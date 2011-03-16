@@ -1,0 +1,60 @@
+/* font */
+body, input {
+  /*font-family: "lucida grande",tahoma,verdana,arial,sans-serif;*/
+  font-size: 12px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* color */
+header {
+  border-bottom: #eee solid 1px;
+}
+
+footer {
+  border-top: #eee solid 1px;
+}
+
+noscript {
+  color: #800;
+}
+
+#main {
+  background-color: #eee;
+}
+
+/* size and position */
+html {
+  overflow-y: auto;
+}
+
+body {
+  height: 100%;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+noscript, header h1, footer span {
+  margin: 0 5px 0 5px;
+}
+
+footer nav {
+  float: right;
+  list-style-type: none;
+}
+
+footer nav li {
+  margin: 0 5px 0 5px;
+  display: inline;
+}
+

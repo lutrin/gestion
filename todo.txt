@@ -1,0 +1,118 @@
+entete de colonne
+clic - tri
+right clic - liste
+  editer
+  cacher
+  tri
+  filtre
+  supprimer
+
+Perfectionnement des détails
+- Dans template, afficher la liste d'objets qui utilisent le gabarit
+- Dans un objet référencé, indiquer le nombre de références
+- Find dans les textarea
+- Outils pour textarea: compter les mots, remplacer, élastique
+    - http://www.electrictoolbox.com/jquery-count-words-textarea-input/
+- Raccourci, option de visualiser les sous-pages seulement ou toutes les pages du sites
+- Afficher la liste de sous-objets, surtout pour les dossiers
+- Changer le wysiwyg ou le perfectionner pour transformer les <br> en <p>, les <i> en <em>, les <b> en strong
+- Dans wysiwyg, filtrer les attributs permis.
+- Couleur de code pour mots réservés html, css, js: http://www.quackit.com/javascript/javascript_reserved_words.cfm Brush 
+- Afficher le lien complet et lien encodé (bit.ly) max 64 caractères, code barre 2d
+- Action sur image, crop, effets..., si largeur == 0, redimensionner en prenant compte de hauteur seulement
+- Lier un objet gabarit à un fichier Html.  Même chose pour un objet page
+- Option du nombre de colonnes dans les attribute list au lieu de samerow, peut etre avec objet row et cell ou content pour formulaire
+- Commentaire d'article: Option pour déterminer le controle des commentaire, qui approuve?
+- Adapter http://www.modernizr.com/
+- Tree et select multiple, laisser la liste affichée tant qu'il n'y a pas eu de click extérieure au sur un bouton "fermer"
+- Ajax au lieu de iframe
+- Importer l'image directement par l'article
+- Dans fil rss, afficher le graphique et ajouter les champs dans les emplacement (entete, contenu, côté gauche, côté droit...) pour chacun des mode (rss, liste, détail)
+- Vérification de version de navigateur avant la connexion
+- Des paramètres pour les raccourcis
+- ctrl s pour sauvegarder
+- Utiliser les pages et content en tant que gabarit
+- self::getTable au lieu de cms_object
+- Séparer les parties du formulaire par onglet
+- Image par défaut pour rss, image par défaut pour catégorie
+- Afficher l'arbre dans la page au lieu d'être à la suite.
+- Arbre multiple sélection reste affichée tant qu'on a pas pesé le X
+- Image, choisir Importer, Url, picasa...
+- Annuler les fonctions PAGEUP et PAGEDOWN pour la page lorsqu'on est dans un champ "number", wheelup wheeldown
+- Nouveau mode d'édition de page, se sentir comme dans un wysiwyg avec attribut contenteditable
+- Personnaliser les icones
+- Fenêtre Détails redimensionnable
+- Compartiment pour catalogue
+- Photo selector
+
+Perfectionnement pour l'arbre
+- Séparer les arbres pages, fichiers et autres.
+- Lister différement les paramètres, les champs supplémentaires et les articles.
+- Ajouter les fonctions dans le menu du haut
+- Fonction, Faire le ménage qui efface la cache et qui optimize la BD "OPTIMIZE"
+- Personnaliser les icones
+- Token pour ne pas ouvrir des formulaires details ailleurs
+- Expiration pour la page au complet
+- Bienvenu, afficher la liste des dernieres opérations.
+- Icone de l'image avec la vraie image en 16x16
+- Effacer avec un multiselect d'objets, ou autres opérations
+- Après avoir déplacer ou couper coller, effacer le contenu mis en réserve pour de pas redéplacer
+- Changer racine pour domaine
+- Lors de la visualisation, avoir la possibilité de mettre des paramètres
+- Pouvoir mettre un icône de son choix pour un objet dans l'arbre
+- Outils color picker dans les fonctions en haut
+
+Perfectionnement à l'affichage
+- Nouvelles variables %this.id% %parent.name% %page.title% %object[$id].name% %date%
+- Paramètres effectifs pour les css et les javascript
+- command convert pour convertir svg to png
+- url élégants dans .htaccess
+- Créer une cédule automatique pour effacer la cache à partir des dates de publication
+- Les Builds ne devraient pas concaténer des string mais contruire un array et print array-To-Xml-To-String pour ne pas avoir à traiter des tags http://snipt.net/robertbanh/php-array-to-xml/
+- img, toujours spécifier le width, height et alt
+- Mettre un message noscript si javascript utilisé
+
+Base de données
+- Simplifier la base de données pour réduire le nombre de table même si elle sont utilisées pour des objets différents
+- Une extension de la class DB pour sécuriser les opérations avec un token de session
+
+Nouveaux objets
+- object text and image
+- object fil d'ariane, semblable au menu
+- object comment
+- object form
+- object search
+- object svg
+- object album pour regrouper image et/ou media, dossier retourne sa liste complète
+- object font
+- object application pour réserver le id
+- object data (json ou xml)
+- object modele de données pour data, article, template... (on définit des champs)
+- object video, longueur, dimension, voir http://jvideoplayer.just-page.de/index_en.php ou http://jquery.malsup.com/media/
+- object audio, longueur
+- object file, option pour stoker dans un vrai dossier ou dans base de données
+- object bulletin
+- object project
+- object plain text
+- object user (mysql PASSWORD() )
+- object group
+- object calendar/agenda lien ical
+- object event (relié au calendar)
+- object anchor vers n'importe quoi d'affichable et paramétrable. Pour éviter la confusion des pages en mode raccourci et les image, css et javascript en attachement
+- note ou todo pour projet et root
+
+
+Référence:
+http://html5boilerplate.com/
+http://www.palmerwebmarketing.com/blog/25-ways-to-speed-up-your-website/
+http://www.palmerwebmarketing.com/blog/25-web-form-optimization-tips/
+http://slides.html5rocks.com/
+http://nicolasgallagher.com/pure-css-gui-icons/demo/
+http://diveintohtml5.org/
+http://www.west-wind.com/Weblog/posts/778165.aspx
+http://msdn.microsoft.com/en-us/library/ms533049(VS.85).aspx
+http://perplexed.co.uk/993_contenteditable_cross_browser_wysiwyg.htm
+http://aquantum-demo.appspot.com/file-upload
+http://www.datatables.net/index
+http://accessibiliteweb.com/stuff/captcha-slider.html
+http://plugins.jquery.com/project/ARIAFormValidation4502.541210
