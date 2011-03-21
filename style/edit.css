@@ -8,6 +8,36 @@ a:hover {
 }
 
 /* color */
+noscript, #error-msg {
+  color: #800;
+}
+
+input {
+  color: #000;
+}
+
+input[type="text"]:hover, input[type="password"]:hover {
+  background-color: #ffc;
+}
+
+input:invalid, textarea:invalid {
+    box-shadow: 0 0 2px red;
+}
+
+input[type=submit], button {
+  color: #fff;
+  background-color: #607890;
+}
+
+input[type=submit]:active {
+  margin-top:2px;
+}
+
+input[type=submit]:hover, button:hover {
+  background-color: #036;
+}
+
+/* border */
 header {
   border-bottom: #eee solid 1px;
 }
@@ -16,8 +46,9 @@ footer {
   border-top: #eee solid 1px;
 }
 
-noscript, #error-msg {
-  color: #800;
+fieldset, legend, input {
+  border: 1px solid #aaa;
+  border-radius: 4px;
 }
 
 /* size and position */
@@ -55,9 +86,15 @@ footer nav li {
 
 fieldset {
   padding: 10px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
   float: left;
+}
+
+legend {
+  padding: 2px 5px;
+}
+
+input {
+  padding: 5px;
 }
 
 #main {
@@ -65,4 +102,12 @@ fieldset {
   top: 20px;
   bottom: 20px;
   width: 100%;
+  display: none;
+}
+
+#login {
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 50px;
+  width: 200px;
 }

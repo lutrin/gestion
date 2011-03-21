@@ -16,6 +16,11 @@ var _edit = {
   },*/
 
   /****************************************************************************/
+  observeList: [
+    { query: "form", script: "form" }
+  ],
+
+  /****************************************************************************/
   msg: {
     "notcompatible": {
       "fr": "Votre navigateur ne dispose pas de toutes les fonctionalités nécessaires.",
@@ -32,6 +37,13 @@ var _edit = {
     if( !this.isCompatible() ) {
       return false;
     }
+
+    // display main
+    _c.select( "#main" ).fadeIn();
+
+    // observe
+    _edit.observe( _c.select( "#main" ) );
+    return false;
   },
 
   /****************************************************************************/
@@ -51,7 +63,29 @@ var _edit = {
     _c.select( "#main" ).hide();
     _c.select( "#error-msg" ).html( msg ).show();
     return false;
-  }
+  },
+
+  /****************************************************************************/
+  observe: function( object ) {
+    _c.eachItem( _edit.observeList, function( observeItem ) {
+      var subObjectList = object.find( observeItem.query );
+      if( subObjectList.size() ) {
+        _edit.initialize( subObjectList, observeItem.script );
+      }
+    } );
+    return false;
+  },
+
+  /****************************************************************************/
+  initialize: function( objectList, script ) {
+    return _c.callAjax(
+      [ { folder: "interaction", name: script } ],
+      function( ajaxItem ) {
+        objectList.each( ajaxItem.initialize );
+        return false;
+      }
+    );
+  },
 };
 
 $( document ).ready( function() {

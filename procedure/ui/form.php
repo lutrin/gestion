@@ -82,6 +82,11 @@ class ui_Form {
       return Tag::build( "fieldset", $attributes, $innerHtml );
     }
 
+    # type text
+    if( !isset( $attributes["type"] ) ) {
+      $attributes["type"] = "text";
+    }
+
     # field
     $attributes["name"] = $fieldId;
     $attributes["id"] = "$formId-$fieldId";

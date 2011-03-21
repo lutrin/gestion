@@ -8,7 +8,13 @@
       return false;
     }
 
-    /* ... */
+    // submit
+    form.submit( function() {
+      return false;
+    } );
+    form.find( "input[type=submit]" ).each( function() {
+      return $( this ).click( app.submit );
+    } );
 
     // autofocus
     if( !Modernizr.input.autofocus ) {
@@ -16,6 +22,11 @@
     }
 
     form.addClass( "initiated" );
+    return false;
+  },
+
+  /****************************************************************************/
+  submit: function() {
     return false;
   }
 }
