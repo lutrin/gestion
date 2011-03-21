@@ -46,6 +46,25 @@ $EDITOR = array(
   )
 );
 
+$LOGIN = array(
+  "legend" => array(
+    "fr" => "Connexion",
+    "en" => "Login"
+  ),
+  "username" => array(
+    "fr" => "Utilisateur",
+    "en" => "User"
+  ),
+  "password" => array(
+    "fr" => "Mot de passe",
+    "en" => "Password"
+  ),
+  "connect" => array(
+    "fr" => "Connecter",
+    "en" => "Connect"
+  )
+);
+
 $MSG_NOSCRIPT = array(
   "fr" => "L'activation de JavaScript est absolument nécessaire.",
   "en" => "Enabling JavaScript is absolutely necessary.",
@@ -125,5 +144,8 @@ $INCLUDE_LIST = array(
   # user interface
   "uiFrame" => array(
     "path" => "ui/frame.php"
+  ),
+  "uiForm" => array(
+    "path" => "ui/form.php"
   )
 );

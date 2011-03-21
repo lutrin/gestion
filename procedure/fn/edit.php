@@ -33,10 +33,11 @@ class fn_Edit {
   protected static function getBody( $lang, $title ) {
     global $MSG_NOSCRIPT, $EDITOR, $EDIT;
     return ui_Frame::replaceFields( array(
+      "lang"          => $lang,
       "title"         => $title,
       "headerButtons" => " ",
       "noscript"      => $MSG_NOSCRIPT[$lang],
-      "main"          => " ",
+      "main"          => self::getMain( $lang ),
       "copyright"     => $EDITOR["copyright"],
       "help"          => $EDITOR["help"][$lang],
       "condition"     => $EDITOR["condition"][$lang],
@@ -45,7 +46,14 @@ class fn_Edit {
   }
 
   /****************************************************************************/
-  protected static function getMain() {
+  public static function getMain( $lang ) {
 
+    # login form
+    if( !$connected = fn_Login::isConnected() ) {
+      return fn_login::getForm( $lang );
+    }
+
+    # editor
+    return "Afficher l'environnement d'édition";
   }
 }

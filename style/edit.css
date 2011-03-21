@@ -1,9 +1,4 @@
 /* font */
-body, input {
-  /*font-family: "lucida grande",tahoma,verdana,arial,sans-serif;*/
-  font-size: 12px;
-}
-
 a {
   text-decoration: none;
 }
@@ -21,12 +16,8 @@ footer {
   border-top: #eee solid 1px;
 }
 
-noscript {
+noscript, #error-msg {
   color: #800;
-}
-
-#main {
-  background-color: #eee;
 }
 
 /* size and position */
@@ -38,13 +29,17 @@ body {
   height: 100%;
 }
 
+header, footer {
+  height: 20px;
+}
+
 footer {
   position: absolute;
   bottom: 0;
   width: 100%;
 }
 
-noscript, header h1, footer span {
+noscript, header h1, footer span, #error-msg {
   margin: 0 5px 0 5px;
 }
 
@@ -58,3 +53,16 @@ footer nav li {
   display: inline;
 }
 
+fieldset {
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  float: left;
+}
+
+#main {
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  width: 100%;
+}

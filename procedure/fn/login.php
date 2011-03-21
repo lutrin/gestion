@@ -26,4 +26,43 @@ return true;
   public static function getSessionEditor() {
     return isset( $_SESSION["editor"]["user"] )? $_SESSION["editor"]["user"]: false;
   }
+
+  /****************************************************************************/
+  public static function getForm( $lang ) {
+    global $LOGIN;
+
+    Includer::add( "uiForm" );
+
+    # set params
+    $params = array(
+      "id"     => "login",
+      "action" => "login",
+      "submit" => $LOGIN["connect"][$lang],
+      "method" => "get"
+    );
+
+    # set fields
+    $fields = array(
+      "connect" => array(
+        "legend" => $LOGIN["legend"][$lang],
+        "type"   => "fieldset",
+        "fieldlist" => array(
+          "username" => array(
+            "label"        => $LOGIN["username"][$lang],
+            "required"     => "required",
+            "autofocus"    => "autofocus",
+            "autocomplete" => "off",
+          ),
+          "password" => array(
+            "label"        => $LOGIN["password"][$lang],
+            "type"         => "password",
+            "required"     => "required",
+            "autocomplete" => "off",
+          )
+        )
+      )
+    );
+
+    return ui_Form::buildXml( $params, $fields );
+  }
 }

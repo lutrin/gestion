@@ -41,6 +41,38 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<!-- user interface -->
+<xsl:template match="ui.form">
+  <form>
+    <xsl:call-template name="apply-tag" />
+  </form>
+</xsl:template>
+
+<xsl:template match="ui.field">
+  <xsl:choose>
+    <xsl:when test="@type='textarea'">
+      <textarea>allo</textarea>
+    </xsl:when>
+    <xsl:otherwise>
+      <div>
+        <xsl:if test="@label">
+          <label>
+            <xsl:attribute name="for">
+              <xsl:value-of select="@id" />
+            </xsl:attribute>
+             <xsl:value-of select="@label" />
+          </label>
+        </xsl:if>
+        <input>
+          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete">
+            <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+          </xsl:for-each>
+        </input>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- common template -->
 <xsl:template name="apply-tag">
   <xsl:call-template name="apply-attributes" />
