@@ -19,6 +19,8 @@ $APP = array(
   "meta"   => array( "robots" => "noindex, nofollow" ),
   "stylesheet" => array(
     "../../external/style/boilerplate.style.css",
+    /*"../../external/style/wufoo.structure.css",
+    "../../external/style/wufoo.form.css",*/
     "style/edit.css"
   ),
   "head_script" => "../external/interaction/modernizr-1.6.min.js",

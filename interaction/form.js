@@ -27,6 +27,69 @@
 
   /****************************************************************************/
   submit: function() {
+    var form = $( this ).parents( "form:first" ),
+        app = _c.ajaxList.interaction.form,
+        scriptList = [];
+
+    // remove alert message
+    form.find( ".alertMsg" ).remove();
+    form.find( ".invalid" ).removeClass( "invalid" );
+
+    // prepare
+    if( form.find( "input[type=password]" ).size() ) {
+      scriptList.push( { folder: "interaction", url: "../../external/", name: "sha1" } );
+    }
+
+    // serialize
+    _c.callAjax( scriptList, function( ajaxItem ) {
+      var fields = app.serialize( form, app );
+
+      if( fields ) {
+        // send
+console.log( fields );
+        return true;
+      }
+      return false;
+    } );
+    return false;
+  },
+
+  /****************************************************************************/
+  serialize: function( form, app ) {
+    var fields = {},
+        error = false;
+    form.find( "input[type=text],input[type=hidden],input[type=password]" ).each( function() {
+      var object = $( this ),
+          type = object.attr( "type" ),
+          value = object.val();
+
+      // password
+      if( value !== "" && type == "password" ) {
+        value = _c.ajaxList.interaction.sha1.get( value );
+      }
+
+      // required
+      if( object.attr( "required" ) && value === "" ) {
+        error = true;
+        app.showMsg( object, _edit.msg.required[_edit.lang] );
+      } else if( !error ) {
+        fields[object.attr( "name" )] = value;
+      }
+    } );
+    if( error ) {
+      return false;
+    }
+    return fields;
+  },
+
+  /****************************************************************************/
+  showMsg: function( field, msg ) {
+    var div = field.parents( ".field:first" );
+    if( div.hasClass( "invalid" ) ) {
+      return false;
+    }
+    div.addClass( "invalid" );
+    div.append( "<div class='alertMsg'>" + msg + "</div>" );
     return false;
   }
 }

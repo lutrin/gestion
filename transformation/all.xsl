@@ -55,6 +55,9 @@
     </xsl:when>
     <xsl:otherwise>
       <div>
+        <xsl:attribute name="class">
+          <xsl:text>field</xsl:text>
+        </xsl:attribute>
         <xsl:if test="@label">
           <label>
             <xsl:attribute name="for">

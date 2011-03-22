@@ -1,4 +1,9 @@
 /* font */
+@font-face {
+  font-family: "Abstract";
+  src: url(../../external/font/fontsforflash.abstract.ttf);
+}
+
 a {
   text-decoration: none;
 }
@@ -7,8 +12,19 @@ a:hover {
   text-decoration: underline;
 }
 
+#title {
+  font-family: "Abstract";
+  font-size: 8px;
+  padding-top: 7px;
+  text-shadow: 0px 0px 5px rgba(0,88,88,.7);
+}
+
 /* color */
-noscript, #error-msg {
+html, legend {
+  background:#eee;
+}
+
+noscript, #error-msg, .alertMsg {
   color: #800;
 }
 
@@ -20,21 +36,22 @@ input[type="text"]:hover, input[type="password"]:hover {
   background-color: #ffc;
 }
 
-input:invalid, textarea:invalid {
-    box-shadow: 0 0 2px red;
-}
-
-input[type=submit], button {
+input[type="submit"], button {
   color: #fff;
   background-color: #607890;
+  margin: 10px;
 }
 
-input[type=submit]:active {
-  margin-top:2px;
+input[type="submit"]:active {
+  margin-top:11px;
 }
 
-input[type=submit]:hover, button:hover {
+input[type="submit"]:hover, button:hover {
   background-color: #036;
+}
+
+#main {
+  background:#fff;
 }
 
 /* border */
@@ -49,6 +66,42 @@ footer {
 fieldset, legend, input {
   border: 1px solid #aaa;
   border-radius: 4px;
+}
+
+input[type="text"], input[type="password"] {
+  box-shadow: inset rgba(0,0,0,.2) 0px 0px 5px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+  border-color: #008;
+  border-radius: 4px;
+  box-shadow: inset rgba(0,0,88,.5) 0px 0px 5px;
+}
+
+input:invalid, textarea:invalid {
+  border-color: #800;
+  border-radius: 4px;
+  box-shadow: inset rgba(88,0,0,.5) 0px 0px 5px;
+}
+
+input[type="text"][type="password"]:valid, textarea:valid {
+  border-color: #080;
+  border-radius: 4px;
+  box-shadow: inset rgba(0,88,0,.5) 0px 0px 5px;
+}
+
+input[type="submit"] {
+  box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
+}
+
+input[type="submit"]:active {
+  box-shadow:rgba(0,0,0,.2) 0px 0px 3px;
+}
+
+#main {
+  border-top:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+  box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
 }
 
 /* size and position */
@@ -93,6 +146,12 @@ legend {
   padding: 2px 5px;
 }
 
+form {
+  margin:20px 14px 0 14px;
+  padding:0 0 20px 0;
+  position:relative;
+}
+
 input {
   padding: 5px;
 }
@@ -110,4 +169,8 @@ input {
   margin-right:auto;
   margin-top: 50px;
   width: 200px;
+}
+
+.field {
+  padding: 5px;
 }
