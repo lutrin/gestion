@@ -1,8 +1,9 @@
 "use strict";
 
 var _edit = {
-  compatibilityList: [],
+  compatibilityList: ["localstorage"],
   lang: "fr",
+  msg: false,
 
   /****************************************************************************/
   /*uiForm: function( caller ) {
@@ -21,33 +22,27 @@ var _edit = {
   ],
 
   /****************************************************************************/
-  msg: {
-    "notcompatible": {
-      "fr": "Votre navigateur ne dispose pas de toutes les fonctionalités nécessaires.",
-      "en": "Your browser is not compatible."
-    },
-    "required": {
-      "fr": "Champ obligatoire",
-      "en": "Mandatory field"
-    },
-  },
-
-  /****************************************************************************/
   load: function() {
     // initialize language
     this.lang = _c.select( "#title" ).attr( "lang" );
 
-    // is compatible
-    if( !this.isCompatible() ) {
+    // initialize message
+    return _c.callAjax( [ { folder: "data", name: "msg" } ], function( ajaxItem ) {
+      _edit.msg = ajaxItem;
+
+      // is compatible
+      if( !_edit.isCompatible() ) {
+        return false;
+      }
+
+      // display main
+      _c.select( "#main" ).fadeIn();
+
+      // observe
+      _edit.observe( _c.select( "#main" ) );
+
       return false;
-    }
-
-    // display main
-    _c.select( "#main" ).fadeIn();
-
-    // observe
-    _edit.observe( _c.select( "#main" ) );
-    return false;
+    } );
   },
 
   /****************************************************************************/

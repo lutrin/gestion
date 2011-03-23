@@ -67,7 +67,7 @@
           </label>
         </xsl:if>
         <input>
-          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete">
+          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength">
             <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
           </xsl:for-each>
         </input>

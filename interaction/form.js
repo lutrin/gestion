@@ -42,11 +42,21 @@
 
     // serialize
     _c.callAjax( scriptList, function( ajaxItem ) {
-      var fields = app.serialize( form, app );
+      var fields = app.serialize( form, app ),
+          action;
 
       if( fields ) {
+        action = fields.action;
+        delete fields.action;
+
         // send
-console.log( fields );
+        _c.callAjax(
+          [ { folder: "procedure", name: action, params: fields } ],
+          function( ajaxItem ) {
+console.log( ajaxItem );
+            return false;
+          }
+        );
         return true;
       }
       return false;
@@ -61,7 +71,12 @@ console.log( fields );
     form.find( "input[type=text],input[type=hidden],input[type=password]" ).each( function() {
       var object = $( this ),
           type = object.attr( "type" ),
-          value = object.val();
+          value = _c.trim( object.val() );
+
+      // trim
+      if( _c.inList( type, ["hidden", "text"] ) ) {
+        value = _c.trim( value );
+      }
 
       // password
       if( value !== "" && type == "password" ) {

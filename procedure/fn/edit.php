@@ -50,7 +50,7 @@ class fn_Edit {
 
     # login form
     if( !$connected = fn_Login::isConnected() ) {
-      return fn_login::getForm( $lang );
+      return fn_login::buildForm( $lang );
     }
 
     # editor

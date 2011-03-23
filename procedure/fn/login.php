@@ -1,5 +1,7 @@
 <?php
 class fn_Login {
+  protected $id = "login";
+
   /****************************************************************************/
   public static function isConnected() {
 
@@ -28,21 +30,36 @@ return true;
   }
 
   /****************************************************************************/
-  public static function getForm( $lang ) {
+  public static function buildForm( $lang ) {
     global $LOGIN;
 
     Includer::add( "uiForm" );
 
     # set params
     $params = array(
-      "id"     => "login",
-      "action" => "login",
+      "id"     => self::$id,
+      "action" => self::id,
       "submit" => $LOGIN["connect"][$lang],
       "method" => "get"
     );
 
-    # set fields
-    $fields = array(
+    return ui_Form::buildXml( $params, self::getFormFields( $LOGIN, $lang ) );
+  }
+
+  /****************************************************************************/
+  public static function connect( $values ) {
+    global $LOGIN;
+
+    # language
+    $lang = $DEFAULT_LANG; /*TODO get language from user config*/
+
+    # valid form
+    $fields = self::getFormFields( $LOGIN, $lang );
+  }
+
+  /****************************************************************************/
+  protected static function getFields( $LOGIN, $lang ) {
+    return array(
       "connect" => array(
         "legend" => $LOGIN["legend"][$lang],
         "type"   => "fieldset",
@@ -50,6 +67,7 @@ return true;
           "username" => array(
             "label"        => $LOGIN["username"][$lang],
             "required"     => "required",
+            "maxlength"    => 30,
             "autofocus"    => "autofocus",
             "autocomplete" => "off",
           ),
@@ -57,12 +75,11 @@ return true;
             "label"        => $LOGIN["password"][$lang],
             "type"         => "password",
             "required"     => "required",
+            "maxlength"    => 30,
             "autocomplete" => "off",
           )
         )
       )
     );
-
-    return ui_Form::buildXml( $params, $fields );
   }
 }

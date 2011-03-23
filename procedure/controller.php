@@ -48,13 +48,12 @@ function main() {
 
 /******************************************************************************/
 function login() {
-  if( ( $user     = ( isset( $_GET["user"] )?     $_GET["user"]:     false ) ) &&
+  if( ( $user     = ( isset( $_GET["username"] )? $_GET["username"]: false ) ) &&
       ( $password = ( isset( $_GET["password"] )? $_GET["password"]: false ) ) &&
       ( $token    = ( isset( $_GET["token"] )?    $_GET["token"]:    false ) ) ) {
-    $login = new Login();
     setHeader( "json" );
-    return json_encode( $login->connect( array(
-      "user"     => $user,
+    return json_encode( fn_Login::connect( array(
+      "username" => $username,
       "password" => $password,
       "token"    => $token
     ) ) );
@@ -68,27 +67,6 @@ function displayEdit() {
   Includer::add( array( "clean", "fnEdit" ) );
   setHeader();
   return fn_Edit::display();
-/*  setHeader();
-  $frame = new UIFrame();
-  return $frame->build(
-    array(
-      "title"       => "Système de gestion de contenu - Mon Lutrin",
-      "description" => "Système de gestion de contenu",
-      "author"      => "Eric Barolet",
-      "stylesheet"  => array(
-        "../../external/style/boilerplate.style.css",
-        "style/edit.css"
-      ),
-      "head_script" => "../external/interaction/modernizr-1.6.min.js",
-      "body"        => ( $connected? prepareEdit(): prepareLogin() ),
-      "body_script" => array(
-        "../external/interaction/jquery-1.3.2.min.js",
-        "../external/interaction/jquery-ui-1.8.custom.min.js",
-        "../library/interaction/common.js",
-        "interaction/edit.js"
-      )
-    )
-  );*/
 }
 
 /******************************************************************************/
@@ -115,9 +93,9 @@ function prepareLogin() {
 
 /******************************************************************************/
 function logout() {
-  $login = new Login();
+  /*$login = new Login();
   setHeader( "json" );
-  return json_encode( $login->disconnect() );
+  return json_encode( $login->disconnect() );*/
 }
 
 /******************************************************************************/

@@ -14,12 +14,11 @@ class ui_Form {
     $id = "";
     if( isset( $params["id"] ) ) {
       $id = $params["id"];
-      $tokenId = "$id-token";
       $innerHtml[] = Tag::build( "input", array(
-        "id"    => $tokenId,
+        "id"    => "$id-token",
         "type"  => "hidden",
         "name"  => "token",
-        "value" => Tokenizer::create( $tokenId )
+        "value" => Tokenizer::create( $id )
       ) );
     }
 
