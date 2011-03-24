@@ -48,7 +48,7 @@ function main() {
 
 /******************************************************************************/
 function login() {
-  if( ( $user     = ( isset( $_GET["username"] )? $_GET["username"]: false ) ) &&
+  if( ( $username = ( isset( $_GET["username"] )? $_GET["username"]: false ) ) &&
       ( $password = ( isset( $_GET["password"] )? $_GET["password"]: false ) ) &&
       ( $token    = ( isset( $_GET["token"] )?    $_GET["token"]:    false ) ) ) {
     setHeader( "json" );

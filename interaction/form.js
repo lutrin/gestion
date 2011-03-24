@@ -50,14 +50,25 @@
         delete fields.action;
 
         // send
-        _c.callAjax(
+        return _c.callAjax(
           [ { folder: "procedure", name: action, params: fields } ],
           function( ajaxItem ) {
-console.log( ajaxItem );
+
+            // fatal error
+            if( ajaxItem.fatalError ) {
+              _edit.showError( _edit.msg[ajaxItem.fatalError][_edit.lang] );
+              return false;
+            }
+
+            // fields error
+            if( ajaxItem.errorList ) {
+              _c.eachItem( ajaxItem.errorList, function( errorItem ) {
+                return app.showMsg( form.find( "[name=" + errorItem.name + "]:first" ), _edit.msg[errorItem.msg][_edit.lang] );
+              } );
+            }
             return false;
           }
         );
-        return true;
       }
       return false;
     } );

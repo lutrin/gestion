@@ -142,6 +142,9 @@ $INCLUDE_LIST = array(
   "fnEdit" => array(
     "path" => "fn/edit.php"
   ),
+  "fnForm" => array(
+    "path" => "fn/form.php"
+  ),
 
   # user interface
   "uiFrame" => array(
@@ -149,5 +152,11 @@ $INCLUDE_LIST = array(
   ),
   "uiForm" => array(
     "path" => "ui/form.php"
+  ),
+
+  # data base table
+  "dbEditor" => array(
+    "path" => "db/editor.php",
+    "depend" => "dbConnect"
   )
 );

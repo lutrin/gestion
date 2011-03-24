@@ -1,6 +1,6 @@
 <?php
 class fn_Login {
-  protected $id = "login";
+  protected static $id = "login";
 
   /****************************************************************************/
   public static function isConnected() {
@@ -35,30 +35,51 @@ return true;
 
     Includer::add( "uiForm" );
 
-    # set params
-    $params = array(
-      "id"     => self::$id,
-      "action" => self::id,
-      "submit" => $LOGIN["connect"][$lang],
-      "method" => "get"
+    return ui_Form::buildXml(
+      self::getFormParams( $LOGIN, $lang ),
+      self::getFormFields( $LOGIN, $lang )
     );
-
-    return ui_Form::buildXml( $params, self::getFormFields( $LOGIN, $lang ) );
   }
 
   /****************************************************************************/
   public static function connect( $values ) {
-    global $LOGIN;
+    global $LOGIN, $DEFAULT_LANG;
 
     # language
     $lang = $DEFAULT_LANG; /*TODO get language from user config*/
 
     # valid form
-    $fields = self::getFormFields( $LOGIN, $lang );
+    Includer::add( "fnForm" );
+    $result = fn_Form::hasErrors(
+      self::getFormParams( $LOGIN, $lang ),
+      self::getFormFields( $LOGIN, $lang ),
+      $values
+    );
+    if( $result ) {
+
+      # fatal error
+      if( isset( $result["fatalError"] ) ) {
+        return $result; /*TODO create token */
+      }
+    }
+
+    # valid user exists
+    Includer::add( "dbEditor" );
+    return array( "exists" => db_Editor::getInfo( $values["username"], $values["password"] ) );
   }
 
   /****************************************************************************/
-  protected static function getFields( $LOGIN, $lang ) {
+  protected static function getFormParams( $LOGIN, $lang ) {
+    return array(
+      "id"     => self::$id,
+      "action" => self::$id,
+      "submit" => $LOGIN["connect"][$lang],
+      "method" => "post"
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormFields( $LOGIN, $lang ) {
     return array(
       "connect" => array(
         "legend" => $LOGIN["legend"][$lang],
