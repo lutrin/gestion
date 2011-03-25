@@ -10,5 +10,13 @@
   "required": {
     "fr": "Champ obligatoire",
     "en": "Mandatory field"
+  },
+  "incorrectlogin": {
+    "fr": "Le nom d'utilisateur ou le mot de passe est incorrect.",
+    "en": "Incorrect user name or password."
+  },
+  "disabledaccount": {
+    "fr": "Le compte est désactivé.",
+    "en": "Account disabled."
   }
 }

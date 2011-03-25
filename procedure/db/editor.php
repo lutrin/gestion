@@ -4,13 +4,14 @@ class db_Editor {
 
   /****************************************************************************/
   public static function getInfo( $username, $password ) {
-    /*$result = DB::select( array(
+    $result = DB::select( array(
+      "field" => array( "username", "admin", "active" ),
       "table" => self::$table,
       "where" => array(
         "username LIKE '$username'",
         "password = PASSWORD( '$password' )"
       )
-    ) );*/
-    return false;
+    ) );
+    return $result? $result[0]: false;
   }
 }

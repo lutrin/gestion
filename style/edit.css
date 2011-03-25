@@ -24,7 +24,7 @@ html, legend {
   background:#eee;
 }
 
-noscript, #error-msg, .alertMsg {
+noscript, #error-msg, .alertMsg, .formMsg {
   color: #800;
 }
 
@@ -170,6 +170,12 @@ input {
   margin-right:auto;
   margin-top: 50px;
   width: 200px;
+}
+
+#header-buttons {
+  position: absolute;
+  top: 0;
+  right: 100%;
 }
 
 .field {

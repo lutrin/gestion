@@ -32,7 +32,7 @@
         scriptList = [];
 
     // remove alert message
-    form.find( ".alertMsg" ).remove();
+    form.find( ".alertMsg,.formMsg" ).remove();
     form.find( ".invalid" ).removeClass( "invalid" );
 
     // prepare
@@ -53,6 +53,7 @@
         return _c.callAjax(
           [ { folder: "procedure", name: action, params: fields } ],
           function( ajaxItem ) {
+            var key;
 
             // fatal error
             if( ajaxItem.fatalError ) {
@@ -64,6 +65,28 @@
             if( ajaxItem.errorList ) {
               _c.eachItem( ajaxItem.errorList, function( errorItem ) {
                 return app.showMsg( form.find( "[name=" + errorItem.name + "]:first" ), _edit.msg[errorItem.msg][_edit.lang] );
+              } );
+            }
+
+            // form error
+            if( ajaxItem.formError ) {
+              form.append( "<div class='formMsg'>" + _edit.msg[ajaxItem.formError][_edit.lang] + "</div>" );
+            }
+
+            // values
+            form.find( "[type=password]" ).val( "" );
+            if( ajaxItem.values ) {
+              for( key in ajaxItem.values ) {
+                form.find( "[name=" + key + "]:first" ).val( ajaxItem.values[key] );
+              }
+            }
+
+            // replacement
+            if( ajaxItem.replacement ) {
+              _c.eachItem( ajaxItem.replacement, function( replacement ) {
+                $( replacement.query ).xslt( replacement.innerHtml, "transformation/all.xsl", function( object ) {
+                  _edit.observe( object );
+                } );
               } );
             }
             return false;

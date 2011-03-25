@@ -11,7 +11,7 @@ class fn_Login {
     }
 
     # get key
-    $key = "session_" . $editor["user"];
+    $key = "session_" . $editor["username"];
 
 return true;
 
@@ -26,7 +26,7 @@ return true;
 
   /****************************************************************************/
   public static function getSessionEditor() {
-    return isset( $_SESSION["editor"]["user"] )? $_SESSION["editor"]["user"]: false;
+    return isset( $_SESSION["editor"]["username"] )? $_SESSION["editor"]["username"]: false;
   }
 
   /****************************************************************************/
@@ -55,17 +55,37 @@ return true;
       self::getFormFields( $LOGIN, $lang ),
       $values
     );
-    if( $result ) {
 
-      # fatal error
-      if( isset( $result["fatalError"] ) ) {
-        return $result; /*TODO create token */
-      }
+    # fatal error or error list
+    if( isset( $result["fatalError"] ) && isset( $result["errorList"] ) ) {
+      return $result;
     }
 
     # valid user exists
     Includer::add( "dbEditor" );
-    return array( "exists" => db_Editor::getInfo( $values["username"], $values["password"] ) );
+    if( !$info = db_Editor::getInfo( $values["username"], $values["password"] ) ) {
+      $result["formError"] = "incorrectlogin";
+      return $result;
+    }
+
+    # account disabled
+    if( !$info["active"] ) {
+      $result["formError"] = "disabledaccount";
+      return $result;
+    }
+
+    # set session
+    $_SESSION["editor"] = $info;
+    Tokenizer::delete( self::$id );
+
+    # replacement
+    Includer::add( "fnEdit" );
+    return array(
+      "replacement" => array(
+        array( "query" => "#main", "innerHtml" => fn_Edit::getMain( $lang ) ),
+        array( "query" => "#header-button", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
+      )
+    );
   }
 
   /****************************************************************************/

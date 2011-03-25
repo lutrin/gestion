@@ -35,7 +35,7 @@ class fn_Edit {
     return ui_Frame::replaceFields( array(
       "lang"          => $lang,
       "title"         => $title,
-      "headerButtons" => " ",
+      "headerButtons" => self::getHeaderButton( $lang ),
       "noscript"      => $MSG_NOSCRIPT[$lang],
       "main"          => self::getMain( $lang ),
       "copyright"     => $EDITOR["copyright"],
@@ -54,6 +54,18 @@ class fn_Edit {
     }
 
     # editor
-    return "Afficher l'environnement d'édition";
+    return "<p>Afficher l'environnement d'édition</p>";
+  }
+
+  /****************************************************************************/
+  public static function getHeaderButton( $lang ) {
+
+    # empty
+    if( !$connected = fn_Login::isConnected() ) {
+      return " ";
+    }
+
+    # editor
+    return "<button>Déconnecter</button>";
   }
 }
