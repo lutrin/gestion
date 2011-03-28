@@ -46,11 +46,11 @@ class fn_Edit {
   }
 
   /****************************************************************************/
-  public static function getMain( $lang ) {
+  public static function getMain( $lang, $msg = "" ) {
 
     # login form
     if( !$connected = fn_Login::isConnected() ) {
-      return fn_login::buildForm( $lang );
+      return fn_login::buildForm( $lang, $msg );
     }
 
     # editor
@@ -59,6 +59,7 @@ class fn_Edit {
 
   /****************************************************************************/
   public static function getHeaderButton( $lang ) {
+    global $HEADER_BUTTONS;
 
     # empty
     if( !$connected = fn_Login::isConnected() ) {
@@ -66,6 +67,8 @@ class fn_Edit {
     }
 
     # editor
-    return "<button>Déconnecter</button>";
+    return "<span class='currentUser'>" . $_SESSION["editor"]["longname"] . "</span>"
+         . "<button class='iconic' title='" . $HEADER_BUTTONS["setting"][$lang] . "' data-action='displaySetting'>w</button>"
+         . "<button class='iconic' title='" . $HEADER_BUTTONS["logout"][$lang] . "' data-action='logout'>x</button>";
   }
 }

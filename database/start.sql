@@ -19,3 +19,10 @@ INSERT INTO `gestion`.`editor` (
 VALUES (
   NULL , 'root', PASSWORD( 'd033e22ae348aeb5660fc2140aec35850c4da997' ) , '1', '1'
 );
+
+/* add longname field */
+ALTER TABLE `editor` ADD `longname` VARCHAR( 255 ) NOT NULL AFTER `password`;
+UPDATE `gestion`.`editor` SET `longname` = 'Eric Barolet' WHERE `editor`.`k` =1;
+
+/* add password index */
+ALTER TABLE `editor` ADD INDEX ( `password` );

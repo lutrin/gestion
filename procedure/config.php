@@ -5,6 +5,17 @@ $DEFAULT_LANG = "fr";
 
 $SITE_NAME = "Lutrin";
 
+$CONTROLLER = array(
+  "wrongentry" => array(
+    "fr" => "Mauvaise entrée",
+    "en" => "Wrong entry"
+  ),
+  "disconnected" => array(
+    "fr" => "Vous êtes maintenante déconnecté.",
+    "en" => "You are disconnected."
+  )
+);
+
 $APP = array(
   "site" => "Lutrin",
   "name" => array(
@@ -19,8 +30,6 @@ $APP = array(
   "meta"   => array( "robots" => "noindex, nofollow" ),
   "stylesheet" => array(
     "../../external/style/boilerplate.style.css",
-    /*"../../external/style/wufoo.structure.css",
-    "../../external/style/wufoo.form.css",*/
     "style/edit.css"
   ),
   "head_script" => "../external/interaction/modernizr-1.6.min.js",
@@ -68,6 +77,17 @@ $LOGIN = array(
   )
 );
 
+$HEADER_BUTTONS = array(
+  "setting" => array(
+    "fr" => "Configurations",
+    "en" => "Setting"
+  ),
+  "logout" => array(
+    "fr" => "Déconnecter",
+    "en" => "Disconnect"
+  )
+);
+
 $MSG_NOSCRIPT = array(
   "fr" => "L'activation de JavaScript est absolument nécessaire.",
   "en" => "Enabling JavaScript is absolutely necessary.",
@@ -98,7 +118,7 @@ $EDIT = $TEMPPATH . "edit.html";
 $COMPRESS_LIST = array(
   "html" => array( $TEMPPATH ),
   "css"  => array( "../style/" ),
-  "js"   => array( /*"../data/",*/ "../interaction/" )
+  "js"   => array( "../data/", "../interaction/" )
 );
 
 $INCLUDE_LIST = array(
@@ -142,6 +162,9 @@ $INCLUDE_LIST = array(
   ),
   "fnEdit" => array(
     "path" => "fn/edit.php"
+  ),
+  "fnSetting" => array(
+    "path" => "fn/setting.php"
   ),
   "fnForm" => array(
     "path" => "fn/form.php"

@@ -1,24 +1,14 @@
 "use strict";
 
 var _edit = {
-  compatibilityList: [""],
+  compatibilityList: ["fontface"],
   lang: "fr",
   msg: false,
 
   /****************************************************************************/
-  /*uiForm: function( caller ) {
-    return _c.callAjax(
-      [ { folder: "interaction", name: "form" } ],
-      function( ajaxItem ) {
-        objectList.each( ajaxItem["caller"] );
-        return false;
-      }
-    );
-  },*/
-
-  /****************************************************************************/
   observeList: [
-    { query: "form", script: "form" }
+    { query: "form", script: "form" },
+    { query: "button", script: "button" },
   ],
 
   /****************************************************************************/
@@ -36,10 +26,10 @@ var _edit = {
       }
 
       // display main
-      _c.select( "#main" ).fadeIn();
-
-      // observe
-      _edit.observe( _c.select( "#main" ) );
+      // display and observe
+      _c.eachItem( ["#main", "#header-buttons"], function( object ) {
+        _edit.observe( _c.select( object ).fadeIn() );
+      } );
 
       return false;
     } );

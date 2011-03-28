@@ -30,13 +30,13 @@ return true;
   }
 
   /****************************************************************************/
-  public static function buildForm( $lang ) {
+  public static function buildForm( $lang, $msg = "" ) {
     global $LOGIN;
 
     Includer::add( "uiForm" );
 
     return ui_Form::buildXml(
-      self::getFormParams( $LOGIN, $lang ),
+      self::getFormParams( $LOGIN, $lang, $msg ),
       self::getFormFields( $LOGIN, $lang )
     );
   }
@@ -83,18 +83,38 @@ return true;
     return array(
       "replacement" => array(
         array( "query" => "#main", "innerHtml" => fn_Edit::getMain( $lang ) ),
-        array( "query" => "#header-button", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
+        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
       )
     );
   }
 
   /****************************************************************************/
-  protected static function getFormParams( $LOGIN, $lang ) {
+  public static function disconnect( $msg = "" ) {
+    global $DEFAULT_LANG;
+
+    # language
+    $lang = $DEFAULT_LANG; /*TODO get language from user config*/
+
+    $_SESSION["editor"] = false;
+
+    # replacement
+    Includer::add( "fnEdit" );
+    return array(
+      "replacement" => array(
+        array( "query" => "#main", "innerHtml" => fn_Edit::getMain( $lang, $msg ) ),
+        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
+      )
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormParams( $LOGIN, $lang, $msg = "" ) {
     return array(
       "id"     => self::$id,
       "action" => self::$id,
       "submit" => $LOGIN["connect"][$lang],
-      "method" => "post"
+      "method" => "post",
+      "message" => $msg
     );
   }
 

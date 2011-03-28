@@ -9,6 +9,7 @@ class ui_Form {
 
     # params
     $submit = false;
+    $message = false;
 
     # token
     $id = "";
@@ -25,6 +26,11 @@ class ui_Form {
     foreach( $params as $key => $item ) {
       if( $key == "submit" ) {
         $submit = $params[$key];
+        continue;
+
+        # message
+      } elseif( $key == "message" ) {
+        $message = $params[$key];
         continue;
 
         # action
@@ -52,6 +58,13 @@ class ui_Form {
         "type"  => "submit",
         "value" => $submit
       ) );
+    }
+
+    # message
+    if( $message ) {
+      $innerHtml[] = Tag::build( "div", array(
+        "class" => "formMsg"
+      ), $message );
     }
     return Tag::build( "ui.form", $attributes, $innerHtml );
   }

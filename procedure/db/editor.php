@@ -5,7 +5,7 @@ class db_Editor {
   /****************************************************************************/
   public static function getInfo( $username, $password ) {
     $result = DB::select( array(
-      "field" => array( "username", "admin", "active" ),
+      "field" => array( "username", "admin", "active", "longname" ),
       "table" => self::$table,
       "where" => array(
         "username LIKE '$username'",

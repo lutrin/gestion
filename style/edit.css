@@ -19,6 +19,23 @@ a:hover {
   text-shadow: 0px 0px 5px rgba(0,88,88,.7);
 }
 
+/* icon */
+@font-face {
+  font-family: "IconicStroke";
+  src: local("IconicStroke"),
+       url("../../external/style/iconic/iconic_stroke.svg#iconic") format("svg"),
+       url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
+}
+
+.iconic, .currentUser:before {
+  font-family: "IconicStroke";
+  font-size: 1.2em;
+}
+
+.currentUser:before {
+  content: "u";
+}
+
 /* color */
 html, legend {
   background:#eee;
@@ -181,8 +198,29 @@ input[type="submit"] {
 
 #header-buttons {
   float: right;
+  display: none;
+}
+
+.currentUser {
+  font-weight: bold;
+  margin: 0 5px;
 }
 
 .field {
   padding: 5px;
+}
+
+#dialog {
+  display:none;
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+#dialog:target {
+  display: block;
 }

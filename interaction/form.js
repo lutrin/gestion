@@ -22,7 +22,6 @@
     }
 
     form.addClass( "initiated" );
-    return false;
   },
 
   /****************************************************************************/
@@ -84,7 +83,7 @@
             // replacement
             if( ajaxItem.replacement ) {
               _c.eachItem( ajaxItem.replacement, function( replacement ) {
-                $( replacement.query ).xslt( replacement.innerHtml, "transformation/all.xsl", function( object ) {
+                $( replacement.query ).xslt( "<app.start>" + replacement.innerHtml + "</app.start>", "transformation/all.xsl", function( object ) {
                   _edit.observe( object );
                 } );
               } );

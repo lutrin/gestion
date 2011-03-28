@@ -16,13 +16,13 @@ exit;
 
 /******************************************************************************/
 function main() {
-  global $adminMode, $pageMode;
+  global $adminMode, $pageMode, $CONTROLLER, $DEFAULT_LANG;
 
   # set includer
   Includer::add( array( "typeValidator", "tokenizer", "fnLogin" ) );
 
   # set default entry
-  $msg = "Mauvaise entrée";
+  $msg = $CONTROLLER["wrongentry"][$DEFAULT_LANG];
   $connected = fn_Login::isConnected();
 
   # switch action
@@ -33,7 +33,14 @@ function main() {
       return getPage();
     } else {
       if( $connected ) {
-        return logout();
+        if( $action = isset( $_GET["action"] )? typeValidator::isAlphaNumeric( $_GET["action"] ): false ) {
+          if( $action == "logout" ) {
+            return logout( $CONTROLLER["disconnected"][$DEFAULT_LANG] );
+          } elseif( $action == "displaySetting" ) {
+            return displaySetting();
+          }
+        }
+        return logout( $msg );
       } else {
         if( $action = isset( $_GET["action"] )? typeValidator::isAlphaNumeric( $_GET["action"] ): false ) {
           if( $action == "login" ) {
@@ -48,6 +55,7 @@ function main() {
 
 /******************************************************************************/
 function login() {
+  global $CONTROLLER, $DEFAULT_LANG;
   if( ( $username = ( isset( $_GET["username"] )? $_GET["username"]: false ) ) &&
       ( $password = ( isset( $_GET["password"] )? $_GET["password"]: false ) ) &&
       ( $token    = ( isset( $_GET["token"] )?    $_GET["token"]:    false ) ) ) {
@@ -58,7 +66,7 @@ function login() {
       "token"    => $token
     ) ) );
   } else {
-    return "Mauvaise entrée";
+    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$DEFAULT_LANG] );
   }
 }
 
@@ -70,32 +78,16 @@ function displayEdit() {
 }
 
 /******************************************************************************/
-function prepareEdit() {
-  Includer::add( "uiEdit" );
-  $edit = new UIEdit();
-  return str_replace(
-    array( "###main###", "###header-buttons###" ),
-    array( $edit->build(), $edit->buttons() ),
-    file_get_contents( "../template/edit.html" )
-  );
-}
-
-/******************************************************************************/
-function prepareLogin() {
-  Includer::add( "uiLogin" );
-  $login = new UILogin();
-  return str_replace(
-    array( "###main###", "###header-buttons###" ),
-    array( $login->build(), "" ),
-    file_get_contents( "../template/edit.html" )
-  );
-}
-
-/******************************************************************************/
-function logout() {
-  /*$login = new Login();
+function logout( $msg = "" ) {
   setHeader( "json" );
-  return json_encode( $login->disconnect() );*/
+  return json_encode( fn_Login::disconnect( $msg ) );
+}
+
+/******************************************************************************/
+function displaySetting() {
+  Includer::add( "fnSetting" );
+  setHeader( "json" );
+  return json_encode( fn_Setting::display() );
 }
 
 /******************************************************************************/
