@@ -1,7 +1,7 @@
 "use strict";
 
 var _edit = {
-  compatibilityList: ["localstorage"],
+  compatibilityList: [""],
   lang: "fr",
   msg: false,
 
