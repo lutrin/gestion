@@ -56,20 +56,23 @@
 
             // fatal error
             if( ajaxItem.fatalError ) {
-              _edit.showError( _edit.msg[ajaxItem.fatalError][_edit.lang] );
+              _edit.showError( _edit.msg( ajaxItem.fatalError ) );
               return false;
             }
 
             // fields error
             if( ajaxItem.errorList ) {
               _c.eachItem( ajaxItem.errorList, function( errorItem ) {
-                return app.showMsg( form.find( "[name=" + errorItem.name + "]:first" ), _edit.msg[errorItem.msg][_edit.lang] );
+                return app.showMsg(
+                  form.find( "[name=" + errorItem.name + "]:first" ),
+                  _edit.msg( errorItem.msg )
+                );
               } );
             }
 
             // form error
             if( ajaxItem.formError ) {
-              form.append( "<div class='formMsg'>" + _edit.msg[ajaxItem.formError][_edit.lang] + "</div>" );
+              form.append( "<div class='formMsg'>" + _edit.msg( ajaxItem.formError ) + "</div>" );
             }
 
             // values
@@ -83,9 +86,11 @@
             // replacement
             if( ajaxItem.replacement ) {
               _c.eachItem( ajaxItem.replacement, function( replacement ) {
-                $( replacement.query ).xslt( "<app.start>" + replacement.innerHtml + "</app.start>", "transformation/all.xsl", function( object ) {
-                  _edit.observe( object );
-                } );
+                $( replacement.query ).xslt(
+                  "<app.start>" + replacement.innerHtml + "</app.start>",
+                  _edit.transformation(),
+                  _edit.observe
+                );
               } );
             }
             return false;
@@ -119,7 +124,7 @@
       // required
       if( object.attr( "required" ) && value === "" ) {
         error = true;
-        app.showMsg( object, _edit.msg.required[_edit.lang] );
+        app.showMsg( object, _edit.msg( "required" ) );
       } else if( !error ) {
         fields[object.attr( "name" )] = value;
       }

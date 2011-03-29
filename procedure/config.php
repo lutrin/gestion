@@ -11,7 +11,7 @@ $CONTROLLER = array(
     "en" => "Wrong entry"
   ),
   "disconnected" => array(
-    "fr" => "Vous êtes maintenante déconnecté.",
+    "fr" => "Vous êtes maintenant déconnecté.",
     "en" => "You are disconnected."
   )
 );
@@ -35,7 +35,7 @@ $APP = array(
   "head_script" => "../external/interaction/modernizr-1.6.min.js",
   "body_script" => array(
       "../external/interaction/jquery-1.3.2.min.js",
-      "../external/interaction/jquery-ui-1.8.custom.min.js",
+      /*"../external/interaction/jquery-ui-1.8.custom.min.js",*/
       "../external/interaction/jquery.xslt.js",
       "../library/interaction/common.js",
       "interaction/edit.js"
@@ -74,6 +74,41 @@ $LOGIN = array(
   "connect" => array(
     "fr" => "Connecter",
     "en" => "Connect"
+  )
+);
+
+$SETTING = array(
+  "apply" => array(
+    "fr" => "Appliquer",
+    "en" => "Apply"
+  ),
+  "login" => array(
+    "fr" => "Paramètres de connexion",
+    "en" => "Login settings"
+  ),
+  "username" => array(
+    "fr" => "Utilisateur",
+    "en" => "User"
+  ),
+  "longname" => array(
+    "fr" => "Nom complet",
+    "en" => "Long name"
+  ),
+  "password" => array(
+    "fr" => "Nouveau mot de passe",
+    "en" => "New password"
+  ),
+  "confirmpassword" => array(
+    "fr" => "Confirmation de mot de passe",
+    "en" => "Password confirmation"
+  ),
+  "edit" => array(
+    "fr" => "Paramètres d'édition",
+    "en" => "Editor settings"
+  ),
+  "lang" => array(
+    "fr" => "Langage",
+    "en" => "Language"
   )
 );
 

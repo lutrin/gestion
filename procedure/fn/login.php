@@ -129,6 +129,7 @@ return true;
             "label"        => $LOGIN["username"][$lang],
             "required"     => "required",
             "maxlength"    => 30,
+            "size"         => 20,
             "autofocus"    => "autofocus",
             "autocomplete" => "off",
           ),
@@ -137,6 +138,7 @@ return true;
             "type"         => "password",
             "required"     => "required",
             "maxlength"    => 30,
+            "size"         => 20,
             "autocomplete" => "off",
           )
         )

@@ -4,6 +4,7 @@ var _edit = {
   compatibilityList: ["fontface"],
   lang: "fr",
   msg: false,
+  transformation: false,
 
   /****************************************************************************/
   observeList: [
@@ -17,20 +18,30 @@ var _edit = {
     this.lang = _c.select( "#title" ).attr( "lang" );
 
     // initialize message
-    return _c.callAjax( [ { folder: "data", name: "msg" } ], function( ajaxItem ) {
-      _edit.msg = ajaxItem;
+    return _c.callAjax( [
+      { folder: "data", name: "msg" },
+      { folder: "transformation", name: "all" },
+    ], function( ajaxItem ) {
+
+      // msg
+      _edit.msg = function( msg ) {
+        return _c.ajaxList.data.msg[msg][_edit.lang];
+      };
 
       // is compatible
       if( !_edit.isCompatible() ) {
         return false;
       }
 
-      // display main
       // display and observe
       _c.eachItem( ["#main", "#header-buttons"], function( object ) {
-        _edit.observe( _c.select( object ).fadeIn() );
+        _edit.observe( _c.select( object ).show() );
       } );
 
+      // transformation
+      _edit.transformation = function() {
+        return _c.ajaxList.transformation.all;
+      };
       return false;
     } );
   },
@@ -41,7 +52,7 @@ var _edit = {
         l = this.compatibilityList.length;
     for( i = 0, l = this.compatibilityList.length; i < l; ) {
       if( !Modernizr[this.compatibilityList[i++]] ) {
-        return this.showError( this.msg.notcompatible[this.lang] );
+        return this.showError( this.msg( "notcompatible" ) );
       }
     }
     return true;

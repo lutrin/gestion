@@ -51,23 +51,36 @@
 <xsl:template match="ui.field">
   <xsl:choose>
     <xsl:when test="@type='textarea'">
-      <textarea>allo</textarea>
+      <div>
+        <xsl:call-template name="apply-topfield" />
+        <textarea>Ceci est un text area</textarea>
+      </div>
+    </xsl:when>
+    <xsl:when test="@type='select'">
+      <div>
+        <xsl:call-template name="apply-topfield" />
+        <select>
+          <xsl:for-each select="@id|@name|@required|@autofocus|@autocomplete|@multiple">
+            <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+          </xsl:for-each>
+          <xsl:for-each select="ui.datalist">
+            <xsl:for-each select="ui.dataitem">
+              <option>
+                <xsl:if test="@value">
+                  <xsl:attribute name="value"><xsl:value-of select="@value"/></xsl:attribute>
+                </xsl:if>
+                <xsl:value-of select="@label" />
+              </option>
+            </xsl:for-each>
+          </xsl:for-each>
+        </select>
+      </div>
     </xsl:when>
     <xsl:otherwise>
       <div>
-        <xsl:attribute name="class">
-          <xsl:text>field</xsl:text>
-        </xsl:attribute>
-        <xsl:if test="@label">
-          <label>
-            <xsl:attribute name="for">
-              <xsl:value-of select="@id" />
-            </xsl:attribute>
-             <xsl:value-of select="@label" />
-          </label>
-        </xsl:if>
+        <xsl:call-template name="apply-topfield" />
         <input>
-          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength">
+          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size">
             <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
           </xsl:for-each>
         </input>
@@ -88,5 +101,18 @@
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="apply-topfield">
+  <xsl:attribute name="class">
+    <xsl:text>field</xsl:text>
+  </xsl:attribute>
+  <xsl:if test="@label">
+    <label>
+      <xsl:attribute name="for">
+        <xsl:value-of select="@id" />
+      </xsl:attribute>
+       <xsl:value-of select="@label" />
+    </label>
+  </xsl:if>
+</xsl:template>
 
 </xsl:stylesheet>

@@ -23,6 +23,11 @@ class ui_Form {
       ) );
     }
 
+    # head title
+    if( isset( $params["headtitle"] ) ) {
+      $innerHtml[] = Tag::build( "h2", false, $params["headtitle"] );
+    }
+
     foreach( $params as $key => $item ) {
       if( $key == "submit" ) {
         $submit = $params[$key];
@@ -102,6 +107,35 @@ class ui_Form {
     # field
     $attributes["name"] = $fieldId;
     $attributes["id"] = "$formId-$fieldId";
-    return Tag::build( "ui.field", $attributes, ( isset( $values[$fieldId] )? $values[$fieldId]: false ) );
+
+    # value
+    $innerHtml = array();
+    if( isset( $values[$fieldId] ) ) {
+      $innerHtml[] = Tag::build( "ui.value", false, $values[$fieldId] );
+    }
+
+    # list
+    if( isset( $attributes["list"] ) ) {
+      $innerHtml[] = Tag::build( "ui.datalist", false, self::getDatalist(
+        $attributes["id"],
+        $attributes["name"],
+        $attributes["list"]
+      ) );
+      unset( $attributes["list"] );
+    }
+
+    return Tag::build( "ui.field", $attributes, $innerHtml );
+  }
+
+  /****************************************************************************/
+  protected static function getDatalist( $id, $name, $list ) {
+    $dataList = array();
+    foreach( $list as $key => $item ) {
+      $dataList[] = Tag::build(
+        "ui.dataitem",
+        array_merge( $item, array( "listid" => $id, "listname" => $name, "key" => $key ) )
+      );
+    }
+    return $dataList;
   }
 }

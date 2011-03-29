@@ -28,27 +28,33 @@
 
         // fatal error
         if( ajaxItem.fatalError ) {
-          _edit.showError( _edit.msg[ajaxItem.fatalError][_edit.lang] );
+          _edit.showError( _edit.msg( ajaxItem.fatalError ) );
           return false;
         }
 
         // replacement
         if( ajaxItem.replacement ) {
           _c.eachItem( ajaxItem.replacement, function( replacement ) {
-            $( replacement.query ).xslt( "<app.start>" + replacement.innerHtml + "</app.start>", "transformation/all.xsl", function( object ) {
-              _edit.observe( object );
-            } );
+            $( replacement.query ).xslt(
+              "<app.start>" + replacement.innerHtml + "</app.start>",
+              _edit.transformation(),
+              _edit.observe
+            );
           } );
         }
 
         // dialog
         if( ajaxItem.dialog ) {
-          _c.select( "#dialog" ).xslt( "<app.start>" + ajaxItem.dialog + "</app.start>", "transformation/all.xsl", function( object ) {
-            _edit.observe( object.show() );
-            object.click( function() {
-              $( this ).hide();
-            } );
-          } );
+          _c.select( "#dialog" ).xslt(
+            "<app.start>" + ajaxItem.dialog + "</app.start>",
+            _edit.transformation(),
+            function( object ) {
+              _edit.observe( object.show() );
+              /*object.click( function() {
+                $( this ).hide();
+              } );*/
+            }
+          );
         }
         return false;
       }
