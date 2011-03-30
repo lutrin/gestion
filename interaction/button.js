@@ -50,9 +50,12 @@
             _edit.transformation(),
             function( object ) {
               _edit.observe( object.show() );
-              /*object.click( function() {
-                $( this ).hide();
-              } );*/
+              object.click( function( ev ) {
+                var target = $( ev.target );
+                if( target.attr( "id" ) && target.attr( "id" ) == "dialog" ) {
+                  target.hide();
+                }
+              } );
             }
           );
         }
