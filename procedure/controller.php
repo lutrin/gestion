@@ -38,6 +38,8 @@ function main() {
             return logout( $CONTROLLER["disconnected"][$DEFAULT_LANG] );
           } elseif( $action == "displaySetting" ) {
             return displaySetting();
+          } elseif( $action == "save" ) {
+            return save();
           }
         }
         return logout( $msg );
@@ -88,6 +90,22 @@ function displaySetting() {
   Includer::add( "fnSetting" );
   setHeader( "json" );
   return json_encode( fn_Setting::display() );
+}
+
+/******************************************************************************/
+function save() {
+  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
+      ( $token =  ( isset( $_GET["token"] )?    $_GET["token"]: false ) ) ) {
+    setHeader( "json" );
+
+    # setting
+    if( $object == "setting" ) {
+      Includer::add( "fnSetting" );
+      return( fn_Setting::save( $token ) );
+    }    
+  } else {
+    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$DEFAULT_LANG] );
+  }
 }
 
 /******************************************************************************/

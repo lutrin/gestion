@@ -50,12 +50,16 @@
 
 <xsl:template match="ui.field">
   <xsl:choose>
+
+    <!-- textarea -->
     <xsl:when test="@type='textarea'">
       <div>
         <xsl:call-template name="apply-topfield" />
         <textarea>Ceci est un text area</textarea>
       </div>
     </xsl:when>
+
+    <!-- select -->
     <xsl:when test="@type='select'">
       <div>
         <xsl:call-template name="apply-topfield" />
@@ -76,11 +80,22 @@
         </select>
       </div>
     </xsl:when>
+
+    <!-- hidden -->
+    <xsl:when test="@type='hidden'">
+      <input>
+        <xsl:for-each select="@id|@name|@type|@value">
+          <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+        </xsl:for-each>
+      </input>
+    </xsl:when>
+
+    <!-- input -->
     <xsl:otherwise>
       <div>
         <xsl:call-template name="apply-topfield" />
         <input>
-          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size">
+          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size|@value">
             <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
           </xsl:for-each>
         </input>

@@ -32,8 +32,9 @@ class fn_Setting {
   /****************************************************************************/
   protected static function getFormFields( $SETTING, $lang ) {
     return array(
-      "k"     => array(
-        "type" => "hidden"
+      "object"     => array(
+        "type" => "hidden",
+        "value" => self::$id
       ),
       "login" => array(
         "legend" => $SETTING["login"][$lang],
@@ -42,6 +43,8 @@ class fn_Setting {
           "username" => array(
             "label"        => $SETTING["username"][$lang],
             "required"     => "required",
+            "pattern"      => "^[a-z][\-_\.a-z0-9]+$",
+            "unique"       => true,
             "maxlength"    => 30,
             "size"         => 20,
             "autofocus"    => "autofocus",

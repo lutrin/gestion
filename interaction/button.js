@@ -34,30 +34,12 @@
 
         // replacement
         if( ajaxItem.replacement ) {
-          _c.eachItem( ajaxItem.replacement, function( replacement ) {
-            $( replacement.query ).xslt(
-              "<app.start>" + replacement.innerHtml + "</app.start>",
-              _edit.transformation(),
-              _edit.observe
-            );
-          } );
+          _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
         }
 
         // dialog
         if( ajaxItem.dialog ) {
-          _c.select( "#dialog" ).xslt(
-            "<app.start>" + ajaxItem.dialog + "</app.start>",
-            _edit.transformation(),
-            function( object ) {
-              _edit.observe( object.show() );
-              object.click( function( ev ) {
-                var target = $( ev.target );
-                if( target.attr( "id" ) && target.attr( "id" ) == "dialog" ) {
-                  target.hide();
-                }
-              } );
-            }
-          );
+          _edit.showDialog( ajaxItem.dialog );
         }
         return false;
       }

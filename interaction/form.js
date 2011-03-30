@@ -21,6 +21,11 @@
       form.find( "input[autofocus]" ).focus();
     }
 
+    // apply change
+    form.find( "input[type=text],input[type=password],textarea" ).change( function() {
+      $( this ).addClass( "changed" );
+    } );
+
     form.addClass( "initiated" );
   },
 
@@ -86,11 +91,7 @@
             // replacement
             if( ajaxItem.replacement ) {
               _c.eachItem( ajaxItem.replacement, function( replacement ) {
-                $( replacement.query ).xslt(
-                  "<app.start>" + replacement.innerHtml + "</app.start>",
-                  _edit.transformation(),
-                  _edit.observe
-                );
+                _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
               } );
             }
             return false;

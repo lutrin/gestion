@@ -66,6 +66,27 @@ var _edit = {
   },
 
   /****************************************************************************/
+  showDialog: function( dialog ) {
+    _edit.replaceContent( { query: "#dialog-content", innerHtml: dialog } );
+    _c.select( "#dialog" ).css( { display: "table" } ).click( function( ev ) {
+      var target = $( ev.target );
+      if( target.attr( "id" ) && target.attr( "id" ) == "dialog-content" ) {
+        target.parent().hide();
+        target.html( "" );
+      }
+    } );
+  },
+
+  /****************************************************************************/
+  replaceContent: function( replacement ) {
+    $( replacement.query ).xslt(
+      "<app.start>" + replacement.innerHtml + "</app.start>",
+      _edit.transformation(),
+      _edit.observe
+    );
+  },
+
+  /****************************************************************************/
   observe: function( object ) {
     _c.eachItem( _edit.observeList, function( observeItem ) {
       var subObjectList = object.find( observeItem.query );
@@ -85,7 +106,7 @@ var _edit = {
         return false;
       }
     );
-  },
+  }
 };
 
 $( document ).ready( function() {

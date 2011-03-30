@@ -59,10 +59,10 @@ class ui_Form {
 
     # submit
     if( $submit ) {
-      $innerHtml[] = Tag::build( "input", array(
+      $innerHtml[] = Tag::build( "div", array( "class" => "buttonList" ), Tag::build( "input", array(
         "type"  => "submit",
         "value" => $submit
-      ) );
+      ) ) );
     }
 
     # message
