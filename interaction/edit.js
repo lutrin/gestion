@@ -33,6 +33,11 @@ var _edit = {
         return false;
       }
 
+      // common error
+      _c.showAjaxError = function( XMLHttpRequest, textStatus, errorThrown ) {
+        _edit.showError( XMLHttpRequest.responseText || _edit.msg( textStatus ) || _edit.msg( "emptyresponse" ) );
+      }
+
       // display and observe
       _c.eachItem( ["#main", "#header-buttons"], function( object ) {
         _edit.observe( _c.select( object ).show() );
@@ -61,6 +66,8 @@ var _edit = {
   /****************************************************************************/
   showError: function( msg ) {
     _c.select( "#main" ).hide();
+    _c.select( "#header-buttons" ).html( "" );
+    _c.select( "#dialog" ).hide();
     _c.select( "#error-msg" ).html( msg ).show();
     return false;
   },

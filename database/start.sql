@@ -26,3 +26,6 @@ UPDATE `gestion`.`editor` SET `longname` = 'Eric Barolet' WHERE `editor`.`k` =1;
 
 /* add password index */
 ALTER TABLE `editor` ADD INDEX ( `password` );
+
+/* add lang */
+ALTER TABLE `editor` ADD `lang` VARCHAR( 10 ) NOT NULL DEFAULT 'fr' AFTER `longname` ;

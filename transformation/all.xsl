@@ -87,6 +87,7 @@
         <xsl:for-each select="@id|@name|@type|@value">
           <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
         </xsl:for-each>
+        <xsl:call-template name="apply-value-attribute" />
       </input>
     </xsl:when>
 
@@ -98,6 +99,7 @@
           <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size|@value">
             <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
           </xsl:for-each>
+          <xsl:call-template name="apply-value-attribute" />
         </input>
       </div>
     </xsl:otherwise>
@@ -127,6 +129,12 @@
       </xsl:attribute>
        <xsl:value-of select="@label" />
     </label>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="apply-value-attribute">
+  <xsl:if test="ui.value">
+    <xsl:attribute name="value"><xsl:value-of select="ui.value"/></xsl:attribute>
   </xsl:if>
 </xsl:template>
 

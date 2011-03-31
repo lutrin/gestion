@@ -2,11 +2,11 @@
 class fn_Edit {
   /****************************************************************************/
   public static function display() {
-    global $DEFAULT_LANG, $CHARSET, $APP;
+    global $CHARSET, $APP;
     Includer::add( "uiFrame" );
 
     # language
-    $lang = $DEFAULT_LANG; /*TODO get language from user config*/
+    $lang = getLang();
 
     # title
     $title = $APP["name"][$lang] . "&nbsp;-&nbsp;" . $APP["site"];

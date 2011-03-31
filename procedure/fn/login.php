@@ -6,9 +6,24 @@ class fn_Login {
   public static function isConnected() {
 
     # get editor
-    if( !$editor = self::getSessionEditor() ) {
+    if( !$username = self::getSessionEditor() ) {
       return false;
     }
+
+    # reset
+    $_SESSION["editor"] = false;
+    Includer::add( "dbEditor" );
+    if( !$editor = db_Editor::getInfo( $username ) ) {
+      return false;
+    }
+
+    # account disabled
+    if( !$editor["active"] ) {
+      return false;
+    }
+
+    # set session
+    $_SESSION["editor"] = $editor;
 
     # get key
     $key = "session_" . $editor["username"];
@@ -43,10 +58,10 @@ return true;
 
   /****************************************************************************/
   public static function connect( $values ) {
-    global $LOGIN, $DEFAULT_LANG;
+    global $LOGIN;
 
     # language
-    $lang = $DEFAULT_LANG; /*TODO get language from user config*/
+    $lang = getLang();
 
     # valid form
     Includer::add( "fnForm" );
@@ -57,25 +72,25 @@ return true;
     );
 
     # fatal error or error list
-    if( isset( $result["fatalError"] ) && isset( $result["errorList"] ) ) {
+    if( isset( $result["fatalError"] ) || ( isset( $result["errorList"] ) && $result["errorList"] ) ) {
       return $result;
     }
 
     # valid user exists
     Includer::add( "dbEditor" );
-    if( !$info = db_Editor::getInfo( $values["username"], $values["password"] ) ) {
+    if( !$editor = db_Editor::getInfo( $values["username"], $values["password"] ) ) {
       $result["formError"] = "incorrectlogin";
       return $result;
     }
 
     # account disabled
-    if( !$info["active"] ) {
+    if( !$editor["active"] ) {
       $result["formError"] = "disabledaccount";
       return $result;
     }
 
     # set session
-    $_SESSION["editor"] = $info;
+    $_SESSION["editor"] = $editor;
     Tokenizer::delete( self::$id );
 
     # replacement
@@ -90,10 +105,9 @@ return true;
 
   /****************************************************************************/
   public static function disconnect( $msg = "" ) {
-    global $DEFAULT_LANG;
 
     # language
-    $lang = $DEFAULT_LANG; /*TODO get language from user config*/
+    $lang = getLang();
 
     $_SESSION["editor"] = false;
 

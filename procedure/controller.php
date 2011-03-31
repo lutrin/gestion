@@ -16,13 +16,16 @@ exit;
 
 /******************************************************************************/
 function main() {
-  global $adminMode, $pageMode, $CONTROLLER, $DEFAULT_LANG;
+  global $adminMode, $pageMode, $CONTROLLER;
 
   # set includer
   Includer::add( array( "typeValidator", "tokenizer", "fnLogin" ) );
 
+  # language
+  $lang = getLang();
+
   # set default entry
-  $msg = $CONTROLLER["wrongentry"][$DEFAULT_LANG];
+  $msg = $CONTROLLER["wrongentry"][$lang];
   $connected = fn_Login::isConnected();
 
   # switch action
@@ -35,7 +38,7 @@ function main() {
       if( $connected ) {
         if( $action = isset( $_GET["action"] )? typeValidator::isAlphaNumeric( $_GET["action"] ): false ) {
           if( $action == "logout" ) {
-            return logout( $CONTROLLER["disconnected"][$DEFAULT_LANG] );
+            return logout( $CONTROLLER["disconnected"][$lang] );
           } elseif( $action == "displaySetting" ) {
             return displaySetting();
           } elseif( $action == "save" ) {
@@ -57,7 +60,7 @@ function main() {
 
 /******************************************************************************/
 function login() {
-  global $CONTROLLER, $DEFAULT_LANG;
+  global $CONTROLLER;
   if( ( $username = ( isset( $_GET["username"] )? $_GET["username"]: false ) ) &&
       ( $password = ( isset( $_GET["password"] )? $_GET["password"]: false ) ) &&
       ( $token    = ( isset( $_GET["token"] )?    $_GET["token"]:    false ) ) ) {
@@ -68,7 +71,8 @@ function login() {
       "token"    => $token
     ) ) );
   } else {
-    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$DEFAULT_LANG] );
+    $lang = getLang();
+    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$lang] );
   }
 }
 
@@ -94,17 +98,19 @@ function displaySetting() {
 
 /******************************************************************************/
 function save() {
-  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
+  if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
+      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
       ( $token =  ( isset( $_GET["token"] )?    $_GET["token"]: false ) ) ) {
     setHeader( "json" );
 
     # setting
     if( $object == "setting" ) {
       Includer::add( "fnSetting" );
-      return( fn_Setting::save( $token ) );
+      return json_encode( fn_Setting::save( $k, $token ) );
     }    
   } else {
-    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$DEFAULT_LANG] );
+    $lang = getLang();
+    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$lang] );
   }
 }
 
@@ -128,6 +134,12 @@ function setHeader( $type = "html" ) {
     "json" => "Content-Type: application/json; charset=$CHARSET"
   );
   return header( in_array( $type, array_keys( $typeList ) )? $typeList[$type]: $typeList["html"] );
+}
+
+/******************************************************************************/
+function getLang() {
+  global $DEFAULT_LANG;
+  return isset( $_SESSION["editor"]["lang"] )? $_SESSION["editor"]["lang"]: $DEFAULT_LANG;
 }
 
 /******************************************************************************/

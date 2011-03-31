@@ -90,10 +90,9 @@
 
             // replacement
             if( ajaxItem.replacement ) {
-              _c.eachItem( ajaxItem.replacement, function( replacement ) {
-                _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
-              } );
+              _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
             }
+            _c.select( "#dialog" ).hide();
             return false;
           }
         );
@@ -107,13 +106,13 @@
   serialize: function( form, app ) {
     var fields = {},
         error = false;
-    form.find( "input[type=text],input[type=hidden],input[type=password]" ).each( function() {
+    form.find( "input[type=text],input[type=hidden],input[type=password],select" ).each( function() {
       var object = $( this ),
-          type = object.attr( "type" ),
+          type = object.attr( "type" ) || object.tagName,
           value = _c.trim( object.val() );
 
       // trim
-      if( _c.inList( type, ["hidden", "text"] ) ) {
+      if( _c.inList( type, ["text"] ) ) {
         value = _c.trim( value );
       }
 

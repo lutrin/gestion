@@ -4,8 +4,8 @@
     "en": "Your browser is not compatible. Please upgrade."
   },
   "tokenerror": {
-    "fr": "Réponse au formulaire tardive ou douteuse. Veuillez recharger la page.",
-    "en": "Response to the form later or doubtful. Please reload page."
+    "fr": "Réponse au formulaire tardive ou douteuse. <a href=''>Veuillez recharger la page</a>.",
+    "en": "Response to the form later or doubtful. <a href=''>Please reload page</a>."
   },
   "required": {
     "fr": "Champ obligatoire",
@@ -18,5 +18,21 @@
   "disabledaccount": {
     "fr": "Le compte est désactivé.",
     "en": "Account disabled."
+  },
+  "parsererror": {
+    "fr": "Erreur de l'analyseur. <a href=''>Veuillez recharger la page</a>.",
+    "en": "Parse error. <a href=''>Please reload page</a>."
+  },
+  "emptyresponse": {
+    "fr": "Réponse vide",
+    "en": "Empty response"
+  },
+  "notpermitted": {
+    "fr": "Opération non permise",
+    "en": "Operation not permitted"
+  },
+  "notsaved": {
+    "fr": "Non sauvegardé",
+    "en": "Not saved"
   }
 }
