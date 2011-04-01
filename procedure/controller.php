@@ -143,6 +143,20 @@ function getLang() {
 }
 
 /******************************************************************************/
+function replaceFields( $fields, $content ) {
+  return str_replace(
+    array_map(
+      function( $key ) {
+        return "###$key###";
+      },
+      array_keys( $fields )
+    ),
+    array_values( $fields ),
+    $content
+  );
+}
+
+/******************************************************************************/
 function e( $item ) {
   error_log( print_r( $item ), 1 );
 }

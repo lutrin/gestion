@@ -40,6 +40,7 @@ var _edit = {
 
       // display and observe
       _c.eachItem( ["#main", "#header-buttons"], function( object ) {
+      //TODO remove .show()
         _edit.observe( _c.select( object ).show() );
       } );
 
@@ -86,8 +87,9 @@ var _edit = {
 
   /****************************************************************************/
   replaceContent: function( replacement ) {
+    //TODO replace( /\&/, "&amp" )
     $( replacement.query ).xslt(
-      "<app.start>" + replacement.innerHtml + "</app.start>",
+      "<app.start>" + replacement.innerHtml.replace( /\&/, "&amp" ) + "</app.start>",
       _edit.transformation(),
       _edit.observe
     );

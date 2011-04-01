@@ -76,20 +76,6 @@ class ui_Frame {
     }
 
     # replace
-    return self::replaceFields( $fields, file_get_contents( $FRAME ) );
-  }
-
-  /****************************************************************************/
-  public static function replaceFields( $fields, $content ) {
-    return str_replace(
-      array_map(
-        function( $key ) {
-          return "###$key###";
-        },
-        array_keys( $fields )
-      ),
-      array_values( $fields ),
-      $content
-    );
+    return replaceFields( $fields, file_get_contents( $FRAME ) );
   }
 }

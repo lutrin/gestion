@@ -30,9 +30,9 @@ class fn_Edit {
   }
 
   /****************************************************************************/
-  protected static function getBody( $lang, $title ) {
+  public static function getBody( $lang, $title ) {
     global $MSG_NOSCRIPT, $EDITOR, $EDIT;
-    return ui_Frame::replaceFields( array(
+    return replaceFields( array(
       "lang"          => $lang,
       "title"         => $title,
       "headerButtons" => self::getHeaderButton( $lang ),

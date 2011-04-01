@@ -20,7 +20,7 @@ class fn_Setting {
 
   /****************************************************************************/
   public static function save( $k, $token ) {
-    global $SETTING;
+    global $SETTING, $APP;
 
     # allowed
     if( $k != $_SESSION["editor"]["k"] ) {
@@ -52,13 +52,15 @@ class fn_Setting {
     $_SESSION["editor"] = db_Editor::getInfo( $_SESSION["editor"]["username"] );
     $lang = $values["lang"];
 
+    # title
+    $title = $APP["name"][$lang] . "&nbsp;-&nbsp;" . $APP["site"];
+    
     # replacement
     Includer::add( "fnEdit" );
+#TODO if lang, replace main, header-buttons, longname else replace longname
     return array(
       "replacement" => array(
-        array( "query" => "#main", "innerHtml" => fn_Edit::getMain( $lang ) ),
-        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )/*,
-        TODO #title*/
+        array( "query" => "body:first", "innerHtml" => fn_Edit::getBody( $lang, $title ) )
       )
     );
   }
