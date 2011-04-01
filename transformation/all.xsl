@@ -27,14 +27,14 @@
 </xsl:template>
 
 <!-- adaptation -->
-<xsl:template match="a">
+<!--<xsl:template match="a">
   <a>
     <xsl:call-template name="apply-tag" />
     <xsl:if test=".=''">
       <xsl:value-of select="@href" />
     </xsl:if>
   </a>
-</xsl:template>
+</xsl:template>-->
 
 <!-- application -->
 <xsl:template match="app.start">
@@ -72,6 +72,11 @@
               <option>
                 <xsl:if test="@value">
                   <xsl:attribute name="value"><xsl:value-of select="@value"/></xsl:attribute>
+                  <xsl:if test="../../ui.value">
+                    <xsl:if test="@value=../../ui.value">
+                      <xsl:attribute name="selected"><xsl:text>selected</xsl:text></xsl:attribute>
+                    </xsl:if>
+                  </xsl:if>
                 </xsl:if>
                 <xsl:value-of select="@label" />
               </option>

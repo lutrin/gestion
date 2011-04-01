@@ -22,17 +22,17 @@ a:hover {
        url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
-.iconic, .currentUser:before {
+.iconic, #currentUser:before {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
 
-.currentUser:before {
+#currentUser:before {
   content: "u";
 }
 
 /* color */
-html, legend {
+html, legend, #dock li span {
   background:#eee;
 }
 
@@ -93,7 +93,7 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input, select, button, #dialog-content > * {
+fieldset, legend, input, select, button, #dialog-content > *, #dock li span {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
@@ -118,7 +118,7 @@ input[type=text]:focus, input[type=password]:focus, select:focus {
   box-shadow: inset rgba(0,88,0,.5) 0px 0px 5px;
 }
 
-input[type=submit], button {
+input[type=submit], button, #dock li span {
   box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
 }
 
@@ -181,7 +181,7 @@ input, select {
   padding: 5px;
 }
 
-legend {
+legend, #dock li span {
   padding: 2px 5px;
 }
 
@@ -204,7 +204,6 @@ input[type=submit] {
   top: 20px;
   bottom: 20px;
   width: 100%;
-  display: none;
 }
 
 #login {
@@ -216,7 +215,6 @@ input[type=submit] {
 
 #header-buttons {
   float: right;
-  display: none;
 }
 
 #dialog {
@@ -243,9 +241,73 @@ input[type=submit] {
   width: 250px;
 }
 
-.currentUser {
+#currentUser {
   font-weight: bold;
   margin: 0 5px;
+}
+
+#dock-container {
+  top: 16px;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+#dock {
+  display: inline-block;
+  position: relative;
+}
+
+#dock li {
+    display: inline-block;
+    list-style-type: none;
+    position: relative;
+    z-index: 1;
+}
+
+#dock li span {
+    display: none;
+    left: -50%;
+    margin: 20px;
+    position: absolute;
+    float: left;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+#dock li:hover span {
+    display: block;
+}
+
+#dock li a {
+    -moz-transform-origin: 50% 100%;
+    -moz-transition: all 0.4s ease 0s;
+    -webkit-transform-origin: 50% 100%;
+    -webkit-transition: all 0.4s ease 0s;
+    -o-transform-origin: 50% 100%;
+    -o-transition: all 0.4s ease 0s;
+    background: url(../image/pages-stack.svg) no-repeat center center;
+    height: 20px;
+    width: 24px;
+    -moz-transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    -o-transform: scale(1.5);
+    float:left;
+    
+}
+
+#dock li:hover a {
+    -moz-transform: scale(2);
+    -webkit-transform: scale(2);
+    -o-transform: scale(2);
+    margin: 0 4px;
+}
+
+#dock li:hover + li a, #dock li.prev a {
+    -moz-transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    -o-transform: scale(1.5);
+    margin: 0 5px;
 }
 
 .field {
@@ -255,4 +317,8 @@ input[type=submit] {
 .buttonList {
   width: 100%;
   text-align: right;
+}
+
+.no-js #main, .no-js #header-buttons {
+  display: none;
 }

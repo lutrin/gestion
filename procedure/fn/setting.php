@@ -20,7 +20,7 @@ class fn_Setting {
 
   /****************************************************************************/
   public static function save( $k, $token ) {
-    global $SETTING, $APP;
+    global $SETTING, $APP, $EDITOR;
 
     # allowed
     if( $k != $_SESSION["editor"]["k"] ) {
@@ -47,20 +47,26 @@ class fn_Setting {
     # update editor
     Includer::add( "dbEditor" );
     if( !db_Editor::save( array( "lang" => $values["lang"], "longname" => $values["longname"] ), $k ) ) {
-      return array( "formError" => "notsaved" );
+      return array();
     }
     $_SESSION["editor"] = db_Editor::getInfo( $_SESSION["editor"]["username"] );
     $lang = $values["lang"];
 
     # title
-    $title = $APP["name"][$lang] . "&nbsp;-&nbsp;" . $APP["site"];
-    
+    $tagtitle = $APP["name"][$lang] . " - " . $APP["site"];
+
     # replacement
     Includer::add( "fnEdit" );
-#TODO if lang, replace main, header-buttons, longname else replace longname
     return array(
       "replacement" => array(
-        array( "query" => "body:first", "innerHtml" => fn_Edit::getBody( $lang, $title ) )
+        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $lang ) ),
+        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) ),
+        array( "query" => "#title",          "innerHtml" => $APP["name"][$lang] . "&nbsp;-&nbsp;" . $APP["site"] ),
+        array( "query" => "#currentUser",    "innerHtml" => $_SESSION["editor"]["longname"] ),
+        array( "query" => "#about",          "innerHtml" => $EDITOR["about"][$lang] ),
+        array( "query" => "#condition",      "innerHtml" => $EDITOR["condition"][$lang] ),
+        array( "query" => "#help",           "innerHtml" => $EDITOR["help"][$lang] ),
+        array( "query" => "[lang]", "attributeList" => array( "name" => "lang", "value" => $lang ) )
       )
     );
   }

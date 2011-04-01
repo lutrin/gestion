@@ -40,8 +40,7 @@ var _edit = {
 
       // display and observe
       _c.eachItem( ["#main", "#header-buttons"], function( object ) {
-      //TODO remove .show()
-        _edit.observe( _c.select( object ).show() );
+        _edit.observe( _c.select( object ) );
       } );
 
       // transformation
@@ -87,12 +86,23 @@ var _edit = {
 
   /****************************************************************************/
   replaceContent: function( replacement ) {
-    //TODO replace( /\&/, "&amp" )
-    $( replacement.query ).xslt(
-      "<app.start>" + replacement.innerHtml.replace( /\&/, "&amp" ) + "</app.start>",
-      _edit.transformation(),
-      _edit.observe
-    );
+    var object = $( replacement.query );
+
+    // inner html
+    if( replacement.innerHtml ) {
+      object.xslt(
+        "<app.start>" + replacement.innerHtml + "</app.start>",
+        _edit.transformation(),
+        _edit.observe
+      );
+    }
+
+    // attribute list
+    if( replacement.attributeList ) {
+      _c.eachItem( replacement.attributeList, function( attribute ) {
+        object.attr( attribute.name, attribute.value );
+      } ); 
+    }
   },
 
   /****************************************************************************/

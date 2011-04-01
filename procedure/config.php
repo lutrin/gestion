@@ -32,7 +32,7 @@ $APP = array(
     "../../external/style/boilerplate.style.css",
     "style/edit.css"
   ),
-  "head_script" => "../external/interaction/modernizr-1.6.min.js",
+  "head_script" => "../external/interaction/modernizr-1.7.min.js",
   "body_script" => array(
       "../external/interaction/jquery-1.3.2.min.js",
       /*"../external/interaction/jquery-ui-1.8.custom.min.js",*/

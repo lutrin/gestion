@@ -30,10 +30,10 @@ class fn_Edit {
   }
 
   /****************************************************************************/
-  public static function getBody( $lang, $title ) {
+  protected static function getBody( $lang, $title ) {
     global $MSG_NOSCRIPT, $EDITOR, $EDIT;
     return replaceFields( array(
-      "lang"          => $lang,
+      "lang"          => $lang, 
       "title"         => $title,
       "headerButtons" => self::getHeaderButton( $lang ),
       "noscript"      => $MSG_NOSCRIPT[$lang],
@@ -54,7 +54,25 @@ class fn_Edit {
     }
 
     # editor
-    return "<p>Afficher l'environnement d'édition</p>";
+    return '<div id="dock-container">'
+         . '<span>Outils</span>'
+		 .   '<div id="dock">'
+		 .   '<ul>'
+		. '<li><span>Les pages</span><a href="#option1"> </a></li>'
+	   . '<li><span>Les gabarits</span><a href="#option2"> </a></li>'
+	   . '<li><span>Les articles</span><a href="#option3"> </a></li>'
+	   . '<li><span>Les calendriers</span><a href="#option4"> </a></li>'
+	   . '<li><span>Les bulletins</span><a href="#option5"> </a></li>'
+	   . '<li><span>Les formulaires</span><a href="#option5"> </a></li>'
+	   . '<li><span>Les forums</span><a href="#option5"> </a></li>'
+	   . '<li><span>Les données</span><a href="#option5"> </a></li>'
+	   . '<li><span>Les fichiers</span><a href="#option5"> </a></li>'
+	   . '<li><span>Les éditeurs</span><a href="#option5"> </a></li>'
+	   . '<li><span>Les visiteurs</span><a href="#option5"> </a></li>'
+		. '</ul>'
+		#. '<div class="base"></div>'
+		. '</div>'
+	. '</div>';
   }
 
   /****************************************************************************/
@@ -67,7 +85,7 @@ class fn_Edit {
     }
 
     # editor
-    return "<span class='currentUser'>" . $_SESSION["editor"]["longname"] . "</span>"
+    return "<span id='currentUser'>" . $_SESSION["editor"]["longname"] . "</span>"
          . "<button class='iconic' title='" . $HEADER_BUTTONS["setting"][$lang] . "' data-action='displaySetting'>w</button>"
          . "<button class='iconic' title='" . $HEADER_BUTTONS["logout"][$lang] . "' data-action='logout'>x</button>";
   }
