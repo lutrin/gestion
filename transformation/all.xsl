@@ -65,23 +65,9 @@
         <xsl:call-template name="apply-topfield" />
         <select>
           <xsl:for-each select="@id|@name|@required|@autofocus|@autocomplete|@multiple">
-            <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+            <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
-          <xsl:for-each select="ui.datalist">
-            <xsl:for-each select="ui.dataitem">
-              <option>
-                <xsl:if test="@value">
-                  <xsl:attribute name="value"><xsl:value-of select="@value"/></xsl:attribute>
-                  <xsl:if test="../../ui.value">
-                    <xsl:if test="@value=../../ui.value">
-                      <xsl:attribute name="selected"><xsl:text>selected</xsl:text></xsl:attribute>
-                    </xsl:if>
-                  </xsl:if>
-                </xsl:if>
-                <xsl:value-of select="@label" />
-              </option>
-            </xsl:for-each>
-          </xsl:for-each>
+          <xsl:apply-templates select="ui.datalist" mode="select" />
         </select>
       </div>
     </xsl:when>
@@ -90,7 +76,7 @@
     <xsl:when test="@type='hidden'">
       <input>
         <xsl:for-each select="@id|@name|@type|@value">
-          <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+          <xsl:call-template name="apply-attribute" />
         </xsl:for-each>
         <xsl:call-template name="apply-value-attribute" />
       </input>
@@ -102,7 +88,7 @@
         <xsl:call-template name="apply-topfield" />
         <input>
           <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size|@value">
-            <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+            <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
           <xsl:call-template name="apply-value-attribute" />
         </input>
@@ -111,16 +97,76 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="ui.datalist" mode="select">
+  <xsl:apply-templates select="ui.dataitem" mode="select" />
+</xsl:template>
+
+<xsl:template match="ui.dataitem" mode="select">
+  <option>
+    <xsl:if test="@value">
+      <xsl:attribute name="value"><xsl:value-of select="@value"/></xsl:attribute>
+      <xsl:if test="../../ui.value">
+        <xsl:if test="@value=../../ui.value">
+          <xsl:attribute name="selected">
+            <xsl:text>selected</xsl:text>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:if>
+    </xsl:if>
+    <xsl:value-of select="@label" />
+  </option>
+</xsl:template>
+
+<xsl:template match="ui.dock">
+  <div class="dock-container">
+    <xsl:call-template name="apply-attributelist" />
+    <nav class="dock">
+      <menu>
+        <xsl:for-each select="ui.item">
+          <li>
+            <xsl:for-each select="@id">
+              <xsl:call-template name="apply-attribute" />
+            </xsl:for-each>
+            <span>
+              <xsl:if test="@label">
+                <xsl:value-of select="@label"/>
+              </xsl:if>
+            </span>
+            <a>
+              <xsl:attribute name="href">
+                <xsl:value-of select="concat('#',@href)" />
+              </xsl:attribute>
+              <xsl:text> </xsl:text>
+            </a>
+          </li>
+        </xsl:for-each>
+      </menu>
+    </nav>
+    <xsl:for-each select="ui.item">
+      <section id="{@href}">
+        <xsl:for-each select="@class">
+          <xsl:call-template name="apply-attribute" />
+        </xsl:for-each>
+        <xsl:apply-templates/>
+      </section>
+    </xsl:for-each>
+  </div>
+</xsl:template>
+
 <!-- common template -->
 <xsl:template name="apply-tag">
-  <xsl:call-template name="apply-attributes" />
+  <xsl:call-template name="apply-attributelist" />
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template name="apply-attributes">
+<xsl:template name="apply-attributelist">
   <xsl:for-each select="@*">
-    <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+    <xsl:call-template name="apply-attribute" />
   </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="apply-attribute">
+  <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 
 <xsl:template name="apply-topfield">
@@ -128,10 +174,7 @@
     <xsl:text>field</xsl:text>
   </xsl:attribute>
   <xsl:if test="@label">
-    <label>
-      <xsl:attribute name="for">
-        <xsl:value-of select="@id" />
-      </xsl:attribute>
+    <label for="@id">
        <xsl:value-of select="@label" />
     </label>
   </xsl:if>

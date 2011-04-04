@@ -47,32 +47,46 @@ class fn_Edit {
 
   /****************************************************************************/
   public static function getMain( $lang, $msg = "" ) {
+    global $TOOLS;
 
     # login form
     if( !$connected = fn_Login::isConnected() ) {
       return fn_login::buildForm( $lang, $msg );
     }
 
-    # editor
-    return '<div id="dock-container">'
-         . '<span>Outils</span>'
-		 .   '<div id="dock">'
-		 .   '<ul>'
-		. '<li><span>Les pages</span><a href="#option1"> </a></li>'
-	   . '<li><span>Les gabarits</span><a href="#option2"> </a></li>'
-	   . '<li><span>Les articles</span><a href="#option3"> </a></li>'
-	   . '<li><span>Les calendriers</span><a href="#option4"> </a></li>'
-	   . '<li><span>Les bulletins</span><a href="#option5"> </a></li>'
-	   . '<li><span>Les formulaires</span><a href="#option5"> </a></li>'
-	   . '<li><span>Les forums</span><a href="#option5"> </a></li>'
-	   . '<li><span>Les données</span><a href="#option5"> </a></li>'
-	   . '<li><span>Les fichiers</span><a href="#option5"> </a></li>'
-	   . '<li><span>Les éditeurs</span><a href="#option5"> </a></li>'
-	   . '<li><span>Les visiteurs</span><a href="#option5"> </a></li>'
-		. '</ul>'
-		#. '<div class="base"></div>'
-		. '</div>'
-	. '</div>';
+    # tool list
+    $toolList = array(
+      "pages" => array(
+        "label"     => $TOOLS["pages"][$lang],
+        "class"     => "empty",
+        "innerHtml" => "<h2>" . $TOOLS["pages"][$lang] . "</h2>"
+      ),
+      "editors" => array(
+        "label"     => $TOOLS["editors"][$lang],
+        "class"     => "empty",
+        "innerHtml" => "<h2>" . $TOOLS["editors"][$lang] . "</h2>"
+      )
+    );
+
+    # is admin
+    $idAdmin = $_SESSION["editor"]["admin"];
+
+    # build list
+    $allowedToolList = array();
+    foreach( $toolList as $key => $tool ) {
+      if( $idAdmin ) {
+        $allowedToolList[$key] = $tool;
+      }
+    }
+
+    # params
+    $params = array(
+      "id"   => "toolList",
+      "mode" => "dock"
+    );
+
+    Includer::add( "uiNav" );
+    return ui_Nav::buildXml( $params, $allowedToolList );
   }
 
   /****************************************************************************/

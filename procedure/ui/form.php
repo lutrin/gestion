@@ -28,14 +28,14 @@ class ui_Form {
       $innerHtml[] = Tag::build( "h2", false, $params["headtitle"] );
     }
 
-    foreach( $params as $key => $item ) {
+    foreach( $params as $key => $param ) {
       if( $key == "submit" ) {
-        $submit = $params[$key];
+        $submit = $param;
         continue;
 
         # message
       } elseif( $key == "message" ) {
-        $message = $params[$key];
+        $message = $param;
         continue;
 
         # action
@@ -44,12 +44,12 @@ class ui_Form {
           "type"  => "hidden",
           "id"    => "$id-action",
           "name"  => "action",
-          "value" => $params[$key]
+          "value" => $param
         ) );
         $attributes[$key] = "?action=" . $params[$key];
         continue;
       }
-      $attributes[$key] = $params[$key];
+      $attributes[$key] = $param;
     }
 
     # fields

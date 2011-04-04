@@ -128,6 +128,17 @@ $MSG_NOSCRIPT = array(
   "en" => "Enabling JavaScript is absolutely necessary.",
 );
 
+$TOOLS = array(
+  "pages" => array(
+    "fr" => "Les pages",
+    "en" => "Pages"
+  ),
+  "editors" => array(
+    "fr" => "Les éditeurs",
+    "en" => "Editors"
+  )
+);
+
 mb_internal_encoding( $CHARSET );
 mb_http_output( $CHARSET );
 ob_start("mb_output_handler");
@@ -211,6 +222,9 @@ $INCLUDE_LIST = array(
   ),
   "uiForm" => array(
     "path" => "ui/form.php"
+  ),
+  "uiNav" => array(
+    "path" => "ui/nav.php"
   ),
 
   # data base table

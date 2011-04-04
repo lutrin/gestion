@@ -31,8 +31,16 @@ a:hover {
   content: "u";
 }
 
+#toolList-pages a, #toolList-editors a {
+  background: url(../image/pages-stack.svg) no-repeat center center;
+}
+
+.empty {
+  background: url(../image/roller.gif) no-repeat center center;
+}
+
 /* color */
-html, legend, #dock li span {
+html, legend, .dock li span {
   background:#eee;
 }
 
@@ -93,7 +101,7 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input, select, button, #dialog-content > *, #dock li span {
+fieldset, legend, input, select, button, #dialog-content > *, .dock li span {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
@@ -118,7 +126,7 @@ input[type=text]:focus, input[type=password]:focus, select:focus {
   box-shadow: inset rgba(0,88,0,.5) 0px 0px 5px;
 }
 
-input[type=submit], button, #dock li span {
+input[type=submit], button, .dock li span {
   box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
 }
 
@@ -181,7 +189,7 @@ input, select {
   padding: 5px;
 }
 
-legend, #dock li span {
+legend, .dock li span {
   padding: 2px 5px;
 }
 
@@ -246,26 +254,30 @@ input[type=submit] {
   margin: 0 5px;
 }
 
-#dock-container {
+#toolList {
   top: 16px;
+  bottom: 20px;
+}
+
+.dock-container {
   position: fixed;
   text-align: center;
   width: 100%;
 }
 
-#dock {
+.dock {
   display: inline-block;
   position: relative;
 }
 
-#dock li {
-    display: inline-block;
-    list-style-type: none;
-    position: relative;
-    z-index: 1;
+.dock li {
+  display: inline-block;
+  list-style-type: none;
+  position: relative;
+  z-index: 1;
 }
 
-#dock li span {
+.dock li span {
     display: none;
     left: -50%;
     margin: 20px;
@@ -275,39 +287,50 @@ input[type=submit] {
     z-index: 2;
 }
 
-#dock li:hover span {
+.dock li:hover span {
     display: block;
 }
 
-#dock li a {
+.dock li a {
     -moz-transform-origin: 50% 100%;
     -moz-transition: all 0.4s ease 0s;
     -webkit-transform-origin: 50% 100%;
     -webkit-transition: all 0.4s ease 0s;
     -o-transform-origin: 50% 100%;
     -o-transition: all 0.4s ease 0s;
-    background: url(../image/pages-stack.svg) no-repeat center center;
     height: 20px;
     width: 24px;
     -moz-transform: scale(1.5);
     -webkit-transform: scale(1.5);
     -o-transform: scale(1.5);
     float:left;
-    
 }
 
-#dock li:hover a {
+.dock li:hover a {
     -moz-transform: scale(2);
     -webkit-transform: scale(2);
     -o-transform: scale(2);
     margin: 0 4px;
 }
 
-#dock li:hover + li a, #dock li.prev a {
+.dock li:hover + li a, .dock li.prev a {
     -moz-transform: scale(1.5);
     -webkit-transform: scale(1.5);
     -o-transform: scale(1.5);
     margin: 0 5px;
+}
+
+.dock-container section {
+  text-align: left;
+  display: none;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  position: absolute;
+}
+
+.dock-container section:target {
+  display: block;
 }
 
 .field {

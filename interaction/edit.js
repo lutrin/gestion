@@ -9,7 +9,21 @@ var _edit = {
   /****************************************************************************/
   observeList: [
     { query: "form", script: "form" },
-    { query: "button", script: "button" },
+    { query: "button", script: "button" }
+/*
+{
+jQuery('a[href^=#]').click(function(){
+    var id = this.hash.replace('#','');
+    $('#' + id).addClass('isNowHighlighted');
+});
+
+
+$(document).ready(function(){
+    if (window.location.hash) {
+        $('#' + window.location.hash.replace('#','')).addClass('isNowHighlighted');
+    }
+});
+*/
   ],
 
   /****************************************************************************/

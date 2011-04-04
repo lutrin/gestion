@@ -97,7 +97,7 @@ return true;
     Includer::add( "fnEdit" );
     return array(
       "replacement" => array(
-        array( "query" => "#main", "innerHtml" => fn_Edit::getMain( $lang ) ),
+        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $lang ) ),
         array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
       )
     );
@@ -115,7 +115,7 @@ return true;
     Includer::add( "fnEdit" );
     return array(
       "replacement" => array(
-        array( "query" => "#main", "innerHtml" => fn_Edit::getMain( $lang, $msg ) ),
+        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $lang, $msg ) ),
         array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
       )
     );
