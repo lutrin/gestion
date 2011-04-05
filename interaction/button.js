@@ -9,7 +9,11 @@
     }
 
     // click
-    button.click( app.click );
+    if( button.hasClass( "closeDialog" ) ) {
+      button.click( _edit.closeDialog );
+    } else {
+      button.click( app.click );
+    }
 
     button.addClass( "initiated" );
     //return false;
@@ -24,7 +28,6 @@
     return _c.callAjax(
       [ { folder: "procedure", name: action } ],
       function( ajaxItem ) {
-        var key;
 
         // fatal error
         if( ajaxItem.fatalError ) {

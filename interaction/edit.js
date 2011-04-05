@@ -8,8 +8,9 @@ var _edit = {
 
   /****************************************************************************/
   observeList: [
-    { query: "form", script: "form" },
-    { query: "button", script: "button" }
+    { query: "form",       script: "form" },
+    { query: "button",     script: "button" },
+    { query: "a[href^=#]", script: "anchor" }
 /*
 {
 jQuery('a[href^=#]').click(function(){
@@ -83,6 +84,7 @@ $(document).ready(function(){
     _c.select( "#header-buttons" ).html( "" );
     _c.select( "#dialog" ).hide();
     _c.select( "#error-msg" ).html( msg ).show();
+    window.location.hash = "";
     return false;
   },
 
@@ -96,6 +98,12 @@ $(document).ready(function(){
         target.html( "" );
       }
     } );
+  },
+
+  /****************************************************************************/
+  closeDialog: function() {
+    _c.select( "#dialog" ).hide();
+    _c.select( "#dialog-content" ).html( "" );
   },
 
   /****************************************************************************/

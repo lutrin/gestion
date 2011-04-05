@@ -120,6 +120,9 @@
 <xsl:template match="ui.dock">
   <div class="dock-container">
     <xsl:call-template name="apply-attributelist" />
+    <xsl:if test="ui.headtitle">
+      <h2><xsl:value-of select="ui.headtitle"/></h2>
+    </xsl:if>
     <nav class="dock">
       <menu>
         <xsl:for-each select="ui.item">
@@ -150,6 +153,56 @@
         <xsl:apply-templates/>
       </section>
     </xsl:for-each>
+  </div>
+</xsl:template>
+
+<xsl:template match="ui.tabs">
+  <div class="tabs">
+    <xsl:if test="ui.headtitle">
+      <h2><xsl:value-of select="ui.headtitle"/></h2>
+    </xsl:if>
+    <xsl:call-template name="apply-attributelist" />
+    <menu>
+      <xsl:for-each select="ui.item">
+        <li>
+          <xsl:for-each select="@id">
+            <xsl:call-template name="apply-attribute" />
+          </xsl:for-each>
+          <a>
+            <xsl:attribute name="href">
+              <xsl:value-of select="concat('#',@href)" />
+            </xsl:attribute>
+            <xsl:if test="@label">
+              <xsl:value-of select="@label"/>
+            </xsl:if>
+          </a>
+        </li>
+      </xsl:for-each>
+    </menu>
+    <xsl:for-each select="ui.item">
+      <section id="{@href}">
+        <xsl:for-each select="@class">
+          <xsl:call-template name="apply-attribute" />
+        </xsl:for-each>
+        <xsl:apply-templates/>
+      </section>
+    </xsl:for-each>
+  </div>
+</xsl:template>
+
+<xsl:template match="ui.dialog">
+  <div>
+    <xsl:if test="@title">
+      <h2><xsl:value-of select="@title" /></h2>
+    </xsl:if>
+    <p>
+      <xsl:apply-templates/>
+    </p>
+    <div class="buttonList">
+      <xsl:if test="@close">
+        <button class="closeDialog"><xsl:value-of select="@close" /></button>
+      </xsl:if>
+    </div>
   </div>
 </xsl:template>
 

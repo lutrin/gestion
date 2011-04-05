@@ -57,24 +57,20 @@ class fn_Edit {
     # tool list
     $toolList = array(
       "pages" => array(
-        "label"     => $TOOLS["pages"][$lang],
-        "class"     => "empty",
-        "innerHtml" => "<h2>" . $TOOLS["pages"][$lang] . "</h2>"
+        "label" => $TOOLS["pages"][$lang]
       ),
       "editors" => array(
-        "label"     => $TOOLS["editors"][$lang],
-        "class"     => "empty",
-        "innerHtml" => "<h2>" . $TOOLS["editors"][$lang] . "</h2>"
+        "label"  => $TOOLS["editors"][$lang]
       )
     );
 
     # is admin
-    $idAdmin = $_SESSION["editor"]["admin"];
+    $isAdmin = $_SESSION["editor"]["admin"];
 
     # build list
     $allowedToolList = array();
     foreach( $toolList as $key => $tool ) {
-      if( $idAdmin ) {
+      if( $isAdmin ) {
         $allowedToolList[$key] = $tool;
       }
     }
@@ -82,7 +78,8 @@ class fn_Edit {
     # params
     $params = array(
       "id"   => "toolList",
-      "mode" => "dock"
+      "mode" => "dock",
+      "headtitle" => "Outils"
     );
 
     Includer::add( "uiNav" );

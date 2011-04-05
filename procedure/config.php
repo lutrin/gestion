@@ -139,6 +139,24 @@ $TOOLS = array(
   )
 );
 
+$PERMISSION = array(
+  "title" => array(
+    "fr" => "Problème de permission",
+    "en" => "Permission problem"
+  ),
+  "message" => array(
+    "fr" => "Vous n'avez pas accès à cette section.",
+    "en" => "This section is not permit."
+  )
+);
+
+$DIALOG = array(
+  "close" => array(
+    "fr" => "Fermer",
+    "en" => "Close"
+  )
+);
+
 mb_internal_encoding( $CHARSET );
 mb_http_output( $CHARSET );
 ob_start("mb_output_handler");
@@ -215,6 +233,9 @@ $INCLUDE_LIST = array(
   "fnForm" => array(
     "path" => "fn/form.php"
   ),
+  "fnEditor" => array(
+    "path" => "fn/editor.php"
+  ),
 
   # user interface
   "uiFrame" => array(
@@ -225,6 +246,9 @@ $INCLUDE_LIST = array(
   ),
   "uiNav" => array(
     "path" => "ui/nav.php"
+  ),
+  "uiDialog" => array(
+    "path" => "ui/dialog.php"
   ),
 
   # data base table

@@ -41,6 +41,8 @@ function main() {
             return logout( $CONTROLLER["disconnected"][$lang] );
           } elseif( $action == "displaySetting" ) {
             return displaySetting();
+          } elseif( $action == "getContent" ) {
+            return getContent();
           } elseif( $action == "save" ) {
             return save();
           }
@@ -70,10 +72,9 @@ function login() {
       "password" => $password,
       "token"    => $token
     ) ) );
-  } else {
-    $lang = getLang();
-    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$lang] );
   }
+  $lang = getLang();
+  return logout( $CONTROLLER["wrongentry"][$lang] );
 }
 
 /******************************************************************************/
@@ -97,7 +98,22 @@ function displaySetting() {
 }
 
 /******************************************************************************/
+function getContent() {
+  global $CONTROLLER;
+  if( $id = ( isset( $_GET["id"] )? typeValidator::isAlphaNumeric( $_GET["id"] ): false ) ) {
+    setHeader( "json" );
+    if( $id == "editors" ) {
+      Includer::add( "fnEditor" );
+      return json_encode( fn_Editor::displayList() );
+    }
+  }
+  $lang = getLang();
+  return logout( $CONTROLLER["wrongentry"][$lang] );
+}
+
+/******************************************************************************/
 function save() {
+  global $CONTROLLER;
   if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
       ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
       ( $token =  ( isset( $_GET["token"] )?    $_GET["token"]: false ) ) ) {
@@ -108,10 +124,9 @@ function save() {
       Includer::add( "fnSetting" );
       return json_encode( fn_Setting::save( $k, $token ) );
     }    
-  } else {
-    $lang = getLang();
-    return fn_logout::disconnect( $CONTROLLER["wrongentry"][$lang] );
   }
+  $lang = getLang();
+  return logout( $CONTROLLER["wrongentry"][$lang] );
 }
 
 /******************************************************************************/

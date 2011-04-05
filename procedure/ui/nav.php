@@ -20,6 +20,12 @@ class ui_Nav {
       $id = $params["id"];
     }
 
+    # headtitle
+    if( isset( $params["headtitle"] ) ) {
+      $innerHtml[] = Tag::build( "ui.headtitle", false, $params["headtitle"] );
+      unset( $params["headtitle"] );
+    }
+
     # attributes list
     foreach( $params as $key => $param ) {
       $attributes[$key] = $param;
@@ -39,10 +45,14 @@ class ui_Nav {
     $attributes["href"] = $fieldId;
 
     # inner html
-    $innerHtml = "";
+    $innerHtml = " ";
     if( isset( $attributes["innerHtml"] ) ) {
       $innerHtml = $attributes["innerHtml"];
       unset( $attributes["innerHtml"] );
+    } else {
+        $classList = isset( $attributes["class"] )? explode( " ", $attributes["class"] ): array();
+        $classList[] = "empty";
+        $attributes["class"] = join( " ", $classList );
     }
 
     return Tag::build( "ui.item", $attributes, $innerHtml );
