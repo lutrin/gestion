@@ -31,8 +31,12 @@ a:hover {
   content: "u";
 }
 
-#toolList-pages a, #toolList-editors a {
-  background: url(../image/pages-stack.svg) no-repeat center center;
+#toolList-pages a {
+  background: url(../image/page.svg) no-repeat center center;
+}
+
+#toolList-editors a {
+  background: url(../image/editor.svg) no-repeat center center;
 }
 
 .empty {
