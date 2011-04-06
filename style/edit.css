@@ -14,7 +14,7 @@ a:hover {
   text-shadow: 0px 0px 5px rgba(0,88,88,.7);
 }
 
-.tabs > menu .selected {
+.nav > menu > li.selected {
   font-weight: bold;
 }
 
@@ -48,8 +48,8 @@ a:hover {
 }
 
 /* color */
-html, legend, .dock li span, .tabs li {
-  background:#eee;
+html, legend, .dock li span, .nav {
+  background-color:#eee;
 }
 
 noscript, #error-msg, .alertMsg, .formMsg {
@@ -70,12 +70,24 @@ input[type=submit], button {
   background-color: #607890;
 }
 
+.nav > menu > li {
+  background-color: #607890;
+}
+
+.nav > menu > li:not(.selected) > a {
+  color: #fff;
+}
+
 input[type=submit]:hover, button:hover {
   background-color: #036;
   text-shadow: 0px 0px 5px rgba(255,255,255,0.6);
 }
 
-#main, #dialog-content > *, .tabs > menu .selected {
+.nav > menu > li:hover {
+  background-color: #036;
+}
+
+#main, #dialog-content > *, .nav > menu li.selected {
   background-color: #fff;
 }
 
@@ -356,7 +368,7 @@ section:target, section.target {
   display: block;
 }
 
-.tabs li {
+.nav li {
   display: inline-block;
   margin: 0 2px;
 }
@@ -364,6 +376,10 @@ section:target, section.target {
 .buttonList {
   width: 100%;
   text-align: right;
+}
+
+.nav h2, .nav menu {
+  display: inline;
 }
 
 .no-js #main, .no-js #header-buttons {

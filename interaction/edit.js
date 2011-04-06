@@ -37,7 +37,7 @@ $(document).ready(function(){
       { folder: "data", name: "msg" },
       { folder: "transformation", name: "all" }
     ], function( ajaxItem ) {
-console.log( ajaxItem );
+
       // msg
       _edit.msg = function( msg ) {
         return _c.ajaxList.data.msg[msg][_edit.lang];
@@ -140,6 +140,7 @@ console.log( ajaxItem );
     return _c.callAjax(
       [ { folder: "interaction", name: script } ],
       function( ajaxItem ) {
+/*console.log( ajaxItem );*/
         objectList.each( ajaxItem.initialize );
       }
     );

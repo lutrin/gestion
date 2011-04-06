@@ -45,14 +45,12 @@ class ui_Nav {
     $attributes["href"] = $fieldId;
 
     # inner html
-    $innerHtml = " ";
+    $innerHtml = false;
     if( isset( $attributes["innerHtml"] ) ) {
       $innerHtml = $attributes["innerHtml"];
       unset( $attributes["innerHtml"] );
     } else {
-        $classList = isset( $attributes["class"] )? explode( " ", $attributes["class"] ): array();
-        $classList[] = "empty";
-        $attributes["class"] = join( " ", $classList );
+      $attributes["empty"] = true;
     }
 
     return Tag::build( "ui.item", $attributes, $innerHtml );

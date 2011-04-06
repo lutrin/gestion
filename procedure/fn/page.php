@@ -1,6 +1,6 @@
 <?php
-class fn_Editor {
-  protected static $idList = "editors";  
+class fn_Page {
+  protected static $idList = "pages";  
 
   /****************************************************************************/
   public static function displayList() {
@@ -10,7 +10,7 @@ class fn_Editor {
     $lang = getLang();
 
     # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+    /*if( !$isAdmin = $_SESSION["editor"]["admin"] ) {*/
       Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
       return array(
         "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
@@ -19,8 +19,8 @@ class fn_Editor {
           "innerHtml" => fn_edit::getMain( getLang() ) 
         )
       );
-    }
-
+    /*}*/
+/*
     $editorsTabList = array(
       "editors-individual" => array(
         "label"     => "Individus",
@@ -46,6 +46,6 @@ class fn_Editor {
         "innerHtml" => ui_Nav::buildXml( $params, $editorsTabList )
       ),
       "hash" => true
-    );
+    );*/
   }
 }

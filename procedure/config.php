@@ -233,6 +233,9 @@ $INCLUDE_LIST = array(
   "fnForm" => array(
     "path" => "fn/form.php"
   ),
+  "fnPage" => array(
+    "path" => "fn/page.php"
+  ),
   "fnEditor" => array(
     "path" => "fn/editor.php"
   ),

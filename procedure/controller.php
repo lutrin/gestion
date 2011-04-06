@@ -101,8 +101,15 @@ function displaySetting() {
 function getContent() {
   global $CONTROLLER;
   if( $id = ( isset( $_GET["id"] )? typeValidator::isAlphaNumeric( $_GET["id"] ): false ) ) {
+    $idList = explode( "-", $id );
     setHeader( "json" );
-    if( $id == "editors" ) {
+    if( $id == "pages" ) {
+      Includer::add( "fnPage" );
+      return json_encode( fn_Page::displayList() );
+    } elseif( $id == "editors" ) {
+      Includer::add( "fnEditor" );
+      return json_encode( fn_Editor::displayList() );
+    } elseif( $id == "editors-individual" ) {
       Includer::add( "fnEditor" );
       return json_encode( fn_Editor::displayList() );
     }

@@ -127,9 +127,7 @@
       <menu>
         <xsl:for-each select="ui.item">
           <li>
-            <xsl:for-each select="@id">
-              <xsl:call-template name="apply-attribute" />
-            </xsl:for-each>
+            <xsl:call-template name="apply-nav-attributelist" />
             <span>
               <xsl:if test="@label">
                 <xsl:value-of select="@label"/>
@@ -145,48 +143,34 @@
         </xsl:for-each>
       </menu>
     </nav>
-    <xsl:for-each select="ui.item">
-      <section id="{@href}">
-        <xsl:for-each select="@class">
-          <xsl:call-template name="apply-attribute" />
-        </xsl:for-each>
-        <xsl:apply-templates/>
-      </section>
-    </xsl:for-each>
+    <xsl:call-template name="apply-itemlist" />
   </div>
 </xsl:template>
 
 <xsl:template match="ui.tabs">
   <div class="tabs">
-    <xsl:if test="ui.headtitle">
-      <h2><xsl:value-of select="ui.headtitle"/></h2>
-    </xsl:if>
     <xsl:call-template name="apply-attributelist" />
-    <menu>
-      <xsl:for-each select="ui.item">
-        <li>
-          <xsl:for-each select="@id">
-            <xsl:call-template name="apply-attribute" />
-          </xsl:for-each>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:value-of select="concat('#',@href)" />
-            </xsl:attribute>
-            <xsl:if test="@label">
-              <xsl:value-of select="@label"/>
-            </xsl:if>
-          </a>
-        </li>
-      </xsl:for-each>
-    </menu>
-    <xsl:for-each select="ui.item">
-      <section id="{@href}">
-        <xsl:for-each select="@class">
-          <xsl:call-template name="apply-attribute" />
+    <div class="nav">
+      <xsl:if test="ui.headtitle">
+        <h2><xsl:value-of select="ui.headtitle"/></h2>
+      </xsl:if>
+      <menu>
+        <xsl:for-each select="ui.item">
+          <li>
+            <xsl:call-template name="apply-nav-attributelist" />
+            <a>
+              <xsl:attribute name="href">
+                <xsl:value-of select="concat('#',@href)" />
+              </xsl:attribute>
+              <xsl:if test="@label">
+                <xsl:value-of select="@label"/>
+              </xsl:if>
+            </a>
+          </li>
         </xsl:for-each>
-        <xsl:apply-templates/>
-      </section>
-    </xsl:for-each>
+      </menu>
+    </div>
+    <xsl:call-template name="apply-itemlist" />
   </div>
 </xsl:template>
 
@@ -237,6 +221,40 @@
   <xsl:if test="ui.value">
     <xsl:attribute name="value"><xsl:value-of select="ui.value"/></xsl:attribute>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="apply-nav-attributelist">
+  <xsl:for-each select="@id">
+    <xsl:call-template name="apply-attribute" />
+  </xsl:for-each>
+  <xsl:if test="@selected">
+    <xsl:attribute name="class">
+      <xsl:text>selected</xsl:text>
+    </xsl:attribute>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="apply-itemlist">
+    <xsl:for-each select="ui.item">
+      <section id="{@href}">
+        <xsl:if test="(@empty) or (@selected)">
+          <xsl:if test="@empty">
+            <xsl:attribute name="class">
+              <xsl:text>empty</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:if test="@selected">
+            <xsl:attribute name="class">
+              <xsl:text> target</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
+        </xsl:if>
+        <xsl:if test="@empty">
+          <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates/>
+      </section>
+    </xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>
