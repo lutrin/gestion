@@ -35,9 +35,9 @@ $(document).ready(function(){
     // initialize message
     return _c.callAjax( [
       { folder: "data", name: "msg" },
-      { folder: "transformation", name: "all" },
+      { folder: "transformation", name: "all" }
     ], function( ajaxItem ) {
-
+console.log( ajaxItem );
       // msg
       _edit.msg = function( msg ) {
         return _c.ajaxList.data.msg[msg][_edit.lang];
@@ -62,7 +62,6 @@ $(document).ready(function(){
       _edit.transformation = function() {
         return _c.ajaxList.transformation.all;
       };
-      return false;
     } );
   },
 
@@ -85,7 +84,6 @@ $(document).ready(function(){
     _c.select( "#dialog" ).hide();
     _c.select( "#error-msg" ).html( msg ).show();
     window.location.hash = "";
-    return false;
   },
 
   /****************************************************************************/
@@ -135,7 +133,6 @@ $(document).ready(function(){
         _edit.initialize( subObjectList, observeItem.script );
       }
     } );
-    return false;
   },
 
   /****************************************************************************/
@@ -144,12 +141,9 @@ $(document).ready(function(){
       [ { folder: "interaction", name: script } ],
       function( ajaxItem ) {
         objectList.each( ajaxItem.initialize );
-        return false;
       }
     );
   }
 };
 
-$( document ).ready( function() {
-  return _edit.load();
-} );
+$( document ).ready( _edit.load );

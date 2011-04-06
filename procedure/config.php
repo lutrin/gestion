@@ -34,7 +34,7 @@ $APP = array(
   ),
   "head_script" => "../external/interaction/modernizr-1.7.min.js",
   "body_script" => array(
-      "../external/interaction/jquery-1.3.2.min.js",
+      "../external/interaction/jquery-1.5.2.min.js",
       /*"../external/interaction/jquery-ui-1.8.custom.min.js",*/
       "../external/interaction/jquery.xslt.js",
       "../library/interaction/common.js",

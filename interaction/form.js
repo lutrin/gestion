@@ -97,7 +97,6 @@
           }
         );
       }
-      return false;
     } );
     return false;
   },
@@ -143,6 +142,5 @@
     }
     div.addClass( "invalid" );
     div.append( "<div class='alertMsg'>" + msg + "</div>" );
-    return false;
   }
 }
