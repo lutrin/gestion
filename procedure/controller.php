@@ -103,15 +103,26 @@ function getContent() {
   if( $id = ( isset( $_GET["id"] )? typeValidator::isAlphaNumeric( $_GET["id"] ): false ) ) {
     $idList = explode( "-", $id );
     setHeader( "json" );
-    if( $id == "pages" ) {
+
+    # pages
+    if( $idList[0] == "pages" ) {
       Includer::add( "fnPage" );
       return json_encode( fn_Page::displayList() );
-    } elseif( $id == "editors" ) {
+
+    # editors
+    } elseif( $idList[0] == "editors" ) {
       Includer::add( "fnEditor" );
-      return json_encode( fn_Editor::displayList() );
-    } elseif( $id == "editors-individual" ) {
-      Includer::add( "fnEditor" );
-      return json_encode( fn_Editor::displayList() );
+      if( isset( $idList[1] ) ) {
+
+        # individual
+        if( $idList[1] == "individual" ) {
+          return json_encode( fn_Editor::displayIndividualList() );
+        } elseif( $idList[1] == "group" ) {
+          return json_encode( fn_Editor::displayGroupList() );
+        }
+      } else {
+        return json_encode( fn_Editor::displayNav() );
+      }
     }
   }
   $lang = getLang();

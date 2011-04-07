@@ -17,6 +17,14 @@ class db_Editor {
   }
 
   /****************************************************************************/
+  public static function get( $fields ) {
+    return DB::select( array(
+      "field" => $fields,
+      "table" => self::$table
+    ) );
+  }
+
+  /****************************************************************************/
   public static function save( $values, $k = false ) {
     if( !$values ) {
       return false;

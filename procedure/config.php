@@ -250,6 +250,9 @@ $INCLUDE_LIST = array(
   "uiNav" => array(
     "path" => "ui/nav.php"
   ),
+  "uiList" => array(
+    "path" => "ui/list.php"
+  ),
   "uiDialog" => array(
     "path" => "ui/dialog.php"
   ),

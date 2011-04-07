@@ -38,9 +38,9 @@
           if( ajaxItem.replacement ) {
             _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
             if( ajaxItem.hash ) {
-              target.removeClass( "empty" );
               window.location.hash = href;
             }
+            target.removeClass( "empty" );
           }
 
           // dialog

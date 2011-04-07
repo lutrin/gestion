@@ -18,6 +18,14 @@ nav > menu > li.selected {
   font-weight: bold;
 }
 
+nav h2 {
+  font-size: 1.2em;
+}
+
+nav h3 {
+  font-size: 1.1em;
+}
+
 /* icon */
 @font-face {
   font-family: "IconicStroke";
@@ -48,7 +56,7 @@ nav > menu > li.selected {
 }
 
 /* color */
-html, legend, .dock li span, nav {
+html, legend, .dock li span, .tabs {
   background-color:#eee;
 }
 
@@ -70,7 +78,7 @@ input[type=submit], button {
   background-color: #607890;
 }
 
-.tabs > nav > menu > li {
+.tabs > menu > li {
   background-color: #607890;
 }
 
@@ -83,11 +91,11 @@ input[type=submit]:hover, button:hover {
   text-shadow: 0px 0px 5px rgba(255,255,255,0.6);
 }
 
-.tabs > nav > menu > li:hover {
+.tabs > menu > li:hover {
   background-color: #036;
 }
 
-#main, #dialog-content > *, .tabs > nav > menu > li.selected {
+#main, #dialog-content > *, .tabs > menu > li.selected {
   background-color: #fff;
 }
 
@@ -145,7 +153,7 @@ input[type=submit]:active, button:active {
   box-shadow:rgba(0,0,0,.2) 0px 0px 3px;
 }
 
-.tabs li {
+.tabs-container li {
   border-left: 1px solid #aaa;
   border-top: 1px solid #aaa;
   border-right: 1px solid #aaa;
@@ -213,7 +221,7 @@ select,
 #dialog-content > * > h2,
 .closeDialog,
 .field,
-.tabs li {
+.tabs-container li {
   padding: 5px;
 }
 
@@ -287,14 +295,16 @@ input[type=submit]:active, .closeDialog:active {
 }
 
 #toolList {
-  top: 16px;
+  top: 20px;
   bottom: 20px;
 }
 
 .dock-container {
   position: fixed;
-  text-align: center;
+  /*text-align: center;*/
+  /*margin: 5px;*/
   width: 100%;
+
 }
 
 .dock {
@@ -303,15 +313,20 @@ input[type=submit]:active, .closeDialog:active {
 }
 
 .dock li {
-  display: inline-block;
+  display: inline;
   list-style-type: none;
   position: relative;
   z-index: 1;
+    /*border: 1px solid #000;*/
+    float: left;
+    clear: both;
+margin: 2px;
 }
 
 .dock li span {
     display: none;
-    left: -50%;
+    left: 50%;
+    top: -50%;
     margin: 20px;
     position: absolute;
     float: left;
@@ -324,11 +339,11 @@ input[type=submit]:active, .closeDialog:active {
 }
 
 .dock li a {
-    -moz-transform-origin: 50% 100%;
+    -moz-transform-origin: 50% 0%;
     -moz-transition: all 0.4s ease 0s;
-    -webkit-transform-origin: 50% 100%;
+    -webkit-transform-origin: 50% 0%;
     -webkit-transition: all 0.4s ease 0s;
-    -o-transform-origin: 50% 100%;
+    -o-transform-origin: 50% 0%;
     -o-transition: all 0.4s ease 0s;
     height: 20px;
     width: 24px;
@@ -342,26 +357,35 @@ input[type=submit]:active, .closeDialog:active {
     -moz-transform: scale(2);
     -webkit-transform: scale(2);
     -o-transform: scale(2);
-    margin: 0 4px;
+    margin: 4px; 4px;
 }
 
 .dock li:hover + li a, .dock li.prev a {
     -moz-transform: scale(1.5);
     -webkit-transform: scale(1.5);
     -o-transform: scale(1.5);
-    margin: 0 5px;
+    margin: 5px 5px;
 }
 
-section {
+section, .no-js #main, .no-js #header-buttons {
   display: none;
 }
 
-.dock-container > section {
-  text-align: left;
+#toolList > section {
+  /*;
   top: 0;
   bottom: 0;
-  width: 100%;
+  width: 100%;*/
+  text-align: left;
+  /*width: 100%;*/
+  /*position: absolute;
+  top: 0;
+  bottom: 0;*/
   position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50px;
+  width: 100%;
 }
 
 section:target, section.target {
@@ -380,8 +404,4 @@ nav li {
 
 nav h2, nav menu {
   display: inline;
-}
-
-.no-js #main, .no-js #header-buttons {
-  display: none;
 }
