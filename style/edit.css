@@ -14,7 +14,7 @@ a:hover {
   text-shadow: 0px 0px 5px rgba(0,88,88,.7);
 }
 
-.nav > menu > li.selected {
+nav > menu > li.selected {
   font-weight: bold;
 }
 
@@ -22,8 +22,8 @@ a:hover {
 @font-face {
   font-family: "IconicStroke";
   src: local("IconicStroke"),
-       url("../../external/style/iconic/iconic_stroke.svg#iconic") format("svg"),
-       url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
+    url("../../external/style/iconic/iconic_stroke.svg#iconic") format("svg"),
+    url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
 .iconic, #currentUser:before {
@@ -48,7 +48,7 @@ a:hover {
 }
 
 /* color */
-html, legend, .dock li span, .nav {
+html, legend, .dock li span, nav {
   background-color:#eee;
 }
 
@@ -70,11 +70,11 @@ input[type=submit], button {
   background-color: #607890;
 }
 
-.nav > menu > li {
+.tabs > nav > menu > li {
   background-color: #607890;
 }
 
-.nav > menu > li:not(.selected) > a {
+nav > menu > li:not(.selected) > a {
   color: #fff;
 }
 
@@ -83,11 +83,11 @@ input[type=submit]:hover, button:hover {
   text-shadow: 0px 0px 5px rgba(255,255,255,0.6);
 }
 
-.nav > menu > li:hover {
+.tabs > nav > menu > li:hover {
   background-color: #036;
 }
 
-#main, #dialog-content > *, .nav > menu li.selected {
+#main, #dialog-content > *, .tabs > nav > menu > li.selected {
   background-color: #fff;
 }
 
@@ -368,7 +368,7 @@ section:target, section.target {
   display: block;
 }
 
-.nav li {
+nav li {
   display: inline-block;
   margin: 0 2px;
 }
@@ -378,7 +378,7 @@ section:target, section.target {
   text-align: right;
 }
 
-.nav h2, .nav menu {
+nav h2, nav menu {
   display: inline;
 }
 

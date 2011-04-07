@@ -150,7 +150,7 @@
 <xsl:template match="ui.tabs">
   <div class="tabs">
     <xsl:call-template name="apply-attributelist" />
-    <div class="nav">
+    <nav>
       <xsl:if test="ui.headtitle">
         <h2><xsl:value-of select="ui.headtitle"/></h2>
       </xsl:if>
@@ -169,7 +169,7 @@
           </li>
         </xsl:for-each>
       </menu>
-    </div>
+    </nav>
     <xsl:call-template name="apply-itemlist" />
   </div>
 </xsl:template>
