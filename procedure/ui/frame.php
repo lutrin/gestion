@@ -65,7 +65,7 @@ class ui_Frame {
 
         # xsl
         $xslDoc = new DOMDocument();
-        $xslDoc->load( "../transformation/all.xsl" );
+        $xslDoc->load( "../transformation/html5-ui.xsl" );
         $proc = new XSLTProcessor();
         $proc->importStylesheet( $xslDoc );
         $fields[$key] = str_replace( "&amp;", "&", $proc->transformToXML( $xmlDoc ) );

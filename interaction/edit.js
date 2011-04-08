@@ -11,31 +11,18 @@ var _edit = {
     { query: "form",       script: "form" },
     { query: "button",     script: "button" },
     { query: "a[href^=#]", script: "anchor" }
-/*
-{
-jQuery('a[href^=#]').click(function(){
-    var id = this.hash.replace('#','');
-    $('#' + id).addClass('isNowHighlighted');
-});
-
-
-$(document).ready(function(){
-    if (window.location.hash) {
-        $('#' + window.location.hash.replace('#','')).addClass('isNowHighlighted');
-    }
-});
-*/
   ],
 
   /****************************************************************************/
   load: function() {
+
     // initialize language
     this.lang = _c.select( "#title" ).attr( "lang" );
 
     // initialize message
     return _c.callAjax( [
       { folder: "data", name: "msg" },
-      { folder: "transformation", name: "all" }
+      { folder: "transformation", name: "html5-ui" }
     ], function( ajaxItem ) {
 
       // msg
@@ -60,7 +47,7 @@ $(document).ready(function(){
 
       // transformation
       _edit.transformation = function() {
-        return _c.ajaxList.transformation.all;
+        return _c.ajaxList.transformation["html5-ui"];
       };
     } );
   },

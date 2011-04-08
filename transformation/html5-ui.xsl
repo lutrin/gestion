@@ -14,7 +14,7 @@
   <object><xsl:call-template name="apply-tag" /></object>
 </xsl:template>
 
-<xsl:template match="basefont">
+<xsl:template match="basefont|big|center|font|s|strike">
   <span><xsl:call-template name="apply-tag" /></span>
 </xsl:template>
 
@@ -24,6 +24,20 @@
 
 <xsl:template match="i">
   <em><xsl:call-template name="apply-tag" /></em>
+</xsl:template>
+
+<xsl:template match="u">
+  <span><xsl:call-template name="apply-tag" /></span>
+</xsl:template>
+
+<xsl:template match="dir">
+  <ul><xsl:call-template name="apply-tag" /></ul>
+</xsl:template>
+
+<xsl:template match="frame|frameset|noframes" />
+
+<xsl:template match="xmp">
+  <pre><xsl:call-template name="apply-tag" /></pre>
 </xsl:template>
 
 <!-- adaptation -->
@@ -172,6 +186,42 @@
       </menu>
     </nav>
     <xsl:call-template name="apply-itemlist" />
+  </div>
+</xsl:template>
+
+<xsl:template match="ui.list">
+  <div id="{@id}">
+    <xsl:attribute name="class">
+      <xsl:value-of select="concat( 'list-container ', ui.mode[1]/@name )" />
+    </xsl:attribute>
+    <xsl:if test="ui.headtitle">
+      <h3><xsl:value-of select="ui.headtitle"/></h3>
+    </xsl:if>
+    <xsl:if test="count(ui.mode) > 1">
+      <select class="mode">
+        <xsl:for-each select="ui.mode">
+          <option value="{@name}"><xsl:value-of select="." /></option>
+        </xsl:for-each>
+      </select>
+    </xsl:if>
+    <div class="list">
+      <div class="header">
+        <xsl:for-each select="ui.headercolumn">
+          <div class="cell"><xsl:value-of select="." /></div>
+        </xsl:for-each>
+      </div>
+      <xsl:for-each select="ui.row">
+        <div class="row">
+          <xsl:call-template name="apply-attributelist" />
+          <xsl:for-each select="ui.cell">
+            <div class="cell">
+              <xsl:call-template name="apply-attributelist" />
+              <xsl:value-of select="." />
+            </div>
+          </xsl:for-each>
+        </div>
+      </xsl:for-each>
+    </div>
   </div>
 </xsl:template>
 

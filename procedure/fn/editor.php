@@ -71,11 +71,31 @@ class fn_Editor {
     $params = array(
       "id"          => "editorIndividualList",
       "mode"        => array(
-        "table",
-        "compact"
+        "table"   => "Tableau",
+        "compact" => "Compacte",
+        "tree"    => "Arbre",
+        "gallery" => "Galerie"
       ),
-      "headertitle" => "Individus",
-      "columnList" => array( "username", "active", "admin", "longname" )
+      "headtitle" => "Individus",
+      "primary" => "k",
+      "columns" => array(
+        "k" => array(
+          "label"    => "Id",
+        ),
+        "username" => array(
+          "label"    => "Éditeur",
+          "sortable" => true
+        ),
+        "active"   => array(
+          "label"  => "Activé"
+        ),
+        "admin"    => array(
+          "label"  => "Administrateur"
+        ),
+        "longname" => array(
+          "label"  => "Nom complet"
+        )
+      )
     );
 
     # list
@@ -83,7 +103,7 @@ class fn_Editor {
     return array(
       "replacement" => array(
         "query" => "#editors-individual",
-        "innerHtml" => ui_List::buildXml( $params, db_Editor::get( $params["columnList"] ) )
+        "innerHtml" => ui_List::buildXml( $params, db_Editor::get( array_keys( $params["columns"] ) ) )
       ),
     );
   }
