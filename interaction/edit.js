@@ -8,9 +8,10 @@ var _edit = {
 
   /****************************************************************************/
   observeList: [
-    { query: "form",       script: "form" },
-    { query: "button",     script: "button" },
-    { query: "a[href^=#]", script: "anchor" }
+    { query: "form",            script: "form" },
+    { query: "button",          script: "button" },
+    { query: "a[href^=#]",      script: "anchor" },
+    { query: ".list-container", script: "list" }
   ],
 
   /****************************************************************************/

@@ -24,28 +24,29 @@
     var button = $( this ),
         app = _c.ajaxList.interaction.button,
         action = button.attr( "data-action" );        
+    if( action ) {
+      return _c.callAjax(
+        [ { folder: "procedure", name: action } ],
+        function( ajaxItem ) {
 
-    return _c.callAjax(
-      [ { folder: "procedure", name: action } ],
-      function( ajaxItem ) {
+          // fatal error
+          if( ajaxItem.fatalError ) {
+            _edit.showError( _edit.msg( ajaxItem.fatalError ) );
+            return false;
+          }
 
-        // fatal error
-        if( ajaxItem.fatalError ) {
-          _edit.showError( _edit.msg( ajaxItem.fatalError ) );
+          // replacement
+          if( ajaxItem.replacement ) {
+            _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
+          }
+
+          // dialog
+          if( ajaxItem.dialog ) {
+            _edit.showDialog( ajaxItem.dialog );
+          }
           return false;
         }
-
-        // replacement
-        if( ajaxItem.replacement ) {
-          _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
-        }
-
-        // dialog
-        if( ajaxItem.dialog ) {
-          _edit.showDialog( ajaxItem.dialog );
-        }
-        return false;
-      }
-    );
+      );
+    }
   }
 }

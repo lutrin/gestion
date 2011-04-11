@@ -29,7 +29,10 @@ class ui_List {
 
     # columns
     foreach( $params["columns"] as $key => $column ) {
-      $innerHtml[] = Tag::build( "ui.headercolumn", false, $column["label"] );
+      $colAttribute = $column;
+      unset( $colAttribute["label" ] );
+      $colAttribute["key"] = $key;
+      $innerHtml[] = Tag::build( "ui.headercolumn", $colAttribute, $column["label"] );
     }
     unset( $params["columns"] );
 
@@ -57,7 +60,7 @@ class ui_List {
     $attributes["id"] = $rowId;
     $innerHtml = array();
     foreach( $fields as $key => $value ) {
-      $attribute = array( "id" => "$rowId-$key" );
+      $attribute = array( "key" => $key, "id" => "$rowId-$key" );
       /*if( is_numeric( $value ) ) {
         $attribute["class"] = "numeric";
       }*/

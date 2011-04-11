@@ -17,11 +17,15 @@ class db_Editor {
   }
 
   /****************************************************************************/
-  public static function get( $fields ) {
-    return DB::select( array(
+  public static function get( $fields, $orders = false ) {
+    $query = array(
       "field" => $fields,
       "table" => self::$table
-    ) );
+    );
+    if( $orders ) {
+      $query["order"] = $orders;
+    }
+    return DB::select( $query );
   }
 
   /****************************************************************************/

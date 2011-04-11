@@ -207,7 +207,22 @@
     <div class="list">
       <div class="header">
         <xsl:for-each select="ui.headercolumn">
-          <div class="cell"><xsl:value-of select="." /></div>
+          <div class="cell">
+            <xsl:if test="@hidden">
+              <xsl:attribute name="class"><xsl:text>hidden</xsl:text></xsl:attribute>
+            </xsl:if>
+            <xsl:choose>
+              <xsl:when test="@sortable">
+                <a class="sortable"><xsl:value-of select="." /></a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="." />
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="@filtrable">
+              <button class="filtrable" />
+            </xsl:if>
+          </div>
         </xsl:for-each>
       </div>
       <xsl:for-each select="ui.row">
@@ -215,7 +230,12 @@
           <xsl:call-template name="apply-attributelist" />
           <xsl:for-each select="ui.cell">
             <div class="cell">
-              <xsl:call-template name="apply-attributelist" />
+              <xsl:variable name="position" select="position()"/>
+              <xsl:for-each select="../../ui.headercolumn[position()=$position]">
+                <xsl:if test="@hidden">
+                  <xsl:attribute name="class"><xsl:text>hidden</xsl:text></xsl:attribute>
+                </xsl:if>
+              </xsl:for-each>
               <xsl:value-of select="." />
             </div>
           </xsl:for-each>
