@@ -59,6 +59,9 @@ class fn_Edit {
       "pages" => array(
         "label" => $TOOLS["pages"][$lang]
       ),
+      "files" => array(
+        "label" => $TOOLS["files"][$lang]
+      ),
       "editors" => array(
         "label"  => $TOOLS["editors"][$lang]
       )

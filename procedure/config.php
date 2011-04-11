@@ -133,6 +133,10 @@ $TOOLS = array(
     "fr" => "Les pages",
     "en" => "Pages"
   ),
+  "files" => array(
+    "fr" => "Les fichiers",
+    "en" => "Files"
+  ),
   "editors" => array(
     "fr" => "Les éditeurs",
     "en" => "Editors"
