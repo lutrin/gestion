@@ -23,7 +23,10 @@
   click: function() {
     var button = $( this ),
         app = _c.ajaxList.interaction.button,
-        action = button.attr( "data-action" );        
+        action = button.attr( "data-action" ),
+        trigger = button.attr( "data-trigger" );
+
+    // action      
     if( action ) {
       return _c.callAjax(
         [ { folder: "procedure", name: action } ],
@@ -47,6 +50,8 @@
           return false;
         }
       );
+    } else if( trigger ) {
+      button.trigger( trigger );
     }
   }
 }

@@ -220,7 +220,9 @@
               </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="@filtrable">
-              <button class="filtrable" />
+              <div class='filtrable'>
+                <button class="setFilter" data-trigger="setFilter"/>
+              </div>
             </xsl:if>
           </div>
         </xsl:for-each>

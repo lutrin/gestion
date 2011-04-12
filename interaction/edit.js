@@ -101,7 +101,12 @@ var _edit = {
       object.xslt(
         "<app.start>" + replacement.innerHtml + "</app.start>",
         _edit.transformation(),
-        _edit.observe
+        function() {
+          _edit.observe( object );
+          if( replacement.callback ) {
+            replacement.callback( object );
+          }
+        }
       );
     }
 
@@ -128,7 +133,6 @@ var _edit = {
     return _c.callAjax(
       [ { folder: "interaction", name: script } ],
       function( ajaxItem ) {
-/*console.log( ajaxItem );*/
         objectList.each( ajaxItem.initialize );
       }
     );

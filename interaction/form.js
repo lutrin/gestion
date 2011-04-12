@@ -47,55 +47,61 @@
     // serialize
     _c.callAjax( scriptList, function( ajaxItem ) {
       var fields = app.serialize( form, app ),
-          action;
+          action, trigger;
 
       if( fields ) {
-        action = fields.action;
-        delete fields.action;
+        if( fields.action ) {
+          action = fields.action;
+          delete fields.action;
 
-        // send
-        return _c.callAjax(
-          [ { folder: "procedure", name: action, params: fields } ],
-          function( ajaxItem ) {
-            var key;
+          // send
+          return _c.callAjax(
+            [ { folder: "procedure", name: action, params: fields } ],
+            function( ajaxItem ) {
+              var key;
 
-            // fatal error
-            if( ajaxItem.fatalError ) {
-              _edit.showError( _edit.msg( ajaxItem.fatalError ) );
+              // fatal error
+              if( ajaxItem.fatalError ) {
+                _edit.showError( _edit.msg( ajaxItem.fatalError ) );
+                return false;
+              }
+
+              // fields error
+              if( ajaxItem.errorList ) {
+                _c.eachItem( ajaxItem.errorList, function( errorItem ) {
+                  return app.showMsg(
+                    form.find( "[name=" + errorItem.name + "]:first" ),
+                    _edit.msg( errorItem.msg )
+                  );
+                } );
+              }
+
+              // form error
+              if( ajaxItem.formError ) {
+                form.append( "<div class='formMsg'>" + _edit.msg( ajaxItem.formError ) + "</div>" );
+              }
+
+              // values
+              form.find( "[type=password]" ).val( "" );
+              if( ajaxItem.values ) {
+                for( key in ajaxItem.values ) {
+                  form.find( "[name=" + key + "]:first" ).val( ajaxItem.values[key] );
+                }
+              }
+
+              // replacement
+              if( ajaxItem.replacement ) {
+                _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
+              }
+              _c.select( "#dialog" ).hide();
               return false;
             }
-
-            // fields error
-            if( ajaxItem.errorList ) {
-              _c.eachItem( ajaxItem.errorList, function( errorItem ) {
-                return app.showMsg(
-                  form.find( "[name=" + errorItem.name + "]:first" ),
-                  _edit.msg( errorItem.msg )
-                );
-              } );
-            }
-
-            // form error
-            if( ajaxItem.formError ) {
-              form.append( "<div class='formMsg'>" + _edit.msg( ajaxItem.formError ) + "</div>" );
-            }
-
-            // values
-            form.find( "[type=password]" ).val( "" );
-            if( ajaxItem.values ) {
-              for( key in ajaxItem.values ) {
-                form.find( "[name=" + key + "]:first" ).val( ajaxItem.values[key] );
-              }
-            }
-
-            // replacement
-            if( ajaxItem.replacement ) {
-              _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
-            }
-            _c.select( "#dialog" ).hide();
-            return false;
-          }
-        );
+          );
+        } else if( fields.trigger ) {
+          trigger = fields.trigger;
+          delete fields.trigger;
+          form.trigger( trigger, fields );
+        }
       }
     } );
     return false;

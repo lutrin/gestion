@@ -6,6 +6,7 @@ a {
 
 a:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 #title {
@@ -34,7 +35,7 @@ nav h3 {
     url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
-.iconic, #currentUser:before, .filtrable {
+.iconic, #currentUser:before, .setFilter {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
@@ -43,7 +44,7 @@ nav h3 {
   content: "u";
 }
 
-.filtrable:before {
+.setFilter:before {
   content: "f";
 }
 
@@ -69,6 +70,24 @@ nav h3 {
 
 .empty {
   background: url(../image/roller.gif) no-repeat center center;
+}
+
+.sorted_asc a:after {
+  content: ">";
+  margin: 2px;
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.sorted_desc a:after {
+  content: "<";
+  margin: 2px;
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 /* color */
@@ -445,16 +464,12 @@ nav h2, nav menu {
   margin: 2px;
 }
 
-.compact .header {
+.compact .header, .compact .cell {
   display: none;
 }
 
 .compact .row {
   display: list-item;
-}
-
-.compact .cell {
-  display: none;
 }
 
 .compact .cell:nth-child(2) {
@@ -472,4 +487,14 @@ nav h2, nav menu {
 .buttonList {
   width: 100%;
   text-align: right;
+}
+
+.filtrable form {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+}
+
+.filtrable .field {
+  padding: 0;
 }

@@ -11,8 +11,11 @@
     // mode choice
     listContainer.children( ".mode:first" ).change( app.changeMode );
 
-    // TODO sortable
+    // sortable
     listContainer.find( ".sortable" ).click( app.sort );
+
+    // fitrable
+    listContainer.find( ".setFilter" ).bind( "setFilter", app.setFilter );
 
     listContainer.addClass( "initiated" );
   },
@@ -30,11 +33,15 @@
 
   /****************************************************************************/
   sort: function() {
-    // get item index
-    var header = $( this ).parent(),
-        index = header.index() - 1,
-        list =  header.parents( ".list:first" ),
+    var app       = _c.ajaxList.interaction.list,
+        cell      = $( this ).parent(),
+        header    = cell.parent(),
+        list      = header.parent(),
+        index     = cell.index() - 1,
+        order     = cell.hasClass( "sorted_asc" )? "desc": "asc",
         valueList = [];
+
+    // get item index
     list.find( ".row" ).each( function() {
       var row = $( this );
       valueList.push( {
@@ -42,13 +49,50 @@
         "outerHtml": row.clone().wrap('<div></div>').parent().html()
       } );
     } ).remove();
-    _c.eachItem( valueList.sort(
-      function( a, b ) {
-        return a.compare > b.compare;
-      } ),
+
+    // order
+    header.find( ".cell" ).each( function() {
+      var cell = $( this );
+      cell.removeClass( "sorted_asc" );
+      cell.removeClass( "sorted_desc" );
+    } );
+
+    // sort
+    _c.eachItem(
+      valueList.sort( app["sort_" + order] ),
       function( value ) {
         list.append( value.outerHtml );
       }
     );
+    cell.addClass( "sorted_" + order );
+  },
+
+  /****************************************************************************/
+  sort_asc: function( a, b ) {
+    return ( a.compare > b.compare )? 1: -1;
+  },
+
+  /****************************************************************************/
+  sort_desc: function( a, b ) {
+    return ( a.compare < b.compare )? 1: -1;
+  },
+
+  /****************************************************************************/
+  setFilter: function() {
+    var app = _c.ajaxList.interaction.list;
+    _edit.replaceContent( {
+      query: this.parentNode,
+      innerHtml: "<ui.form><ui.field type='hidden' name='trigger' value='applyFilter' /><ui.field type='search' name='filter' autofocus='autofocus'/></ui.form>",
+      callback: app.initFilterForm
+    } );
+  },
+
+  /****************************************************************************/
+  initFilterForm: function( form ) {
+    var search = form.find( "input[type=search]" );
+    search.focus();
+    search.blur( function() {
+      form.remove();
+    } );
   }
 }
