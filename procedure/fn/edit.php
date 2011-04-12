@@ -59,6 +59,9 @@ class fn_Edit {
       "pages" => array(
         "label" => $TOOLS["pages"][$lang]
       ),
+      "articles" => array(
+        "label" => $TOOLS["articles"][$lang]
+      ),   
       "files" => array(
         "label" => $TOOLS["files"][$lang]
       ),
@@ -82,7 +85,7 @@ class fn_Edit {
     $params = array(
       "id"   => "toolList",
       "mode" => "dock",
-      "headtitle" => "Outils"
+      "headtitle" => $TOOLS["headtitle"][$lang]
     );
 
     Includer::add( "uiNav" );

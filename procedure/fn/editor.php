@@ -4,7 +4,7 @@ class fn_Editor {
 
   /****************************************************************************/
   public static function displayNav() {
-    global $PERMISSION, $TOOLS;
+    global $PERMISSION, $TOOLS, $TOOLS_EDITOR;
 
     # language
     $lang = getLang();
@@ -23,12 +23,12 @@ class fn_Editor {
 
     $editorsTabList = array(
       "editors-individual" => array(
-        "label"     => "Individus"/*,
+        "label"     => $TOOLS_EDITOR["individual"][$lang]/*,
         "selected"  => true,
         "innerHtml" => "<h3>Individus</h3>"*/
       ),
       "editors-group" => array(
-        "label"  => "Groupes"
+        "label"  => $TOOLS_EDITOR["group"][$lang]
       )
     );
 
@@ -51,7 +51,8 @@ class fn_Editor {
 
   /****************************************************************************/
   public static function displayIndividualList() {
-
+    global $TOOLS_EDITOR, $TOOLS_EDITOR_INDIVIDUAL;
+  
     # language
     $lang = getLang();
 
@@ -76,28 +77,28 @@ class fn_Editor {
         "tree"    => "Arbre",
         "gallery" => "Galerie"
       ),
-      "headtitle" => "Individus",
+      "headtitle" => $TOOLS_EDITOR["individual"][$lang],
       "primary"   => "k",
       "order"     => "k",
       "columns"   => array(
         "k"        => array(
-          "label"  => "Id",
+          "label"    => $TOOLS_EDITOR_INDIVIDUAL["k"][$lang],
           "hidden" => true
         ),
         "username" => array(
-          "label"    => "Éditeur",
+          "label"    => $TOOLS_EDITOR_INDIVIDUAL["username"][$lang],
           "sortable" => true,
           "filtrable" => true
         ),
         "active"   => array(
-          "label" => "Activé"
+          "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang]
         ),
         "admin"    => array(
-          "label" => "Admin.",
+          "label" => $TOOLS_EDITOR_INDIVIDUAL["admin"][$lang],
           "sortable" => true
         ),
         "longname" => array(
-          "label"  => "Nom complet",
+          "label"  => $TOOLS_EDITOR_INDIVIDUAL["longname"][$lang],
           "sortable" => true,
           "filtrable" => true
         )

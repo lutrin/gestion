@@ -129,9 +129,17 @@ $MSG_NOSCRIPT = array(
 );
 
 $TOOLS = array(
+  "headtitle" => array(
+    "fr" => "Outils",
+    "en" => "Tools"
+  ),
   "pages" => array(
     "fr" => "Les pages",
     "en" => "Pages"
+  ),
+  "articles" => array(
+    "fr" => "Les articles",
+    "en" => "Articles"
   ),
   "files" => array(
     "fr" => "Les fichiers",
@@ -141,6 +149,40 @@ $TOOLS = array(
     "fr" => "Les éditeurs",
     "en" => "Editors"
   )
+);
+
+$TOOLS_EDITOR = array(
+  "individual" => array(
+    "fr" => "Individus",
+    "en" => "Individual"
+  ),
+  "group" => array(
+    "fr" => "Groupes",
+    "en" => "Groups"
+  )
+);
+
+$TOOLS_EDITOR_INDIVIDUAL = array(
+  "k" => array(
+    "fr" => "Id",
+    "en" => "Id"
+  ),
+  "username" => array(
+    "fr" => "Éditeur",
+    "en" => "Editor"
+  ),
+  "active" => array(
+    "fr" => "Activé",
+    "en" => "Active"
+  ),
+  "admin" => array(
+    "fr" => "Admin.",
+    "en" => "Admin."
+  ),
+  "longname" => array(
+    "fr" => "Nom complet",
+    "en" => "Complete name"
+  ),
 );
 
 $PERMISSION = array(

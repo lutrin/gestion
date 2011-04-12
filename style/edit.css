@@ -51,6 +51,10 @@ nav h3 {
   background: url(../image/page.svg) no-repeat center center;
 }
 
+#toolList-articles a {
+  background: url(../image/article.svg) no-repeat center center;
+}
+
 #toolList-files a {
   background: url(../image/folder.svg) no-repeat center center;
 }
