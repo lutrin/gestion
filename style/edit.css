@@ -68,8 +68,9 @@ nav h3 {
   background: url(../image/editor.svg) no-repeat center center;
 }
 
-#editorIndividualList .row .cell:nth-child(2) {
+.list-container .cell.editor {
   background: url(../image/editor.svg) no-repeat left center;
+  padding-left: 20px;
 }
 
 .empty {
@@ -95,7 +96,7 @@ nav h3 {
 }
 
 /* color */
-html, legend, .dock li span, .tabs, .header > .cell {
+html, legend, .dock li span, .tabs, .header > .cell, #dialog-content > * > h2 {
   background-color:#eee;
 }
 
@@ -146,8 +147,8 @@ input[type=submit]:hover, button:hover, .tabs > menu > li:hover {
   background-color: transparent;
 }
 
-#dialog-content > * > h2 {
-  background-color: #eee;
+.row.selected {
+  background-color: #ccf;
 }
 
 /* border */
@@ -373,10 +374,6 @@ nav h2, nav menu {
   padding-left: 40px;
 }
 
-#editorIndividualList .row .cell:nth-child(2) {
-  padding-left: 20px;
-}
-
 .dock-container {
   position: fixed;
   width: 100%;
@@ -476,11 +473,11 @@ nav h2, nav menu {
   display: list-item;
 }
 
-.compact .cell:nth-child(2) {
+.compact .main {
   display: block;
 }
 
-.cell .numeric {
+.cell.numeric {
   text-align: right;
 }
 

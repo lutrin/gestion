@@ -204,8 +204,19 @@
         </xsl:for-each>
       </select>
     </xsl:if>
-    <div class="list">
+    <div>
+      <xsl:attribute name="class">
+        <xsl:text>list</xsl:text>
+        <xsl:if test="@selectable">
+          <xsl:text> selectable</xsl:text>
+        </xsl:if>
+      </xsl:attribute>
       <div class="header">
+        <xsl:if test="@selectable">
+          <div class="cell">
+            <input type="checkbox" />
+          </div>
+        </xsl:if>
         <xsl:for-each select="ui.headercolumn">
           <div class="cell">
             <xsl:if test="@hidden">
@@ -230,12 +241,31 @@
       <xsl:for-each select="ui.row">
         <div class="row">
           <xsl:call-template name="apply-attributelist" />
+          <xsl:if test="../@selectable">
+            <div class="cell"><input type="checkbox" class="rowSelection"/></div>
+          </xsl:if>
           <xsl:for-each select="ui.cell">
-            <div class="cell">
-              <xsl:variable name="position" select="position()"/>
+            <div>
+             <xsl:variable name="position" select="position()"/> 
+             <xsl:attribute name="class">
+                <xsl:text>cell</xsl:text>
+                <xsl:if test="@key=../../@main">
+                  <xsl:text> main</xsl:text>
+                </xsl:if>
+                <xsl:if test="@class">
+                  <xsl:value-of select="concat(' ', @class)"/>
+                </xsl:if>
+                <xsl:for-each select="../../ui.headercolumn[position()=$position]">
+                  <xsl:if test="@class">
+                    <xsl:value-of select="concat(' ', @class)"/>
+                  </xsl:if>
+                </xsl:for-each>
+              </xsl:attribute>           
               <xsl:for-each select="../../ui.headercolumn[position()=$position]">
                 <xsl:if test="@hidden">
-                  <xsl:attribute name="class"><xsl:text>hidden</xsl:text></xsl:attribute>
+                  <xsl:attribute name="class">
+                    <xsl:text>hidden</xsl:text>
+                  </xsl:attribute>
                 </xsl:if>
               </xsl:for-each>
               <xsl:value-of select="." />
@@ -252,9 +282,7 @@
     <xsl:if test="@title">
       <h2><xsl:value-of select="@title" /></h2>
     </xsl:if>
-    <p>
-      <xsl:apply-templates/>
-    </p>
+    <p><xsl:apply-templates/></p>
     <div class="buttonList">
       <xsl:if test="@close">
         <button class="closeDialog"><xsl:value-of select="@close" /></button>

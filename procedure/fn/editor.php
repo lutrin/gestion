@@ -70,47 +70,59 @@ class fn_Editor {
 
     # params
     $params = array(
-      "id"          => "editorIndividualList",
-      "mode"      => array(
+      "id"         => "editorIndividualList",
+      "mode"       => array(
         "table"   => "Tableau",
         "compact" => "Compacte",
         "tree"    => "Arbre",
         "gallery" => "Galerie"
       ),
-      "headtitle" => $TOOLS_EDITOR["individual"][$lang],
-      "primary"   => "k",
-      "order"     => "k",
-      "columns"   => array(
+      "headtitle"  => $TOOLS_EDITOR["individual"][$lang],
+      "primary"    => "k",
+      "main"       => "username",
+      "order"      => "k",
+      "selectable" => true,
+      "columns"    => array(
         "k"        => array(
-          "label"    => $TOOLS_EDITOR_INDIVIDUAL["k"][$lang],
+          "label"  => $TOOLS_EDITOR_INDIVIDUAL["k"][$lang],
           "hidden" => true
         ),
         "username" => array(
           "label"    => $TOOLS_EDITOR_INDIVIDUAL["username"][$lang],
-          "sortable" => true,
-          "filtrable" => true
+          "class"    => "editor",
+          "sortable" => true/*,
+          "filtrable" => true*/
         ),
         "active"   => array(
-          "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang]
+          "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang],
+          "sortable" => true,
+          "field" => "IF( active = 1, 'oui', 'non' )"
         ),
         "admin"    => array(
           "label" => $TOOLS_EDITOR_INDIVIDUAL["admin"][$lang],
-          "sortable" => true
+          "sortable" => true,
+          "field" => "IF( admin = 1, 'oui', 'non' )"
         ),
         "longname" => array(
           "label"  => $TOOLS_EDITOR_INDIVIDUAL["longname"][$lang],
-          "sortable" => true,
-          "filtrable" => true
+          "sortable" => true/*,
+          "filtrable" => true*/
         )
       )
     );
+
+    # field
+    $fields = array();
+    foreach( $params["columns"] as $key => $column ) {
+      $fields[] = isset( $column["field"] )? ( $column["field"] . " AS $key" ): $key;
+    }
 
     # list
     Includer::add( array( "dbEditor", "uiList" ) );
     return array(
       "replacement" => array(
         "query" => "#editors-individual",
-        "innerHtml" => ui_List::buildXml( $params, db_Editor::get( array_keys( $params["columns"] ), $params["order"] ) )
+        "innerHtml" => ui_List::buildXml( $params, db_Editor::get( $fields, $params["order"] ) )
       ),
     );
   }

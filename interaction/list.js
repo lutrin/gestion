@@ -17,7 +17,27 @@
     // fitrable
     listContainer.find( ".setFilter" ).bind( "setFilter", app.setFilter );
 
+    // selectable
+    if( listContainer.find( ".selectable:first" ).size() ) {
+      listContainer.find( ".row" ).click( app.setRowSelection );
+      listContainer.find( ".rowSelection" ).change( app.changeRowSelection );
+    }
+
     listContainer.addClass( "initiated" );
+  },
+
+  /****************************************************************************/
+  reinitialize: function( listContainer ) {
+    var app = _c.ajaxList.interaction.list;
+
+    // selectable
+    if( listContainer.find( ".selectable:first" ).size() ) {
+      listContainer.find( ".selected .rowSelection" ).each( function() {
+        $( this ).attr( "checked", true );
+      } );
+      listContainer.find( ".row" ).click( app.setRowSelection );
+      listContainer.find( ".rowSelection" ).change( app.changeRowSelection );
+    }
   },
 
   /****************************************************************************/
@@ -65,6 +85,7 @@
       }
     );
     cell.addClass( "sorted_" + order );
+    app.reinitialize( list.parent() );
   },
 
   /****************************************************************************/
@@ -94,5 +115,31 @@
     search.blur( function() {
       form.remove();
     } );
+  },
+
+  /****************************************************************************/
+  setRowSelection: function( event ) {
+    var app = _c.ajaxList.interaction.list,
+        row = $( this ),
+        checkbox = row.find( ".rowSelection:first" );
+    if( $( event.target ).hasClass( "rowSelection" ) ) {
+      return true;
+    }
+    if( checkbox.is(":checked") ) {
+      checkbox.attr( "checked", false );
+    } else {
+      checkbox.attr( "checked", true );
+    }
+    checkbox.each( app.changeRowSelection );
+  },
+
+  /****************************************************************************/
+  changeRowSelection: function() {
+    var checkbox = $( this );
+    if( checkbox.is(":checked") ) {
+      checkbox.parent().parent().addClass( "selected" );
+    } else {
+      checkbox.parent().parent().removeClass( "selected" );
+    }
   }
 }

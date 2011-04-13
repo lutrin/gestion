@@ -12,7 +12,6 @@ class ui_List {
       foreach( $params["mode"] as $key => $mode ) {
         $innerHtml[] = Tag::build( "ui.mode", array( "name" => $key ), $mode );
       }
-      unset( $params["mode"] );
     }
 
     # id
@@ -24,26 +23,30 @@ class ui_List {
     # headtitle
     if( isset( $params["headtitle"] ) ) {
       $innerHtml[] = Tag::build( "ui.headtitle", false, $params["headtitle"] );
-      unset( $params["headtitle"] );
+    }
+
+    # primary
+    $primary = false;
+    if( isset( $params["primary"] ) ) {
+      $primary = $params["primary"];
     }
 
     # columns
     foreach( $params["columns"] as $key => $column ) {
+      if( !$primary ) {
+        $primary = $key;
+      }
       $colAttribute = $column;
-      unset( $colAttribute["label" ] );
-      $colAttribute["key"] = $key;
+      unset( $colAttribute["label"] );
+      unset( $colAttribute["field"] );
       $innerHtml[] = Tag::build( "ui.headercolumn", $colAttribute, $column["label"] );
     }
-    unset( $params["columns"] );
-
-
-    # primary
-    $primary = $params["primary"];
-    unset( $params["primary"] );
 
     # attributes list
     foreach( $params as $key => $param ) {
-      $attributes[$key] = $param;
+      if( !in_array( $key, array( "order", "columns", "primary", "headtitle", "mode", "field" ) ) ) {
+        $attributes[$key] = $param;
+      }
     }
 
     # items
@@ -60,10 +63,10 @@ class ui_List {
     $attributes["id"] = $rowId;
     $innerHtml = array();
     foreach( $fields as $key => $value ) {
-      $attribute = array( "key" => $key, "id" => "$rowId-$key" );
-      /*if( is_numeric( $value ) ) {
+      $attribute = array( "key" => $key );
+      if( is_numeric( $value ) ) {
         $attribute["class"] = "numeric";
-      }*/
+      }
       $innerHtml[] = Tag::build( "ui.cell", $attribute, $value );
     }
     return Tag::build( "ui.row", $attributes, $innerHtml );
