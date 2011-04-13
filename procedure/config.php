@@ -137,6 +137,10 @@ $TOOLS = array(
     "fr" => "Les pages",
     "en" => "Pages"
   ),
+  "templates" => array(
+    "fr" => "Les gabarits",
+    "en" => "Templates"
+  ),
   "articles" => array(
     "fr" => "Les articles",
     "en" => "Articles"
