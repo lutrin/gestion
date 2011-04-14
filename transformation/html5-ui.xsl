@@ -214,7 +214,7 @@
       <div class="header">
         <xsl:if test="@selectable">
           <div class="cell">
-            <input type="checkbox" />
+            <input type="checkbox" class="selectAll" />
           </div>
         </xsl:if>
         <xsl:for-each select="ui.headercolumn">
@@ -237,12 +237,21 @@
             </xsl:if>
           </div>
         </xsl:for-each>
+        <xsl:for-each select="ui.action">
+          <div class="cell"></div>
+        </xsl:for-each>
       </div>
       <xsl:for-each select="ui.row">
         <div class="row">
           <xsl:call-template name="apply-attributelist" />
+          <xsl:variable name="rowId">
+            <xsl:value-of select="concat(../@id,'-',@id)" />
+          </xsl:variable> 
+          <xsl:attribute name="id">
+             <xsl:value-of select="$rowId" />
+          </xsl:attribute>
           <xsl:if test="../@selectable">
-            <div class="cell"><input type="checkbox" class="rowSelection"/></div>
+            <div class="cell"><input type="checkbox" class="selectRow"/></div>
           </xsl:if>
           <xsl:for-each select="ui.cell">
             <div>
@@ -270,6 +279,9 @@
               </xsl:for-each>
               <xsl:value-of select="." />
             </div>
+          </xsl:for-each>
+          <xsl:for-each select="../ui.action">
+            <div class="cell action"><button class="{@key}" data-action="{@key}" data-params="row={$rowId}" /></div>
           </xsl:for-each>
         </div>
       </xsl:for-each>

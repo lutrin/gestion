@@ -286,6 +286,15 @@ $INCLUDE_LIST = array(
   "fnPage" => array(
     "path" => "fn/page.php"
   ),
+  "fnTemplate" => array(
+    "path" => "fn/template.php"
+  ),
+  "fnArticle" => array(
+    "path" => "fn/article.php"
+  ),
+  "fnFile" => array(
+    "path" => "fn/file.php"
+  ),
   "fnEditor" => array(
     "path" => "fn/editor.php"
   ),

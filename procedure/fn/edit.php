@@ -22,7 +22,7 @@ class fn_Edit {
       "stylesheet"  => $APP["stylesheet"],
       "head_script" => $APP["head_script"],
       "body_script" => $APP["body_script"],
-      "body" => self::getBody( $lang, $title )
+      "body" => self::getBody( $title )
     );
 
     # frame
@@ -30,14 +30,15 @@ class fn_Edit {
   }
 
   /****************************************************************************/
-  protected static function getBody( $lang, $title ) {
+  protected static function getBody( $title ) {
     global $MSG_NOSCRIPT, $EDITOR, $EDIT;
+    $lang = getLang();
     return replaceFields( array(
       "lang"          => $lang, 
       "title"         => $title,
-      "headerButtons" => self::getHeaderButton( $lang ),
+      "headerButtons" => self::getHeaderButton(),
       "noscript"      => $MSG_NOSCRIPT[$lang],
-      "main"          => self::getMain( $lang ),
+      "main"          => self::getMain(),
       "copyright"     => $EDITOR["copyright"],
       "help"          => $EDITOR["help"][$lang],
       "condition"     => $EDITOR["condition"][$lang],
@@ -46,13 +47,15 @@ class fn_Edit {
   }
 
   /****************************************************************************/
-  public static function getMain( $lang, $msg = "" ) {
+  public static function getMain( $msg = "" ) {
     global $TOOLS;
 
     # login form
     if( !$connected = fn_Login::isConnected() ) {
-      return fn_login::buildForm( $lang, $msg );
+      return fn_login::buildForm( $msg );
     }
+
+    $lang = getLang();
 
     # tool list
     $toolList = array(
@@ -96,13 +99,15 @@ class fn_Edit {
   }
 
   /****************************************************************************/
-  public static function getHeaderButton( $lang ) {
+  public static function getHeaderButton() {
     global $HEADER_BUTTONS;
 
     # empty
     if( !$connected = fn_Login::isConnected() ) {
       return " ";
     }
+
+    $lang = getLang();
 
     # editor
     return "<span id='currentUser'>" . $_SESSION["editor"]["longname"] . "</span>"

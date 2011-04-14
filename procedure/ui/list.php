@@ -42,9 +42,18 @@ class ui_List {
       $innerHtml[] = Tag::build( "ui.headercolumn", $colAttribute, $column["label"] );
     }
 
+    # actions
+    foreach( $params["actions"] as $key => $action ) {
+      $colAttribute = $action;
+      $colAttribute["key"] = $key;
+
+      unset( $colAttribute["label"] );
+      $innerHtml[] = Tag::build( "ui.action", $colAttribute, ( isset( $action["label"] )? $action["label"]: false ) );
+    }
+
     # attributes list
     foreach( $params as $key => $param ) {
-      if( !in_array( $key, array( "order", "columns", "primary", "headtitle", "mode", "field" ) ) ) {
+      if( !in_array( $key, array( "order", "columns", "primary", "headtitle", "mode", "field", "actions" ) ) ) {
         $attributes[$key] = $param;
       }
     }
@@ -59,8 +68,7 @@ class ui_List {
 
   /****************************************************************************/
   protected static function getItem( $formId, $primary, $fields ) {
-    $rowId = "$formId-" . $fields[$primary];
-    $attributes["id"] = $rowId;
+    $attributes["id"] = $fields[$primary];
     $innerHtml = array();
     foreach( $fields as $key => $value ) {
       $attribute = array( "key" => $key );

@@ -19,8 +19,9 @@
 
     // selectable
     if( listContainer.find( ".selectable:first" ).size() ) {
-      listContainer.find( ".row" ).click( app.setRowSelection );
-      listContainer.find( ".rowSelection" ).change( app.changeRowSelection );
+      listContainer.find( ".row" ).click( app.setSelectRow );
+      listContainer.find( ".selectRow" ).change( app.changeSelectRow );
+      listContainer.find( ".selectAll" ).change( app.changeSelectAll );
     }
 
     listContainer.addClass( "initiated" );
@@ -32,12 +33,17 @@
 
     // selectable
     if( listContainer.find( ".selectable:first" ).size() ) {
-      listContainer.find( ".selected .rowSelection" ).each( function() {
+      listContainer.find( ".selected .selectRow" ).each( function() {
         $( this ).attr( "checked", true );
       } );
-      listContainer.find( ".row" ).click( app.setRowSelection );
-      listContainer.find( ".rowSelection" ).change( app.changeRowSelection );
+      listContainer.find( ".row" ).click( app.setSelectRow );
+      listContainer.find( ".selectRow" ).change( app.changeSelectRow );
     }
+    listContainer.find( ".row" ).each( function() {
+      var row = $( this );
+      row.find( ".initiated" ).removeClass( "initiated" );
+      _edit.observe( row );
+    } );
   },
 
   /****************************************************************************/
@@ -118,11 +124,12 @@
   },
 
   /****************************************************************************/
-  setRowSelection: function( event ) {
+  setSelectRow: function( event ) {
     var app = _c.ajaxList.interaction.list,
         row = $( this ),
-        checkbox = row.find( ".rowSelection:first" );
-    if( $( event.target ).hasClass( "rowSelection" ) ) {
+        checkbox = row.find( ".selectRow:first" ),
+        target = $( event.target );
+    if( target.is( "button, .selectRow" ) ) {
       return true;
     }
     if( checkbox.is(":checked") ) {
@@ -130,16 +137,29 @@
     } else {
       checkbox.attr( "checked", true );
     }
-    checkbox.each( app.changeRowSelection );
+    checkbox.each( app.changeSelectRow );
   },
 
   /****************************************************************************/
-  changeRowSelection: function() {
+  changeSelectRow: function() {
     var checkbox = $( this );
     if( checkbox.is(":checked") ) {
       checkbox.parent().parent().addClass( "selected" );
     } else {
       checkbox.parent().parent().removeClass( "selected" );
     }
+  },
+
+  /****************************************************************************/
+  changeSelectAll: function() {
+    var app = _c.ajaxList.interaction.list,
+        selectAll = $( this ),
+        list = selectAll.parents( ".list:first" ),
+        selectAllValue = selectAll.is(":checked");
+    list.find( ".row" ).each( function() {
+      var checkbox = $( this ).find( ".selectRow" );
+      checkbox.attr( "checked", selectAllValue );
+      checkbox.each( app.changeSelectRow );
+    } );
   }
 }

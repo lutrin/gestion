@@ -7,13 +7,9 @@ class fn_Setting {
     global $SETTING;
 
     Includer::add( "uiForm" );
-
-    # language
-    $lang = getLang();
-    
     return array( "dialog" => ui_Form::buildXml(
-      self::getFormParams( $SETTING, $lang ),
-      self::getFormFields( $SETTING, $lang ),
+      self::getFormParams( $SETTING ),
+      self::getFormFields( $SETTING ),
       $_SESSION["editor"]
     ), $_SESSION["editor"] );
   }
@@ -27,15 +23,12 @@ class fn_Setting {
       return array( "fatalError" => "notpermitted" );
     }
 
-    # language
-    $lang = getLang();
-
     # valid form
     $values = $_GET;
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
-      self::getFormParams( $SETTING, $lang ),
-      self::getFormFields( $SETTING, $lang ),
+      self::getFormParams( $SETTING ),
+      self::getFormFields( $SETTING ),
       $values
     );
 
@@ -50,7 +43,7 @@ class fn_Setting {
       return array();
     }
     $_SESSION["editor"] = db_Editor::getInfo( $_SESSION["editor"]["username"] );
-    $lang = $values["lang"];
+    $lang = getLang();
 
     # title
     $tagtitle = $APP["name"][$lang] . " - " . $APP["site"];
@@ -59,8 +52,8 @@ class fn_Setting {
     Includer::add( "fnEdit" );
     return array(
       "replacement" => array(
-        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $lang ) ),
-        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) ),
+        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain() ),
+        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton() ),
         array( "query" => "#title",          "innerHtml" => $APP["name"][$lang] . "&nbsp;-&nbsp;" . $APP["site"] ),
         array( "query" => "#currentUser",    "innerHtml" => $_SESSION["editor"]["longname"] ),
         array( "query" => "#about",          "innerHtml" => $EDITOR["about"][$lang] ),
@@ -72,18 +65,19 @@ class fn_Setting {
   }
 
   /****************************************************************************/
-  protected static function getFormParams( $SETTING, $lang ) {
+  protected static function getFormParams( $SETTING ) {
     return array(
       "id"     => self::$id,
       "action" => "save",
-      "submit" => $SETTING["apply"][$lang],
+      "submit" => $SETTING["apply"][getLang()],
       "method" => "post",
       "headtitle"  => "Configurations"
     );
   }
 
   /****************************************************************************/
-  protected static function getFormFields( $SETTING, $lang ) {
+  protected static function getFormFields( $SETTING ) {
+    $lang = getLang();
     return array(
       "k"     => array(
         "type" => "hidden"

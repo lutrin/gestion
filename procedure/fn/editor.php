@@ -16,16 +16,16 @@ class fn_Editor {
         "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
         "replacement" => array(
           "query" => "#main",
-          "innerHtml" => fn_edit::getMain( $lang ) 
+          "innerHtml" => fn_edit::getMain() 
         )
       );
     }
 
     $editorsTabList = array(
       "editors-individual" => array(
-        "label"     => $TOOLS_EDITOR["individual"][$lang]/*,
+        "label"     => $TOOLS_EDITOR["individual"][$lang],
         "selected"  => true,
-        "innerHtml" => "<h3>Individus</h3>"*/
+        "innerHtml" => self::getIndividualList()
       ),
       "editors-group" => array(
         "label"  => $TOOLS_EDITOR["group"][$lang]
@@ -51,7 +51,7 @@ class fn_Editor {
 
   /****************************************************************************/
   public static function displayIndividualList() {
-    global $TOOLS_EDITOR, $TOOLS_EDITOR_INDIVIDUAL;
+    global $TOOLS_EDITOR;
   
     # language
     $lang = getLang();
@@ -63,10 +63,24 @@ class fn_Editor {
         "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
         "replacement" => array(
           "query" => "#main",
-          "innerHtml" => fn_edit::getMain( $lang ) 
+          "innerHtml" => fn_edit::getMain() 
         )
       );
     }
+
+    # list
+    return array(
+      "replacement" => array(
+        "query" => "#editors-individual",
+        "innerHtml" => self::getIndividualList()
+      ),
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getIndividualList() {
+    global $TOOLS_EDITOR_INDIVIDUAL;
+    $lang = getLang();
 
     # params
     $params = array(
@@ -77,10 +91,10 @@ class fn_Editor {
         "tree"    => "Arbre",
         "gallery" => "Galerie"
       ),
-      "headtitle"  => $TOOLS_EDITOR["individual"][$lang],
+      #"headtitle"  => $TOOLS_EDITOR["individual"][$lang],
       "primary"    => "k",
       "main"       => "username",
-      "order"      => "k",
+      "order"      => "username",
       "selectable" => true,
       "columns"    => array(
         "k"        => array(
@@ -108,6 +122,15 @@ class fn_Editor {
           "sortable" => true/*,
           "filtrable" => true*/
         )
+      ),
+      "actions" => array(
+        "edit" => array(
+          "title" => "Modifier"
+        ),
+        "delete" => array(
+          "title" => "Supprimer",
+          "multiple" => true
+        )
       )
     );
 
@@ -117,27 +140,49 @@ class fn_Editor {
       $fields[] = isset( $column["field"] )? ( $column["field"] . " AS $key" ): $key;
     }
 
-    # list
     Includer::add( array( "dbEditor", "uiList" ) );
-    return array(
-      "replacement" => array(
-        "query" => "#editors-individual",
-        "innerHtml" => ui_List::buildXml( $params, db_Editor::get( $fields, $params["order"] ) )
-      ),
-    );
+    return ui_List::buildXml( $params, db_Editor::get( $fields, $params["order"] ) );
   }
 
   /****************************************************************************/
   public static function displayGroupList() {
     global $PERMISSION;
-      $lang = getLang();
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain( $lang ) 
-        )
-      );
+    $lang = getLang();
+    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+    return array(
+      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+      "replacement" => array(
+        "query" => "#main",
+        "innerHtml" => fn_edit::getMain() 
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function edit( $k ) {
+    global $PERMISSION;
+    $lang = getLang();
+    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+    return array(
+      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+      "replacement" => array(
+        "query" => "#main",
+        "innerHtml" => fn_edit::getMain() 
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function delete( $k ) {
+    global $PERMISSION;
+    $lang = getLang();
+    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+    return array(
+      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+      "replacement" => array(
+        "query" => "#main",
+        "innerHtml" => fn_edit::getMain() 
+      )
+    );
   }
 }

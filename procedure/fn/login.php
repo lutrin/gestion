@@ -45,14 +45,14 @@ return true;
   }
 
   /****************************************************************************/
-  public static function buildForm( $lang, $msg = "" ) {
+  public static function buildForm( $msg = "" ) {
     global $LOGIN;
 
     Includer::add( "uiForm" );
-
+    
     return ui_Form::buildXml(
-      self::getFormParams( $LOGIN, $lang, $msg ),
-      self::getFormFields( $LOGIN, $lang )
+      self::getFormParams( $LOGIN, $msg ),
+      self::getFormFields( $LOGIN )
     );
   }
 
@@ -60,14 +60,11 @@ return true;
   public static function connect( $values ) {
     global $LOGIN;
 
-    # language
-    $lang = getLang();
-
     # valid form
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
-      self::getFormParams( $LOGIN, $lang ),
-      self::getFormFields( $LOGIN, $lang ),
+      self::getFormParams( $LOGIN ),
+      self::getFormFields( $LOGIN ),
       $values
     );
 
@@ -97,43 +94,40 @@ return true;
     Includer::add( "fnEdit" );
     return array(
       "replacement" => array(
-        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $lang ) ),
-        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
+        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain() ),
+        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton() )
       )
     );
   }
 
   /****************************************************************************/
   public static function disconnect( $msg = "" ) {
-
-    # language
-    $lang = getLang();
-
     $_SESSION["editor"] = false;
 
     # replacement
     Includer::add( "fnEdit" );
     return array(
       "replacement" => array(
-        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $lang, $msg ) ),
-        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton( $lang ) )
+        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $msg ) ),
+        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton() )
       )
     );
   }
 
   /****************************************************************************/
-  protected static function getFormParams( $LOGIN, $lang, $msg = "" ) {
+  protected static function getFormParams( $LOGIN, $msg = "" ) {
     return array(
       "id"     => self::$id,
       "action" => self::$id,
-      "submit" => $LOGIN["connect"][$lang],
+      "submit" => $LOGIN["connect"][getLang()],
       "method" => "post",
       "message" => $msg
     );
   }
 
   /****************************************************************************/
-  protected static function getFormFields( $LOGIN, $lang ) {
+  protected static function getFormFields( $LOGIN ) {
+    $lang = getLang();
     return array(
       "connect" => array(
         "legend" => $LOGIN["legend"][$lang],

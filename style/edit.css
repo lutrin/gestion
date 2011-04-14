@@ -35,7 +35,7 @@ nav h3 {
     url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
-.iconic, #currentUser:before, .setFilter {
+.iconic, #currentUser:before, .setFilter, .edit, .delete {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
@@ -46,6 +46,18 @@ nav h3 {
 
 .setFilter:before {
   content: "f";
+}
+
+.edit:before {
+  content: "p";
+}
+
+.edit {
+ content: "";
+}
+
+.delete:before {
+  content: "x";
 }
 
 #toolList-pages a {
@@ -102,6 +114,10 @@ html, legend, .dock li span, .tabs, .header > .cell, #dialog-content > * > h2 {
 
 .row:nth-child(odd) {
   background-color:#f5f5f5;
+}
+
+.main {
+  background-color:#e5e5e5;
 }
 
 noscript, #error-msg, .alertMsg, .formMsg {

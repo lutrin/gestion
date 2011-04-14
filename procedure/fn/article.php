@@ -1,6 +1,6 @@
 <?php
-class fn_Page {
-  protected static $idList = "pages";  
+class fn_Article {
+  protected static $idList = "articles";  
 
   /****************************************************************************/
   public static function displayList() {

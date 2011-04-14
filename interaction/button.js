@@ -24,12 +24,25 @@
     var button = $( this ),
         app = _c.ajaxList.interaction.button,
         action = button.attr( "data-action" ),
-        trigger = button.attr( "data-trigger" );
+        trigger = button.attr( "data-trigger" ),
+        ajaxObject, dataParams, params;
 
     // action      
     if( action ) {
+      ajaxObject = { folder: "procedure", name: action };
+
+      // params
+      dataParams = button.attr( "data-params" );
+      if( dataParams ) {
+        params = {};
+        _c.eachItem( dataParams.split( /\,/g ), function( param ) {
+          var paramSplit = param.split( /=/g );
+          params[paramSplit[0]] = paramSplit[1];
+        } );
+        ajaxObject["params"] = params;
+      }
       return _c.callAjax(
-        [ { folder: "procedure", name: action } ],
+        [ ajaxObject ],
         function( ajaxItem ) {
 
           // fatal error

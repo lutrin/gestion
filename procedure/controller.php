@@ -45,6 +45,10 @@ function main() {
             return getContent();
           } elseif( $action == "save" ) {
             return save();
+          } elseif( $action == "edit" ) {
+            return edit();
+          } elseif( $action == "delete" ) {
+            return delete();
           }
         }
         return logout( $msg );
@@ -109,6 +113,21 @@ function getContent() {
       Includer::add( "fnPage" );
       return json_encode( fn_Page::displayList() );
 
+    # templates
+    } elseif( $idList[0] == "templates" ) {
+      Includer::add( "fnTemplate" );
+      return json_encode( fn_Template::displayList() );
+
+    # articles
+    } elseif( $idList[0] == "articles" ) {
+      Includer::add( "fnArticle" );
+      return json_encode( fn_Article::displayList() );
+
+    # files
+    } elseif( $idList[0] == "files" ) {
+      Includer::add( "fnFile" );
+      return json_encode( fn_File::displayList() );
+
     # editors
     } elseif( $idList[0] == "editors" ) {
       Includer::add( "fnEditor" );
@@ -141,6 +160,44 @@ function save() {
     if( $object == "setting" ) {
       Includer::add( "fnSetting" );
       return json_encode( fn_Setting::save( $k, $token ) );
+    }    
+  }
+  $lang = getLang();
+  return logout( $CONTROLLER["wrongentry"][$lang] );
+}
+
+/******************************************************************************/
+function edit() {
+  global $CONTROLLER;
+  if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
+    setHeader( "json" );
+
+    # split row
+    list( $object, $k ) = explode( "-", $row );
+
+    # editor
+    if( $object == "editorIndividualList" ) {
+      Includer::add( "fnEditor" );
+      return json_encode( fn_Editor::edit( $k ) );
+    }    
+  }
+  $lang = getLang();
+  return logout( $CONTROLLER["wrongentry"][$lang] );
+}
+
+/******************************************************************************/
+function delete() {
+  global $CONTROLLER;
+  if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
+    setHeader( "json" );
+
+    # split row
+    list( $object, $k ) = explode( "-", $row );
+
+    # editor
+    if( $object == "editorIndividualList" ) {
+      Includer::add( "fnEditor" );
+      return json_encode( fn_Editor::delete( $k ) );
     }    
   }
   $lang = getLang();
