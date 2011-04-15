@@ -93,6 +93,20 @@ var _edit = {
   },
 
   /****************************************************************************/
+  showDetails: function( details ) {
+    _edit.replaceContent( { query: "#details", innerHtml: details } );
+    _c.select( "#details" ).removeClass( "hidden" );
+/*    _edit.replaceContent( { query: "#dialog-content", innerHtml: dialog } );
+    _c.select( "#dialog" ).css( { display: "table" } ).click( function( ev ) {
+      var target = $( ev.target );
+      if( target.attr( "id" ) && target.attr( "id" ) == "dialog-content" ) {
+        target.parent().hide();
+        target.html( "" );
+      }
+    } );*/
+  },
+
+  /****************************************************************************/
   replaceContent: function( replacement ) {
     var object = $( replacement.query );
 

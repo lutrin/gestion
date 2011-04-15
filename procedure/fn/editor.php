@@ -22,19 +22,19 @@ class fn_Editor {
     }
 
     $editorsTabList = array(
-      "editors-individual" => array(
+      ( self::$idList . "-individual" ) => array(
         "label"     => $TOOLS_EDITOR["individual"][$lang],
         "selected"  => true,
         "innerHtml" => self::getIndividualList()
       ),
-      "editors-group" => array(
+      ( self::$idList . "-group" ) => array(
         "label"  => $TOOLS_EDITOR["group"][$lang]
       )
     );
 
     # params
     $params = array(
-      "id"        => "editorList",
+      "id"        => ( self::$idList . "-nav" ),
       "mode"      => "tabs",
       "headtitle" => $TOOLS[self::$idList][$lang]
     );
@@ -84,7 +84,7 @@ class fn_Editor {
 
     # params
     $params = array(
-      "id"         => "editorIndividualList",
+      "id"         => "editors-individualList",
       "mode"       => array(
         "table"   => "Tableau",
         "compact" => "Compacte",
@@ -110,12 +110,12 @@ class fn_Editor {
         "active"   => array(
           "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang],
           "sortable" => true,
-          "field" => "IF( active = 1, 'oui', 'non' )"
+          "field" => "IF( active = 1, 'oui', '' )"
         ),
         "admin"    => array(
           "label" => $TOOLS_EDITOR_INDIVIDUAL["admin"][$lang],
           "sortable" => true,
-          "field" => "IF( admin = 1, 'oui', 'non' )"
+          "field" => "IF( admin = 1, 'oui', '' )"
         ),
         "longname" => array(
           "label"  => $TOOLS_EDITOR_INDIVIDUAL["longname"][$lang],
@@ -141,7 +141,7 @@ class fn_Editor {
     }
 
     Includer::add( array( "dbEditor", "uiList" ) );
-    return ui_List::buildXml( $params, db_Editor::get( $fields, $params["order"] ) );
+    return ui_List::buildXml( $params, db_Editor::get( $fields, false, $params["order"] ) );
   }
 
   /****************************************************************************/
@@ -160,14 +160,106 @@ class fn_Editor {
 
   /****************************************************************************/
   public static function edit( $k ) {
-    global $PERMISSION;
+    global $PERMISSION, $SETTING, $LOGIN;
     $lang = getLang();
-    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    $params = array(
+      "id"     => "editor-$k",
+      "action" => "save",
+      "submit" => "Enregistrer",
+      "method" => "post",
+      "headtitle"  => "Détails - Éditeur"
+    );
+
+    $fields = array(
+      "k"     => array(
+        "type" => "hidden"
+      ),
+      "object"     => array(
+        "type" => "hidden",
+        "value" => "editor"
+      ),
+      "login" => array(
+        "legend" => "Paramètres de connexion",
+        "type"   => "fieldset",
+        "fieldlist" => array(
+          "username" => array(
+            "label"        => $LOGIN["username"][$lang],
+            "required"     => "required",
+            "maxlength"    => 30,
+            "size"         => 20,
+            "autofocus"    => "autofocus",
+            "autocomplete" => "off",
+          ),
+          "password" => array(
+            "label"        => $LOGIN["password"][$lang],
+            "type"         => "password",
+            "maxlength"    => 30,
+            "size"         => 20,
+            "autocomplete" => "off",
+          ),
+          "confirmpassword" => array(
+            "label"        => "Confirmation de mot de passe",
+            "type"         => "password",
+            "maxlength"    => 30,
+            "size"         => 20,
+            "autocomplete" => "off",
+          ),
+          "admin" => array(
+            "label"        => "Administrateur",
+            "type"         => "checkbox",
+            "value"        => "1"
+          )
+        )
+      ),
+      "edit" => array(
+        "legend" => $SETTING["edit"][$lang],
+        "type" => "fieldset",
+        "fieldlist" => array(
+          "longname" => array(
+            "label" => $SETTING["longname"][$lang],
+            "maxlenght" => 255,
+            "required" => "required",
+            "size" => 20
+          ),
+          "lang" => array(
+            "label" => $SETTING["lang"][$lang],
+            "type" => "select",
+            "list" => array(
+              "fr" => array(
+                "label" => "Français",
+                "value" => "fr"
+              ),
+              "en" => array(
+                "label" => "English",
+                "value" => "en"
+              )
+            )
+          )
+        )
+      )
+    );
+
+    $values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" );
+
+    Includer::add( array( "uiForm" ) );
     return array(
-      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-      "replacement" => array(
-        "query" => "#main",
-        "innerHtml" => fn_edit::getMain() 
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields,
+        $values[0]
       )
     );
   }

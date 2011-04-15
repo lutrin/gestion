@@ -60,6 +60,11 @@
           if( ajaxItem.dialog ) {
             _edit.showDialog( ajaxItem.dialog );
           }
+
+          // details
+          if( ajaxItem.details ) {
+            _edit.showDetails( ajaxItem.details );
+          }
           return false;
         }
       );

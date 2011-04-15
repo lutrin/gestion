@@ -96,6 +96,18 @@
       </input>
     </xsl:when>
 
+    <!-- checkbox -->
+    <xsl:when test="@type='checkbox'">
+      <div>
+        <input>
+          <xsl:for-each select="@id|@name|@type|@required|@value">
+            <xsl:call-template name="apply-attribute" />
+          </xsl:for-each>
+        </input>
+        <xsl:call-template name="apply-topfield" />
+      </div>
+    </xsl:when>
+
     <!-- input -->
     <xsl:otherwise>
       <div>
@@ -281,7 +293,7 @@
             </div>
           </xsl:for-each>
           <xsl:for-each select="../ui.action">
-            <div class="cell action"><button class="{@key}" data-action="{@key}" data-params="row={$rowId}" /></div>
+            <div class="cell action"><button class="{@key}" data-action="{@key}" data-params="row={$rowId}" title="{@title}" /></div>
           </xsl:for-each>
         </div>
       </xsl:for-each>
@@ -324,7 +336,7 @@
     <xsl:text>field</xsl:text>
   </xsl:attribute>
   <xsl:if test="@label">
-    <label for="@id">
+    <label for="{@id}">
        <xsl:value-of select="@label" />
     </label>
   </xsl:if>

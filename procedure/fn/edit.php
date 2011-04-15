@@ -95,7 +95,7 @@ class fn_Edit {
     );
 
     Includer::add( "uiNav" );
-    return ui_Nav::buildXml( $params, $allowedToolList );
+    return ui_Nav::buildXml( $params, $allowedToolList ) . Tag::build( "div", array( "id" => "details", "class" => "hidden" ), false );
   }
 
   /****************************************************************************/

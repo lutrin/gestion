@@ -21,11 +21,8 @@ function main() {
   # set includer
   Includer::add( array( "typeValidator", "tokenizer", "fnLogin" ) );
 
-  # language
-  $lang = getLang();
-
   # set default entry
-  $msg = $CONTROLLER["wrongentry"][$lang];
+  $msg = $CONTROLLER["wrongentry"][getLang()];
   $connected = fn_Login::isConnected();
 
   # switch action
@@ -77,8 +74,7 @@ function login() {
       "token"    => $token
     ) ) );
   }
-  $lang = getLang();
-  return logout( $CONTROLLER["wrongentry"][$lang] );
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
@@ -144,8 +140,7 @@ function getContent() {
       }
     }
   }
-  $lang = getLang();
-  return logout( $CONTROLLER["wrongentry"][$lang] );
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
@@ -162,46 +157,51 @@ function save() {
       return json_encode( fn_Setting::save( $k, $token ) );
     }    
   }
-  $lang = getLang();
-  return logout( $CONTROLLER["wrongentry"][$lang] );
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
 function edit() {
   global $CONTROLLER;
   if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
+    $idList = explode( "-", $row );
     setHeader( "json" );
 
-    # split row
-    list( $object, $k ) = explode( "-", $row );
-
     # editor
-    if( $object == "editorIndividualList" ) {
+    if( $idList[0] == "editors" ) {
       Includer::add( "fnEditor" );
-      return json_encode( fn_Editor::edit( $k ) );
+      if( isset( $idList[1] ) ) {
+
+        # individual
+        if( $idList[1] == "individualList" ) {
+          return json_encode( fn_Editor::edit( $idList[2] ) );
+        }
+      }
     }    
   }
-  $lang = getLang();
-  return logout( $CONTROLLER["wrongentry"][$lang] );
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
 function delete() {
   global $CONTROLLER;
   if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
+    $idList = explode( "-", $row );
     setHeader( "json" );
 
-    # split row
-    list( $object, $k ) = explode( "-", $row );
-
     # editor
-    if( $object == "editorIndividualList" ) {
+    if( $idList[0] == "editors" ) {
       Includer::add( "fnEditor" );
-      return json_encode( fn_Editor::delete( $k ) );
-    }    
+      if( isset( $idList[1] ) ) {
+
+        # individual
+        if( $idList[1] == "individualList" ) {
+          return json_encode( fn_Editor::edit() );
+        }
+      }
+    }   
   }
-  $lang = getLang();
-  return logout( $CONTROLLER["wrongentry"][$lang] );
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
