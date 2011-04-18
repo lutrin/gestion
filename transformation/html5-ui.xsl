@@ -99,10 +99,13 @@
     <!-- checkbox -->
     <xsl:when test="@type='checkbox'">
       <div>
-        <input>
+        <input class="field">
           <xsl:for-each select="@id|@name|@type|@required|@value">
             <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
+          <xsl:if test="ui.value=@value">
+            <xsl:attribute name="checked"><xsl:text>checked</xsl:text></xsl:attribute>
+          </xsl:if>
         </input>
         <xsl:call-template name="apply-topfield" />
       </div>
@@ -333,7 +336,7 @@
 
 <xsl:template name="apply-topfield">
   <xsl:attribute name="class">
-    <xsl:text>field</xsl:text>
+    <xsl:text>field input</xsl:text>
   </xsl:attribute>
   <xsl:if test="@label">
     <label for="{@id}">

@@ -175,12 +175,17 @@ class fn_Editor {
       );
     }
 
+    if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" ) ) {
+return "Introuvable";
+    }
+
     $params = array(
       "id"     => "editor-$k",
       "action" => "save",
       "submit" => "Enregistrer",
       "method" => "post",
-      "headtitle"  => "Détails - Éditeur"
+      "class"  => "editor",
+      "headtitle"  => $values[0]["username"] . " - Éditeur"
     );
 
     $fields = array(
@@ -190,6 +195,11 @@ class fn_Editor {
       "object"     => array(
         "type" => "hidden",
         "value" => "editor"
+      ),
+      "active" => array(
+        "label"        => "Compte activé",
+        "type"         => "checkbox",
+        "value"        => "1"
       ),
       "login" => array(
         "legend" => "Paramètres de connexion",
@@ -251,8 +261,6 @@ class fn_Editor {
         )
       )
     );
-
-    $values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" );
 
     Includer::add( array( "uiForm" ) );
     return array(

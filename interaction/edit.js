@@ -95,6 +95,10 @@ var _edit = {
   /****************************************************************************/
   showDetails: function( details ) {
     _edit.replaceContent( { query: "#details", innerHtml: details } );
+    $( "#details > *" ).draggable( {
+      handle: "h2",
+      containment: "#main"
+    } );
     _c.select( "#details" ).removeClass( "hidden" );
 /*    _edit.replaceContent( { query: "#dialog-content", innerHtml: dialog } );
     _c.select( "#dialog" ).css( { display: "table" } ).click( function( ev ) {

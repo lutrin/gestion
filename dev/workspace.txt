@@ -1,0 +1,8 @@
+Espace de travail
+
+Liste d'icônes pour accéder aux fenêtre d'édition en cours.
+
+Gérer les z-index pour plusieur fenêtres
+Générer le timestamp dans data-timestamp=123123 le dernier focus
+Retrier les z-index à partir de 100 par exemple
+

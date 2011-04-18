@@ -80,8 +80,10 @@ nav h3 {
   background: url(../image/editor.svg) no-repeat center center;
 }
 
-.list-container .cell.editor {
-  background: url(../image/editor.svg) no-repeat left center;
+.list-container .cell.editor, #details form.editor h2 {
+  background-image: url(../image/editor.svg);
+  background-repeat: no-repeat;
+  background-position: left center;
   padding-left: 20px;
 }
 
@@ -108,16 +110,12 @@ nav h3 {
 }
 
 /* color */
-html, legend, .dock li span, .tabs, .header > .cell, #dialog-content > * > h2 {
+html, legend, .dock li span, .tabs, .header > .cell, #dialog-content > * > h2, #details > * > h2 {
   background-color:#eee;
 }
 
 .row:nth-child(odd) {
   background-color:#f5f5f5;
-}
-
-.main {
-  background-color:#e5e5e5;
 }
 
 noscript, #error-msg, .alertMsg, .formMsg {
@@ -151,7 +149,7 @@ input[type=submit]:hover, button:hover, .tabs > menu > li:hover {
   text-shadow: 0px 0px 5px rgba(255,255,255,0.6);
 }
 
-#main, #dialog-content > *, .tabs > menu > li.selected, #details {
+#main, #dialog-content > *, .tabs > menu > li.selected, #details > * {
   background-color: #fff;
 }
 
@@ -176,7 +174,7 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input, select, button, #dialog-content > *, .dock li span {
+fieldset, legend, input, select, button, #dialog-content > *, .dock li span, #details > * {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
@@ -205,7 +203,7 @@ input[type=text]:focus, input[type=password]:focus, select:focus {
   box-shadow: inset rgba(0,88,0,.5) 0px 0px 5px;
 }
 
-input[type=submit], button, .dock li span {
+input[type=submit], button, .dock li span, #details > * {
   box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
 }
 
@@ -227,7 +225,7 @@ input[type=submit]:active, button:active {
   box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
 }
 
-#dialog-content > * > h2 {
+#dialog-content > * > h2, #details > * > h2 {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
@@ -279,6 +277,7 @@ input,
 select,
 #dialog-content p,
 #dialog-content > * > h2,
+#details > * > h2,
 .closeDialog,
 .field,
 .tabs > menu > li {
@@ -377,7 +376,7 @@ nav h2, nav menu {
   overflow: hidden;
 }
 
-#toolList > section, #details {
+#toolList > section {
   text-align: left;
   position: absolute;
   top: 1px;
@@ -386,6 +385,16 @@ nav h2, nav menu {
   right: 0;
   width: 100%;
   overflow: auto;
+}
+
+#details > * {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}
+
+#details > * > h2:hover {
+  cursor: move;
 }
 
 #toolList > section > * {
@@ -516,4 +525,8 @@ nav h2, nav menu {
 
 .filtrable .field {
   padding: 0;
+}
+
+.input label {
+  display: block;
 }
