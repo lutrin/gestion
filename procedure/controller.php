@@ -21,8 +21,10 @@ function main() {
   # set includer
   Includer::add( array( "typeValidator", "tokenizer", "fnLogin" ) );
 
+  $lang = getLang();
+  
   # set default entry
-  $msg = $CONTROLLER["wrongentry"][getLang()];
+  $msg = $CONTROLLER["wrongentry"][$lang];
   $connected = fn_Login::isConnected();
 
   # switch action
@@ -153,9 +155,14 @@ function save() {
 
     # setting
     if( $object == "setting" ) {
-      Includer::add( "fnSetting" );
-      return json_encode( fn_Setting::save( $k, $token ) );
-    }    
+        Includer::add( "fnSetting" );
+        return json_encode( fn_Setting::save( $k, $token ) );
+
+    # editor
+    } elseif( $object == "editor" ) {
+        Includer::add( "fnEditor" );
+        return json_encode( fn_Editor::save( $k, $token ) );
+    }
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
