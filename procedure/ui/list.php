@@ -1,7 +1,6 @@
 <?php
 class ui_List {
   public static function buildXml( $params, $items ) {
-    Includer::add( "tag" );
 
     # initialize
     $attributes = array();

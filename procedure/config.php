@@ -272,48 +272,68 @@ $INCLUDE_LIST = array(
 
   # function
   "fnLogin" => array(
-    "path" => "fn/login.php"
+    "path" => "fn/login.php",
+    "class" => "fn_Login"
   ),
   "fnEdit" => array(
-    "path" => "fn/edit.php"
+    "path" => "fn/edit.php",
+    "class" => "fn_Edit"
   ),
   "fnSetting" => array(
-    "path" => "fn/setting.php"
+    "path" => "fn/setting.php",
+    "class" => "fn_Setting",
+    "entries" => array( "setting" )
   ),
   "fnForm" => array(
-    "path" => "fn/form.php"
+    "path" => "fn/form.php",
+    "class" => "fn_Form"
   ),
   "fnPage" => array(
-    "path" => "fn/page.php"
+    "path" => "fn/page.php",
+    "class" => "fn_Page",
+    "entries" => array( "pages" )
   ),
   "fnTemplate" => array(
-    "path" => "fn/template.php"
+    "path" => "fn/template.php",
+    "class" => "fn_Template",
+    "entries" => array( "templates" )
   ),
   "fnArticle" => array(
-    "path" => "fn/article.php"
+    "path" => "fn/article.php",
+    "class" => "fn_Article",
+    "entries" => array( "articles" )
   ),
   "fnFile" => array(
-    "path" => "fn/file.php"
+    "path" => "fn/file.php",
+    "class" => "fn_File",
+    "entries" => array( "files" )
   ),
   "fnEditor" => array(
-    "path" => "fn/editor.php"
+    "path" => "fn/editor.php",
+    "class" => "fn_Editor",
+    "entries" => array( "editors", "editor" )
   ),
 
   # user interface
   "uiFrame" => array(
-    "path" => "ui/frame.php"
+    "path" => "ui/frame.php",
+    "depend" => "tag"
   ),
   "uiForm" => array(
-    "path" => "ui/form.php"
+    "path" => "ui/form.php",
+    "depend" => "tag"
   ),
   "uiNav" => array(
-    "path" => "ui/nav.php"
+    "path" => "ui/nav.php",
+    "depend" => "tag"
   ),
   "uiList" => array(
-    "path" => "ui/list.php"
+    "path" => "ui/list.php",
+    "depend" => "tag"
   ),
   "uiDialog" => array(
-    "path" => "ui/dialog.php"
+    "path" => "ui/dialog.php",
+    "depend" => "tag"
   ),
 
   # data base table

@@ -101,44 +101,17 @@ function displaySetting() {
 
 /******************************************************************************/
 function getContent() {
-  global $CONTROLLER;
+  global $CONTROLLER, $INCLUDE_LIST;
   if( $id = ( isset( $_GET["id"] )? typeValidator::isAlphaNumeric( $_GET["id"] ): false ) ) {
     $idList = explode( "-", $id );
     setHeader( "json" );
 
-    # pages
-    if( $idList[0] == "pages" ) {
-      Includer::add( "fnPage" );
-      return json_encode( fn_Page::displayList() );
-
-    # templates
-    } elseif( $idList[0] == "templates" ) {
-      Includer::add( "fnTemplate" );
-      return json_encode( fn_Template::displayList() );
-
-    # articles
-    } elseif( $idList[0] == "articles" ) {
-      Includer::add( "fnArticle" );
-      return json_encode( fn_Article::displayList() );
-
-    # files
-    } elseif( $idList[0] == "files" ) {
-      Includer::add( "fnFile" );
-      return json_encode( fn_File::displayList() );
-
-    # editors
-    } elseif( $idList[0] == "editors" ) {
-      Includer::add( "fnEditor" );
-      if( isset( $idList[1] ) ) {
-
-        # individual
-        if( $idList[1] == "individual" ) {
-          return json_encode( fn_Editor::displayIndividualList() );
-        } elseif( $idList[1] == "group" ) {
-          return json_encode( fn_Editor::displayGroupList() );
-        }
-      } else {
-        return json_encode( fn_Editor::displayNav() );
+    foreach( $INCLUDE_LIST as $key => $include ) {
+      if( isset( $include["entries"] ) && in_array( $idList[0], $include["entries"] ) ) {
+        Includer::add( $key );
+        $function = "getContent" . ( isset( $idList[1] )? ( "_" . $idList[1] ) : "" );
+        return json_encode( call_user_func( array( $include["class"], $function ) ) );
+        break;
       }
     }
   }
@@ -147,21 +120,22 @@ function getContent() {
 
 /******************************************************************************/
 function save() {
-  global $CONTROLLER;
+  global $CONTROLLER, $INCLUDE_LIST;
   if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
       ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
       ( $token =  ( isset( $_GET["token"] )?    $_GET["token"]: false ) ) ) {
     setHeader( "json" );
 
-    # setting
-    if( $object == "setting" ) {
-        Includer::add( "fnSetting" );
-        return json_encode( fn_Setting::save( $k, $token ) );
-
-    # editor
-    } elseif( $object == "editor" ) {
-        Includer::add( "fnEditor" );
-        return json_encode( fn_Editor::save( $k, $token ) );
+    foreach( $INCLUDE_LIST as $key => $include ) {
+      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
+        Includer::add( $key );
+        $function = "save";
+        return json_encode( call_user_func_array(
+          array( $include["class"], $function ),
+          array( $k, $token )
+        ) );
+        break;
+      }
     }
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );

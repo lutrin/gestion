@@ -3,7 +3,7 @@ class fn_Editor {
   protected static $idList = "editors";  
 
   /****************************************************************************/
-  public static function displayNav() {
+  public static function getContent() {
     global $PERMISSION, $TOOLS, $TOOLS_EDITOR;
 
     # language
@@ -50,7 +50,7 @@ class fn_Editor {
   }
 
   /****************************************************************************/
-  public static function displayIndividualList() {
+  public static function getContent_individual() {
     global $TOOLS_EDITOR;
   
     # language
@@ -145,7 +145,7 @@ class fn_Editor {
   }
 
   /****************************************************************************/
-  public static function displayGroupList() {
+  public static function getContent_group() {
     global $PERMISSION;
     $lang = getLang();
     Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
@@ -176,19 +176,87 @@ class fn_Editor {
     }
 
     if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" ) ) {
-return "Introuvable";
+      return "Introuvable";
     }
 
-    $params = array(
+    $params = self::getFormParams( $k );
+    $params["headtitle"] = $values[0]["username"] . " - Éditeur";
+    $fields = self::getFormFields( $SETTING );
+
+    Includer::add( array( "uiForm" ) );
+    return array(
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields,
+        $values[0]
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function save( $k ) {
+    global $PERMISSION, $SETTING;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # valid form
+    $values = $_GET;
+    Includer::add( "fnForm" );
+    $result = fn_Form::hasErrors(
+      self::getFormParams( $k ),
+      self::getFormFields( $SETTING ),
+      $values
+    );
+
+    # fatal error or error list
+    if( isset( $result["fatalError"] ) || ( isset( $result["errorList"] ) && $result["errorList"] ) ) {
+      return $result;
+    }
+
+    return $values;
+  }
+
+  /****************************************************************************/
+  public static function delete( $k ) {
+    global $PERMISSION;
+    $lang = getLang();
+    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+    return array(
+      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+      "replacement" => array(
+        "query" => "#main",
+        "innerHtml" => fn_edit::getMain() 
+      )
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormParams( $k ) {
+    return array(
       "id"     => "editor-$k",
       "action" => "save",
       "submit" => "Enregistrer",
       "method" => "post",
-      "class"  => "editor",
-      "headtitle"  => $values[0]["username"] . " - Éditeur"
+      "class"  => "editor"
     );
+  }
 
-    $fields = array(
+  /****************************************************************************/
+  protected static function getFormFields( $SETTING ) {
+    global $LOGIN;
+    $lang = getLang();
+    return array(
       "k"     => array(
         "type" => "hidden"
       ),
@@ -226,6 +294,7 @@ return "Introuvable";
             "maxlength"    => 30,
             "size"         => 20,
             "autocomplete" => "off",
+            "equal"        => "[name=password]"
           ),
           "admin" => array(
             "label"        => "Administrateur",
@@ -259,29 +328,6 @@ return "Introuvable";
             )
           )
         )
-      )
-    );
-
-    Includer::add( array( "uiForm" ) );
-    return array(
-      "details" => ui_Form::buildXml(
-        $params,
-        $fields,
-        $values[0]
-      )
-    );
-  }
-
-  /****************************************************************************/
-  public static function delete( $k ) {
-    global $PERMISSION;
-    $lang = getLang();
-    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-    return array(
-      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-      "replacement" => array(
-        "query" => "#main",
-        "innerHtml" => fn_edit::getMain() 
       )
     );
   }

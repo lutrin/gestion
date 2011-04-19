@@ -3,7 +3,7 @@ class fn_Article {
   protected static $idList = "articles";  
 
   /****************************************************************************/
-  public static function displayList() {
+  public static function getContent() {
     global $PERMISSION, $TOOLS;
 
     # language

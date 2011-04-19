@@ -95,7 +95,7 @@ var _edit = {
   /****************************************************************************/
   showDetails: function( details ) {
     _edit.replaceContent( { query: "#details", innerHtml: details } );
-    $( "#details > *" ).draggable( {
+    $( "#details > *" ).resizable().draggable( {
       handle: "h2",
       containment: "#main"
     } );

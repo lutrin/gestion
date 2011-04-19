@@ -3,7 +3,7 @@ class fn_Template {
   protected static $idList = "templates";  
 
   /****************************************************************************/
-  public static function displayList() {
+  public static function getContent() {
     global $PERMISSION, $TOOLS;
 
     # language

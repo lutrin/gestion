@@ -1,7 +1,6 @@
 <?php
 class ui_Form {
   public static function buildXml( $params, $fields, $values = false ) {
-    Includer::add( "tag" );
 
     # initialize
     $attributes = array();

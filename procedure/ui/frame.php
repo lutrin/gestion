@@ -18,8 +18,6 @@ class ui_Frame {
   public static function buildHtml( $params = false ) {
     global $FRAME;
 
-    Includer::add( "tag" );
-
     # empty fields
     $fields = self::$defaultFields;
 

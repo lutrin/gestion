@@ -114,7 +114,8 @@
     form.find( "input[type=text],input[type=hidden],input[type=password],select" ).each( function() {
       var object = $( this ),
           type = object.attr( "type" ) || object.tagName,
-          value = _c.trim( object.val() );
+          value = _c.trim( object.val() ),
+          compareObject;
 
       // trim
       if( _c.inList( type, ["text"] ) ) {
@@ -130,7 +131,25 @@
       if( object.attr( "required" ) && value === "" ) {
         error = true;
         app.showMsg( object, _edit.msg( "required" ) );
-      } else if( !error ) {
+      }
+
+      // equal
+      if( object.attr( "data-equal" ) ) {
+        compareObject = form.find( object.attr( "data-equal" ) );
+        if( compareObject.size() ) {
+          if( object.val() != compareObject.val() ) {
+            error = true;
+            app.showMsg( object, _edit.msg( "notequal" ) );
+          }
+        }
+
+        // equal
+        /*
+        error = true;
+        app.showMsg( object, _edit.msg( "required" ) +  );*/
+      }
+
+      if( !error ) {
         fields[object.attr( "name" )] = value;
       }
     } );

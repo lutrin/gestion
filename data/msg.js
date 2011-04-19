@@ -11,6 +11,10 @@
     "fr": "Champ obligatoire",
     "en": "Mandatory field"
   },
+  "notequal": {
+    "fr": "Champ inégal",
+    "en": "Not equal field"
+  },
   "incorrectlogin": {
     "fr": "Le nom d'utilisateur ou le mot de passe est incorrect.",
     "en": "Incorrect user name or password."

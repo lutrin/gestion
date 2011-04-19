@@ -174,18 +174,17 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input, select, button, #dialog-content > *, .dock li span, #details > * {
+fieldset, legend, input[type=submit], button, #dialog-content > *, .dock li span, #details > * {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
 
-.header > .cell {
+input, select, .header > .cell {
   border: 1px solid #aaa;
 }
 
 input[type=text], input[type=password], select {
   box-shadow: inset rgba(0,0,0,.2) 0px 0px 5px;
-  border-radius: 4px;
 }
 
 input[type=text]:focus, input[type=password]:focus, select:focus {
@@ -193,12 +192,12 @@ input[type=text]:focus, input[type=password]:focus, select:focus {
   box-shadow: inset rgba(0,0,88,.5) 0px 0px 5px;
 }
 
-.changed:invalid {
+.changed:invalid, .field.invalid input {
   border-color: #800;
   box-shadow: inset rgba(88,0,0,.5) 0px 0px 5px;
 }
 
-.changed:valid {
+.field:not(.invalid) .changed:valid {
   border-color: #080;
   box-shadow: inset rgba(0,88,0,.5) 0px 0px 5px;
 }
@@ -391,6 +390,7 @@ nav h2, nav menu {
   position: absolute;
   top: 50px;
   left: 50px;
+  overflow: hidden;
 }
 
 #details > * > h2:hover {
@@ -529,4 +529,35 @@ nav h2, nav menu {
 
 .input label {
   display: block;
+}
+
+.ui-resizable-handle {
+  display: block;
+  font-size: 0.1px;
+  position: absolute;
+  z-index: 99999;
+}
+
+.ui-resizable-e {
+  cursor: e-resize;
+  height: 100%;
+  right: -5px;
+  top: 0;
+  width: 7px;
+}
+
+.ui-resizable-s {
+  bottom: -5px;
+  cursor: s-resize;
+  height: 7px;
+  left: 0;
+  width: 100%;
+}
+
+.ui-resizable-se {
+  bottom: 1px;
+  cursor: se-resize;
+  height: 12px;
+  right: 1px;
+  width: 12px;
 }
