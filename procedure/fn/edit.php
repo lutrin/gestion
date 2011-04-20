@@ -73,6 +73,9 @@ class fn_Edit {
       ),
       "editors" => array(
         "label"  => $TOOLS["editors"][$lang]
+      ),
+      "visitors" => array(
+        "label"  => $TOOLS["visitors"][$lang]
       )
     );
 

@@ -152,6 +152,10 @@ $TOOLS = array(
   "editors" => array(
     "fr" => "Les éditeurs",
     "en" => "Editors"
+  ),
+  "visitors" => array(
+    "fr" => "Les visiteurs",
+    "en" => "Visitors"
   )
 );
 

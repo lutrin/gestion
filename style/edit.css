@@ -80,6 +80,10 @@ nav h3 {
   background: url(../image/editor.svg) no-repeat center center;
 }
 
+#toolList-visitors a {
+  background: url(../image/visitor.svg) no-repeat center center;
+}
+
 .list-container .cell.editor, #details form.editor h2 {
   background-image: url(../image/editor.svg);
   background-repeat: no-repeat;
