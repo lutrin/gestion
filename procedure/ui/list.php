@@ -59,14 +59,14 @@ class ui_List {
 
     # items
     foreach( $items as $item ) {
-      $innerHtml[] = self::getItem( $id, $primary, $item );
+      $innerHtml[] = self::getRow( $primary, $item );
     }
 
     return Tag::build( "ui.list", $attributes, $innerHtml );
   }
 
   /****************************************************************************/
-  protected static function getItem( $formId, $primary, $fields ) {
+  public static function getRow( $primary, $fields ) {
     $attributes["id"] = $fields[$primary];
     $innerHtml = array();
     foreach( $fields as $key => $value ) {

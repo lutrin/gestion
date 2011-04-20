@@ -58,6 +58,9 @@
 <!-- user interface -->
 <xsl:template match="ui.form">
   <form>
+    <xsl:if test="@closable">
+      <button class="close" data-trigger="close"></button>
+    </xsl:if>
     <xsl:call-template name="apply-tag" />
   </form>
 </xsl:template>

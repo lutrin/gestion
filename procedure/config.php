@@ -42,7 +42,7 @@ $APP = array(
     )
 );
 
-$EDITOR = array(
+$FOOTERLINK = array(
   "copyright" => "Lutrin&nbsp;©&nbsp;2011",
   "help"      => array(
     "fr" => "Aide",
@@ -77,6 +77,29 @@ $LOGIN = array(
   )
 );
 
+$EDITOR = array(
+  "active" => array(
+    "fr" => "Activé",
+    "en" => "Active"
+  ),
+  "username" => array(
+    "fr" => "Utilisateur (unique)",
+    "en" => "User (unique)"
+  ),
+  "password" => array(
+    "fr" => "Changement de mot de passe (facultatif)",
+    "en" => "Password changing (optional)"
+  ),
+  "confirmpassword" => array(
+    "fr" => "Confirmation de mot de passe",
+    "en" => "Password confirmation"
+  ),
+  "admin" => array(
+    "fr" => "Administrateur",
+    "en" => "Administrator"
+  )
+);
+
 $SETTING = array(
   "apply" => array(
     "fr" => "Appliquer",
@@ -107,7 +130,7 @@ $SETTING = array(
     "en" => "Editor settings"
   ),
   "lang" => array(
-    "fr" => "Langage",
+    "fr" => "Langue",
     "en" => "Language"
   )
 );
@@ -273,6 +296,9 @@ $INCLUDE_LIST = array(
   "tag" => array(
     "path" => "tag.php"
   ),
+  "fn" => array(
+    "path" => "fn.php"
+  ),
 
   # function
   "fnLogin" => array(
@@ -294,28 +320,39 @@ $INCLUDE_LIST = array(
   ),
   "fnPage" => array(
     "path" => "fn/page.php",
+    "depend" => "fn",
     "class" => "fn_Page",
     "entries" => array( "pages" )
   ),
   "fnTemplate" => array(
     "path" => "fn/template.php",
+    "depend" => "fn",
     "class" => "fn_Template",
     "entries" => array( "templates" )
   ),
   "fnArticle" => array(
     "path" => "fn/article.php",
+    "depend" => "fn",
     "class" => "fn_Article",
     "entries" => array( "articles" )
   ),
   "fnFile" => array(
     "path" => "fn/file.php",
+    "depend" => "fn",
     "class" => "fn_File",
     "entries" => array( "files" )
   ),
   "fnEditor" => array(
     "path" => "fn/editor.php",
+    "depend" => "fn",
     "class" => "fn_Editor",
     "entries" => array( "editors", "editor" )
+  ),
+  "fnVisitor" => array(
+    "path" => "fn/visitor.php",
+    "depend" => "fn",
+    "class" => "fn_Visitor",
+    "entries" => array( "visitors" )
   ),
 
   # user interface

@@ -96,8 +96,7 @@ var _edit = {
   showDetails: function( details ) {
     _edit.replaceContent( { query: "#details", innerHtml: details } );
     $( "#details > *" ).resizable().draggable( {
-      handle: "h2",
-      containment: "#main"
+      handle: "h2"
     } );
     _c.select( "#details" ).removeClass( "hidden" );
 /*    _edit.replaceContent( { query: "#dialog-content", innerHtml: dialog } );

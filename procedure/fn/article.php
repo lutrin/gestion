@@ -1,5 +1,5 @@
 <?php
-class fn_Article {
+class fn_Article extends fn {
   protected static $idList = "articles";  
 
   /****************************************************************************/

@@ -16,7 +16,7 @@ class fn_Setting {
 
   /****************************************************************************/
   public static function save( $k, $token ) {
-    global $SETTING, $APP, $EDITOR;
+    global $SETTING, $APP, $FOOTERLINK;
 
     # allowed
     if( $k != $_SESSION["editor"]["k"] ) {
@@ -39,7 +39,12 @@ class fn_Setting {
 
     # update editor
     Includer::add( "dbEditor" );
-    if( !db_Editor::save( array( "lang" => $values["lang"], "longname" => $values["longname"] ), $k ) ) {
+    $values = array( "lang" => $values["lang"], "longname" => $values["longname"] );
+    $valuesToSave = array();
+    foreach( $values as $key => $value ) {
+        $valuesToSave[$key] = "'" . DB::mysql_prep( $value ) . "'";
+    }
+    if( !db_Editor::save( $valuesToSave, $k ) ) {
       return array();
     }
     $_SESSION["editor"] = db_Editor::getInfo( $_SESSION["editor"]["username"] );
@@ -56,9 +61,9 @@ class fn_Setting {
         array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton() ),
         array( "query" => "#title",          "innerHtml" => $APP["name"][$lang] . "&nbsp;-&nbsp;" . $APP["site"] ),
         array( "query" => "#currentUser",    "innerHtml" => $_SESSION["editor"]["longname"] ),
-        array( "query" => "#about",          "innerHtml" => $EDITOR["about"][$lang] ),
-        array( "query" => "#condition",      "innerHtml" => $EDITOR["condition"][$lang] ),
-        array( "query" => "#help",           "innerHtml" => $EDITOR["help"][$lang] ),
+        array( "query" => "#about",          "innerHtml" => $FOOTERLINK["about"][$lang] ),
+        array( "query" => "#condition",      "innerHtml" => $FOOTERLINK["condition"][$lang] ),
+        array( "query" => "#help",           "innerHtml" => $FOOTERLINK["help"][$lang] ),
         array( "query" => "[lang]", "attributeList" => array( "name" => "lang", "value" => $lang ) )
       )
     );

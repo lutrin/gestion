@@ -1,5 +1,5 @@
 <?php
-class fn_Editor {
+class fn_Editor extends fn {
   protected static $idList = "editors";  
 
   /****************************************************************************/
@@ -79,8 +79,6 @@ class fn_Editor {
 
   /****************************************************************************/
   protected static function getIndividualList() {
-    global $TOOLS_EDITOR_INDIVIDUAL;
-    $lang = getLang();
 
     # params
     $params = array(
@@ -96,33 +94,7 @@ class fn_Editor {
       "main"       => "username",
       "order"      => "username",
       "selectable" => true,
-      "columns"    => array(
-        "k"        => array(
-          "label"  => $TOOLS_EDITOR_INDIVIDUAL["k"][$lang],
-          "hidden" => true
-        ),
-        "username" => array(
-          "label"    => $TOOLS_EDITOR_INDIVIDUAL["username"][$lang],
-          "class"    => "editor",
-          "sortable" => true/*,
-          "filtrable" => true*/
-        ),
-        "active"   => array(
-          "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang],
-          "sortable" => true,
-          "field" => "IF( active = 1, 'oui', '' )"
-        ),
-        "admin"    => array(
-          "label" => $TOOLS_EDITOR_INDIVIDUAL["admin"][$lang],
-          "sortable" => true,
-          "field" => "IF( admin = 1, 'oui', '' )"
-        ),
-        "longname" => array(
-          "label"  => $TOOLS_EDITOR_INDIVIDUAL["longname"][$lang],
-          "sortable" => true/*,
-          "filtrable" => true*/
-        )
-      ),
+      "columns"    => self::getIndividualColumns(),
       "actions" => array(
         "edit" => array(
           "title" => "Modifier"
@@ -135,13 +107,53 @@ class fn_Editor {
     );
 
     # field
-    $fields = array();
-    foreach( $params["columns"] as $key => $column ) {
-      $fields[] = isset( $column["field"] )? ( $column["field"] . " AS $key" ): $key;
-    }
+    $fields = self::prepareFields( $params["columns"] );
 
     Includer::add( array( "dbEditor", "uiList" ) );
     return ui_List::buildXml( $params, db_Editor::get( $fields, false, $params["order"] ) );
+  }
+
+  /****************************************************************************/
+  protected static function prepareFields( $columns ) {
+    $fields = array();
+    foreach( $columns as $key => $column ) {
+      $fields[] = isset( $column["field"] )? ( $column["field"] . " AS $key" ): $key;
+    }
+    return $fields;
+  }
+
+  /****************************************************************************/
+  protected static function getIndividualColumns() {
+    global $TOOLS_EDITOR_INDIVIDUAL;
+    $lang = getLang();
+
+    return array(
+      "k"        => array(
+        "label"  => $TOOLS_EDITOR_INDIVIDUAL["k"][$lang],
+        "hidden" => true
+      ),
+      "username" => array(
+        "label"    => $TOOLS_EDITOR_INDIVIDUAL["username"][$lang],
+        "class"    => "editor",
+        "sortable" => true/*,
+        "filtrable" => true*/
+      ),
+      "active"   => array(
+        "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang],
+        "sortable" => true,
+        "field" => "IF( active = 1, 'oui', '' )"
+      ),
+      "admin"    => array(
+        "label" => $TOOLS_EDITOR_INDIVIDUAL["admin"][$lang],
+        "sortable" => true,
+        "field" => "IF( admin = 1, 'oui', '' )"
+      ),
+      "longname" => array(
+        "label"  => $TOOLS_EDITOR_INDIVIDUAL["longname"][$lang],
+        "sortable" => true/*,
+        "filtrable" => true*/
+      )
+    );
   }
 
   /****************************************************************************/
@@ -216,7 +228,8 @@ class fn_Editor {
     $result = fn_Form::hasErrors(
       self::getFormParams( $k ),
       self::getFormFields( $SETTING ),
-      $values
+      $values,
+      $k
     );
 
     # fatal error or error list
@@ -224,19 +237,51 @@ class fn_Editor {
       return $result;
     }
 
-    return $values;
-  }
+    # username unique
+    $username = $values["username"];
+    Includer::add( "dbEditor" );
+    if( db_Editor::count( "k", array( "NOT k=$k", "username='$username'" ) ) ) {
+      $result["errorList"][] = array( "name" => "username", "msg" => "mustbeunique" );
+      return $result;
+    }
 
-  /****************************************************************************/
-  public static function delete( $k ) {
-    global $PERMISSION;
-    $lang = getLang();
-    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+    # values
+    $valuesToSave = array();
+    foreach( $values as $key => $value ) {
+  
+      # not in database
+      if( in_array( $key, array( "token", "confirmpassword", "k", "object", "action" ) ) ) {
+        continue;
+      }
+  
+      # password
+      if( $key == "password" ) {
+        if( !$value ) {
+          continue;
+        }
+        $valuesToSave[$key] = "PASSWORD('" . DB::mysql_prep( $value ) . "')";
+        continue;
+      }
+
+      # add quotes
+      $valuesToSave[$key] = "'" . DB::mysql_prep( $value ) . "'";
+    }
+
+    # update
+    if( !db_Editor::save( $valuesToSave, $k ) ) {
+      return array();
+    }
+
+    #TODO replace form and row
+    $columns = self::getIndividualColumns();
+    $fields = self::prepareFields( $columns );
+    $rows = db_Editor::get( $fields, "k=$k" );
+    Includer::add( "uiList" );
+    $rowInnerHtml = ui_List::getRow( "k", $rows[0] );
     return array(
-      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
       "replacement" => array(
-        "query" => "#main",
-        "innerHtml" => fn_edit::getMain() 
+        "query" => "#editors-individualList-$k",
+        "innerHtml" => $rowInnerHtml
       )
     );
   }
@@ -244,17 +289,18 @@ class fn_Editor {
   /****************************************************************************/
   protected static function getFormParams( $k ) {
     return array(
-      "id"     => "editor-$k",
-      "action" => "save",
-      "submit" => "Enregistrer",
-      "method" => "post",
-      "class"  => "editor"
+      "id"       => "editor-$k",
+      "action"   => "save",
+      "submit"   => "Enregistrer",
+      "method"   => "post",
+      "class"    => "editor",
+      "closable" => true
     );
   }
 
   /****************************************************************************/
   protected static function getFormFields( $SETTING ) {
-    global $LOGIN;
+    global $LOGIN, $EDITOR;
     $lang = getLang();
     return array(
       "k"     => array(
@@ -265,16 +311,16 @@ class fn_Editor {
         "value" => "editor"
       ),
       "active" => array(
-        "label"        => "Compte activé",
+        "label"        => $EDITOR["active"][$lang],
         "type"         => "checkbox",
         "value"        => "1"
       ),
       "login" => array(
-        "legend" => "Paramètres de connexion",
+        "legend" => $SETTING["login"][$lang],
         "type"   => "fieldset",
         "fieldlist" => array(
           "username" => array(
-            "label"        => $LOGIN["username"][$lang],
+            "label"        => $EDITOR["username"][$lang],
             "required"     => "required",
             "maxlength"    => 30,
             "size"         => 20,
@@ -282,22 +328,22 @@ class fn_Editor {
             "autocomplete" => "off",
           ),
           "password" => array(
-            "label"        => $LOGIN["password"][$lang],
+            "label"        => $EDITOR["password"][$lang],
             "type"         => "password",
             "maxlength"    => 30,
             "size"         => 20,
             "autocomplete" => "off",
           ),
           "confirmpassword" => array(
-            "label"        => "Confirmation de mot de passe",
+            "label"        => $EDITOR["confirmpassword"][$lang],
             "type"         => "password",
             "maxlength"    => 30,
             "size"         => 20,
             "autocomplete" => "off",
-            "equal"        => "[name=password]"
+            "equal"        => "password"
           ),
           "admin" => array(
-            "label"        => "Administrateur",
+            "label"        => $EDITOR["admin"][$lang],
             "type"         => "checkbox",
             "value"        => "1"
           )

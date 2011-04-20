@@ -31,7 +31,7 @@ class fn_Edit {
 
   /****************************************************************************/
   protected static function getBody( $title ) {
-    global $MSG_NOSCRIPT, $EDITOR, $EDIT;
+    global $MSG_NOSCRIPT, $FOOTERLINK, $EDIT;
     $lang = getLang();
     return replaceFields( array(
       "lang"          => $lang, 
@@ -39,10 +39,10 @@ class fn_Edit {
       "headerButtons" => self::getHeaderButton(),
       "noscript"      => $MSG_NOSCRIPT[$lang],
       "main"          => self::getMain(),
-      "copyright"     => $EDITOR["copyright"],
-      "help"          => $EDITOR["help"][$lang],
-      "condition"     => $EDITOR["condition"][$lang],
-      "about"         => $EDITOR["about"][$lang]
+      "copyright"     => $FOOTERLINK["copyright"],
+      "help"          => $FOOTERLINK["help"][$lang],
+      "condition"     => $FOOTERLINK["condition"][$lang],
+      "about"         => $FOOTERLINK["about"][$lang]
     ), file_get_contents( $EDIT ) );
   }
 
@@ -97,7 +97,8 @@ class fn_Edit {
       "mode" => "dock",
       "headtitle" => $TOOLS["headtitle"][$lang]
     );
-    return ui_Nav::buildXml( $params, $allowedToolList );
+    return ui_Nav::buildXml( $params, $allowedToolList )
+         . Tag::build( "div", array( "id" => "details"), " " );
   }
 
   /****************************************************************************/

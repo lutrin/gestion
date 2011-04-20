@@ -26,6 +26,11 @@
       $( this ).addClass( "changed" );
     } );
 
+    // close form
+    form.find( "button.close" ).bind( "close", function() {
+      form.remove();
+    } );
+
     form.addClass( "initiated" );
   },
 
@@ -111,20 +116,24 @@
   serialize: function( form, app ) {
     var fields = {},
         error = false;
-    form.find( "input[type=text],input[type=hidden],input[type=password],select" ).each( function() {
+    form.find( "input[type=text],input[type=hidden],input[type=password],input[type=checkbox],select" ).each( function() {
       var object = $( this ),
           type = object.attr( "type" ) || object.tagName,
           value = _c.trim( object.val() ),
           compareObject;
 
-      // trim
-      if( _c.inList( type, ["text"] ) ) {
-        value = _c.trim( value );
-      }
-
       // password
       if( value !== "" && type == "password" ) {
         value = _c.ajaxList.interaction.sha1.get( value );
+      }
+
+      // checkbox
+      if( type == "checkbox" ) {
+        if( object.is(":checked") ) {
+          value = value || 1;
+        } else {
+          value = 0;
+        }
       }
 
       // required
@@ -135,18 +144,13 @@
 
       // equal
       if( object.attr( "data-equal" ) ) {
-        compareObject = form.find( object.attr( "data-equal" ) );
+        compareObject = form.find( "[name=" + object.attr( "data-equal" ) + "]" );
         if( compareObject.size() ) {
           if( object.val() != compareObject.val() ) {
             error = true;
             app.showMsg( object, _edit.msg( "notequal" ) );
           }
         }
-
-        // equal
-        /*
-        error = true;
-        app.showMsg( object, _edit.msg( "required" ) +  );*/
       }
 
       if( !error ) {

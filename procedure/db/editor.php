@@ -17,7 +17,7 @@ class db_Editor {
   }
 
   /****************************************************************************/
-  public static function get( $fields, $where, $orders = false ) {
+  public static function get( $fields, $where = false, $orders = false ) {
     $query = array(
       "field" => $fields,
       "table" => self::$table
@@ -32,6 +32,18 @@ class db_Editor {
   }
 
   /****************************************************************************/
+  public static function count( $fields, $where = false ) {
+    $query = array(
+      "field" => $fields,
+      "table" => self::$table
+    );
+    if( $where ) {
+      $query["where"] = $where;
+    }
+    return DB::count( $query );
+  }
+
+  /****************************************************************************/
   public static function save( $values, $k = false ) {
     if( !$values ) {
       return false;
@@ -40,9 +52,10 @@ class db_Editor {
     # update
     if( $k ) {
       return DB::update( array(
-        "table" => self::$table,
-        "set"   => $values,
-        "where" => "k = $k"
+        "table"   => self::$table,
+        "set"     => $values,
+        "noquote" => true,
+        "where"   => "k = $k"
       ) );
     
     # insert

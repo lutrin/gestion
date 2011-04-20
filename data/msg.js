@@ -4,8 +4,8 @@
     "en": "Your browser is not compatible. Please upgrade."
   },
   "tokenerror": {
-    "fr": "Réponse au formulaire tardive ou douteuse. <a href=''>Veuillez recharger la page</a>.",
-    "en": "Response to the form later or doubtful. <a href=''>Please reload page</a>."
+    "fr": "Réponse au formulaire expirée. <a href=''>Veuillez recharger la page</a>.",
+    "en": "Response to the form expired. <a href=''>Please reload page</a>."
   },
   "required": {
     "fr": "Champ obligatoire",
@@ -14,6 +14,10 @@
   "notequal": {
     "fr": "Champ inégal",
     "en": "Not equal field"
+  },
+  "mustbeunique": {
+    "fr": "Doit être unique",
+    "en": "Must be unique"
   },
   "incorrectlogin": {
     "fr": "Le nom d'utilisateur ou le mot de passe est incorrect.",
