@@ -94,6 +94,7 @@ class fn_Editor extends fn {
       "main"       => "username",
       "order"      => "username",
       "selectable" => true,
+      "addable"    => true,
       "columns"    => self::getIndividualColumns(),
       "actions" => array(
         "edit" => array(

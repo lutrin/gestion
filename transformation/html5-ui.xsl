@@ -309,6 +309,11 @@
         </div>
       </xsl:for-each>
     </div>
+    <xsl:if test="@addable">
+      <div>
+        <button class="add"> </button>
+      </div>
+    </xsl:if>
   </div>
 </xsl:template>
 

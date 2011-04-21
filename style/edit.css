@@ -35,7 +35,7 @@ nav h3 {
     url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
-.iconic, #currentUser:before, .setFilter, .edit, .delete, .close {
+.iconic, #currentUser:before, .setFilter, .edit, .delete, .close, .add {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
@@ -62,6 +62,10 @@ nav h3 {
 
 .close:before {
   content: "x";
+}
+
+.add:before {
+  content: "+";
 }
 
 #toolList-pages a {
