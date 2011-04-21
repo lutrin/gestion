@@ -98,6 +98,12 @@
               if( ajaxItem.replacement ) {
                 _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
               }
+
+              // details
+              if( ajaxItem.details ) {
+                _edit.showDetails( ajaxItem.details );
+              }
+
               _c.select( "#dialog" ).hide();
               return false;
             }

@@ -73,7 +73,7 @@ class fn_Editor extends fn {
       "replacement" => array(
         "query" => "#editors-individual",
         "innerHtml" => self::getIndividualList()
-      ),
+      )
     );
   }
 
@@ -108,8 +108,8 @@ class fn_Editor extends fn {
 
     # field
     $fields = self::prepareFields( $params["columns"] );
-
     Includer::add( array( "dbEditor", "uiList" ) );
+
     return ui_List::buildXml( $params, db_Editor::get( $fields, false, $params["order"] ) );
   }
 
@@ -172,7 +172,7 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function edit( $k ) {
-    global $PERMISSION, $SETTING, $LOGIN;
+    global $PERMISSION;
     $lang = getLang();
 
     # is admin
@@ -186,7 +186,14 @@ class fn_Editor extends fn {
         )
       );
     }
+    return array(
+      "details" => self::getEdit( $k )
+    );
+  }
 
+  /****************************************************************************/
+  public static function getEdit( $k ) {
+    global $SETTING;
     if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" ) ) {
       return "Introuvable";
     }
@@ -196,12 +203,10 @@ class fn_Editor extends fn {
     $fields = self::getFormFields( $SETTING );
 
     Includer::add( array( "uiForm" ) );
-    return array(
-      "details" => ui_Form::buildXml(
-        $params,
-        $fields,
-        $values[0]
-      )
+    return ui_Form::buildXml(
+      $params,
+      $fields,
+      $values[0]
     );
   }
 
@@ -272,17 +277,13 @@ class fn_Editor extends fn {
       return array();
     }
 
-    #TODO replace form and row
-    $columns = self::getIndividualColumns();
-    $fields = self::prepareFields( $columns );
-    $rows = db_Editor::get( $fields, "k=$k" );
-    Includer::add( "uiList" );
-    $rowInnerHtml = ui_List::getRow( "k", $rows[0] );
+   # list
     return array(
       "replacement" => array(
-        "query" => "#editors-individualList-$k",
-        "innerHtml" => $rowInnerHtml
-      )
+        "query" => "#editors-individual",
+        "innerHtml" => self::getIndividualList()
+      ),
+      "details" => self::getEdit( $k )
     );
   }
 
