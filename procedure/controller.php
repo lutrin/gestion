@@ -46,6 +46,8 @@ function main() {
             return save();
           } elseif( $action == "edit" ) {
             return edit();
+          } elseif( $action == "add" ) {
+            return add();
           } elseif( $action == "delete" ) {
             return delete();
           }
@@ -121,9 +123,10 @@ function getContent() {
 /******************************************************************************/
 function save() {
   global $CONTROLLER, $INCLUDE_LIST;
-  if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
+  if( isset( $_GET["k"] ) &&
       ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
       ( $token =  ( isset( $_GET["token"] )?    $_GET["token"]: false ) ) ) {
+    $k = $_GET["k"];
     setHeader( "json" );
 
     foreach( $INCLUDE_LIST as $key => $include ) {
@@ -143,44 +146,68 @@ function save() {
 
 /******************************************************************************/
 function edit() {
-  global $CONTROLLER;
+  global $CONTROLLER, $INCLUDE_LIST;;
   if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
     $idList = explode( "-", $row );
+    $k = array_pop( $idList );
+    $object = array_shift( $idList );
     setHeader( "json" );
 
-    # editor
-    if( $idList[0] == "editors" ) {
-      Includer::add( "fnEditor" );
-      if( isset( $idList[1] ) ) {
-
-        # individual
-        if( $idList[1] == "individualList" ) {
-          return json_encode( fn_Editor::edit( $idList[2] ) );
-        }
+    foreach( $INCLUDE_LIST as $key => $include ) {
+      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
+        Includer::add( $key );
+        $function = "edit" . ( $idList? ( "_" . $idList[0] ): "" );
+        return json_encode( call_user_func_array(
+          array( $include["class"], $function ),
+          array( $k )
+        ) );
+        break;
       }
-    }    
+    }
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+
+/******************************************************************************/
+function add() {
+  global $CONTROLLER, $INCLUDE_LIST;
+  if( $id = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) {
+    $idList = explode( "-", $id );
+    $object = array_shift( $idList );
+    setHeader( "json" );
+
+    foreach( $INCLUDE_LIST as $key => $include ) {
+      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
+        Includer::add( $key );
+        $function = "add" . ( $idList? ( "_" . $idList[0] ): "" );
+        return json_encode( call_user_func( array( $include["class"], $function ) ) );
+        break;
+      }
+    }
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
 function delete() {
-  global $CONTROLLER;
+  global $CONTROLLER, $INCLUDE_LIST;;
   if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
     $idList = explode( "-", $row );
+    $k = array_pop( $idList );
+    $object = array_shift( $idList );
     setHeader( "json" );
 
-    # editor
-    if( $idList[0] == "editors" ) {
-      Includer::add( "fnEditor" );
-      if( isset( $idList[1] ) ) {
-
-        # individual
-        if( $idList[1] == "individualList" ) {
-          return json_encode( fn_Editor::edit() );
-        }
+    foreach( $INCLUDE_LIST as $key => $include ) {
+      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
+        Includer::add( $key );
+        $function = "delete" . ( $idList? ( "_" . $idList[0] ): "" );
+        return json_encode( call_user_func_array(
+          array( $include["class"], $function ),
+          array( $k )
+        ) );
+        break;
       }
-    }   
+    }
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

@@ -1,7 +1,7 @@
 <?php
 class fn_Form {
   /****************************************************************************/
-  public static function hasErrors( $params, $fields, $values, $k = false ) {
+  public static function hasErrors( $params, $fields, $values ) {
 
     # token
     $exist = Tokenizer::exists( $params["id"], $values["token"] );
@@ -12,24 +12,24 @@ class fn_Form {
 
     # fields
     return array(
-      "errorList" => self::validFieldList( $fields, $values, $k ),
+      "errorList" => self::validFieldList( $fields, $values ),
       "values" => array( "token" => Tokenizer::create( $params["id"] ) )
     );
   }
 
   /****************************************************************************/
-  protected static function validFieldList( $fieldList, $values, $k ) {
+  protected static function validFieldList( $fieldList, $values ) {
     $errorList = array();
     foreach( $fieldList as $key => $field ) {
 
       # field list
       if( isset( $field["fieldlist"] ) ) {
-        $errorList = array_merge( $errorList, self::validFieldList( $field["fieldlist"], $values, $k ) );
+        $errorList = array_merge( $errorList, self::validFieldList( $field["fieldlist"], $values ) );
         continue;
       }
 
       # required
-      if( isset( $field["required"] ) && ( !isset( $values[$key] ) || $values[$key] === "" ) ) {
+      if( isset( $field["required"] ) && $field["required"] && ( !isset( $values[$key] ) || $values[$key] === "" ) ) {
         $errorList[] = array( "name" => $key, "msg" => "required" );
         continue;
       }

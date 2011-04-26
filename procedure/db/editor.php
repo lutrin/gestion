@@ -44,6 +44,19 @@ class db_Editor {
   }
 
   /****************************************************************************/
+  public static function defaults() {
+    $fields = DB::getInfo( self::$table );
+    $list = array();
+    foreach( $fields as $field ) {
+      if( isset( $field["Default"] ) ) {
+        $key = $field["Field"];
+        $list[$field["Field"]] = $field["Default"];
+      }
+    }
+    return $list;
+  }
+
+  /****************************************************************************/
   public static function save( $values, $k = false ) {
     if( !$values ) {
       return false;
@@ -55,11 +68,26 @@ class db_Editor {
         "table"   => self::$table,
         "set"     => $values,
         "noquote" => true,
-        "where"   => "k = $k"
+        "where"   => "k=$k"
       ) );
     
     # insert
     } else {
+      return DB::insert( array(
+        "table"   => self::$table,
+        "field"   => array_keys( $values ),
+        "noquote" => true,
+        "values"  => array_values( $values ),
+        "return"  => "id"
+      ) );
     }
+  }
+
+  /****************************************************************************/
+  public static function remove( $k ) {
+    return DB::delete( array(
+      "table" => self::$table,
+      "where" => "k=$k"
+    ) );
   }
 }

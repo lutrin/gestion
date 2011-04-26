@@ -172,7 +172,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function edit( $k ) {
+  public static function edit_individualList( $k ) {
     global $PERMISSION;
     $lang = getLang();
 
@@ -193,15 +193,82 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
+  public static function add_individualList() {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # get default values
+    Includer::add( "dbEditor" );
+    $defaults = db_Editor::defaults();
+    $defaults["k"] = 0;
+
+    # get params
+    $params = self::getFormParams();
+    $params["headtitle"] = "Nouvel éditeur";
+    $fields = self::getFormFields( 1 );
+
+    Includer::add( array( "uiForm" ) );
+    return array(
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields,
+        $defaults
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function delete_individualList( $k ) {
+    global $PERMISSION;
+    $lang = getLang();
+    $myself = $k == $_SESSION["editor"]["k"];
+
+    # is admin
+    if( ( !$isAdmin = $_SESSION["editor"]["admin"] ) || $myself ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # remove
+    Includer::add( "dbEditor" );
+    db_Editor::remove( $k );
+    
+    return array(
+      "replacement" => array(
+        "query" => "#editors-individual",
+        "innerHtml" => self::getIndividualList()
+      ),
+      "details" => ""
+    );
+  }
+
+  /****************************************************************************/
   public static function getEdit( $k ) {
-    global $SETTING;
     if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" ) ) {
       return "Introuvable";
     }
 
     $params = self::getFormParams( $k );
     $params["headtitle"] = $values[0]["username"] . " - Éditeur";
-    $fields = self::getFormFields( $SETTING );
+    $fields = self::getFormFields();
 
     Includer::add( array( "uiForm" ) );
     return ui_Form::buildXml(
@@ -213,7 +280,7 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function save( $k ) {
-    global $PERMISSION, $SETTING;
+    global $PERMISSION;
     $lang = getLang();
 
     # is admin
@@ -233,7 +300,7 @@ class fn_Editor extends fn {
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
       self::getFormParams( $k ),
-      self::getFormFields( $SETTING ),
+      self::getFormFields(),
       $values,
       $k
     );
@@ -273,9 +340,10 @@ class fn_Editor extends fn {
       $valuesToSave[$key] = "'" . DB::mysql_prep( $value ) . "'";
     }
 
-    # update
-    if( !db_Editor::save( $valuesToSave, $k ) ) {
-      return array();
+    # update or insert
+    $newK = db_Editor::save( $valuesToSave, $k );
+    if( !$k ) {
+      $k = $newK[0];
     }
 
    # list
@@ -289,7 +357,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormParams( $k ) {
+  protected static function getFormParams( $k = 0 ) {
     return array(
       "id"       => "editor-$k",
       "action"   => "save",
@@ -301,9 +369,24 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormFields( $SETTING ) {
-    global $LOGIN, $EDITOR;
+  protected static function getFormFields( $new = false ) {
+    global $LOGIN, $EDITOR, $SETTING;
     $lang = getLang();
+  
+    # password field
+    $password = array(
+      "type"         => "password",
+      "maxlength"    => 30,
+      "size"         => 20,
+      "autocomplete" => "off"
+    );
+    if( $new ) {
+      $password["label"] = $EDITOR["password"][$lang];
+      $password["required"] = "required";
+    } else {
+      $password["label"] = $EDITOR["passwordoptional"][$lang];
+    }
+
     return array(
       "k"     => array(
         "type" => "hidden"
@@ -329,13 +412,7 @@ class fn_Editor extends fn {
             "autofocus"    => "autofocus",
             "autocomplete" => "off",
           ),
-          "password" => array(
-            "label"        => $EDITOR["password"][$lang],
-            "type"         => "password",
-            "maxlength"    => 30,
-            "size"         => 20,
-            "autocomplete" => "off",
-          ),
+          "password" => $password,
           "confirmpassword" => array(
             "label"        => $EDITOR["confirmpassword"][$lang],
             "type"         => "password",

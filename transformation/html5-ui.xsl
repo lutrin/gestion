@@ -309,9 +309,19 @@
         </div>
       </xsl:for-each>
     </div>
+    <xsl:if test="ui.action/@multiple">
+      <div>
+        <span>Sélection&amp;nbsp;:</span>
+        <xsl:for-each select="ui.action">
+          <xsl:if test="@multiple">
+            <button class="{@key}" data-action="{@key}" data-params="mode=selection,object={../@id}" title="{@title}" />
+          </xsl:if>          
+        </xsl:for-each>
+      </div>
+    </xsl:if>
     <xsl:if test="@addable">
       <div>
-        <button class="add"> </button>
+        <button class="add" data-action="add" data-params="object={@id}"> </button>
       </div>
     </xsl:if>
   </div>

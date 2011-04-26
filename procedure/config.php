@@ -86,9 +86,13 @@ $EDITOR = array(
     "fr" => "Utilisateur (unique)",
     "en" => "User (unique)"
   ),
-  "password" => array(
+  "passwordoptional" => array(
     "fr" => "Changement de mot de passe (facultatif)",
     "en" => "Password changing (optional)"
+  ),
+  "password" => array(
+    "fr" => "Mot de passe",
+    "en" => "Password"
   ),
   "confirmpassword" => array(
     "fr" => "Confirmation de mot de passe",
@@ -222,8 +226,8 @@ $PERMISSION = array(
     "en" => "Permission problem"
   ),
   "message" => array(
-    "fr" => "Vous n'avez pas accès à cette section.",
-    "en" => "This section is not permit."
+    "fr" => "Vous n'avez pas accès à cette section ou opération.",
+    "en" => "This section or operation is not permit."
   )
 );
 
