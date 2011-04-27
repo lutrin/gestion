@@ -70,6 +70,7 @@
       );
     } else if( trigger ) {
       button.trigger( trigger );
+      return false;
     }
   }
 }

@@ -58,10 +58,11 @@
 <!-- user interface -->
 <xsl:template match="ui.form">
   <form>
+    <xsl:call-template name="apply-attributelist" />
     <xsl:if test="@closable">
       <button class="close" data-trigger="close"></button>
     </xsl:if>
-    <xsl:call-template name="apply-tag" />
+    <xsl:apply-templates/>
   </form>
 </xsl:template>
 
@@ -102,7 +103,10 @@
     <!-- checkbox -->
     <xsl:when test="@type='checkbox'">
       <div>
-        <input class="field">
+        <xsl:attribute name="class">
+          <xsl:text>field checkbox</xsl:text>
+        </xsl:attribute>
+        <input>
           <xsl:for-each select="@id|@name|@type|@required|@value">
             <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
@@ -110,7 +114,7 @@
             <xsl:attribute name="checked"><xsl:text>checked</xsl:text></xsl:attribute>
           </xsl:if>
         </input>
-        <xsl:call-template name="apply-topfield" />
+        <xsl:call-template name="apply-label" />
       </div>
     </xsl:when>
 
@@ -358,9 +362,17 @@
 </xsl:template>
 
 <xsl:template name="apply-topfield">
+  <xsl:call-template name="apply-class-field" />
+  <xsl:call-template name="apply-label" />
+</xsl:template>
+
+<xsl:template name="apply-class-field">
   <xsl:attribute name="class">
     <xsl:text>field input</xsl:text>
   </xsl:attribute>
+</xsl:template>
+
+<xsl:template name="apply-label">
   <xsl:if test="@label">
     <label for="{@id}">
        <xsl:value-of select="@label" />
