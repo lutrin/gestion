@@ -278,7 +278,7 @@
              <xsl:value-of select="$rowId" />
           </xsl:attribute>
           <xsl:if test="../@selectable">
-            <div class="cell"><input type="checkbox" class="selectRow"/></div>
+            <div class="cell"><input type="checkbox" class="selectRow" value="{@id}"/></div>
           </xsl:if>
           <xsl:for-each select="ui.cell">
             <div>
@@ -304,11 +304,22 @@
                   </xsl:attribute>
                 </xsl:if>
               </xsl:for-each>
-              <xsl:value-of select="." />
+              <xsl:choose>
+                <xsl:when test="@key=../../@main">
+                  <a href="#{$rowId}" data-action="{../../@mainAction}" data-params="row={$rowId}">
+                    <xsl:value-of select="." />
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="." />
+                </xsl:otherwise>
+              </xsl:choose>
             </div>
           </xsl:for-each>
           <xsl:for-each select="../ui.action">
-            <div class="cell action"><button class="{@key}" data-action="{@key}" data-params="row={$rowId}" title="{@title}" /></div>
+            <div class="cell action">
+              <button class="{@key}" data-action="{@key}" data-params="row={$rowId}" title="{@title}" />
+            </div>
           </xsl:for-each>
         </div>
       </xsl:for-each>
@@ -318,7 +329,7 @@
         <span>Sélection&amp;nbsp;:</span>
         <xsl:for-each select="ui.action">
           <xsl:if test="@multiple">
-            <button class="{@key}" data-action="{@key}" data-params="mode=selection,object={../@id}" title="{@title}" />
+            <button class="{@key}" data-action="{@key}Selection" data-params="mode=selection,object={../@id}" title="{@title}" />
           </xsl:if>          
         </xsl:for-each>
       </div>

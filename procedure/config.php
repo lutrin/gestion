@@ -188,8 +188,8 @@ $TOOLS = array(
 
 $TOOLS_EDITOR = array(
   "individual" => array(
-    "fr" => "Individus",
-    "en" => "Individual"
+    "fr" => "Éditeurs",
+    "en" => "Editors"
   ),
   "group" => array(
     "fr" => "Groupes",

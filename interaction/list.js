@@ -131,6 +131,8 @@
         target = $( event.target );
     if( target.is( "button, .selectRow" ) ) {
       return true;
+    } else if( target.is( "a" ) ) {
+      return false;
     }
     if( checkbox.is(":checked") ) {
       checkbox.attr( "checked", false );

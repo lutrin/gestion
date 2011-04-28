@@ -94,11 +94,11 @@ class fn_Edit {
     Includer::add( "uiNav" );
     $params = array(
       "id"   => "toolList",
-      "mode" => "dock",
-      "headtitle" => $TOOLS["headtitle"][$lang]
+      "mode" => "dock"/*,
+      "headtitle" => $TOOLS["headtitle"][$lang]*/
     );
     return ui_Nav::buildXml( $params, $allowedToolList )
-         . Tag::build( "div", array( "id" => "details"), "empty" );
+         . Tag::build( "div", array( "id" => "details"), " " );
   }
 
   /****************************************************************************/

@@ -35,8 +35,8 @@ class fn_Editor extends fn {
     # params
     $params = array(
       "id"        => ( self::$idList . "-nav" ),
-      "mode"      => "tabs",
-      "headtitle" => $TOOLS[self::$idList][$lang]
+      "mode"      => "tabs"/*,
+      "headtitle" => $TOOLS[self::$idList][$lang]*/
     );
 
     Includer::add( "uiNav" );
@@ -92,6 +92,7 @@ class fn_Editor extends fn {
       #"headtitle"  => $TOOLS_EDITOR["individual"][$lang],
       "primary"    => "k",
       "main"       => "username",
+      "mainAction" => "edit",
       "order"      => "username",
       "selectable" => true,
       "addable"    => true,

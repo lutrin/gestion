@@ -50,6 +50,8 @@ function main() {
             return add();
           } elseif( $action == "delete" ) {
             return delete();
+          } elseif( $action == "deleteSelection" ) {
+            return deleteSelection();
           }
         }
         return logout( $msg );
@@ -189,8 +191,8 @@ function add() {
 }
 
 /******************************************************************************/
-function delete() {
-  global $CONTROLLER, $INCLUDE_LIST;;
+function delete() {//TODO object=row=
+  global $CONTROLLER, $INCLUDE_LIST;
   if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
     $idList = explode( "-", $row );
     $k = array_pop( $idList );
@@ -208,6 +210,19 @@ function delete() {
         break;
       }
     }
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+
+/******************************************************************************/
+function deleteSelection() {
+  global $CONTROLLER, $INCLUDE_LIST;
+  $row = $_GET["row"];
+  if( is_array( $row ) &&
+      $id = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) {
+    $idList = explode( "-", $id );
+    $object = array_shift( $idList );
+    
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

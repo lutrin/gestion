@@ -25,7 +25,7 @@
         app = _c.ajaxList.interaction.button,
         action = button.attr( "data-action" ),
         trigger = button.attr( "data-trigger" ),
-        ajaxObject, dataParams, params;
+        ajaxObject, dataParams, params, rowList;
 
     // action      
     if( action ) {
@@ -39,6 +39,14 @@
           var paramSplit = param.split( /=/g );
           params[paramSplit[0]] = paramSplit[1];
         } );
+        if( params.object && params.mode && params.mode == "selection" ) {
+          rowList = [];
+          $( "#" + params.object ).find( "input.selectRow:checked" ).each( function() {
+            rowList.push( this.value );
+          } );
+          params["row"] = rowList;
+          delete params.object;
+        }
         ajaxObject["params"] = params;
       }
       return _c.callAjax(

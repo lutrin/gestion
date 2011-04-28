@@ -18,9 +18,12 @@
   /****************************************************************************/
   click: function() {
     var anchor = $( this ),
-        app = _c.ajaxList.interaction.button,
+        app = _c.ajaxList.interaction.anchor,
         href = anchor.attr( "href" ),
-        target = $( href );
+        target = $( href ),
+        action = anchor.attr( "data-action" ),
+        trigger = anchor.attr( "data-trigger" ),
+        ajaxObject, dataParams, params;
 
     // empty
     if( target.hasClass( "empty" ) ) {
@@ -50,6 +53,53 @@
           return false;
         }
       );
+    } else {
+
+      // action      
+      if( action ) {
+        ajaxObject = { folder: "procedure", name: action };
+
+        // params
+        dataParams = anchor.attr( "data-params" );
+        if( dataParams ) {
+          params = {};
+          _c.eachItem( dataParams.split( /\,/g ), function( param ) {
+            var paramSplit = param.split( /=/g );
+            params[paramSplit[0]] = paramSplit[1];
+          } );
+          ajaxObject["params"] = params;
+        }
+        return _c.callAjax(
+          [ ajaxObject ],
+          function( ajaxItem ) {
+
+            // fatal error
+            if( ajaxItem.fatalError ) {
+              _edit.showError( _edit.msg( ajaxItem.fatalError ) );
+              return false;
+            }
+
+            // replacement
+            if( ajaxItem.replacement ) {
+              _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
+            }
+
+            // dialog
+            if( ajaxItem.dialog ) {
+              _edit.showDialog( ajaxItem.dialog );
+            }
+
+            // details
+            if( ajaxItem.details ) {
+              _edit.showDetails( ajaxItem.details );
+            }
+            return false;
+          }
+        );
+      } else if( trigger ) {
+        anchor.trigger( trigger );
+        return false;
+      }
     }
 
     anchor.parents( "li:first" ).addClass( "selected" );
