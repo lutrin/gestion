@@ -13,6 +13,14 @@ $CONTROLLER = array(
   "disconnected" => array(
     "fr" => "Vous êtes maintenant déconnecté.",
     "en" => "You are disconnected."
+  ),
+  "delete" => array(
+    "fr" => "Suppression",
+    "en" => "Delete"
+  ),
+  "noitem" => array(
+    "fr" => "Vous devez sélectionner au moins un item.",
+    "en" => "You must select atleast one item."
   )
 );
 
@@ -228,6 +236,17 @@ $PERMISSION = array(
   "message" => array(
     "fr" => "Vous n'avez pas accès à cette section ou opération.",
     "en" => "This section or operation is not permit."
+  )
+);
+
+$DELETE = array(
+  "title" => array(
+    "fr" => "Suppression",
+    "en" => "Delete"
+  ),
+  "message" => array(
+    "fr" => "Vous n'avez pas la permission de supprimer votre propre compte.",
+    "en" => "You cannot delete your account."
   )
 );
 

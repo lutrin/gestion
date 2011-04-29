@@ -50,8 +50,6 @@ function main() {
             return add();
           } elseif( $action == "delete" ) {
             return delete();
-          } elseif( $action == "deleteSelection" ) {
-            return deleteSelection();
           }
         }
         return logout( $msg );
@@ -124,105 +122,79 @@ function getContent() {
 
 /******************************************************************************/
 function save() {
-  global $CONTROLLER, $INCLUDE_LIST;
+  global $CONTROLLER;
   if( isset( $_GET["k"] ) &&
       ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
-      ( $token =  ( isset( $_GET["token"] )?    $_GET["token"]: false ) ) ) {
+      ( $token =  ( isset( $_GET["token"] )? $_GET["token"]: false ) ) ) {
     $k = $_GET["k"];
-    setHeader( "json" );
-
-    foreach( $INCLUDE_LIST as $key => $include ) {
-      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
-        Includer::add( $key );
-        $function = "save";
-        return json_encode( call_user_func_array(
-          array( $include["class"], $function ),
-          array( $k, $token )
-        ) );
-        break;
-      }
-    }
+    return switchFunction( "save", $object, array( $k, $token ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
 function edit() {
-  global $CONTROLLER, $INCLUDE_LIST;;
-  if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
-    $idList = explode( "-", $row );
-    $k = array_pop( $idList );
-    $object = array_shift( $idList );
-    setHeader( "json" );
-
-    foreach( $INCLUDE_LIST as $key => $include ) {
-      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
-        Includer::add( $key );
-        $function = "edit" . ( $idList? ( "_" . $idList[0] ): "" );
-        return json_encode( call_user_func_array(
-          array( $include["class"], $function ),
-          array( $k )
-        ) );
-        break;
-      }
-    }
+  global $CONTROLLER;
+  if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
+      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
+    return switchFunction( "edit", $object, array( $k ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
 function add() {
-  global $CONTROLLER, $INCLUDE_LIST;
-  if( $id = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) {
-    $idList = explode( "-", $id );
-    $object = array_shift( $idList );
-    setHeader( "json" );
-
-    foreach( $INCLUDE_LIST as $key => $include ) {
-      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
-        Includer::add( $key );
-        $function = "add" . ( $idList? ( "_" . $idList[0] ): "" );
-        return json_encode( call_user_func( array( $include["class"], $function ) ) );
-        break;
-      }
-    }
+  global $CONTROLLER;
+  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
+    return switchFunction( "add", $object );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/
-function delete() {//TODO object=row=
-  global $CONTROLLER, $INCLUDE_LIST;
-  if( $row = ( isset( $_GET["row"] )? typeValidator::isAlphaNumeric( $_GET["row"] ): false ) ) {
-    $idList = explode( "-", $row );
-    $k = array_pop( $idList );
-    $object = array_shift( $idList );
+function delete() {
+  global $CONTROLLER;
+  if( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) {
+    if( $kList = ( isset( $_GET["k"] )? typeValidator::isNumericList( $_GET["k"] ): false ) ) {
+      return switchFunction( "delete", $object, array( $kList ) );
+    }
     setHeader( "json" );
+    Includer::add( "uiDialog" );
+    return json_encode( array(
+      "dialog" => ui_Dialog::buildXml( $CONTROLLER["delete"][getLang()], $CONTROLLER["noitem"][getLang()] )
+    ) );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
 
-    foreach( $INCLUDE_LIST as $key => $include ) {
-      if( isset( $include["entries"] ) && in_array( $object, $include["entries"] ) ) {
-        Includer::add( $key );
-        $function = "delete" . ( $idList? ( "_" . $idList[0] ): "" );
+/******************************************************************************/
+function switchFunction( $action, $object, $params = false ) {
+  global $CONTROLLER, $INCLUDE_LIST;
+
+  # object list
+  $objList = explode( "-", $object );
+  $obj = array_shift( $objList );
+
+  # find class
+  foreach( $INCLUDE_LIST as $key => $include ) {
+    if( isset( $include["entries"] ) && in_array( $obj, $include["entries"] ) ) {
+
+      # include class
+      Includer::add( $key );
+      $function = $action . ( $objList? ( "_" . $objList[0] ): "" );
+      setHeader( "json" );
+
+      # with params
+      if( $params ) {
         return json_encode( call_user_func_array(
           array( $include["class"], $function ),
-          array( $k )
+          $params
         ) );
-        break;
       }
-    }
-  }
-  return logout( $CONTROLLER["wrongentry"][getLang()] );
-}
 
-/******************************************************************************/
-function deleteSelection() {
-  global $CONTROLLER, $INCLUDE_LIST;
-  $row = $_GET["row"];
-  if( is_array( $row ) &&
-      $id = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) {
-    $idList = explode( "-", $id );
-    $object = array_shift( $idList );
-    
+      # without params
+      return json_encode( call_user_func( array( $include["class"], $function ) ) );
+    }
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

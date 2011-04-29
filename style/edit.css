@@ -35,7 +35,7 @@ nav h3 {
     url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
-.iconic, #currentUser:before, .setFilter, .edit, .delete, .close, .add {
+.iconic, #currentUser:before, .setFilter, .edit, .delete, .close, .add:before {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
@@ -480,10 +480,6 @@ nav h2, nav menu {
     -webkit-transform: scale(1.5);
     -o-transform: scale(1.5);
     margin: 5px 5px;
-}
-
-.list-container .mode {
-  float: right;
 }
 
 .table .list {

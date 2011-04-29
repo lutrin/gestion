@@ -9,7 +9,7 @@
     }
 
     // mode choice
-    listContainer.children( ".mode:first" ).change( app.changeMode );
+    listContainer.find( ".mode:first" ).change( app.changeMode );
 
     // sortable
     listContainer.find( ".sortable" ).click( app.sort );
@@ -50,7 +50,7 @@
   changeMode: function() {
     var select = $( this ),
         mode = select.val(),
-        listContainer = select.parent();
+        listContainer = select.parents( ".list-container:first" );
     _c.eachItem( ["table", "compact", "tree", "gallery"], function( oldMode ) {
       listContainer.removeClass( oldMode );
     } );

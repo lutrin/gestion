@@ -25,6 +25,7 @@ class ui_Form {
     # head title
     if( isset( $params["headtitle"] ) ) {
       $innerHtml[] = Tag::build( "h2", false, $params["headtitle"] );
+      unset( $params["headtitle"] );
     }
 
     foreach( $params as $key => $param ) {

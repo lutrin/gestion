@@ -84,10 +84,10 @@ class db_Editor {
   }
 
   /****************************************************************************/
-  public static function remove( $k ) {
+  public static function remove( $kList ) {
     return DB::delete( array(
       "table" => self::$table,
-      "where" => "k=$k"
+      "where" => "k IN (". join( ",", $kList ) . ")"
     ) );
   }
 }

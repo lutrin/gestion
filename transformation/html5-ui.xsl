@@ -107,7 +107,7 @@
           <xsl:text>field checkbox</xsl:text>
         </xsl:attribute>
         <input>
-          <xsl:for-each select="@id|@name|@type|@required|@value">
+          <xsl:for-each select="@id|@name|@type|@required|@value|@disabled">
             <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
           <xsl:if test="ui.value=@value">
@@ -225,12 +225,17 @@
       <h3><xsl:value-of select="ui.headtitle"/></h3>
     </xsl:if>
     <xsl:if test="count(ui.mode) > 1">
-      <select class="mode">
+      <label for="mode-{@id}">Mode</label>
+      <select id="mode-{@id}" class="mode">
         <xsl:for-each select="ui.mode">
           <option value="{@name}"><xsl:value-of select="." /></option>
         </xsl:for-each>
       </select>
+      <hr />
     </xsl:if>
+    <xsl:variable name="object">
+      <xsl:value-of select="@id" />
+    </xsl:variable>
     <div>
       <xsl:attribute name="class">
         <xsl:text>list</xsl:text>
@@ -265,15 +270,22 @@
           </div>
         </xsl:for-each>
         <xsl:for-each select="ui.action">
-          <div class="cell"></div>
+          <div class="cell">
+            <xsl:if test="@multiple">
+              <button class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}" />
+            </xsl:if>
+          </div>
         </xsl:for-each>
       </div>
       <xsl:for-each select="ui.row">
         <div class="row">
           <xsl:call-template name="apply-attributelist" />
+          <xsl:variable name="k">
+            <xsl:value-of select="@id" />
+          </xsl:variable>
           <xsl:variable name="rowId">
-            <xsl:value-of select="concat(../@id,'-',@id)" />
-          </xsl:variable> 
+            <xsl:value-of select="concat($object,'-',$k)" />
+          </xsl:variable>
           <xsl:attribute name="id">
              <xsl:value-of select="$rowId" />
           </xsl:attribute>
@@ -306,7 +318,7 @@
               </xsl:for-each>
               <xsl:choose>
                 <xsl:when test="@key=../../@main">
-                  <a href="#{$rowId}" data-action="{../../@mainAction}" data-params="row={$rowId}">
+                  <a href="#{$rowId}" data-action="{../../@mainAction}" data-params="object={$object},k={$k}">
                     <xsl:value-of select="." />
                   </a>
                 </xsl:when>
@@ -318,25 +330,16 @@
           </xsl:for-each>
           <xsl:for-each select="../ui.action">
             <div class="cell action">
-              <button class="{@key}" data-action="{@key}" data-params="row={$rowId}" title="{@title}" />
+              <button class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}" />
             </div>
           </xsl:for-each>
         </div>
       </xsl:for-each>
     </div>
-    <xsl:if test="ui.action/@multiple">
-      <div>
-        <span>Sélection&amp;nbsp;:</span>
-        <xsl:for-each select="ui.action">
-          <xsl:if test="@multiple">
-            <button class="{@key}" data-action="{@key}Selection" data-params="mode=selection,object={../@id}" title="{@title}" />
-          </xsl:if>          
-        </xsl:for-each>
-      </div>
-    </xsl:if>
     <xsl:if test="@addable">
+      <hr />
       <div>
-        <button class="add" data-action="add" data-params="object={@id}"> </button>
+        <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
       </div>
     </xsl:if>
   </div>

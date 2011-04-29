@@ -39,13 +39,12 @@
           var paramSplit = param.split( /=/g );
           params[paramSplit[0]] = paramSplit[1];
         } );
-        if( params.object && params.mode && params.mode == "selection" ) {
+        if( params.object && params.row && params.row == "selection" ) {
           rowList = [];
           $( "#" + params.object ).find( "input.selectRow:checked" ).each( function() {
             rowList.push( this.value );
           } );
-          params["row"] = rowList;
-          delete params.object;
+          params["k"] = rowList;
         }
         ajaxObject["params"] = params;
       }

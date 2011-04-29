@@ -218,7 +218,7 @@ class fn_Editor extends fn {
     # get params
     $params = self::getFormParams();
     $params["headtitle"] = "Nouvel éditeur";
-    $fields = self::getFormFields( 1 );
+    $fields = self::getFormFields( 0 );
 
     Includer::add( array( "uiForm" ) );
     return array(
@@ -231,14 +231,13 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function delete_individualList( $k ) {
-    global $PERMISSION;
+  public static function delete_individualList( $kList ) {
+    global $PERMISSION, $DELETE;
     $lang = getLang();
-    $myself = $k == $_SESSION["editor"]["k"];
 
     # is admin
-    if( ( !$isAdmin = $_SESSION["editor"]["admin"] ) || $myself ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+    if( ( !$isAdmin = $_SESSION["editor"]["admin"] ) ) {
+      Includer::add( array( "fnEdit", "uiDialog" ) );
       return array(
         "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
         "replacement" => array(
@@ -248,9 +247,17 @@ class fn_Editor extends fn {
       );
     }
 
+    # is myself
+    if( in_array( $_SESSION["editor"]["k"], $kList ) ) {
+      Includer::add( array( "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $DELETE["title"][$lang], $DELETE["message"][$lang] )
+      );
+    }
+
     # remove
     Includer::add( "dbEditor" );
-    db_Editor::remove( $k );
+    db_Editor::remove( $kList );
     
     return array(
       "replacement" => array(
@@ -264,12 +271,12 @@ class fn_Editor extends fn {
   /****************************************************************************/
   public static function getEdit( $k ) {
     if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" ) ) {
-      return "Introuvable";
+      return "Introuvable $k";
     }
 
     $params = self::getFormParams( $k );
     $params["headtitle"] = $values[0]["username"] . " - Éditeur";
-    $fields = self::getFormFields();
+    $fields = self::getFormFields( $k );
 
     Includer::add( array( "uiForm" ) );
     return ui_Form::buildXml(
@@ -301,7 +308,7 @@ class fn_Editor extends fn {
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
       self::getFormParams( $k ),
-      self::getFormFields(),
+      self::getFormFields( $k ),
       $values,
       $k
     );
@@ -370,7 +377,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormFields( $new = false ) {
+  protected static function getFormFields( $k ) {
     global $LOGIN, $EDITOR, $SETTING;
     $lang = getLang();
   
@@ -381,11 +388,27 @@ class fn_Editor extends fn {
       "size"         => 20,
       "autocomplete" => "off"
     );
-    if( $new ) {
+    if( !$k ) {
       $password["label"] = $EDITOR["password"][$lang];
       $password["required"] = "required";
     } else {
       $password["label"] = $EDITOR["passwordoptional"][$lang];
+    }
+
+    # active and admin checkbox
+    $active = array(
+      "label" => $EDITOR["active"][$lang],
+      "type"  => "checkbox",
+      "value" => "1"
+    );
+    $admin =  array(
+      "label" => $EDITOR["admin"][$lang],
+      "type"  => "checkbox",
+      "value" => "1"
+    );
+    if( $k == $_SESSION["editor"]["k"] ) {
+      $admin["disabled"] = "disabled";
+      $active["disabled"] = "disabled";
     }
 
     return array(
@@ -396,11 +419,7 @@ class fn_Editor extends fn {
         "type" => "hidden",
         "value" => "editor"
       ),
-      "active" => array(
-        "label"        => $EDITOR["active"][$lang],
-        "type"         => "checkbox",
-        "value"        => "1"
-      ),
+      "active" => $active,
       "login" => array(
         "legend" => $SETTING["login"][$lang],
         "type"   => "fieldset",
@@ -422,11 +441,7 @@ class fn_Editor extends fn {
             "autocomplete" => "off",
             "equal"        => "password"
           ),
-          "admin" => array(
-            "label"        => $EDITOR["admin"][$lang],
-            "type"         => "checkbox",
-            "value"        => "1"
-          )
+          "admin" => $admin
         )
       ),
       "edit" => array(
