@@ -161,11 +161,10 @@
 <xsl:template match="ui.dock">
   <div class="dock-container">
     <xsl:call-template name="apply-attributelist" />
-    <xsl:if test="ui.headtitle">
-      <h2><xsl:value-of select="ui.headtitle"/></h2>
-    </xsl:if>
     <nav class="dock">
-
+      <xsl:if test="ui.headtitle">
+        <h2><xsl:value-of select="ui.headtitle"/></h2>
+      </xsl:if>
       <menu>
         <xsl:for-each select="ui.item">
           <li>
@@ -179,6 +178,11 @@
               <xsl:attribute name="href">
                 <xsl:value-of select="concat('#',@href)" />
               </xsl:attribute>
+              <xsl:if test="@label">
+                <xsl:attribute name="title">
+                  <xsl:value-of select="@label" />
+                </xsl:attribute>
+              </xsl:if>
               <xsl:text> </xsl:text>
             </a>
           </li>
@@ -204,6 +208,9 @@
               <xsl:attribute name="href">
                 <xsl:value-of select="concat('#',@href)" />
               </xsl:attribute>
+              <xsl:attribute name="title">
+                <xsl:value-of select="@label" />
+              </xsl:attribute>
               <xsl:if test="@label">
                 <xsl:value-of select="@label"/>
               </xsl:if>
@@ -226,7 +233,7 @@
     </xsl:if>
     <xsl:if test="count(ui.mode) > 1">
       <label for="mode-{@id}">Mode</label>
-      <select id="mode-{@id}" class="mode">
+      <select id="mode-{@id}" class="mode" name="mode">
         <xsl:for-each select="ui.mode">
           <option value="{@name}"><xsl:value-of select="." /></option>
         </xsl:for-each>
@@ -246,7 +253,7 @@
       <div class="header">
         <xsl:if test="@selectable">
           <div class="cell">
-            <input type="checkbox" class="selectAll" />
+            <input type="checkbox" class="selectAll" name="selectAll" />
           </div>
         </xsl:if>
         <xsl:for-each select="ui.headercolumn">
@@ -256,7 +263,7 @@
             </xsl:if>
             <xsl:choose>
               <xsl:when test="@sortable">
-                <a class="sortable"><xsl:value-of select="." /></a>
+                <a href="#sort" class="sortable" title="Trier"><xsl:value-of select="." /></a>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="." />
@@ -271,9 +278,14 @@
         </xsl:for-each>
         <xsl:for-each select="ui.action">
           <div class="cell">
-            <xsl:if test="@multiple">
-              <button class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}" />
-            </xsl:if>
+            <xsl:choose>
+              <xsl:when test="@multiple">
+                <button class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text> </xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
           </div>
         </xsl:for-each>
       </div>
@@ -290,7 +302,7 @@
              <xsl:value-of select="$rowId" />
           </xsl:attribute>
           <xsl:if test="../@selectable">
-            <div class="cell"><input type="checkbox" class="selectRow" value="{@id}"/></div>
+            <div class="cell"><input type="checkbox" class="selectRow" name="selectRow" value="{@id}"/></div>
           </xsl:if>
           <xsl:for-each select="ui.cell">
             <div>
@@ -318,12 +330,15 @@
               </xsl:for-each>
               <xsl:choose>
                 <xsl:when test="@key=../../@main">
-                  <a href="#{$rowId}" data-action="{../../@mainAction}" data-params="object={$object},k={$k}">
+                  <a href="#{$rowId}" data-action="{../../@mainAction}" data-params="object={$object},k={$k}" title="{.}">
                     <xsl:value-of select="." />
                   </a>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="string-length(.) &gt; 0">
                   <xsl:value-of select="." />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:text> </xsl:text>
                 </xsl:otherwise>
               </xsl:choose>
             </div>

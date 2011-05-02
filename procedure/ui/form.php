@@ -61,6 +61,7 @@ class ui_Form {
     if( $submit ) {
       $innerHtml[] = Tag::build( "div", array( "class" => "buttonList" ), Tag::build( "input", array(
         "type"  => "submit",
+        "name"  => "submit",
         "value" => $submit
       ) ) );
     }

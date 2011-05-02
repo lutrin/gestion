@@ -36,7 +36,7 @@ nav h3 {
     url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
-.iconic, #currentUser:before, .setFilter, .edit, .delete, .close, .add:before {
+.iconic, #currentUser:before, .setFilter, .edit, .delete, .close, .add:before, .sorted_asc a:after, .sorted_desc a:after {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
@@ -105,25 +105,17 @@ nav h3 {
 }
 
 .sorted_asc a:after {
-  content: ">";
-  margin: 2px;
-  -moz-transform: rotate(90deg);
-  -webkit-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
+  content: "5";
+  margin: 5px;
 }
 
 .sorted_desc a:after {
-  content: "<";
-  margin: 2px;
-  -moz-transform: rotate(90deg);
-  -webkit-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
+  content: "3";
+  margin: 5px;
 }
 
 /* color */
-html, legend, .dock li span, .tabs, .header > .cell, #dialog-content > * > h2, #details > * > h2 {
+html, legend, .dock, .dock li span, .tabs, .header > .cell, #dialog-content > * > h2, #details > * > h2 {
   background-color:#eee;
 }
 
@@ -187,7 +179,7 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input[type=submit], button, #dialog-content > *, .dock li span, #details > * {
+fieldset, legend, input[type=submit], button, #dialog-content > *, .dock, .dock li span, #details > * {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
@@ -204,6 +196,8 @@ input[type=text]:focus, input[type=password]:focus, select:focus {
   border-color: #008;
   box-shadow: inset rgba(0,0,88,.5) 0px 0px 5px;
 }
+
+border: 1px solid #000;
 
 .changed:invalid, .field.invalid input {
   border-color: #800;
@@ -416,8 +410,16 @@ nav h2, nav menu {
 }
 
 #toolList > section > * {
-  padding-left: 40px;
+/*  padding-left: 5px;*/
 }
+
+#toolList .dock {
+  float:right;
+}
+
+/*#toolList .dock:hover {
+  left: 0;
+}*/
 
 .dock-container {
   position: fixed;
@@ -427,6 +429,15 @@ nav h2, nav menu {
 .dock {
   display: inline-block;
   position: relative;
+  z-index: 2;
+}
+
+.dock > menu {
+  display: none;
+}
+
+.dock:hover > menu {
+  display: block;
 }
 
 .dock li {
@@ -522,8 +533,13 @@ nav h2, nav menu {
   display: list-item;
 }
 
+.compact .cell {
+  padding: 5px;
+}
+
 .compact .main {
   display: block;
+  overflow: hidden
 }
 
 .cell.numeric {

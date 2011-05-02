@@ -38,6 +38,7 @@ $APP = array(
   "meta"   => array( "robots" => "noindex, nofollow" ),
   "stylesheet" => array(
     "../../external/style/boilerplate.style.css",
+    "../../external/style/holmes.min.css",
     "style/edit.css"
   ),
   "head_script" => "../external/interaction/modernizr-1.7.min.js",

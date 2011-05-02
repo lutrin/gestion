@@ -17,6 +17,9 @@ var _edit = {
   /****************************************************************************/
   load: function() {
 
+    // debug mode
+    $( "html" ).addClass( "holmes-debug" );
+
     // initialize language
     this.lang = _c.select( "#title" ).attr( "lang" );
 
