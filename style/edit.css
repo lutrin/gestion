@@ -30,6 +30,7 @@ nav h3 {
 /* icon */
 @font-face {
   font-family: "IconicStroke";
+  src: url("../../external/style/iconic/iconic_stroke.eot");
   src: local("IconicStroke"),
     url("../../external/style/iconic/iconic_stroke.svg#iconic") format("svg"),
     url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
@@ -436,6 +437,7 @@ nav h2, nav menu {
   float: left;
   clear: both;
   margin: 2px;
+  padding: 5px;
 }
 
 .dock li span {
@@ -454,11 +456,11 @@ nav h2, nav menu {
 }
 
 .dock li a {
-    -moz-transform-origin: 50% 0%;
-    -moz-transition: all 0.4s ease 0s;
+    /*-moz-transform-origin: 50% 0%;
     -webkit-transform-origin: 50% 0%;
+    -o-transform-origin: 50% 0%;*/
+    -moz-transition: all 0.4s ease 0s;
     -webkit-transition: all 0.4s ease 0s;
-    -o-transform-origin: 50% 0%;
     -o-transition: all 0.4s ease 0s;
     height: 20px;
     width: 24px;
@@ -503,6 +505,13 @@ nav h2, nav menu {
   display: table-cell;
   padding: 5px;
   margin: 2px;
+}
+
+.compact .list {
+  -moz-column-width: 150px;
+  -webkit-column-width: 150px;
+  -moz-column-gap: 5px;
+  -webkit-column-gap: 5px;
 }
 
 .compact .header, .compact .cell {

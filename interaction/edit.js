@@ -1,7 +1,7 @@
 "use strict";
 
 var _edit = {
-  compatibilityList: ["fontface"],
+  compatibilityList: ["fontface", "svg"],
   lang: "fr",
   msg: false,
   transformation: false,
