@@ -143,12 +143,12 @@ class fn_Editor extends fn {
       "active"   => array(
         "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang],
         "sortable" => true,
-        "field" => "IF( active = 1, 'oui', '' )"
+        "field" => "IF( active = 1, '', 'inactif' )"
       ),
       "admin"    => array(
         "label" => $TOOLS_EDITOR_INDIVIDUAL["admin"][$lang],
         "sortable" => true,
-        "field" => "IF( admin = 1, 'oui', '' )"
+        "field" => "IF( admin = 1, 'admin', '' )"
       ),
       "longname" => array(
         "label"  => $TOOLS_EDITOR_INDIVIDUAL["longname"][$lang],

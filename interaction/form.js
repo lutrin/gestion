@@ -149,8 +149,8 @@
       }
 
       // equal
-      if( object.attr( "data-equal" ) ) {
-        compareObject = form.find( "[name=" + object.attr( "data-equal" ) + "]" );
+      if( object.data( "equal" ) ) {
+        compareObject = form.find( "[name=" + object.data( "equal" ) + "]" );
         if( compareObject.size() ) {
           if( object.val() != compareObject.val() ) {
             error = true;

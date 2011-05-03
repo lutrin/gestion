@@ -23,8 +23,8 @@
   click: function() {
     var button = $( this ),
         app = _c.ajaxList.interaction.button,
-        action = button.attr( "data-action" ),
-        trigger = button.attr( "data-trigger" ),
+        action = button.data( "action" ),
+        trigger = button.data( "trigger" ),
         ajaxObject, dataParams, params, rowList;
 
     // action      
@@ -32,7 +32,7 @@
       ajaxObject = { folder: "procedure", name: action };
 
       // params
-      dataParams = button.attr( "data-params" );
+      dataParams = button.data( "params" );
       if( dataParams ) {
         params = {};
         _c.eachItem( dataParams.split( /\,/g ), function( param ) {

@@ -43,7 +43,7 @@ $APP = array(
   ),
   "head_script" => "../external/interaction/modernizr-1.7.min.js",
   "body_script" => array(
-      "../external/interaction/jquery-1.5.2.min.js",
+      "../external/interaction/jquery-1.6.min.js",
       "../external/interaction/jquery-ui-1.8.11.custom.min.js",
       "../library/interaction/jquery.xslt.mod.js",
       "../library/interaction/common.js",
@@ -216,12 +216,12 @@ $TOOLS_EDITOR_INDIVIDUAL = array(
     "en" => "Editor"
   ),
   "active" => array(
-    "fr" => "Activé",
-    "en" => "Active"
+    "fr" => "État",
+    "en" => "Status"
   ),
   "admin" => array(
-    "fr" => "Admin.",
-    "en" => "Admin."
+    "fr" => "Type",
+    "en" => "Type"
   ),
   "longname" => array(
     "fr" => "Nom complet",

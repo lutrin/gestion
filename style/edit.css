@@ -1,5 +1,9 @@
 /* font */
 
+hr {
+  clear: both;
+}
+
 a {
   text-decoration: none;
 }
@@ -93,11 +97,22 @@ nav h3 {
   background: url(../image/visitor.svg) no-repeat center center;
 }
 
-.list-container .cell.editor, #details form.editor h2 {
-  background-image: url(../image/editor.svg);
+.list-container .main {
   background-repeat: no-repeat;
+}
+
+.list-container.table .main, .list-container.compact .main {
   background-position: left center;
-  padding-left: 20px;
+}
+
+.list-container.gallery .main {
+  background-position: center center;
+  background-size: 48px;
+}
+
+.list-container .editor, #details form.editor h2 {
+  background-image: url(../image/editor.svg);
+
 }
 
 .empty {
@@ -119,7 +134,7 @@ html, legend, .dock, .dock li span, .tabs, .header > .cell, #dialog-content > * 
   background-color:#eee;
 }
 
-.row:nth-child(odd) {
+.table .row:nth-child(odd) {
   background-color:#f5f5f5;
 }
 
@@ -495,6 +510,14 @@ nav h2, nav menu {
     margin: 5px 5px;
 }
 
+.list {
+  clear:both;
+}
+
+.list-container.table .main, .list-container.compact .main {
+  padding-left: 20px;
+}
+
 .table .list {
   display: table;
 }
@@ -525,7 +548,7 @@ nav h2, nav menu {
   -webkit-column-gap: 5px;
 }
 
-.compact .header, .compact .cell {
+.compact .header, .compact .cell, .gallery .header, .gallery .cell {
   display: none;
 }
 
@@ -537,9 +560,34 @@ nav h2, nav menu {
   padding: 5px;
 }
 
-.compact .main {
+.compact .main, .gallery .main {
   display: block;
   overflow: hidden
+}
+
+.list-container.gallery .main {
+  padding-left: 2px;
+}
+
+.gallery .row {
+  display: inline-block;
+  float: left;
+  width: 100px;
+  height: 100px;
+}
+
+.gallery .main {
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  position: relative;
+}
+
+.gallery .main > a {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
 }
 
 .cell.numeric {

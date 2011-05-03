@@ -21,8 +21,8 @@
         app = _c.ajaxList.interaction.anchor,
         href = anchor.attr( "href" ),
         target = $( href ),
-        action = anchor.attr( "data-action" ),
-        trigger = anchor.attr( "data-trigger" ),
+        action = anchor.data( "action" ),
+        trigger = anchor.data( "trigger" ),
         ajaxObject, dataParams, params;
 
     // empty
@@ -60,7 +60,7 @@
         ajaxObject = { folder: "procedure", name: action };
 
         // params
-        dataParams = anchor.attr( "data-params" );
+        dataParams = anchor.data( "params" );
         if( dataParams ) {
           params = {};
           _c.eachItem( dataParams.split( /\,/g ), function( param ) {
