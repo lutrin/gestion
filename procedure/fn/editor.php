@@ -93,6 +93,7 @@ class fn_Editor extends fn {
       "primary"    => "k",
       "main"       => "username",
       "mainAction" => "edit",
+      "rowAction"  => "edit",
       "order"      => "username",
       "selectable" => true,
       "addable"    => true,

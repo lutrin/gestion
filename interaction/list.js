@@ -24,6 +24,13 @@
       listContainer.find( ".selectAll" ).change( app.changeSelectAll );
     }
 
+    // row action
+    listContainer.find( ".row[data-action]" ).dblclick( function( event ) {
+      console.log( event.target );
+      var row = $( this );
+      row.find( "[data-action=" + row.data( "action" ) + "]:first" ).trigger( "click" );
+    } );
+
     listContainer.addClass( "initiated" );
   },
 

@@ -147,7 +147,7 @@ input, select {
   background-color: #fff;
 }
 
-input[type=text]:hover, input[type=password]:hover, select:hover, .row:hover {
+input[type=text]:hover, input[type=password]:hover, select:hover, .row:hover, .dock li:hover {
   background-color: #ffc;
 }
 
@@ -220,7 +220,7 @@ input[type=submit]:active, button:active {
   box-shadow:rgba(0,0,0,.2) 0px 0px 3px;
 }
 
-.gallery .row, .compact .row {
+.gallery .row, .compact .row, .dock li {
   border-radius: 4px;
 }
 
@@ -479,9 +479,9 @@ nav h2, nav menu {
     z-index: 2;
 }
 
-.dock li:hover span {
+/*.dock li:hover span {
     display: block;
-}
+}*/
 
 .dock li a {
     /*-moz-transform-origin: 50% 0%;
