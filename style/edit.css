@@ -181,7 +181,7 @@ input[type=submit]:hover, button:hover, .tabs > menu > li:hover {
   background-color: transparent;
 }
 
-.row.selected {
+.list-container .row.selected {
   background-color: #ccf;
 }
 
@@ -212,7 +212,17 @@ input[type=text]:focus, input[type=password]:focus, select:focus {
   box-shadow: inset rgba(0,0,88,.5) 0px 0px 5px;
 }
 
-border: 1px solid #000;
+input[type=submit], button, .dock li span, #details > * {
+  box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
+}
+
+input[type=submit]:active, button:active {
+  box-shadow:rgba(0,0,0,.2) 0px 0px 3px;
+}
+
+.gallery .row, .compact .row {
+  border-radius: 4px;
+}
 
 .changed:invalid, .field.invalid input {
   border-color: #800;
@@ -222,14 +232,6 @@ border: 1px solid #000;
 .field:not(.invalid) .changed:valid {
   border-color: #080;
   box-shadow: inset rgba(0,88,0,.5) 0px 0px 5px;
-}
-
-input[type=submit], button, .dock li span, #details > * {
-  box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
-}
-
-input[type=submit]:active, button:active {
-  box-shadow:rgba(0,0,0,.2) 0px 0px 3px;
 }
 
 .tabs > menu > li {
@@ -554,10 +556,12 @@ nav h2, nav menu {
 
 .compact .row {
   display: list-item;
+  margin: 2px;
 }
 
 .compact .cell {
   padding: 5px;
+  margin: 2px;
 }
 
 .compact .main, .gallery .main {
@@ -565,13 +569,10 @@ nav h2, nav menu {
   overflow: hidden
 }
 
-.list-container.gallery .main {
-  padding-left: 2px;
-}
-
 .gallery .row {
   display: inline-block;
   float: left;
+  margin: 2px;
   width: 100px;
   height: 100px;
 }
@@ -579,7 +580,6 @@ nav h2, nav menu {
 .gallery .main {
   width: 100%;
   height: 100%;
-  padding: 2px;
   position: relative;
 }
 
