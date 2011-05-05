@@ -45,6 +45,7 @@ $APP = array(
   "body_script" => array(
       "../external/interaction/jquery-1.6.min.js",
       "../external/interaction/jquery-ui-1.8.11.custom.min.js",
+      "../external/interaction/jquery.rightClick.js",
       "../library/interaction/jquery.xslt.mod.js",
       "../library/interaction/common.js",
       "interaction/edit.js"

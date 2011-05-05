@@ -18,7 +18,7 @@ var _edit = {
   load: function() {
 
     // debug mode
-    $( "html" ).addClass( "holmes-debug" );
+    //$( "html" ).addClass( "holmes-debug" );
 
     // initialize language
     this.lang = _c.select( "#title" ).attr( "lang" );
@@ -91,7 +91,7 @@ var _edit = {
 
   /****************************************************************************/
   closeDialog: function() {
-    _c.select( "#dialog" ).hide();
+    _c.select( "#dialog" ).addClass( "hidden" );;
     _c.select( "#dialog-content" ).html( "" );
   },
 
@@ -102,14 +102,6 @@ var _edit = {
       handle: "h2"
     } );
     _c.select( "#details" ).removeClass( "hidden" );
-/*    _edit.replaceContent( { query: "#dialog-content", innerHtml: dialog } );
-    _c.select( "#dialog" ).css( { display: "table" } ).click( function( ev ) {
-      var target = $( ev.target );
-      if( target.attr( "id" ) && target.attr( "id" ) == "dialog-content" ) {
-        target.parent().hide();
-        target.html( "" );
-      }
-    } );*/
   },
 
   /****************************************************************************/

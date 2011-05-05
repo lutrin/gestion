@@ -25,10 +25,30 @@
     }
 
     // row action
-    listContainer.find( ".row[data-action]" ).dblclick( function( event ) {
-      console.log( event.target );
-      var row = $( this );
-      row.find( "[data-action=" + row.data( "action" ) + "]:first" ).trigger( "click" );
+    listContainer.find( ".row[data-action]" ).dblclick( app.rowDblclick );
+
+    // context menu
+    listContainer.find( ".row" ).rightClick( function() {
+      var row = $( this ),
+          targetList = [],
+          actionList = [],
+          html = "";
+
+      // selectable
+      if( row.parents( ".list.selectable:first" ).size() ) {
+        targetList.push( $( this ).find( ".selectRow:first" ) );
+      }
+
+      // action list
+      row.find( "button" ).each( function() {
+        targetList.push( $( this ) );
+      } );
+
+      // build
+      _c.eachItem( targetList, function( targetItem ) {
+        actionList.push( "<li><a>" + targetItem.attr( "title" ) + "</a></li>" );
+      } );
+      console.log( "<ul>" + actionList.join( "" ) + "</ul>" );
     } );
 
     listContainer.addClass( "initiated" );
@@ -170,5 +190,11 @@
       checkbox.attr( "checked", selectAllValue );
       checkbox.each( app.changeSelectRow );
     } );
+  },
+
+  /****************************************************************************/
+  rowDblclick: function( event ) {
+    var row = $( this );
+    row.find( "[data-action=" + row.data( "action" ) + "]:first" ).trigger( "click" );
   }
 }

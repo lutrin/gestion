@@ -104,7 +104,8 @@
                 _edit.showDetails( ajaxItem.details );
               }
 
-              _c.select( "#dialog" ).hide();
+              // close dialog
+              _edit.closeDialog();
               return false;
             }
           );

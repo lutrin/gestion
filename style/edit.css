@@ -40,7 +40,17 @@ nav h3 {
     url("../../external/style/iconic/iconic_stroke.otf") format("opentype");
 }
 
-.iconic, #currentUser:before, .setFilter, .edit, .delete, .close, .add:before, .sorted_asc a:after, .sorted_desc a:after {
+.iconic,
+#displaySetting:before,
+#logout:before,
+#currentUser:before,
+.setFilter,
+.edit,
+.delete,
+.close,
+.add:before,
+.sorted_asc a:after,
+.sorted_desc a:after {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
@@ -65,8 +75,12 @@ nav h3 {
   content: "t";
 }
 
-.close:before {
+#logout:before, .close:before {
   content: "x";
+}
+
+#displaySetting:before {
+  content: "w";
 }
 
 .add:before {
@@ -97,11 +111,11 @@ nav h3 {
   background: url(../image/visitor.svg) no-repeat center center;
 }
 
-.list-container .main {
+#details form.editor h2, .list-container .main {
   background-repeat: no-repeat;
 }
 
-.list-container.table .main, .list-container.compact .main {
+#details form.editor h2, .list-container.table .main, .list-container.compact .main {
   background-position: left center;
 }
 
@@ -112,7 +126,6 @@ nav h3 {
 
 .list-container .editor, #details form.editor h2 {
   background-image: url(../image/editor.svg);
-
 }
 
 .empty {
@@ -312,8 +325,8 @@ legend, .dock li span {
 }
 
 form {
-  margin:20px 14px 0 14px;
-  padding:0 0 20px 0;
+  /*margin:20px 14px 0 14px;
+  padding:0 0 20px 0;*/
   position:relative;
 }
 
@@ -411,10 +424,15 @@ nav h2, nav menu {
 }
 
 #details > * {
-  position: absolute;
+  /*position: absolute;
   top: 50px;
-  left: 50px;
+  left: 50px;*/
+  display: inline-block;
   overflow: hidden;
+}
+
+#details form.editor h2 {
+  padding-left: 20px;
 }
 
 #details > * > h2:hover {

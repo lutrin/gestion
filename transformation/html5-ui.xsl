@@ -60,7 +60,9 @@
   <form>
     <xsl:call-template name="apply-attributelist" />
     <xsl:if test="@closable">
-      <button class="close" data-trigger="close"></button>
+      <button class="close" data-trigger="close">
+        <span class="hidden"><xsl:text>Fermer</xsl:text></span>
+      </button>
     </xsl:if>
     <xsl:apply-templates/>
   </form>
@@ -169,11 +171,6 @@
         <xsl:for-each select="ui.item">
           <li>
             <xsl:call-template name="apply-nav-attributelist" />
-            <span>
-              <xsl:if test="@label">
-                <xsl:value-of select="@label"/>
-              </xsl:if>
-            </span>
             <a>
               <xsl:attribute name="href">
                 <xsl:value-of select="concat('#',@href)" />
@@ -183,7 +180,11 @@
                   <xsl:value-of select="@label" />
                 </xsl:attribute>
               </xsl:if>
-              <xsl:text> </xsl:text>
+              <span>
+                <xsl:if test="@label">
+                  <xsl:value-of select="@label"/>
+                </xsl:if>
+              </span>
             </a>
           </li>
         </xsl:for-each>
@@ -269,7 +270,8 @@
         <!-- selectable -->
         <xsl:if test="@selectable">
           <div class="cell">
-            <input type="checkbox" class="selectAll" name="selectAll" />
+            <input id="selectAll-{$object}" type="checkbox" class="selectAll" name="selectAll" title="Sélectionner tous" />
+            <label for="selectAll-{$object}" class="hidden">Sélectionner tous</label>
           </div>
         </xsl:if>
 
@@ -306,7 +308,9 @@
           <div class="cell">
             <xsl:choose>
               <xsl:when test="@multiple">
-                <button class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}" />
+                <button class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}">
+                  <span class="hidden"><xsl:value-of select="@title" /></span>
+                </button>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text> </xsl:text>
@@ -315,6 +319,7 @@
           </div>
         </xsl:for-each>
       </div>
+      <hr class="hidden" />
 
       <!-- row -->
       <xsl:for-each select="ui.row">
@@ -345,7 +350,10 @@
 
           <!-- selectable -->
           <xsl:if test="../@selectable">
-            <div class="cell"><input type="checkbox" class="selectRow" name="selectRow" value="{@id}"/></div>
+            <div class="cell">
+              <input id="selectRow-{$rowId}" type="checkbox" class="selectRow" name="selectRow" value="{@id}" title="Sélectionner"/>
+              <label for="selectRow-{$rowId}" class="hidden">Sélectionner</label>
+            </div>
           </xsl:if>
 
           <!-- cell -->
@@ -396,9 +404,12 @@
           <!-- action -->
           <xsl:for-each select="../ui.action">
             <div class="cell action">
-              <button class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}" />
+              <button class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
+                <span class="hidden"><xsl:value-of select="@title" /></span>
+              </button>
             </div>
           </xsl:for-each>
+          <hr class="hidden" />
         </div>
       </xsl:for-each>
     </div>

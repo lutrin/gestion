@@ -113,8 +113,25 @@ class fn_Edit {
     $lang = getLang();
 
     # editor
-    return "<span id='currentUser'>" . $_SESSION["editor"]["longname"] . "</span>"
-         . "<button class='iconic' title='" . $HEADER_BUTTONS["setting"][$lang] . "' data-action='displaySetting'>w</button>"
-         . "<button class='iconic' title='" . $HEADER_BUTTONS["logout"][$lang] . "' data-action='logout'>x</button>";
+    Includer::add( "tag" );
+    return Tag::build( "span", array( "id" => "currentUser" ), $_SESSION["editor"]["longname"] )
+         . Tag::build(
+            "button",
+            array(
+              "id"          => "displaySetting",
+              "title"       =>  $HEADER_BUTTONS["setting"][$lang],
+              "data-action" => "displaySetting"
+            ),
+            Tag::build( "span", array( "class" => "hidden" ), $HEADER_BUTTONS["setting"][$lang] )
+          )
+         . Tag::build(
+            "button",
+            array(
+              "id"          => "logout",
+              "title"       =>  $HEADER_BUTTONS["logout"][$lang],
+              "data-action" => "logout"
+            ),
+            Tag::build( "span", array( "class" => "hidden" ), $HEADER_BUTTONS["logout"][$lang] )
+          );
   }
 }
