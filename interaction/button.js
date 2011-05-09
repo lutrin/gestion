@@ -41,7 +41,7 @@
         } );
         if( params.object && params.row && params.row == "selection" ) {
           rowList = [];
-          $( "#" + params.object ).find( "input.selectRow:checked" ).each( function() {
+          $( "#" + params.object + " input.selectRow:checked" ).each( function() {
             rowList.push( this.value );
           } );
           params["k"] = rowList;

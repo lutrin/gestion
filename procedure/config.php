@@ -278,7 +278,7 @@ $CACHEPATH = "../cache/";
 $TEMPPATH = "../template/";
 $MERGEPATH = "../merge/";
 
-$FRAME = $TEMPPATH . "index.html";
+$FRAME = "../../library/template/index.html";
 $EDIT = $TEMPPATH . "edit.html";
 
 $COMPRESS_LIST = array(

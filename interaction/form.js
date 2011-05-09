@@ -12,7 +12,7 @@
     form.submit( function() {
       return false;
     } );
-    form.find( "input[type=submit]" ).each( function() {
+    form.find( "input:submit" ).each( function() {
       return $( this ).click( app.submit );
     } );
 
@@ -22,7 +22,7 @@
     }
 
     // apply change
-    form.find( "input[type=text],input[type=password],textarea" ).change( function() {
+    form.find( "input:text,input:password,textarea" ).change( function() {
       $( this ).addClass( "changed" );
     } );
 
@@ -45,7 +45,7 @@
     form.find( ".invalid" ).removeClass( "invalid" );
 
     // prepare
-    if( form.find( "input[type=password]" ).size() ) {
+    if( form.find( "input:password" ).size() ) {
       scriptList.push( { folder: "interaction", url: "../../external/", name: "sha1" } );
     }
 
@@ -87,7 +87,7 @@
               }
 
               // values
-              form.find( "[type=password]" ).val( "" );
+              form.find( ":password" ).val( "" );
               if( ajaxItem.values ) {
                 for( key in ajaxItem.values ) {
                   form.find( "[name=" + key + "]:first" ).val( ajaxItem.values[key] );
@@ -123,7 +123,7 @@
   serialize: function( form, app ) {
     var fields = {},
         error = false;
-    form.find( "input[type=text],input[type=hidden],input[type=password],input[type=checkbox],select" ).each( function() {
+    form.find( "input:text,input:hidden,input:password,input:checkbox,select" ).each( function() {
       var object = $( this ),
           type = object.attr( "type" ) || object.tagName,
           value = _c.trim( object.val() ),

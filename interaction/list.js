@@ -46,7 +46,8 @@
 
       // build
       _c.eachItem( targetList, function( targetItem ) {
-        actionList.push( "<li><a>" + targetItem.attr( "title" ) + "</a></li>" );
+console.log( targetItem );
+        actionList.push( "<li><a data-query='" + targetItem.selector + "'>" + targetItem.attr( "title" ) + "</a></li>" );
       } );
       console.log( "<ul>" + actionList.join( "" ) + "</ul>" );
     } );
