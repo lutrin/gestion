@@ -98,7 +98,8 @@ class fn_Edit {
       "headtitle" => $TOOLS["headtitle"][$lang]
     );
     return ui_Nav::buildXml( $params, $allowedToolList )
-         . Tag::build( "div", array( "id" => "details"), " " );
+         . Tag::build( "div", array( "id" => "details" ), " " )
+         . Tag::build( "div", array( "id" => "contextMenu", "class" => "hidden" ), " " );
   }
 
   /****************************************************************************/

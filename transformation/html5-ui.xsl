@@ -308,7 +308,7 @@
           <div class="cell">
             <xsl:choose>
               <xsl:when test="@multiple">
-                <button class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}">
+                <button id="{@key}-{$object}-selection" class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}">
                   <span class="hidden"><xsl:value-of select="@title" /></span>
                 </button>
               </xsl:when>
@@ -404,7 +404,7 @@
           <!-- action -->
           <xsl:for-each select="../ui.action">
             <div class="cell action">
-              <button class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
+              <button id="{@key}-{$rowId}" class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
                 <span class="hidden"><xsl:value-of select="@title" /></span>
               </button>
             </div>

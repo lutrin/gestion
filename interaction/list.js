@@ -28,29 +28,7 @@
     listContainer.find( ".row[data-action]" ).dblclick( app.rowDblclick );
 
     // context menu
-    listContainer.find( ".row" ).rightClick( function() {
-      var row = $( this ),
-          targetList = [],
-          actionList = [],
-          html = "";
-
-      // selectable
-      if( row.parents( ".list.selectable:first" ).size() ) {
-        targetList.push( $( this ).find( ".selectRow:first" ) );
-      }
-
-      // action list
-      row.find( "button" ).each( function() {
-        targetList.push( $( this ) );
-      } );
-
-      // build
-      _c.eachItem( targetList, function( targetItem ) {
-console.log( targetItem );
-        actionList.push( "<li><a data-query='" + targetItem.selector + "'>" + targetItem.attr( "title" ) + "</a></li>" );
-      } );
-      console.log( "<ul>" + actionList.join( "" ) + "</ul>" );
-    } );
+    listContainer.find( ".row" ).rightClick( app.rowRightClick );
 
     listContainer.addClass( "initiated" );
   },
@@ -196,6 +174,40 @@ console.log( targetItem );
   /****************************************************************************/
   rowDblclick: function( event ) {
     var row = $( this );
+
+    // selectable
+    if( row.parents( ".list.selectable:first" ).size() ) {
+      row.parent().children( ".selected" ).each( function() {
+        var selectedRow = $( this );
+        selectedRow.removeClass( "selected" );
+        selectedRow.find( ".selectRow:first" ).attr( "checked", false );
+      } );
+      row.find( ".selectRow:first" ).attr( "checked", true );
+      row.addClass( "selected" );
+    }
     row.find( "[data-action=" + row.data( "action" ) + "]:first" ).trigger( "click" );
+  },
+
+  /****************************************************************************/
+  rowRightClick: function( event ) {
+    var row = $( this ),
+        targetList = [];
+
+    // selectable
+    if( row.parents( ".list.selectable:first" ).size() ) {
+      row.find( ".selectRow:first" ).attr( "checked", true );
+      row.addClass( "selected" );
+      if( row.parent().children( ".selected" ).size() > 1 ) {
+        row = row.parent().children( ".header:first" );
+      }
+    }
+
+    // action list
+    row.find( "button" ).each( function() {
+      var object = $( this );
+      targetList.push( { "id": object.attr( "id" ), "title": object.attr( "title" ) } );
+    } );
+
+    _edit.showContextMenu( targetList, event );
   }
 }

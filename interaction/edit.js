@@ -49,6 +49,8 @@ var _edit = {
         _edit.observe( _c.select( object ) );
       } );
 
+      _c.select( "#contextMenu" ).click( _edit.closeContextMenu );
+
       // transformation
       _edit.transformation = function() {
         return _c.ajaxList.transformation["html5-ui"];
@@ -93,6 +95,31 @@ var _edit = {
   closeDialog: function() {
     _c.select( "#dialog" ).addClass( "hidden" );;
     _c.select( "#dialog-content" ).html( "" );
+  },
+
+  /****************************************************************************/
+  showContextMenu: function( targetList, event ) {
+    var actionList = [];
+
+    // build
+    _c.eachItem( targetList, function( targetItem ) {
+      actionList.push( "<li><a data-query='#" + targetItem.id + "'>" + targetItem.title + "</a></li>" );
+    } );
+    _c.select( "#contextMenu" ).html( "<menu>" + actionList.join( "" ) + "</menu>" ).removeClass( "hidden" );
+
+    // menu
+    $( "#contextMenu > menu" ).css( {
+      "top": ( event.pageY - 20 ) + "px",
+      "left": event.pageX + "px"
+    } )
+    .find( "a" ).click( function() {
+      $( $( this ).data( "query" ) ).trigger( "click" );
+    } );
+  },
+
+  /****************************************************************************/
+  closeContextMenu: function() {
+    _c.select( "#contextMenu" ).addClass( "hidden" ).html( "" );
   },
 
   /****************************************************************************/
