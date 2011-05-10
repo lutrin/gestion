@@ -50,6 +50,8 @@ function main() {
             return add();
           } elseif( $action == "delete" ) {
             return delete();
+          } elseif( $action == "setAccountStorage" ) {
+            return setAccountStorage();
           }
         }
         return logout( $msg );
@@ -99,6 +101,17 @@ function displaySetting() {
   Includer::add( "fnSetting" );
   setHeader( "json" );
   return json_encode( fn_Setting::display() );
+}
+
+/******************************************************************************/
+function setAccountStorage() {
+  global $CONTROLLER;
+  if( ( $name = ( isset( $_GET["name"] )? $_GET["name"]: false ) ) &&
+      ( $value = ( isset( $_GET["value"] )? $_GET["value"]: false ) ) ) {
+    Includer::add( "fnSetting" );
+    return json_encode( fn_Setting::setAccountStorage( $name, $value ) );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
 /******************************************************************************/

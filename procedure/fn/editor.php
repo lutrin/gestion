@@ -78,7 +78,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  protected static function getIndividualList() {
+  protected static function getIndividualList( $partOnly = false ) {
 
     # params
     $params = array(
@@ -113,7 +113,7 @@ class fn_Editor extends fn {
     $fields = self::prepareFields( $params["columns"] );
     Includer::add( array( "dbEditor", "uiList" ) );
 
-    return ui_List::buildXml( $params, db_Editor::get( $fields, false, $params["order"] ) );
+    return ui_List::buildXml( $params, db_Editor::get( $fields, false, $params["order"] ), $partOnly );
   }
 
   /****************************************************************************/

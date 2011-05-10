@@ -70,6 +70,42 @@ class fn_Setting {
   }
 
   /****************************************************************************/
+  public static function setAccountStorage( $name, $value ) {
+    Includer::add( "dbEditor" );
+    $storage = self::getStorage();
+    if( !is_array( $storage ) ) {
+      $storage = array();
+    }
+    $storage[$name] = $value;
+    return array( "success" => ( self::setStorage( $storage )? true: false ) );
+  }
+
+  /****************************************************************************/
+  public static function getAccountStorage( $name ) {
+    Includer::add( "dbEditor" );
+    if( $storage = self::getStorage() ) {
+      return isset( $storage[$name] )? $storage[$name]: false;
+    }
+    return false;
+  }
+
+  /****************************************************************************/
+  protected static function setStorage( $storage ) {
+    return db_Editor::save(
+      array( "storage" => "'" . DB::mysql_prep( json_encode( $storage ) ) . "'" ),
+      $_SESSION["editor"]["k"]
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getStorage() {
+    if( $result = db_Editor::get( "storage", "k=" . $_SESSION["editor"]["k"] ) ) {
+      return json_decode( $result[0]["storage"], true );
+    }
+    return false;
+  }
+
+  /****************************************************************************/
   protected static function getFormParams( $SETTING ) {
     return array(
       "id"     => self::$id,

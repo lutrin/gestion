@@ -1,22 +1,45 @@
 <?php
 class ui_List {
-  public static function buildXml( $params, $items ) {
+  public static function buildXml( $params, $items, $partOnly = false ) {
 
     # initialize
     $attributes = array();
     $innerHtml = array();
 
-    # mode
-    if( isset( $params["mode"] ) ) {
-      foreach( $params["mode"] as $key => $mode ) {
-        $innerHtml[] = Tag::build( "ui.mode", array( "name" => $key ), $mode );
-      }
-    }
-
     # id
     $id = "";
     if( isset( $params["id"] ) ) {
       $id = $params["id"];
+    }
+
+    # mode
+    if( isset( $params["mode"] ) ) {
+      Includer::add( array( "fnSetting", "uiForm" ) );
+      $modeList = array();
+      foreach( $params["mode"] as $key => $mode ) {
+        $modeList[$key] = array(
+          "label" => $mode,
+          "value" => $key
+        );
+      }
+      $storedValue = fn_Setting::getAccountStorage( "$id-mode" );
+      $modeKeyList = array_keys( $params["mode"] );
+      $storedValue = $storedValue? $storedValue: $modeKeyList[0];
+      $innerHtml[] = Tag::build(
+        "ui.mode",
+        array( "value" => $storedValue, "count" => count( $params["mode"] ) ),
+        ui_Form::getField(
+          $id,
+          "mode",
+          array(
+            "class" => "mode",
+            "label" => "Mode",
+            "type"  => "select",
+            "list"  => $modeList
+          ),
+          array( "mode" => $storedValue )
+        )
+      );
     }
 
     # headtitle
@@ -62,7 +85,8 @@ class ui_List {
       $innerHtml[] = self::getRow( $primary, $item );
     }
 
-    return Tag::build( "ui.list", $attributes, $innerHtml );
+    # tag
+    return Tag::build( ( $partOnly? "ui.listpart": "ui.list" ), $attributes, $innerHtml );
   }
 
   /****************************************************************************/

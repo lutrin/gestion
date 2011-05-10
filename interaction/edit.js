@@ -49,7 +49,7 @@ var _edit = {
         _edit.observe( _c.select( object ) );
       } );
 
-      _c.select( "#contextMenu" ).click( _edit.closeContextMenu );
+      $( "#contextMenu" ).click( _edit.closeContextMenu );
 
       // transformation
       _edit.transformation = function() {
@@ -105,11 +105,11 @@ var _edit = {
     _c.eachItem( targetList, function( targetItem ) {
       actionList.push( "<li><a data-query='#" + targetItem.id + "'>" + targetItem.title + "</a></li>" );
     } );
-    _c.select( "#contextMenu" ).html( "<menu>" + actionList.join( "" ) + "</menu>" ).removeClass( "hidden" );
+    $( "#contextMenu" ).html( "<menu>" + actionList.join( "" ) + "</menu>" ).removeClass( "hidden" );
 
     // menu
     $( "#contextMenu > menu" ).css( {
-      "top": ( event.pageY - 20 ) + "px",
+      "top": event.pageY + "px",
       "left": event.pageX + "px"
     } )
     .find( "a" ).click( function() {
@@ -119,7 +119,7 @@ var _edit = {
 
   /****************************************************************************/
   closeContextMenu: function() {
-    _c.select( "#contextMenu" ).addClass( "hidden" ).html( "" );
+    $( "#contextMenu" ).addClass( "hidden" ).html( "" );
   },
 
   /****************************************************************************/
@@ -128,7 +128,7 @@ var _edit = {
     $( "#details > *" ).resizable().draggable( {
       handle: "h2"
     } );
-    _c.select( "#details" ).removeClass( "hidden" );
+    $( "#details" ).removeClass( "hidden" );
   },
 
   /****************************************************************************/

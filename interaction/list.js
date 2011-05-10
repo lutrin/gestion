@@ -61,6 +61,7 @@
       listContainer.removeClass( oldMode );
     } );
     listContainer.addClass( mode );
+    _c.setAccountStorage( select.attr( "id" ), mode );
   },
 
   /****************************************************************************/

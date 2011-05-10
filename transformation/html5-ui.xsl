@@ -84,7 +84,7 @@
       <div>
         <xsl:call-template name="apply-topfield" />
         <select>
-          <xsl:for-each select="@id|@name|@required|@autofocus|@autocomplete|@multiple">
+          <xsl:for-each select="@id|@name|@required|@autofocus|@autocomplete|@multiple|@class">
             <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
           <xsl:apply-templates select="ui.datalist" mode="select" />
@@ -229,7 +229,7 @@
 
     <!-- class -->
     <xsl:attribute name="class">
-      <xsl:value-of select="concat( 'list-container ', ui.mode[1]/@name )" />
+      <xsl:value-of select="concat( 'list-container ', ui.mode/@value )" />
     </xsl:attribute>
 
     <!-- headtitle -->
@@ -238,181 +238,19 @@
     </xsl:if>
 
     <!-- mode -->
-    <xsl:if test="count(ui.mode) > 1">
-      <label for="mode-{@id}">Mode</label>
+    <xsl:if test="ui.mode/@count > 1">
+      <xsl:apply-templates select="ui.mode/ui.field" />
+<!--      <label for="mode-{@id}">Mode</label>
       <select id="mode-{@id}" class="mode" name="mode">
         <xsl:for-each select="ui.mode">
           <option value="{@name}"><xsl:value-of select="." /></option>
         </xsl:for-each>
-      </select>
+      </select>-->
+      
       <hr />
     </xsl:if>
 
-    <!-- object -->
-    <xsl:variable name="object">
-      <xsl:value-of select="@id" />
-    </xsl:variable>
-
-        <!-- list -->
-    <div>
-
-      <!-- class -->
-      <xsl:attribute name="class">
-        <xsl:text>list</xsl:text>
-        <xsl:if test="@selectable">
-          <xsl:text> selectable</xsl:text>
-        </xsl:if>
-      </xsl:attribute>
-
-      <!-- header -->
-      <div class="header">
-
-        <!-- selectable -->
-        <xsl:if test="@selectable">
-          <div class="cell">
-            <input id="selectAll-{$object}" type="checkbox" class="selectAll" name="selectAll" title="Sélectionner tous" />
-            <label for="selectAll-{$object}" class="hidden">Sélectionner tous</label>
-          </div>
-        </xsl:if>
-
-        <!-- headercolumn -->
-        <xsl:for-each select="ui.headercolumn">
-          <div class="cell">
-
-            <!-- hidden -->
-            <xsl:if test="@hidden">
-              <xsl:attribute name="class"><xsl:text>hidden</xsl:text></xsl:attribute>
-            </xsl:if>
-
-            <!-- sortable -->
-            <xsl:choose>
-              <xsl:when test="@sortable">
-                <a href="#sort" class="sortable" title="Trier"><xsl:value-of select="." /></a>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="." />
-              </xsl:otherwise>
-            </xsl:choose>
-
-            <!-- filtrable -->
-            <xsl:if test="@filtrable">
-              <div class='filtrable'>
-                <button class="setFilter" data-trigger="setFilter"/>
-              </div>
-            </xsl:if>
-          </div>
-        </xsl:for-each>
-
-        <!-- multipleAction -->
-        <xsl:for-each select="ui.action">
-          <div class="cell">
-            <xsl:choose>
-              <xsl:when test="@multiple">
-                <button id="{@key}-{$object}-selection" class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}">
-                  <span class="hidden"><xsl:value-of select="@title" /></span>
-                </button>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text> </xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
-        </xsl:for-each>
-      </div>
-      <hr class="hidden" />
-
-      <!-- row -->
-      <xsl:for-each select="ui.row">
-        <div class="row">
-          <xsl:call-template name="apply-attributelist" />
-
-          <!-- k -->
-          <xsl:variable name="k">
-            <xsl:value-of select="@id" />
-          </xsl:variable>
-
-          <!-- rowId -->
-          <xsl:variable name="rowId">
-            <xsl:value-of select="concat($object,'-',$k)" />
-          </xsl:variable>
-
-          <!-- id -->
-          <xsl:attribute name="id">
-             <xsl:value-of select="$rowId" />
-          </xsl:attribute>
-
-          <!-- rowAction -->
-          <xsl:if test="../@rowAction">
-            <xsl:attribute name="data-action">
-              <xsl:value-of select="../@rowAction"/>
-            </xsl:attribute>
-          </xsl:if>
-
-          <!-- selectable -->
-          <xsl:if test="../@selectable">
-            <div class="cell">
-              <input id="selectRow-{$rowId}" type="checkbox" class="selectRow" name="selectRow" value="{@id}" title="Sélectionner"/>
-              <label for="selectRow-{$rowId}" class="hidden">Sélectionner</label>
-            </div>
-          </xsl:if>
-
-          <!-- cell -->
-          <xsl:for-each select="ui.cell">
-            <div>
-              <xsl:variable name="position" select="position()"/> 
-
-              <!-- class -->
-              <xsl:attribute name="class">
-                <xsl:text>cell</xsl:text>
-                <xsl:if test="@key=../../@main">
-                  <xsl:text> main</xsl:text>
-                </xsl:if>
-                <xsl:if test="@class">
-                  <xsl:value-of select="concat(' ', @class)"/>
-                </xsl:if>
-                <xsl:for-each select="../../ui.headercolumn[position()=$position]">
-                  <xsl:if test="@class">
-                    <xsl:value-of select="concat(' ', @class)"/>
-                  </xsl:if>
-                </xsl:for-each>
-              </xsl:attribute>  
-              <xsl:for-each select="../../ui.headercolumn[position()=$position]">
-                <xsl:if test="@hidden">
-                  <xsl:attribute name="class">
-                    <xsl:text>hidden</xsl:text>
-                  </xsl:attribute>
-                </xsl:if>
-              </xsl:for-each>
-
-              <!-- mainAction -->
-              <xsl:choose>
-                <xsl:when test="@key=../../@main">
-                  <a href="#{$rowId}" data-action="{../../@mainAction}" data-params="object={$object},k={$k}" title="{.}">
-                    <xsl:value-of select="." />
-                  </a>
-                </xsl:when>
-                <xsl:when test="string-length(.) &gt; 0">
-                  <xsl:value-of select="." />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:text> </xsl:text>
-                </xsl:otherwise>
-              </xsl:choose>
-            </div>
-          </xsl:for-each>
-
-          <!-- action -->
-          <xsl:for-each select="../ui.action">
-            <div class="cell action">
-              <button id="{@key}-{$rowId}" class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
-                <span class="hidden"><xsl:value-of select="@title" /></span>
-              </button>
-            </div>
-          </xsl:for-each>
-          <hr class="hidden" />
-        </div>
-      </xsl:for-each>
-    </div>
+    <xsl:call-template name="apply-listpart" />
 
     <!-- addable -->
     <xsl:if test="@addable">
@@ -421,6 +259,178 @@
         <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
       </div>
     </xsl:if>
+  </div>
+</xsl:template>
+
+<xsl:template match="ui.listpart">
+  <xsl:call-template name="apply-listpart" />
+</xsl:template>
+
+<xsl:template name="apply-listpart">
+  <!-- object -->
+  <xsl:variable name="object">
+    <xsl:value-of select="@id" />
+  </xsl:variable>
+
+  <!-- list -->
+  <div>
+
+    <!-- class -->
+    <xsl:attribute name="class">
+      <xsl:text>list</xsl:text>
+      <xsl:if test="@selectable">
+        <xsl:text> selectable</xsl:text>
+      </xsl:if>
+    </xsl:attribute>
+
+    <!-- header -->
+    <div class="header">
+
+      <!-- selectable -->
+      <xsl:if test="@selectable">
+        <div class="cell">
+          <input id="selectAll-{$object}" type="checkbox" class="selectAll" name="selectAll" title="Sélectionner tous" />
+          <label for="selectAll-{$object}" class="hidden">Sélectionner tous</label>
+        </div>
+      </xsl:if>
+
+      <!-- headercolumn -->
+      <xsl:for-each select="ui.headercolumn">
+        <div class="cell">
+
+          <!-- hidden -->
+          <xsl:if test="@hidden">
+            <xsl:attribute name="class"><xsl:text>hidden</xsl:text></xsl:attribute>
+          </xsl:if>
+
+          <!-- sortable -->
+          <xsl:choose>
+            <xsl:when test="@sortable">
+              <a href="#sort" class="sortable" title="Trier"><xsl:value-of select="." /></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="." />
+            </xsl:otherwise>
+          </xsl:choose>
+
+          <!-- filtrable -->
+          <xsl:if test="@filtrable">
+            <div class='filtrable'>
+              <button class="setFilter" data-trigger="setFilter"/>
+            </div>
+          </xsl:if>
+        </div>
+      </xsl:for-each>
+
+      <!-- multipleAction -->
+      <xsl:for-each select="ui.action">
+        <div class="cell">
+          <xsl:choose>
+            <xsl:when test="@multiple">
+              <button id="{@key}-{$object}-selection" class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}">
+                <span class="hidden"><xsl:value-of select="@title" /></span>
+              </button>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text> </xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+      </xsl:for-each>
+    </div>
+    <hr class="hidden" />
+
+    <!-- row -->
+    <xsl:for-each select="ui.row">
+      <div class="row">
+        <xsl:call-template name="apply-attributelist" />
+
+        <!-- k -->
+        <xsl:variable name="k">
+          <xsl:value-of select="@id" />
+        </xsl:variable>
+
+        <!-- rowId -->
+        <xsl:variable name="rowId">
+          <xsl:value-of select="concat($object,'-',$k)" />
+        </xsl:variable>
+
+        <!-- id -->
+        <xsl:attribute name="id">
+           <xsl:value-of select="$rowId" />
+        </xsl:attribute>
+
+        <!-- rowAction -->
+        <xsl:if test="../@rowAction">
+          <xsl:attribute name="data-action">
+            <xsl:value-of select="../@rowAction"/>
+          </xsl:attribute>
+        </xsl:if>
+
+        <!-- selectable -->
+        <xsl:if test="../@selectable">
+          <div class="cell">
+            <input id="selectRow-{$rowId}" type="checkbox" class="selectRow" name="selectRow" value="{@id}" title="Sélectionner"/>
+            <label for="selectRow-{$rowId}" class="hidden">Sélectionner</label>
+          </div>
+        </xsl:if>
+
+        <!-- cell -->
+        <xsl:for-each select="ui.cell">
+          <div>
+            <xsl:variable name="position" select="position()"/> 
+
+            <!-- class -->
+            <xsl:attribute name="class">
+              <xsl:text>cell</xsl:text>
+              <xsl:if test="@key=../../@main">
+                <xsl:text> main</xsl:text>
+              </xsl:if>
+              <xsl:if test="@class">
+                <xsl:value-of select="concat(' ', @class)"/>
+              </xsl:if>
+              <xsl:for-each select="../../ui.headercolumn[position()=$position]">
+                <xsl:if test="@class">
+                  <xsl:value-of select="concat(' ', @class)"/>
+                </xsl:if>
+              </xsl:for-each>
+            </xsl:attribute>  
+            <xsl:for-each select="../../ui.headercolumn[position()=$position]">
+              <xsl:if test="@hidden">
+                <xsl:attribute name="class">
+                  <xsl:text>hidden</xsl:text>
+                </xsl:attribute>
+              </xsl:if>
+            </xsl:for-each>
+
+            <!-- mainAction -->
+            <xsl:choose>
+              <xsl:when test="@key=../../@main">
+                <a href="#{$rowId}" data-action="{../../@mainAction}" data-params="object={$object},k={$k}" title="{.}">
+                  <xsl:value-of select="." />
+                </a>
+              </xsl:when>
+              <xsl:when test="string-length(.) &gt; 0">
+                <xsl:value-of select="." />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text> </xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </xsl:for-each>
+
+        <!-- action -->
+        <xsl:for-each select="../ui.action">
+          <div class="cell action">
+            <button id="{@key}-{$rowId}" class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
+              <span class="hidden"><xsl:value-of select="@title" /></span>
+            </button>
+          </div>
+        </xsl:for-each>
+        <hr class="hidden" />
+      </div>
+    </xsl:for-each>
   </div>
 </xsl:template>
 

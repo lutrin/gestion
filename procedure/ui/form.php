@@ -76,7 +76,7 @@ class ui_Form {
   }
 
   /****************************************************************************/
-  protected static function getField( $formId, $fieldId, $attributes, $values ) {
+  public static function getField( $formId, $fieldId, $attributes, $values ) {
 
     # field set  
     if( isset( $attributes["type"] ) && $attributes["type"] == "fieldset" ) {

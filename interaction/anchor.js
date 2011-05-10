@@ -79,14 +79,14 @@
               return false;
             }
 
-            // replacement
-            if( ajaxItem.replacement ) {
-              _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
-            }
-
             // dialog
             if( ajaxItem.dialog ) {
               _edit.showDialog( ajaxItem.dialog );
+            }
+
+            // replacement
+            if( ajaxItem.replacement ) {
+              _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
             }
 
             // details
