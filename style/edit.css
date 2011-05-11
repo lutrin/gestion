@@ -685,3 +685,7 @@ nav h2, nav menu {
 .ui-resizable-handle {
   z-index: 99999;
 }
+
+.option .field {
+  display: inline-block;
+}

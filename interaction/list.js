@@ -11,6 +11,9 @@
     // mode choice
     listContainer.find( ".mode:first" ).change( app.changeMode );
 
+    // sort choice
+    listContainer.find( ".sort:first" ).change( app.changeSort );
+
     // sortable
     listContainer.find( ".sortable" ).click( app.sort );
 
@@ -50,6 +53,12 @@
       row.find( ".initiated" ).removeClass( "initiated" );
       _edit.observe( row );
     } );
+
+    // row action
+    listContainer.find( ".row[data-action]" ).dblclick( app.rowDblclick );
+
+    // context menu
+    listContainer.find( ".row" ).rightClick( app.rowRightClick );
   },
 
   /****************************************************************************/
@@ -65,9 +74,27 @@
   },
 
   /****************************************************************************/
+  changeSort: function() {
+    var select          = $( this ),
+        value           = select.val();
+
+    // click header column
+    $(
+      "#" +
+      select.parents( ".list-container:first" ).attr( "id" ) +
+      "-sort-" +
+      select.val()
+    ).trigger( "click" );
+
+    // set acount storage
+    _c.setAccountStorage( select.attr( "id" ), value );
+  },
+
+  /****************************************************************************/
   sort: function() {
     var app       = _c.ajaxList.interaction.list,
-        cell      = $( this ).parent(),
+        anchor    = $( this ),
+        cell      = anchor.parent(),
         header    = cell.parent(),
         list      = header.parent(),
         index     = cell.index() - 1,
@@ -98,6 +125,10 @@
       }
     );
     cell.addClass( "sorted_" + order );
+
+    // select
+    cell.parents( ".list-container:first" ).find( ".sort:first" ).val( anchor.data( "value" ) );
+
     app.reinitialize( list.parent() );
   },
 

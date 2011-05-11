@@ -26,7 +26,7 @@ class ui_List {
       $modeKeyList = array_keys( $params["mode"] );
       $storedValue = $storedValue? $storedValue: $modeKeyList[0];
       $innerHtml[] = Tag::build(
-        "ui.mode",
+        "ui.option",
         array( "value" => $storedValue, "count" => count( $params["mode"] ) ),
         ui_Form::getField(
           $id,
@@ -42,11 +42,6 @@ class ui_List {
       );
     }
 
-    # headtitle
-    if( isset( $params["headtitle"] ) ) {
-      $innerHtml[] = Tag::build( "ui.headtitle", false, $params["headtitle"] );
-    }
-
     # primary
     $primary = false;
     if( isset( $params["primary"] ) ) {
@@ -54,6 +49,7 @@ class ui_List {
     }
 
     # columns
+    $sortableList = array();
     foreach( $params["columns"] as $key => $column ) {
       if( !$primary ) {
         $primary = $key;
@@ -61,7 +57,43 @@ class ui_List {
       $colAttribute = $column;
       unset( $colAttribute["label"] );
       unset( $colAttribute["field"] );
+      $colAttribute["id"] = $key;
       $innerHtml[] = Tag::build( "ui.headercolumn", $colAttribute, $column["label"] );
+
+      # sortable
+      if( isset( $column["sortable"] ) && $column["sortable"] ) {
+        $sortableList[$key] = array(
+          "label" => $column["label"],
+          "value" => $key
+        );
+      }
+    }
+
+    # sort
+    if( $sortableList ) {
+      $storedValue = fn_Setting::getAccountStorage( "$id-sort" );
+      $sortKeyList = array_keys( $sortableList );
+      $storedValue = $storedValue? $storedValue: $sortKeyList[0];
+      $innerHtml[] = Tag::build(
+        "ui.option",
+        array( "value" => $storedValue, "count" => count( $sortableList ) ),
+        ui_Form::getField(
+          $id,
+          "sort",
+          array(
+            "class" => "sort",
+            "label" => "Ordre",
+            "type"  => "select",
+            "list"  => $sortableList
+          ),
+          array( "sort" => $storedValue )
+        )
+      );
+    }
+
+    # headtitle
+    if( isset( $params["headtitle"] ) ) {
+      $innerHtml[] = Tag::build( "ui.headtitle", false, $params["headtitle"] );
     }
 
     # actions

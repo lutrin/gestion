@@ -79,22 +79,25 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   protected static function getIndividualList( $partOnly = false ) {
+    Includer::add( "fnSetting" );
+
+    $id = "editors-individualList";
+    $storedValue = fn_Setting::getAccountStorage( "$id-sort" );
+    $order = $storedValue? $storedValue: "username";
 
     # params
     $params = array(
-      "id"         => "editors-individualList",
+      "id"         => $id,
       "mode"       => array(
         "table"   => "Tableau",
         "compact" => "Compacte",
-        "tree"    => "Arbre",
         "gallery" => "Galerie"
       ),
-      #"headtitle"  => $TOOLS_EDITOR["individual"][$lang],
       "primary"    => "k",
       "main"       => "username",
       "mainAction" => "edit",
       "rowAction"  => "edit",
-      "order"      => "username",
+      "order"      => $order,
       "selectable" => true,
       "addable"    => true,
       "columns"    => self::getIndividualColumns(),
@@ -265,7 +268,7 @@ class fn_Editor extends fn {
         "query" => "#editors-individual",
         "innerHtml" => self::getIndividualList()
       ),
-      "details" => ""
+      "details" => " "
     );
   }
 
@@ -361,7 +364,7 @@ class fn_Editor extends fn {
         "query" => "#editors-individual",
         "innerHtml" => self::getIndividualList()
       ),
-      "details" => self::getEdit( $k )
+      "details" => " "
     );
   }
 

@@ -6,7 +6,7 @@ CREATE TABLE `gestion`.`editor` (
   `admin` TINYINT UNSIGNED NOT NULL DEFAULT '0',
   `active` TINYINT UNSIGNED NOT NULL DEFAULT '1',
   INDEX ( `username` )
-) ENGINE = InnoDB;
+) ENGINE = MyISAM;
 
 /* insert root editor */
 INSERT INTO `gestion`.`editor` (
@@ -32,3 +32,11 @@ ALTER TABLE `editor` ADD `lang` VARCHAR( 10 ) NOT NULL DEFAULT 'fr' AFTER `longn
 
 /* add storage */
 ALTER TABLE `editor` ADD `storage` TEXT NOT NULL;
+
+/* create table groupEditor */
+CREATE TABLE `gestion`.`groupEditor` (
+`k` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 30 ) NOT NULL ,
+`longname` VARCHAR( 255 ) NOT NULL ,
+`parentK` MEDIUMINT NOT NULL DEFAULT '0'
+) ENGINE = MyISAM;

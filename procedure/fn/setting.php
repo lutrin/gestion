@@ -77,7 +77,12 @@ class fn_Setting {
       $storage = array();
     }
     $storage[$name] = $value;
-    return array( "success" => ( self::setStorage( $storage )? true: false ) );
+    return array(
+      "action" => "setAccountStorage",
+      "name"   => $name,
+      "value"  => $value,
+      "saved" => ( self::setStorage( $storage )? true: false )
+    );
   }
 
   /****************************************************************************/

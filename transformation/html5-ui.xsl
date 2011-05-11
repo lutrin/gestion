@@ -229,7 +229,11 @@
 
     <!-- class -->
     <xsl:attribute name="class">
-      <xsl:value-of select="concat( 'list-container ', ui.mode/@value )" />
+      <xsl:text>list-container</xsl:text>
+      <xsl:for-each select="ui.option">
+        <xsl:value-of select="concat( ' ', @value )" />
+      </xsl:for-each>
+      <!--<xsl:value-of select="concat( 'list-container ', ui.option/@value )" />-->
     </xsl:attribute>
 
     <!-- headtitle -->
@@ -237,16 +241,16 @@
       <h3><xsl:value-of select="ui.headtitle"/></h3>
     </xsl:if>
 
-    <!-- mode -->
-    <xsl:if test="ui.mode/@count > 1">
-      <xsl:apply-templates select="ui.mode/ui.field" />
-<!--      <label for="mode-{@id}">Mode</label>
-      <select id="mode-{@id}" class="mode" name="mode">
-        <xsl:for-each select="ui.mode">
-          <option value="{@name}"><xsl:value-of select="." /></option>
+    <!-- option -->
+    <xsl:if test="ui.option">
+      <fieldset class="option">
+        <legend>Options</legend>
+        <xsl:for-each select="ui.option">
+          <xsl:if test="@count > 1">
+            <xsl:apply-templates select="ui.field" />
+          </xsl:if>
         </xsl:for-each>
-      </select>-->
-      
+      </fieldset>
       <hr />
     </xsl:if>
 
@@ -306,7 +310,7 @@
           <!-- sortable -->
           <xsl:choose>
             <xsl:when test="@sortable">
-              <a href="#sort" class="sortable" title="Trier"><xsl:value-of select="." /></a>
+              <a id="{$object}-sort-{@id}" data-value="{@id}" href="#sort" class="sortable" title="Trier"><xsl:value-of select="." /></a>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="." />
