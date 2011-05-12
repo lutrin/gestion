@@ -74,7 +74,7 @@ var _edit = {
   showError: function( msg ) {
     _c.select( "#main" ).hide();
     _c.select( "#header-buttons" ).html( "" );
-    _c.select( "#dialog" ).hide();
+    _c.select( "#dialog" ).addClass( "hidden" );
     _c.select( "#error-msg" ).html( msg ).show();
     window.location.hash = "";
   },
@@ -82,7 +82,7 @@ var _edit = {
   /****************************************************************************/
   showDialog: function( dialog ) {
     _edit.replaceContent( { query: "#dialog-content", innerHtml: dialog } );
-    _c.select( "#dialog" ).css( { display: "table" } ).click( function( ev ) {
+    _c.select( "#dialog" ).removeClass( "hidden" ).click( function( ev ) {
       var target = $( ev.target );
       if( target.attr( "id" ) && target.attr( "id" ) == "dialog-content" ) {
         target.parent().hide();

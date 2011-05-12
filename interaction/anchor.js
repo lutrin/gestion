@@ -102,8 +102,8 @@
       }
     }
 
-    anchor.parents( "li:first" ).addClass( "selected" );
-    target.addClass( "target" );
+    anchor.parents( "li:first" ).addClass( "selected" ).siblings().removeClass( "selected" );
+    target.addClass( "target" ).siblings().removeClass( "target" );
     return false;
   }
 }

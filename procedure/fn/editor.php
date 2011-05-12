@@ -120,6 +120,49 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
+  protected static function getGroupList() {
+    Includer::add( "fnSetting" );
+
+    $id = "editors-groupList";
+    $storedValue = fn_Setting::getAccountStorage( "$id-sort" );
+    $order = $storedValue? $storedValue: "name";
+
+    # params
+    $params = array(
+      "id"         => $id,
+      "mode"       => array(
+        "table"   => "Tableau",
+        "compact" => "Arbre",
+        "compact" => "Compacte",
+        "gallery" => "Galerie"
+      ),
+      "primary"    => "k",
+      "main"       => "name",
+      "mainAction" => "edit",
+      "rowAction"  => "expand",
+      "order"      => $order,
+      "selectable" => true,
+      "addable"    => true,
+      "columns"    => self::getGroupColumns(),
+      "actions" => array(
+        "edit" => array(
+          "title" => "Modifier"
+        ),
+        "delete" => array(
+          "title" => "Supprimer",
+          "multiple" => true
+        )
+      )
+    );
+
+    # field
+    $fields = self::prepareFields( $params["columns"] );
+    Includer::add( array( "dbGroupEditor", "uiList" ) );
+
+    return ui_List::buildXml( $params, db_GroupEditor::get( $fields, false, $params["order"] ) );
+  }
+
+  /****************************************************************************/
   protected static function prepareFields( $columns ) {
     $fields = array();
     foreach( $columns as $key => $column ) {
@@ -163,15 +206,58 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function getContent_group() {
-    global $PERMISSION;
+  protected static function getGroupColumns() {
+    global $TOOLS_EDITOR_GROUP;
     $lang = getLang();
-    Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+
     return array(
-      "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+      "k"        => array(
+        "label"  => $TOOLS_EDITOR_GROUP["k"][$lang],
+        "hidden" => true
+      ),
+      "name" => array(
+        "label"    => $TOOLS_EDITOR_GROUP["name"][$lang],
+        "class"    => "groupEditor",
+        "sortable" => true/*,
+        "filtrable" => true*/
+      ),
+      "active"   => array(
+        "label" => $TOOLS_EDITOR_GROUP["active"][$lang],
+        "sortable" => true,
+        "field" => "IF( active = 1, '', 'inactif' )"
+      ),
+      "longname" => array(
+        "label"  => $TOOLS_EDITOR_GROUP["longname"][$lang],
+        "sortable" => true/*,
+        "filtrable" => true*/
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function getContent_group() {
+    global $TOOLS_EDITOR;
+  
+    # language
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # list
+    return array(
       "replacement" => array(
-        "query" => "#main",
-        "innerHtml" => fn_edit::getMain() 
+        "query" => "#editors-group",
+        "innerHtml" => self::getGroupList()
       )
     );
   }
@@ -193,7 +279,28 @@ class fn_Editor extends fn {
       );
     }
     return array(
-      "details" => self::getEdit( $k )
+      "details" => self::getEditIndividual( $k )
+    );
+  }
+
+  /****************************************************************************/
+  public static function edit_groupList( $k ) {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+    return array(
+      "details" => self::getEditGroup( $k )
     );
   }
 
@@ -220,9 +327,47 @@ class fn_Editor extends fn {
     $defaults["k"] = 0;
 
     # get params
-    $params = self::getFormParams();
-    $params["headtitle"] = "Nouvel éditeur";
-    $fields = self::getFormFields( 0 );
+    $params = self::getFormParamsIndividual();
+    $params["headtitle"] = "Nouvel&nbsp;éditeur";
+    $fields = self::getFormFieldsIndividual( 0 );
+
+    Includer::add( array( "uiForm" ) );
+    return array(
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields,
+        $defaults
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function add_groupList() {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # get default values
+    Includer::add( "dbGroupEditor" );
+    $defaults = db_GroupEditor::defaults();
+    $defaults["k"] = 0;
+    $defaults["parentK"] = 0;
+
+    # get params
+    $params = self::getFormParamsGroup();
+    $params["headtitle"] = "Nouveau&nbsp;groupe";
+    $fields = self::getFormFieldsGroup( 0 );
 
     Includer::add( array( "uiForm" ) );
     return array(
@@ -273,14 +418,14 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function getEdit( $k ) {
+  public static function getEditIndividual( $k ) {
     if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" ) ) {
       return "Introuvable $k";
     }
 
-    $params = self::getFormParams( $k );
-    $params["headtitle"] = $values[0]["username"] . " - Éditeur";
-    $fields = self::getFormFields( $k );
+    $params = self::getFormParamsIndividual( $k );
+    $params["headtitle"] = $values[0]["username"] . "&nbsp;-&nbsp;Éditeur";
+    $fields = self::getFormFieldsIndividual( $k );
 
     Includer::add( array( "uiForm" ) );
     return ui_Form::buildXml(
@@ -291,7 +436,26 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function save( $k ) {
+  public static function getEditGroup( $k ) {
+    Includer::add( "dbGroupEditor" );
+    if( !$values = db_GroupEditor::get( array( "k", "name", "longname", "active" ), "k=$k" ) ) {
+      return "Introuvable $k";
+    }
+
+    $params = self::getFormParamsGroup( $k );
+    $params["headtitle"] = $values[0]["name"] . "&nbsp;-&nbsp;Groupe";
+    $fields = self::getFormFieldsGroup( $k );
+
+    Includer::add( array( "uiForm" ) );
+    return ui_Form::buildXml(
+      $params,
+      $fields,
+      $values[0]
+    );
+  }
+
+  /****************************************************************************/
+  public static function save_individual( $k ) {
     global $PERMISSION;
     $lang = getLang();
 
@@ -311,8 +475,8 @@ class fn_Editor extends fn {
     $values = $_GET;
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
-      self::getFormParams( $k ),
-      self::getFormFields( $k ),
+      self::getFormParamsIndividual( $k ),
+      self::getFormFieldsIndividual( $k ),
       $values,
       $k
     );
@@ -369,7 +533,77 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormParams( $k = 0 ) {
+  public static function save_group( $k ) {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # valid form
+    $values = $_GET;
+    Includer::add( "fnForm" );
+    $result = fn_Form::hasErrors(
+      self::getFormParamsGroup( $k ),
+      self::getFormFieldsGroup( $k ),
+      $values,
+      $k
+    );
+
+    # fatal error or error list
+    if( isset( $result["fatalError"] ) || ( isset( $result["errorList"] ) && $result["errorList"] ) ) {
+      return $result;
+    }
+
+    # name unique
+    $name = $values["name"];
+    $parentK = $values["parentK"];
+    Includer::add( "dbGroupEditor" );
+    if( db_GroupEditor::count( "k", array( "NOT k=$k", "name='$name'", "parentK='$parentK'" ) ) ) {
+      $result["errorList"][] = array( "name" => "name", "msg" => "mustbeunique" );
+      return $result;
+    }
+
+    # values
+    $valuesToSave = array();
+    foreach( $values as $key => $value ) {
+  
+      # not in database
+      if( in_array( $key, array( "token", "k", "object", "action" ) ) ) {
+        continue;
+      }
+
+      # add quotes
+      $valuesToSave[$key] = "'" . DB::mysql_prep( $value ) . "'";
+    }
+
+    # update or insert
+    $newK = db_GroupEditor::save( $valuesToSave, $k );
+    if( !$k ) {
+      $k = $newK[0];
+    }
+
+   # list
+    return array(
+      "replacement" => array(
+        "query" => "#editors-group",
+        "innerHtml" => self::getGroupList()
+      ),
+      "details" => " "
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormParamsIndividual( $k = 0 ) {
     return array(
       "id"       => "editor-$k",
       "action"   => "save",
@@ -381,7 +615,19 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormFields( $k ) {
+  protected static function getFormParamsGroup( $k = 0 ) {
+    return array(
+      "id"       => "editor-$k",
+      "action"   => "save",
+      "submit"   => "Enregistrer",
+      "method"   => "post",
+      "class"    => "groupEditor",
+      "closable" => true
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormFieldsIndividual( $k ) {
     global $LOGIN, $EDITOR, $SETTING;
     $lang = getLang();
   
@@ -421,7 +667,7 @@ class fn_Editor extends fn {
       ),
       "object"     => array(
         "type" => "hidden",
-        "value" => "editor"
+        "value" => "editor-individual"
       ),
       "active" => $active,
       "login" => array(
@@ -473,6 +719,54 @@ class fn_Editor extends fn {
             )
           )
         )
+      )
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormFieldsGroup( $k ) {
+    global $LOGIN, $GROUPEDITOR, $SETTING;
+    $lang = getLang();
+
+    # active and admin checkbox
+    $active = array(
+      "label" => $GROUPEDITOR["active"][$lang],
+      "type"  => "checkbox",
+      "value" => "1"
+    );
+    if( $k == $_SESSION["editor"]["k"] ) {
+      $active["disabled"] = "disabled";
+    }
+
+    return array(
+      "k"     => array(
+        "type" => "hidden"
+      ),
+      "parentK" => array(
+        "type" => "hidden"
+      ),
+      "object"     => array(
+        "type" => "hidden",
+        "value" => "editor-group"
+      ),
+      "active" => array(
+        "label" => $GROUPEDITOR["active"][$lang],
+        "type"  => "checkbox",
+        "value" => "1"
+      ),
+      "name" => array(
+        "label"        => $GROUPEDITOR["name"][$lang],
+        "required"     => "required",
+        "maxlength"    => 30,
+        "size"         => 20,
+        "autofocus"    => "autofocus",
+        "autocomplete" => "off",
+      ),
+      "longname" => array(
+        "label" => $SETTING["longname"][$lang],
+        "maxlenght" => 255,
+        "required" => "required",
+        "size" => 20
       )
     );
   }

@@ -114,6 +114,17 @@ $EDITOR = array(
   )
 );
 
+$GROUPEDITOR = array(
+  "active" => array(
+    "fr" => "Activé",
+    "en" => "Active"
+  ),
+  "name" => array(
+    "fr" => "Groupe (unique)",
+    "en" => "Group (unique)"
+  )
+);
+
 $SETTING = array(
   "apply" => array(
     "fr" => "Appliquer",
@@ -223,6 +234,25 @@ $TOOLS_EDITOR_INDIVIDUAL = array(
   "admin" => array(
     "fr" => "Type",
     "en" => "Type"
+  ),
+  "longname" => array(
+    "fr" => "Nom complet",
+    "en" => "Complete name"
+  ),
+);
+
+$TOOLS_EDITOR_GROUP = array(
+  "k" => array(
+    "fr" => "Id",
+    "en" => "Id"
+  ),
+  "name" => array(
+    "fr" => "Groupe",
+    "en" => "Group"
+  ),
+  "active" => array(
+    "fr" => "État",
+    "en" => "Status"
   ),
   "longname" => array(
     "fr" => "Nom complet",
@@ -403,8 +433,16 @@ $INCLUDE_LIST = array(
   ),
 
   # data base table
+  "dbAbstract" => array(
+    "path" => "db.php",
+    "depend" => "dbConnect"
+  ),
   "dbEditor" => array(
     "path" => "db/editor.php",
-    "depend" => "dbConnect"
+    "depend" => "dbAbstract"
+  ),
+  "dbGroupEditor" => array(
+    "path" => "db/groupEditor.php",
+    "depend" => "dbAbstract"
   )
 );

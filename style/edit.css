@@ -111,11 +111,11 @@ nav h3 {
   background: url(../image/visitor.svg) no-repeat center center;
 }
 
-#details form.editor h2, .list-container .main {
+#details form h2, .list-container .main {
   background-repeat: no-repeat;
 }
 
-#details form.editor h2, .list-container.table .main, .list-container.compact .main {
+#details form h2, .list-container.table .main, .list-container.compact .main {
   background-position: left center;
 }
 
@@ -126,6 +126,10 @@ nav h3 {
 
 .list-container .editor, #details form.editor h2 {
   background-image: url(../image/editor.svg);
+}
+
+.list-container .groupEditor, #details form.groupEditor h2 {
+  background-image: url(../image/groupEditor.svg);
 }
 
 .empty {
@@ -376,11 +380,11 @@ nav h2, nav menu {
 }
 
 #dialog {
-  display:none;
   height: 100%;
   width: 100%;
   position: absolute;
   top: 0;
+  display: table;
 }
 
 #dialog-content {
@@ -442,7 +446,7 @@ nav h2, nav menu {
   overflow: hidden;
 }
 
-#details form.editor h2 {
+#details form h2 {
   padding-left: 20px;
 }
 
@@ -532,6 +536,7 @@ nav h2, nav menu {
 
 .list {
   clear:both;
+  margin: 5px;
 }
 
 .list-container.table .main, .list-container.compact .main {

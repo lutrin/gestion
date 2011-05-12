@@ -251,17 +251,15 @@
           </xsl:if>
         </xsl:for-each>
       </fieldset>
-      <hr />
     </xsl:if>
 
     <xsl:call-template name="apply-listpart" />
 
     <!-- addable -->
     <xsl:if test="@addable">
-      <hr />
-      <div>
+      <fieldset>
         <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
-      </div>
+      </fieldset>
     </xsl:if>
   </div>
 </xsl:template>
