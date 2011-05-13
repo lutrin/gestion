@@ -49,6 +49,7 @@ nav h3 {
 .delete,
 .close,
 .add:before,
+.refresh:before,
 .sorted_asc a:after,
 .sorted_desc a:after {
   font-family: "IconicStroke";
@@ -85,6 +86,10 @@ nav h3 {
 
 .add:before {
   content: "+";
+}
+
+.refresh:before {
+  content: "[";
 }
 
 #toolList-pages a {

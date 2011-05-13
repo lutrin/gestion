@@ -43,7 +43,7 @@ $APP = array(
   ),
   "head_script" => "../external/interaction/modernizr-1.7.min.js",
   "body_script" => array(
-      "../external/interaction/jquery-1.6.min.js",
+      "../external/interaction/jquery-1.6.1.min.js",
       "../external/interaction/jquery-ui-1.8.11.custom.min.js",
       "../external/interaction/jquery.rightClick.js",
       "../library/interaction/jquery.xslt.mod.js",

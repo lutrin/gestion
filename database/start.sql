@@ -44,3 +44,4 @@ CREATE TABLE `gestion`.`groupEditor` (
 /* add active */
 ALTER TABLE `groupEditor` ADD `active` TINYINT NOT NULL DEFAULT '1' AFTER `name`;
 ALTER TABLE `groupEditor` CHANGE `active` `active` TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '1';
+

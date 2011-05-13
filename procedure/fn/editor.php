@@ -87,26 +87,27 @@ class fn_Editor extends fn {
 
     # params
     $params = array(
-      "id"         => $id,
-      "mode"       => array(
+      "id"          => $id,
+      "mode"        => array(
         "table"   => "Tableau",
         "compact" => "Compacte",
         "gallery" => "Galerie"
       ),
-      "primary"    => "k",
-      "main"       => "username",
-      "mainAction" => "edit",
-      "rowAction"  => "edit",
-      "order"      => $order,
-      "selectable" => true,
-      "addable"    => true,
-      "columns"    => self::getIndividualColumns(),
-      "actions" => array(
-        "edit" => array(
+      "primary"     => "k",
+      "main"        => "username",
+      "mainAction"  => "edit",
+      "rowAction"   => "edit",
+      "order"       => $order,
+      "selectable"  => true,
+      "addable"     => true,
+      "refreshable" => true,
+      "columns"     => self::getIndividualColumns(),
+      "actions"     => array(
+        "edit"   => array(
           "title" => "Modifier"
         ),
         "delete" => array(
-          "title" => "Supprimer",
+          "title"    => "Supprimer",
           "multiple" => true
         )
       )
@@ -143,6 +144,7 @@ class fn_Editor extends fn {
       "order"      => $order,
       "selectable" => true,
       "addable"    => true,
+      "refreshable" => true,
       "columns"    => self::getGroupColumns(),
       "actions" => array(
         "edit" => array(
@@ -380,6 +382,58 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
+  public static function refresh_individualList() {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    return array(
+      "replacement" => array(
+        "query" => "#editors-individual",
+        "innerHtml" => self::getIndividualList()
+      ),
+      "details" => " "
+    );
+  }
+
+  /****************************************************************************/
+  public static function refresh_groupList() {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    return array(
+      "replacement" => array(
+        "query" => "#editors-individual",
+        "innerHtml" => self::getGroupList()
+      ),
+      "details" => " "
+    );
+  }
+
+  /****************************************************************************/
   public static function delete_individualList( $kList ) {
     global $PERMISSION, $DELETE;
     $lang = getLang();
@@ -412,6 +466,44 @@ class fn_Editor extends fn {
       "replacement" => array(
         "query" => "#editors-individual",
         "innerHtml" => self::getIndividualList()
+      ),
+      "details" => " "
+    );
+  }
+
+  /****************************************************************************/
+  public static function delete_groupList( $kList ) {
+    global $PERMISSION, $DELETE;
+    $lang = getLang();
+
+    # is admin
+    if( ( !$isAdmin = $_SESSION["editor"]["admin"] ) ) {
+      Includer::add( array( "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    /*# is myself
+    if( in_array( $_SESSION["editor"]["k"], $kList ) ) {
+      Includer::add( array( "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $DELETE["title"][$lang], $DELETE["message"][$lang] )
+      );
+    }*/
+
+    # remove
+    Includer::add( "dbGroupEditor" );
+    db_GroupEditor::remove( $kList );
+    
+    return array(
+      "replacement" => array(
+        "query" => "#editors-group",
+        "innerHtml" => self::getGroupList()
       ),
       "details" => " "
     );

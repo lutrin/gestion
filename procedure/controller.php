@@ -46,8 +46,8 @@ function main() {
             return save();
           } elseif( $action == "edit" ) {
             return edit();
-          } elseif( $action == "add" ) {
-            return add();
+          } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
+            return listAction( $action );
           } elseif( $action == "delete" ) {
             return delete();
           } elseif( $action == "setAccountStorage" ) {
@@ -156,14 +156,23 @@ function edit() {
 }
 
 /******************************************************************************/
-function add() {
+function listAction( $action ) {
   global $CONTROLLER;
   if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
-    return switchFunction( "add", $object );
+    return switchFunction( $action, $object );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
 
+/******************************************************************************/
+/*function refresh() {
+  global $CONTROLLER;
+  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
+    return switchFunction( "refresh", $object );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+*/
 /******************************************************************************/
 function delete() {
   global $CONTROLLER;

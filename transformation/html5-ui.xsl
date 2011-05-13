@@ -256,9 +256,14 @@
     <xsl:call-template name="apply-listpart" />
 
     <!-- addable -->
-    <xsl:if test="@addable">
+    <xsl:if test="@addable|@refreshable">
       <fieldset>
-        <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
+        <xsl:if test="@addable">
+          <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
+        </xsl:if>
+        <xsl:if test="@refreshable">
+          <button class="refresh" data-action="refresh" data-params="object={@id}">Actualiser</button>
+        </xsl:if>
       </fieldset>
     </xsl:if>
   </div>
@@ -431,6 +436,7 @@
           </div>
         </xsl:for-each>
         <hr class="hidden" />
+        <!-- TODO each child -->
       </div>
     </xsl:for-each>
   </div>

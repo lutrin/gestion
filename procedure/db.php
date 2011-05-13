@@ -17,6 +17,11 @@ abstract class db_Abstract {
   }
 
   /****************************************************************************/
+  public static function getTree( $fields, $where = false, $orders = false ) {
+    return false;
+  }
+
+  /****************************************************************************/
   public static function count( $fields, $where = false ) {
     $query = array(
       "field" => $fields,
