@@ -51,7 +51,8 @@ nav h3 {
 .add:before,
 .refresh:before,
 .sorted_asc a:after,
-.sorted_desc a:after {
+.sorted_desc a:after,
+.toggleExpand:before {
   font-family: "IconicStroke";
   font-size: 1.2em;
 }
@@ -92,6 +93,14 @@ nav h3 {
   content: "[";
 }
 
+.collapsed .toggleExpand:before {
+  content: "+";
+}
+
+.expanded .toggleExpand:before {
+  content: "-";
+}
+
 #toolList-pages a {
   background: url(../image/page.svg) no-repeat center center;
 }
@@ -116,7 +125,7 @@ nav h3 {
   background: url(../image/visitor.svg) no-repeat center center;
 }
 
-#details form h2, .list-container .main {
+#details form h2, .list-container .icon {
   background-repeat: no-repeat;
 }
 
@@ -124,16 +133,16 @@ nav h3 {
   background-position: left center;
 }
 
-.list-container.gallery .main {
+.gallery .icon {
   background-position: center center;
   background-size: 48px;
 }
 
-.list-container .editor, #details form.editor h2 {
+.list-container .editor > .icon, #details form.editor h2 {
   background-image: url(../image/editor.svg);
 }
 
-.list-container .groupEditor, #details form.groupEditor h2 {
+.list-container .groupEditor > .icon, #details form.groupEditor h2 {
   background-image: url(../image/groupEditor.svg);
 }
 
@@ -545,7 +554,7 @@ nav h2, nav menu {
 }
 
 .list-container.table .main, .list-container.compact .main {
-  padding-left: 20px;
+  /*padding-left: 20px;*/
 }
 
 .table .list {
@@ -569,6 +578,31 @@ nav h2, nav menu {
   display: table-cell;
   padding: 5px;
   margin: 2px;
+}
+
+.table .toggleExpand {
+  width: 12px;
+  height: 16px;
+  display: inline-block;
+}
+
+.table .icon, .compact .icon {
+  width: 16px;
+  height: 16px;
+  margin: 0 2px;
+  display: inline-block;
+}
+
+.table .level2 .main {
+  padding-left: 20px;
+}
+
+.table .level3 .main {
+  padding-left: 40px;
+}
+
+.table .hidden {
+  display: none;
 }
 
 .compact .list {
@@ -614,6 +648,13 @@ nav h2, nav menu {
 .gallery .main > a {
   position: absolute;
   bottom: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.gallery .icon {
+  display: block;
+  height: 100%;
   text-align: center;
   width: 100%;
 }

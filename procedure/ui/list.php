@@ -107,7 +107,7 @@ class ui_List {
 
     # attributes list
     foreach( $params as $key => $param ) {
-      if( !in_array( $key, array( "order", "columns", "primary", "headtitle", "mode", "field", "actions" ) ) ) {
+      if( !in_array( $key, array( "order", "columns", "primary", "headtitle", "mode", "field", "actions", "childList" ) ) ) {
         $attributes[$key] = $param;
       }
     }
@@ -125,13 +125,22 @@ class ui_List {
   public static function getRow( $primary, $fields ) {
     $attributes["id"] = $fields[$primary];
     $innerHtml = array();
+    $childList = array();
     foreach( $fields as $key => $value ) {
       $attribute = array( "key" => $key );
+      if( $key == "childList" ) {
+        $attributes["childList"] = true;
+        foreach( $value as $childItem ) {
+          $childList[] = self::getRow( $primary, $childItem );
+        }
+        continue;
+      }
       if( is_numeric( $value ) ) {
         $attribute["class"] = "numeric";
       }
       $innerHtml[] = Tag::build( "ui.cell", $attribute, $value );
     }
+    $innerHtml = array_merge( $innerHtml, $childList );
     return Tag::build( "ui.row", $attributes, $innerHtml );
   }
 }

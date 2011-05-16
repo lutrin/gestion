@@ -130,28 +130,29 @@ class fn_Editor extends fn {
 
     # params
     $params = array(
-      "id"         => $id,
-      "mode"       => array(
+      "id"          => $id,
+      "mode"        => array(
         "table"   => "Tableau",
         "compact" => "Arbre",
         "compact" => "Compacte",
         "gallery" => "Galerie"
       ),
-      "primary"    => "k",
-      "main"       => "name",
-      "mainAction" => "edit",
-      "rowAction"  => "expand",
-      "order"      => $order,
-      "selectable" => true,
-      "addable"    => true,
+      "primary"     => "k",
+      "main"        => "name",
+      "mainAction"  => "edit",
+      "rowAction"   => "expand",
+      "order"       => $order,
+      "selectable"  => true,
+      "addable"     => true,
       "refreshable" => true,
-      "columns"    => self::getGroupColumns(),
-      "actions" => array(
-        "edit" => array(
+      "expandable"  => true,
+      "columns"     => self::getGroupColumns(),
+      "actions"     => array(
+        "edit"   => array(
           "title" => "Modifier"
         ),
         "delete" => array(
-          "title" => "Supprimer",
+          "title"    => "Supprimer",
           "multiple" => true
         )
       )
@@ -161,7 +162,7 @@ class fn_Editor extends fn {
     $fields = self::prepareFields( $params["columns"] );
     Includer::add( array( "dbGroupEditor", "uiList" ) );
 
-    return ui_List::buildXml( $params, db_GroupEditor::get( $fields, false, $params["order"] ) );
+    return ui_List::buildXml( $params, db_GroupEditor::getTree( $fields, 0, false, $params["order"] ) );
   }
 
   /****************************************************************************/

@@ -17,8 +17,21 @@ abstract class db_Abstract {
   }
 
   /****************************************************************************/
-  public static function getTree( $fields, $where = false, $orders = false ) {
-    return false;
+  public static function getTree( $fields, $parentK = 0, $where = false, $orders = false ) {
+    # add parentK
+    $whereWithParent = array( "parentK=$parentK" );
+    if( $where ) {
+      $whereWithParent = array_merge( $whereWithParent, DB::ensureArray( $where ) );
+    }
+    $result = self::get( $fields, $whereWithParent, $orders );
+    foreach( $result as $key => $item ) {
+      if( isset( $item["k"] ) ) {
+        if( $childList = self::getTree( $fields, $item["k"], $where, $orders ) ) {
+          $result[$key]["childList"] = $childList; 
+        }
+      }
+    }
+    return $result;
   }
 
   /****************************************************************************/
