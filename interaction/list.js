@@ -33,6 +33,9 @@
     // context menu
     listContainer.find( ".row" ).rightClick( app.rowRightClick );
 
+    // expand
+    listContainer.find( ".toggleExpand" ).click( app.toggleExpand );
+
     listContainer.addClass( "initiated" );
   },
 
@@ -241,5 +244,21 @@
     } );
 
     _edit.showContextMenu( targetList, event );
-  }
+  },
+
+  /****************************************************************************/
+  toggleExpand: function() {
+    var app = _c.ajaxList.interaction.list,
+        row = $( this ).parents( ".row:first" ),
+        id = row.attr( "id" );
+    if( row.hasClass( "collapsed" ) ) {
+      /*row.siblings( "[data-parentId=" + id + "].hidden" ).removeClass( "hidden" );*/
+      row.removeClass( "collapsed" ).addClass( "expanded" );
+    } else if( row.hasClass( "expanded" ) ) {
+      /*row.siblings( "[data-parentId=" + id + "]" ).addClass( "hidden" );*/
+      row.removeClass( "expanded" ).addClass( "collapsed" );
+    }
+  },
+
+  
 }

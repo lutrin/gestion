@@ -33,7 +33,7 @@ class ui_List {
           "mode",
           array(
             "class" => "mode",
-            "label" => "Mode",
+            "label" => "Affichage",
             "type"  => "select",
             "list"  => $modeList
           ),

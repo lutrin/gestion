@@ -93,11 +93,11 @@ nav h3 {
   content: "[";
 }
 
-.collapsed .toggleExpand:before {
+.collapsed > .main > .toggleExpand:before {
   content: "+";
 }
 
-.expanded .toggleExpand:before {
+.expanded > .main > .toggleExpand:before {
   content: "-";
 }
 
@@ -165,7 +165,7 @@ html, legend, .dock, .dock li span, .tabs, .header > .cell, #dialog-content > * 
   background-color:#eee;
 }
 
-.table .row:nth-child(odd) {
+.table .row:nth-child(odd), .tree .row:nth-child(odd) {
   background-color:#f5f5f5;
 }
 
@@ -178,7 +178,7 @@ input, select {
   background-color: #fff;
 }
 
-input[type=text]:hover, input[type=password]:hover, select:hover, .row:hover, .dock li:hover, #contextMenu > menu > li:hover {
+input[type=text]:hover, input[type=password]:hover, select:hover, .row:hover > .cell, .dock li:hover, #contextMenu > menu > li:hover {
   background-color: #ffc;
 }
 
@@ -580,13 +580,13 @@ nav h2, nav menu {
   margin: 2px;
 }
 
-.table .toggleExpand {
+.table .toggleExpand, .tree .toggleExpand {
   width: 12px;
   height: 16px;
   display: inline-block;
 }
 
-.table .icon, .compact .icon {
+.table .icon, .compact .icon, .tree .icon {
   width: 16px;
   height: 16px;
   margin: 0 2px;
@@ -601,7 +601,7 @@ nav h2, nav menu {
   padding-left: 40px;
 }
 
-.table .hidden {
+.collapsed .row {
   display: none;
 }
 
@@ -612,21 +612,21 @@ nav h2, nav menu {
   -webkit-column-gap: 5px;
 }
 
-.compact .header, .compact .cell, .gallery .header, .gallery .cell {
+.compact .header, .compact .cell, .gallery .header, .gallery .cell, .tree .header, .tree .cell {
   display: none;
 }
 
-.compact .row {
+.compact .row, .tree .row {
   display: list-item;
   margin: 2px;
 }
 
-.compact .cell {
+.compact .cell, .tree .cell {
   padding: 5px;
   margin: 2px;
 }
 
-.compact .main, .gallery .main {
+.compact .main, .gallery .main, .tree .main {
   display: block;
   overflow: hidden
 }
@@ -665,6 +665,10 @@ nav h2, nav menu {
 
 .cell .filtrable {
   float: right;
+}
+
+.row .row {
+  margin-left: 20px;
 }
 
 .buttonList {

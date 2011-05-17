@@ -242,7 +242,7 @@
     </xsl:if>
 
     <!-- option -->
-    <xsl:if test="ui.option">
+    <xsl:if test="ui.option/@count > 1">
       <fieldset class="option">
         <legend>Options</legend>
         <xsl:for-each select="ui.option">
@@ -258,6 +258,7 @@
     <!-- addable -->
     <xsl:if test="@addable|@refreshable">
       <fieldset>
+        <legend>Fonctions</legend>
         <xsl:if test="@addable">
           <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
         </xsl:if>
@@ -371,6 +372,17 @@
   <xsl:param name="action" select="0"/>
   <xsl:param name="headercolumn" select="0"/>
   <xsl:param name="level" select="1"/>
+  <xsl:param name="parentId" select="concat($object,'-0')"/>
+
+  <!-- k -->
+  <xsl:variable name="k">
+    <xsl:value-of select="@id" />
+  </xsl:variable>
+
+  <!-- rowId -->
+  <xsl:variable name="rowId">
+    <xsl:value-of select="concat($object,'-',$k)" />
+  </xsl:variable>
 
   <div>
 
@@ -386,24 +398,19 @@
       <xsl:if test="@childList">
         <xsl:text> collapsed</xsl:text>
       </xsl:if>
-      <xsl:if test="$level &gt; 1">
+      <!--<xsl:if test="$level &gt; 1">
         <xsl:text> hidden</xsl:text>
-      </xsl:if>
+      </xsl:if>-->
     </xsl:attribute>
-
-    <!-- k -->
-    <xsl:variable name="k">
-      <xsl:value-of select="@id" />
-    </xsl:variable>
-
-    <!-- rowId -->
-    <xsl:variable name="rowId">
-      <xsl:value-of select="concat($object,'-',$k)" />
-    </xsl:variable>
 
     <!-- id -->
     <xsl:attribute name="id">
        <xsl:value-of select="$rowId" />
+    </xsl:attribute>
+
+    <!-- parent id -->
+    <xsl:attribute name="data-parentId">
+       <xsl:value-of select="$parentId" />
     </xsl:attribute>
 
     <!-- rowAction -->
@@ -479,20 +486,20 @@
       </div>
     </xsl:for-each>
     <hr class="hidden" />
+      <!-- TODO each child -->
+      <xsl:apply-templates select="ui.row">
+        <xsl:with-param name="object" select="$object"/>
+        <xsl:with-param name="rowAction" select="$rowAction"/>
+        <xsl:with-param name="selectable" select="$selectable"/>
+        <xsl:with-param name="expandable" select="$expandable"/>
+        <xsl:with-param name="main" select="$main"/>
+        <xsl:with-param name="mainAction" select="$mainAction"/>
+        <xsl:with-param name="action" select="$action"/>
+        <xsl:with-param name="headercolumn" select="$headercolumn"/>
+        <xsl:with-param name="level" select="$level + 1"/>
+        <xsl:with-param name="parentId" select="$rowId"/>
+      </xsl:apply-templates>
   </div>
-
-  <!-- TODO each child -->
-  <xsl:apply-templates select="ui.row">
-    <xsl:with-param name="object" select="$object"/>
-    <xsl:with-param name="rowAction" select="$rowAction"/>
-    <xsl:with-param name="selectable" select="$selectable"/>
-    <xsl:with-param name="expandable" select="$expandable"/>
-    <xsl:with-param name="main" select="$main"/>
-    <xsl:with-param name="mainAction" select="$mainAction"/>
-    <xsl:with-param name="action" select="$action"/>
-    <xsl:with-param name="headercolumn" select="$headercolumn"/>
-    <xsl:with-param name="level" select="$level + 1"/>
-  </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="ui.dialog">

@@ -132,10 +132,7 @@ class fn_Editor extends fn {
     $params = array(
       "id"          => $id,
       "mode"        => array(
-        "table"   => "Tableau",
-        "compact" => "Arbre",
-        "compact" => "Compacte",
-        "gallery" => "Galerie"
+        "tree"   => "Arbre"
       ),
       "primary"     => "k",
       "main"        => "name",
@@ -220,10 +217,9 @@ class fn_Editor extends fn {
       ),
       "name" => array(
         "label"    => $TOOLS_EDITOR_GROUP["name"][$lang],
-        "class"    => "groupEditor",
-        "sortable" => true/*,
-        "filtrable" => true*/
-      ),
+        "class"    => "groupEditor"/*,
+        "sortable" => true*/
+      )/*,
       "active"   => array(
         "label" => $TOOLS_EDITOR_GROUP["active"][$lang],
         "sortable" => true,
@@ -231,9 +227,8 @@ class fn_Editor extends fn {
       ),
       "longname" => array(
         "label"  => $TOOLS_EDITOR_GROUP["longname"][$lang],
-        "sortable" => true/*,
-        "filtrable" => true*/
-      )
+        "sortable" => true
+      )*/
     );
   }
 
