@@ -90,7 +90,34 @@ abstract class db_Abstract {
   public static function remove( $kList ) {
     return DB::delete( array(
       "table" => static::$table,
-      "where" => "k IN (". join( ",", $kList ) . ")"
+      "where" => "k IN (" . join( ",", $kList ) . ")"
     ) );
+  }
+
+  /****************************************************************************/
+  public static function removeTree( $kList ) {
+    foreach( $kList as $k ) {
+      $kList = self::getChildKList( $k, $kList );
+    }
+  }
+
+  /****************************************************************************/
+  public static function getChildKList( $kList ) {
+    $result = DB::select( array(
+      "field" => "k",
+      "table" => static::$table,
+      "where" => array(
+        "parentK IN ( " . join( ",", $kList ) . " )",
+        "NOT k IN ( " . join( ",", $kList ) . " )"
+      )
+    ) );
+    $newKList = array();
+    if( $result ) {
+      $newKList = array_map( function( $item ) {
+        return $item["k"];
+      }, $result );
+      $kList = self::getChildKList( array_merge( $kList, $newKList ) );
+    }
+    return $kList;
   }
 }

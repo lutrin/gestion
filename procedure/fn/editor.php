@@ -148,6 +148,9 @@ class fn_Editor extends fn {
         "edit"   => array(
           "title" => "Modifier"
         ),
+        "insert"   => array(
+          "title" => "Insérer"
+        ),
         "delete" => array(
           "title"    => "Supprimer",
           "multiple" => true
@@ -340,7 +343,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function add_groupList() {
+  public static function add_groupList( $parentK = 0 ) {
     global $PERMISSION;
     $lang = getLang();
 
@@ -360,7 +363,7 @@ class fn_Editor extends fn {
     Includer::add( "dbGroupEditor" );
     $defaults = db_GroupEditor::defaults();
     $defaults["k"] = 0;
-    $defaults["parentK"] = 0;
+    $defaults["parentK"] = $parentK;
 
     # get params
     $params = self::getFormParamsGroup();
@@ -375,6 +378,11 @@ class fn_Editor extends fn {
         $defaults
       )
     );
+  }
+
+  /****************************************************************************/
+  public static function insert_groupList( $k ) {
+    return self::add_groupList( $k );
   }
 
   /****************************************************************************/
@@ -422,7 +430,7 @@ class fn_Editor extends fn {
 
     return array(
       "replacement" => array(
-        "query" => "#editors-individual",
+        "query" => "#editors-group",
         "innerHtml" => self::getGroupList()
       ),
       "details" => " "
@@ -494,7 +502,7 @@ class fn_Editor extends fn {
 
     # remove
     Includer::add( "dbGroupEditor" );
-    db_GroupEditor::remove( $kList );
+    db_GroupEditor::remove( db_GroupEditor::getChildKList( $kList ) );
     
     return array(
       "replacement" => array(
@@ -757,57 +765,71 @@ class fn_Editor extends fn {
         "type" => "hidden",
         "value" => "editor-individual"
       ),
-      "active" => $active,
-      "login" => array(
-        "legend" => $SETTING["login"][$lang],
-        "type"   => "fieldset",
-        "fieldlist" => array(
-          "username" => array(
-            "label"        => $EDITOR["username"][$lang],
-            "required"     => "required",
-            "maxlength"    => 30,
-            "size"         => 20,
-            "autofocus"    => "autofocus",
-            "autocomplete" => "off",
-          ),
-          "password" => $password,
-          "confirmpassword" => array(
-            "label"        => $EDITOR["confirmpassword"][$lang],
-            "type"         => "password",
-            "maxlength"    => 30,
-            "size"         => 20,
-            "autocomplete" => "off",
-            "equal"        => "password"
-          ),
-          "admin" => $admin
-        )
-      ),
-      "edit" => array(
-        "legend" => $SETTING["edit"][$lang],
-        "type" => "fieldset",
-        "fieldlist" => array(
-          "longname" => array(
-            "label" => $SETTING["longname"][$lang],
-            "maxlenght" => 255,
-            "required" => "required",
-            "size" => 20
-          ),
-          "lang" => array(
-            "label" => $SETTING["lang"][$lang],
-            "type" => "select",
-            "list" => array(
-              "fr" => array(
-                "label" => "Français",
-                "value" => "fr"
+/*      "tabs" => array(
+        "type"     => "tabs",
+        "itemlist" => array(
+          "general" => array(
+            "label" => "Propriétés générales",
+            "content" => array(*/
+              "active" => $active,
+              "login" => array(
+                "legend" => $SETTING["login"][$lang],
+                "type"   => "fieldset",
+                "fieldlist" => array(
+                  "username" => array(
+                    "label"        => $EDITOR["username"][$lang],
+                    "required"     => "required",
+                    "maxlength"    => 30,
+                    "size"         => 20,
+                    "autofocus"    => "autofocus",
+                    "autocomplete" => "off",
+                  ),
+                  "password" => $password,
+                  "confirmpassword" => array(
+                    "label"        => $EDITOR["confirmpassword"][$lang],
+                    "type"         => "password",
+                    "maxlength"    => 30,
+                    "size"         => 20,
+                    "autocomplete" => "off",
+                    "equal"        => "password"
+                  ),
+                  "admin" => $admin
+                )
               ),
-              "en" => array(
-                "label" => "English",
-                "value" => "en"
+              "edit" => array(
+                "legend" => $SETTING["edit"][$lang],
+                "type" => "fieldset",
+                "fieldlist" => array(
+                  "longname" => array(
+                    "label" => $SETTING["longname"][$lang],
+                    "maxlenght" => 255,
+                    "required" => "required",
+                    "size" => 20
+                  ),
+                  "lang" => array(
+                    "label" => $SETTING["lang"][$lang],
+                    "type" => "select",
+                    "list" => array(
+                      "fr" => array(
+                        "label" => "Français",
+                        "value" => "fr"
+                      ),
+                      "en" => array(
+                        "label" => "English",
+                        "value" => "en"
+                      )
+                    )
+                  )
+                )
               )
-            )
+/*            )
+          ),
+          "permission" => array(
+            "label"   => "Permissions",
+            "content" => array()
           )
         )
-      )
+      )*/
     );
   }
 

@@ -46,6 +46,8 @@ function main() {
             return save();
           } elseif( $action == "edit" ) {
             return edit();
+          } elseif( $action == "insert" ) {
+            return insert();
           } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
             return listAction( $action );
           } elseif( $action == "delete" ) {
@@ -151,6 +153,16 @@ function edit() {
   if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
       ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
     return switchFunction( "edit", $object, array( $k ) );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+
+/******************************************************************************/
+function insert() {
+  global $CONTROLLER;
+  if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
+      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
+    return switchFunction( "insert", $object, array( $k ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

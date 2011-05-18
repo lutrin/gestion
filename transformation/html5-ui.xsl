@@ -332,7 +332,7 @@
 
       <!-- multipleAction -->
       <xsl:for-each select="ui.action">
-        <div class="cell">
+        <div class="cell action">
           <xsl:choose>
             <xsl:when test="@multiple">
               <button id="{@key}-{$object}-selection" class="{@key}" data-action="{@key}" data-params="object={$object},row=selection" title="{@title}">

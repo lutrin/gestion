@@ -20,11 +20,35 @@
     // fitrable
     listContainer.find( ".setFilter" ).bind( "setFilter", app.setFilter );
 
+    app.initializeRowList( listContainer );
+
+    listContainer.addClass( "initiated" );
+  },
+
+  /****************************************************************************/
+  reinitialize: function( listContainer ) {
+    var app = _c.ajaxList.interaction.list;
+    app.initializeRowList( listContainer );
+
+    // re-observe
+    listContainer.find( ".row" ).each( function() {
+      var row = $( this );
+      row.find( ".initiated" ).removeClass( "initiated" );
+      _edit.observe( row );
+    } );
+  },
+
+  /****************************************************************************/
+  initializeRowList: function( listContainer ) {
+    var app = _c.ajaxList.interaction.list;
+
     // selectable
     if( listContainer.find( ".selectable:first" ).size() ) {
-      listContainer.find( ".row" ).click( app.setSelectRow );
+      listContainer.find( ".selected .selectRow" ).each( function() {
+        $( this ).attr( "checked", true );
+      } );
+      listContainer.find( ".row > .cell" ).click( app.setSelectRow );
       listContainer.find( ".selectRow" ).change( app.changeSelectRow );
-      listContainer.find( ".selectAll" ).change( app.changeSelectAll );
     }
 
     // row action
@@ -35,33 +59,6 @@
 
     // expand
     listContainer.find( ".toggleExpand" ).click( app.toggleExpand );
-
-    listContainer.addClass( "initiated" );
-  },
-
-  /****************************************************************************/
-  reinitialize: function( listContainer ) {
-    var app = _c.ajaxList.interaction.list;
-
-    // selectable
-    if( listContainer.find( ".selectable:first" ).size() ) {
-      listContainer.find( ".selected .selectRow" ).each( function() {
-        $( this ).attr( "checked", true );
-      } );
-      listContainer.find( ".row" ).click( app.setSelectRow );
-      listContainer.find( ".selectRow" ).change( app.changeSelectRow );
-    }
-    listContainer.find( ".row" ).each( function() {
-      var row = $( this );
-      row.find( ".initiated" ).removeClass( "initiated" );
-      _edit.observe( row );
-    } );
-
-    // row action
-    listContainer.find( ".row[data-action]" ).dblclick( app.rowDblclick );
-
-    // context menu
-    listContainer.find( ".row" ).rightClick( app.rowRightClick );
   },
 
   /****************************************************************************/
@@ -167,7 +164,7 @@
   /****************************************************************************/
   setSelectRow: function( event ) {
     var app = _c.ajaxList.interaction.list,
-        row = $( this ),
+        row = $( this ).parent(),
         checkbox = row.find( ".selectRow:first" ),
         target = $( event.target );
     if( target.is( "button, .selectRow" ) ) {
@@ -185,12 +182,21 @@
 
   /****************************************************************************/
   changeSelectRow: function() {
-    var checkbox = $( this );
+    var app =  _c.ajaxList.interaction.list,
+        checkbox = $( this ),
+        row      = checkbox.parents( ".row:first" );
     if( checkbox.is(":checked") ) {
-      checkbox.parent().parent().addClass( "selected" );
+      row.addClass( "selected" );
+      row.parents( ".row" ).each( app.unselectLineage );
+      row.find( ".row" ).each( app.unselectLineage );
     } else {
-      checkbox.parent().parent().removeClass( "selected" );
+      row.removeClass( "selected" );
     }
+  },
+
+  /****************************************************************************/
+  unselectLineage: function() {
+    $( this ).removeClass( "selected" ).children( ".cell > .selectRow" ).attr( "checked", false );
   },
 
   /****************************************************************************/
@@ -238,7 +244,7 @@
     }
 
     // action list
-    row.find( "button" ).each( function() {
+    row.children( ".action" ).children( "button" ).each( function() {
       var object = $( this );
       targetList.push( { "id": object.attr( "id" ), "title": object.attr( "title" ) } );
     } );
