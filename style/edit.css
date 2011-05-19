@@ -624,6 +624,10 @@ nav h2, nav menu {
   display: none;
 }
 
+.compact .list, .tree .list, .checklist {
+  list-style-type: none;
+}
+
 .compact .row, .tree .row {
   display: list-item;
   margin: 2px;

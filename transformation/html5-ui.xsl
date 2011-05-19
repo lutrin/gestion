@@ -120,6 +120,16 @@
       </div>
     </xsl:when>
 
+    <!-- checklist -->
+    <xsl:when test="@type='checklist'">
+      <fieldset>
+        <xsl:if test="@label">
+          <legend><xsl:value-of select="@label" /></legend>
+        </xsl:if>
+        <xsl:apply-templates select="ui.datalist" mode="checklist" />
+      </fieldset>
+    </xsl:when>
+
     <!-- input -->
     <xsl:otherwise>
       <div>
@@ -144,6 +154,12 @@
   <xsl:apply-templates select="ui.dataitem" mode="select" />
 </xsl:template>
 
+<xsl:template match="ui.datalist" mode="checklist">
+  <ul class="checklist">
+  <xsl:apply-templates select="ui.dataitem" mode="checklist" />
+  </ul>
+</xsl:template>
+
 <xsl:template match="ui.dataitem" mode="select">
   <option>
     <xsl:if test="@value">
@@ -158,6 +174,42 @@
     </xsl:if>
     <xsl:value-of select="@label" />
   </option>
+</xsl:template>
+
+<xsl:template match="ui.dataitem" mode="checklist">
+  <li>
+    <xsl:variable name="id">
+      <xsl:value-of select="../../@id"/>
+      <xsl:text>-</xsl:text>
+      <xsl:value-of select="@key"/>
+    </xsl:variable>
+    <input type="checkbox">
+      <xsl:attribute name="id">
+        <xsl:value-of select="$id"/>
+      </xsl:attribute>
+      <xsl:attribute name="name">
+        <xsl:value-of select="../../@name"/>
+      </xsl:attribute>
+      <xsl:for-each select="@disabled">
+        <xsl:call-template name="apply-attribute" />
+      </xsl:for-each>
+      <xsl:if test="@value">
+        <xsl:attribute name="value">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+        <xsl:if test="../../ui.value">
+          <xsl:if test="@value=../../ui.value">
+            <xsl:attribute name="checked">
+              <xsl:text>checked</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
+        </xsl:if>
+      </xsl:if>
+    </input>
+    <xsl:call-template name="apply-label">
+      <xsl:with-param name="for" select="$id" />
+    </xsl:call-template>
+  </li>
 </xsl:template>
 
 <xsl:template match="ui.dock">
@@ -544,9 +596,20 @@
 </xsl:template>
 
 <xsl:template name="apply-label">
+  <xsl:param name="for" />
   <xsl:if test="@label">
-    <label for="{@id}">
-       <xsl:value-of select="@label" />
+    <label>
+      <xsl:attribute name="for">
+        <xsl:choose>
+          <xsl:when test="@id">
+            <xsl:value-of select="@id" />
+          </xsl:when>
+          <xsl:when test="$for">
+            <xsl:value-of select="$for" />
+          </xsl:when>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:value-of select="@label" />
     </label>
   </xsl:if>
 </xsl:template>

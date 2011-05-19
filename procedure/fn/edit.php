@@ -57,8 +57,33 @@ class fn_Edit {
 
     $lang = getLang();
 
-    # tool list
-    $toolList = array(
+    # is admin
+    $isAdmin = $_SESSION["editor"]["admin"];
+
+    # build list
+    $allowedToolList = array();
+    foreach( self::getToolList() as $key => $tool ) {
+      if( $isAdmin ) {
+        $allowedToolList[$key] = $tool;
+      }
+    }
+
+    # params
+    Includer::add( "uiNav" );
+    $params = array(
+      "id"   => "toolList",
+      "mode" => "dock",
+      "headtitle" => $TOOLS["headtitle"][$lang]
+    );
+    return ui_Nav::buildXml( $params, $allowedToolList )
+         . Tag::build( "div", array( "id" => "details" ), " " );
+  }
+
+  /****************************************************************************/
+  public static function getToolList() {
+    global $TOOLS;
+    $lang = getLang();
+    return array(
       "pages" => array(
         "label" => $TOOLS["pages"][$lang]
       ),
@@ -78,27 +103,6 @@ class fn_Edit {
         "label"  => $TOOLS["visitors"][$lang]
       )
     );
-
-    # is admin
-    $isAdmin = $_SESSION["editor"]["admin"];
-
-    # build list
-    $allowedToolList = array();
-    foreach( $toolList as $key => $tool ) {
-      if( $isAdmin ) {
-        $allowedToolList[$key] = $tool;
-      }
-    }
-
-    # params
-    Includer::add( "uiNav" );
-    $params = array(
-      "id"   => "toolList",
-      "mode" => "dock",
-      "headtitle" => $TOOLS["headtitle"][$lang]
-    );
-    return ui_Nav::buildXml( $params, $allowedToolList )
-         . Tag::build( "div", array( "id" => "details" ), " " );
   }
 
   /****************************************************************************/

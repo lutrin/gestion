@@ -77,37 +77,27 @@ class ui_Form {
 
   /****************************************************************************/
   public static function getField( $formId, $fieldId, $attributes, $values ) {
+    $id = "$formId-$fieldId";
 
-    # field set  
-    if( isset( $attributes["type"] ) && $attributes["type"] == "fieldset" ) {
-      unset( $attributes["type"] );
+    # group field 
+    if( isset( $attributes["type"] ) ) {
 
-      # legend
-      $legend = "";
-      $innerHtml = array();
-      if( isset( $attributes["legend"] ) ) {
-        $innerHtml[] = Tag::build( "legend", false, $attributes["legend"] );
-        unset( $attributes["legend"] );
-      }
-
-      # field list
-      if( isset( $attributes["fieldlist"] ) ) {
-        foreach( $attributes["fieldlist"] as $key => $item ) {
-          $innerHtml[] = self::getField( $formId, $key, $item, $values );
+        # field set
+        if( $attributes["type"] == "fieldset" ) {
+          return self::getFieldset( $formId, $attributes, $values );
         }
-        unset( $attributes["fieldlist"] );
-      }
-      return Tag::build( "fieldset", $attributes, $innerHtml );
-    }
 
-    # type text
-    if( !isset( $attributes["type"] ) ) {
+        # tabs
+        if( $attributes["type"] == "tabs" ) {
+          return self::getNav( $formId, $attributes, $values, $id, "tabs" );
+        }
+    } else {
       $attributes["type"] = "text";
     }
 
     # field
     $attributes["name"] = $fieldId;
-    $attributes["id"] = "$formId-$fieldId";
+    $attributes["id"] = $id;
 
     # value
     $innerHtml = array();
@@ -118,8 +108,6 @@ class ui_Form {
     # list
     if( isset( $attributes["list"] ) ) {
       $innerHtml[] = Tag::build( "ui.datalist", false, self::getDatalist(
-        $attributes["id"],
-        $attributes["name"],
         $attributes["list"]
       ) );
       unset( $attributes["list"] );
@@ -129,12 +117,68 @@ class ui_Form {
   }
 
   /****************************************************************************/
-  protected static function getDatalist( $id, $name, $list ) {
+  protected static function getFieldset( $formId, $attributes, $values ) {
+    unset( $attributes["type"] );
+
+    # legend
+    $legend = "";
+    $innerHtml = array();
+    if( isset( $attributes["legend"] ) ) {
+      $innerHtml[] = Tag::build( "legend", false, $attributes["legend"] );
+      unset( $attributes["legend"] );
+    }
+
+    # field list
+    if( isset( $attributes["fieldlist"] ) ) {
+      foreach( $attributes["fieldlist"] as $key => $item ) {
+        $innerHtml[] = self::getField( $formId, $key, $item, $values );
+      }
+      unset( $attributes["fieldlist"] );
+    }
+    return Tag::build( "fieldset", $attributes, $innerHtml );
+  }
+
+  /****************************************************************************/
+  protected static function getNav( $formId, $attributes, $values, $id, $mode ) {
+    unset( $attributes["type"] );
+    $params = array(
+      "id"   => "$id-nav",
+      "mode" => $mode
+    );
+    if( isset( $attributes["headtitle"] ) ) {
+      $innerHtml[] = Tag::build( "h3", false, $attributes["headtitle"] );
+      unset( $attributes["headtitle"] );
+    }
+
+    # item list
+    $itemList = array();
+    if( isset( $attributes["itemlist"] ) ) {
+      $i = 0;
+      foreach( $attributes["itemlist"] as $key => $item ) {
+        $innerHtml = array();
+        foreach( $item["content"] as $contentKey => $content ) {
+          $innerHtml[] = self::getField( $formId, $contentKey, $content, $values );
+        }
+        $itemList[$key] = array(
+          "label"     => $item["label"],
+          "innerHtml" => $innerHtml
+        );
+        if( !$i++ ) {
+          $itemList[$key]["selected"] = true;
+        }
+      }
+    }
+    Includer::add( "uiNav" );
+    return ui_Nav::buildXml( $params, $itemList );
+  }
+
+  /****************************************************************************/
+  protected static function getDatalist( $list ) {
     $dataList = array();
     foreach( $list as $key => $item ) {
       $dataList[] = Tag::build(
         "ui.dataitem",
-        array_merge( $item, array( "listid" => $id, "listname" => $name, "key" => $key ) )
+        array_merge( $item, array( "key" => $key ) )
       );
     }
     return $dataList;

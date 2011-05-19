@@ -34,9 +34,8 @@ class fn_Editor extends fn {
 
     # params
     $params = array(
-      "id"        => ( self::$idList . "-nav" ),
-      "mode"      => "tabs"/*,
-      "headtitle" => $TOOLS[self::$idList][$lang]*/
+      "id"   => ( self::$idList . "-nav" ),
+      "mode" => "tabs"
     );
 
     Includer::add( "uiNav" );
@@ -591,7 +590,7 @@ class fn_Editor extends fn {
     }
 
     # values
-    $valuesToSave = array();
+    $valuesToSave = db_Editor::getEmptyValues();
     foreach( $values as $key => $value ) {
   
       # not in database
@@ -605,6 +604,16 @@ class fn_Editor extends fn {
           continue;
         }
         $valuesToSave[$key] = "PASSWORD('" . DB::mysql_prep( $value ) . "')";
+        continue;
+
+      # tool list
+      } elseif( $key == "toolList" ) {
+error_log( print_r( $value, 1 ) );
+        if( !$value ) {
+          $valuesToSave[$key] = "''";
+        } else {
+          $valuesToSave[$key] = "'" . join( ",", DB::ensureArray( $value ) ) . "'";
+        }
         continue;
       }
 
@@ -678,6 +687,16 @@ class fn_Editor extends fn {
         continue;
       }
 
+      # tool list
+      if( $key == "toolList" ) {
+        if( !$value ) {
+          $valuesToSave[$key] = "''";
+        } else {
+          $valuesToSave[$key] = "'" . join( ",", DB::ensureArray( $value ) ) . "'";
+        }
+        continue;
+      }
+
       # add quotes
       $valuesToSave[$key] = "'" . DB::mysql_prep( $value ) . "'";
     }
@@ -725,6 +744,7 @@ class fn_Editor extends fn {
   /****************************************************************************/
   protected static function getFormFieldsIndividual( $k ) {
     global $LOGIN, $EDITOR, $SETTING;
+
     $lang = getLang();
   
     # password field
@@ -757,6 +777,16 @@ class fn_Editor extends fn {
       $active["disabled"] = "disabled";
     }
 
+    # tool list
+    Includer::add( "fnEdit" );
+    $toolList = array();
+    foreach( fn_Edit::getToolList() as $key => $tool ) {
+      $toolList[$key] = array(
+        "label" => $tool["label"],
+        "value" => $key
+      );
+    }
+
     return array(
       "k"     => array(
         "type" => "hidden"
@@ -765,12 +795,12 @@ class fn_Editor extends fn {
         "type" => "hidden",
         "value" => "editor-individual"
       ),
-/*      "tabs" => array(
+      "tabs" => array(
         "type"     => "tabs",
         "itemlist" => array(
           "general" => array(
             "label" => "Propriétés générales",
-            "content" => array(*/
+            "content" => array(
               "active" => $active,
               "login" => array(
                 "legend" => $SETTING["login"][$lang],
@@ -822,14 +852,20 @@ class fn_Editor extends fn {
                   )
                 )
               )
-/*            )
+            )
           ),
           "permission" => array(
             "label"   => "Permissions",
-            "content" => array()
+            "content" => array(
+              "toolList" => array(
+                "label" => "Outils",
+                "type"  => "checklist",
+                "list" => $toolList
+              )
+            )
           )
         )
-      )*/
+      )
     );
   }
 

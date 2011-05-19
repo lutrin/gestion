@@ -127,7 +127,7 @@
       var object = $( this ),
           type = object.attr( "type" ) || object.tagName,
           value = _c.trim( object.val() ),
-          compareObject;
+          name, compareObject;
 
       // password
       if( value !== "" && type == "password" ) {
@@ -139,12 +139,12 @@
         if( object.is(":checked") ) {
           value = value || 1;
         } else {
-          value = 0;
+          value = null;
         }
       }
 
       // required
-      if( object.attr( "required" ) && value === "" ) {
+      if( object.attr( "required" ) && ( value === "" || value === null ) ) {
         error = true;
         app.showMsg( object, _edit.msg( "required" ) );
       }
@@ -160,8 +160,14 @@
         }
       }
 
-      if( !error ) {
-        fields[object.attr( "name" )] = value;
+      if( !error && value !== null ) {
+        name = object.attr( "name" );
+        if( fields[name] ) {
+          fields[name] = _c.makeArray( fields[name] );
+          fields[name].push( value );
+        } else {
+          fields[name] = value;
+        }
       }
     } );
     if( error ) {

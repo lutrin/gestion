@@ -2,6 +2,11 @@
 abstract class db_Abstract {
 
   /****************************************************************************/
+  public static function getEmptyValues() {
+    return array();
+  }
+
+  /****************************************************************************/
   public static function get( $fields, $where = false, $orders = false ) {
     $query = array(
       "field" => $fields,
