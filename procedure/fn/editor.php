@@ -608,7 +608,6 @@ class fn_Editor extends fn {
 
       # tool list
       } elseif( $key == "toolList" ) {
-error_log( print_r( $value, 1 ) );
         if( !$value ) {
           $valuesToSave[$key] = "''";
         } else {
@@ -801,7 +800,6 @@ error_log( print_r( $value, 1 ) );
           "general" => array(
             "label" => "Propriétés générales",
             "content" => array(
-              "active" => $active,
               "login" => array(
                 "legend" => $SETTING["login"][$lang],
                 "type"   => "fieldset",
@@ -822,8 +820,7 @@ error_log( print_r( $value, 1 ) );
                     "size"         => 20,
                     "autocomplete" => "off",
                     "equal"        => "password"
-                  ),
-                  "admin" => $admin
+                  )
                 )
               ),
               "edit" => array(
@@ -857,6 +854,8 @@ error_log( print_r( $value, 1 ) );
           "permission" => array(
             "label"   => "Permissions",
             "content" => array(
+              "active" => $active,
+              "admin" => $admin,
               "toolList" => array(
                 "label" => "Outils",
                 "type"  => "checklist",

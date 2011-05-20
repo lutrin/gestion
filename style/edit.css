@@ -342,7 +342,8 @@ select,
 #details > * > h2,
 .closeDialog,
 .field,
-.tabs > menu > li {
+.tabs > menu > li,
+.list-container > fieldset > button {
   padding: 5px;
 }
 
@@ -674,6 +675,11 @@ nav h2, nav menu {
 .tree .expanded {
   padding-bottom: 5px;
   padding-right: 5px;
+}
+
+.tree .row {
+  float: left;
+  clear: both;
 }
 
 .cell.numeric {

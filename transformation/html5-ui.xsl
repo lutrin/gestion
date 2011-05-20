@@ -448,7 +448,14 @@
       <xsl:text>row level</xsl:text>
       <xsl:value-of select="$level" />
       <xsl:if test="@childList">
-        <xsl:text> collapsed</xsl:text>
+        <xsl:choose>
+          <xsl:when test="@expanded">
+            <xsl:text> expanded</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text> collapsed</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:if>
       <!--<xsl:if test="$level &gt; 1">
         <xsl:text> hidden</xsl:text>

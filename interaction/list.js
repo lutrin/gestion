@@ -256,14 +256,19 @@
   toggleExpand: function() {
     var app = _c.ajaxList.interaction.list,
         row = $( this ).parents( ".row:first" ),
-        id = row.attr( "id" );
+        id = row.attr( "id" ),
+				listContainer = row.parents( ".list-container:first" ),
+				listContainerId = ( listContainer.attr( "id" ) + "-" ),
+				expandedList = [];
     if( row.hasClass( "collapsed" ) ) {
-      /*row.siblings( "[data-parentId=" + id + "].hidden" ).removeClass( "hidden" );*/
       row.removeClass( "collapsed" ).addClass( "expanded" );
     } else if( row.hasClass( "expanded" ) ) {
-      /*row.siblings( "[data-parentId=" + id + "]" ).addClass( "hidden" );*/
       row.removeClass( "expanded" ).addClass( "collapsed" );
     }
+		listContainer.find( ".expanded" ).each( function() {
+			expandedList.push( $( this ).attr( "id" ).replace( listContainerId, "" ) );
+		} );
+    _c.setAccountStorage( listContainer.attr( "id" ) + "-expanded", expandedList );
   },
 
   

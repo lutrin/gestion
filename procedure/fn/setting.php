@@ -81,7 +81,7 @@ class fn_Setting {
       "action" => "setAccountStorage",
       "name"   => $name,
       "value"  => $value,
-      "saved" => ( self::setStorage( $storage )? true: false )
+      "saved"  => ( self::setStorage( $storage )? true: false )
     );
   }
 
@@ -92,6 +92,21 @@ class fn_Setting {
       return isset( $storage[$name] )? $storage[$name]: false;
     }
     return false;
+  }
+
+  /****************************************************************************/
+  public static function removeAccountStorage( $name ) {
+    Includer::add( "dbEditor" );
+    $storage = self::getStorage();
+    if( !is_array( $storage ) ) {
+      $storage = array();
+    }
+    unset( $storage[$name] );
+    return array(
+      "action" => "removeAccountStorage",
+      "name"   => $name,
+      "saved"  => ( self::setStorage( $storage )? true: false )
+    );
   }
 
   /****************************************************************************/

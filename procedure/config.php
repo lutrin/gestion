@@ -89,8 +89,8 @@ $LOGIN = array(
 
 $EDITOR = array(
   "active" => array(
-    "fr" => "Activé",
-    "en" => "Active"
+    "fr" => "Compte activé",
+    "en" => "Actived account"
   ),
   "username" => array(
     "fr" => "Utilisateur (unique)",
@@ -109,7 +109,7 @@ $EDITOR = array(
     "en" => "Password confirmation"
   ),
   "admin" => array(
-    "fr" => "Administrateur",
+    "fr" => "Droits administrateurs",
     "en" => "Administrator"
   )
 );

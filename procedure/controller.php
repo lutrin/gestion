@@ -54,6 +54,8 @@ function main() {
             return delete();
           } elseif( $action == "setAccountStorage" ) {
             return setAccountStorage();
+          } elseif( $action == "removeAccountStorage" ) {
+            return removeAccountStorage();
           }
         }
         return logout( $msg );
@@ -112,6 +114,16 @@ function setAccountStorage() {
       ( $value = ( isset( $_GET["value"] )? $_GET["value"]: false ) ) ) {
     Includer::add( "fnSetting" );
     return json_encode( fn_Setting::setAccountStorage( $name, $value ) );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+
+/******************************************************************************/
+function removeAccountStorage() {
+  global $CONTROLLER;
+  if( $name = ( isset( $_GET["name"] )? $_GET["name"]: false ) ) {
+    Includer::add( "fnSetting" );
+    return json_encode( fn_Setting::removeAccountStorage( $name ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

@@ -112,9 +112,12 @@ class ui_List {
       }
     }
 
+    # expanded
+    $storedValue = fn_Setting::getAccountStorage( "$id-expanded" );
+    
     # items
     foreach( $items as $item ) {
-      $innerHtml[] = self::getRow( $primary, $item );
+      $innerHtml[] = self::getRow( $primary, $item, $storedValue );
     }
 
     # tag
@@ -122,16 +125,26 @@ class ui_List {
   }
 
   /****************************************************************************/
-  public static function getRow( $primary, $fields ) {
+  public static function getRow( $primary, $fields, $expanded = false ) {
+
+    # id
     $attributes["id"] = $fields[$primary];
+
     $innerHtml = array();
     $childList = array();
     foreach( $fields as $key => $value ) {
       $attribute = array( "key" => $key );
+
+      # child list
       if( $key == "childList" ) {
         $attributes["childList"] = true;
         foreach( $value as $childItem ) {
-          $childList[] = self::getRow( $primary, $childItem );
+          $childList[] = self::getRow( $primary, $childItem, $expanded );
+        }
+
+        # expanded
+        if( in_array( $attributes["id"], $expanded ) ) {
+          $attributes["expanded"] = true;
         }
         continue;
       }

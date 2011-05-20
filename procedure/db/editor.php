@@ -4,7 +4,7 @@ class db_Editor extends db_Abstract {
 
   /****************************************************************************/
   public static function getEmptyValues() {
-    return array( "active" => 0, "admin" => 0, "toolList" => "" );
+    return array( "active" => 0, "admin" => 0, "toolList" => "''" );
   }
 
   /****************************************************************************/
