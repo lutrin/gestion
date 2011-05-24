@@ -514,7 +514,7 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function getEditIndividual( $k ) {
-    if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active" ), "k=$k" ) ) {
+    if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active", "toolList" ), "k=$k" ) ) {
       return "Introuvable $k";
     }
 

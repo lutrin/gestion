@@ -1,5 +1,9 @@
 /* font */
 
+body {
+  /*font-size: 10px;*/
+}
+
 hr {
   clear: both;
 }
@@ -8,7 +12,7 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:hover, .main > .icon:hover {
   text-decoration: underline;
   cursor: pointer;
 }

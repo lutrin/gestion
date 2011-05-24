@@ -156,7 +156,7 @@
 
 <xsl:template match="ui.datalist" mode="checklist">
   <ul class="checklist">
-  <xsl:apply-templates select="ui.dataitem" mode="checklist" />
+    <xsl:apply-templates select="ui.dataitem" mode="checklist" />
   </ul>
 </xsl:template>
 
@@ -183,6 +183,7 @@
       <xsl:text>-</xsl:text>
       <xsl:value-of select="@key"/>
     </xsl:variable>
+
     <input type="checkbox">
       <xsl:attribute name="id">
         <xsl:value-of select="$id"/>
@@ -198,7 +199,13 @@
           <xsl:value-of select="@value"/>
         </xsl:attribute>
         <xsl:if test="../../ui.value">
-          <xsl:if test="@value=../../ui.value">
+          <xsl:variable name="isInList">
+            <xsl:call-template name="inList">
+              <xsl:with-param name="list" select="../../ui.value" /> 
+              <xsl:with-param name="search" select="@value" />
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:if test="$isInList=1">
             <xsl:attribute name="checked">
               <xsl:text>checked</xsl:text>
             </xsl:attribute>
@@ -659,6 +666,27 @@
         <xsl:apply-templates/>
       </section>
     </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="inList">
+  <xsl:param name="list" />
+  <xsl:param name="search" />
+  <xsl:choose>
+    <xsl:when test="contains($list, ',')">
+      <xsl:if test="substring-before($list, ',')=$search">
+        <xsl:text>1</xsl:text>
+      </xsl:if>
+      <xsl:call-template name="inList">
+        <xsl:with-param name="list" select="substring-after($list, ',')"/>
+        <xsl:with-param name="search" select="$search"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="$list=$search">
+        <xsl:text>1</xsl:text>
+      </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

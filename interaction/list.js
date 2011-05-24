@@ -56,6 +56,7 @@
 
     // context menu
     listContainer.find( ".row" ).rightClick( app.rowRightClick );
+    listContainer.find( ".icon" ).click( app.iconClick );
 
     // expand
     listContainer.find( ".toggleExpand" ).click( app.toggleExpand );
@@ -227,6 +228,29 @@
       row.addClass( "selected" );
     }
     row.find( "[data-action=" + row.data( "action" ) + "]:first" ).trigger( "click" );
+  },
+
+  /****************************************************************************/
+  iconClick: function( event ) {
+    var row = $( this ).parents( ".row:first" ),
+        targetList = [];
+
+    // selectable
+    if( row.parents( ".list.selectable:first" ).size() ) {
+      row.find( ".selectRow:first" ).attr( "checked", true );
+      row.addClass( "selected" );
+      if( row.parent().children( ".selected" ).size() > 1 ) {
+        row = row.parent().children( ".header:first" );
+      }
+    }
+
+    // action list
+    row.children( ".action" ).children( "button" ).each( function() {
+      var object = $( this );
+      targetList.push( { "id": object.attr( "id" ), "title": object.attr( "title" ) } );
+    } );
+
+    _edit.showContextMenu( targetList, event );
   },
 
   /****************************************************************************/
