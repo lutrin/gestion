@@ -143,7 +143,7 @@ class ui_List {
         }
 
         # expanded
-        if( in_array( $attributes["id"], $expanded ) ) {
+        if( $expanded && in_array( $attributes["id"], $expanded ) ) {
           $attributes["expanded"] = true;
         }
         continue;
