@@ -17,6 +17,10 @@ a:hover, .main > .icon:hover {
   cursor: pointer;
 }
 
+h3 > a {
+  white-space: nowrap;
+}
+
 #title {
   font-size: 15px;
   padding-top: 2px;
@@ -58,7 +62,7 @@ nav h3 {
 .sorted_desc a:after,
 .toggleExpand:before {
   font-family: "IconicStroke";
-  font-size: 1.2em;
+  /*font-size: 1.2em;*/
 }
 
 #currentUser:before {
@@ -165,7 +169,7 @@ nav h3 {
 }
 
 /* color */
-html, legend, .dock, .dock li span, .tabs, .header > .cell, #dialog-content > * > h2, #details > * > h2 {
+html, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell, #dialog-content > * > h2, #details > * > h2 {
   background-color:#eee;
 }
 
@@ -204,7 +208,7 @@ input[type=submit]:hover, button:hover, .tabs > menu > li:hover {
   text-shadow: 0px 0px 5px rgba(255,255,255,0.6);
 }
 
-#main, #dialog-content > *, .tabs > menu > li.selected, #details > *, #contextMenu > menu {
+section, #main, #dialog-content > *, .tabs > menu > li.selected, #details > *, #contextMenu > menu {
   background-color: #fff;
 }
 
@@ -220,6 +224,10 @@ input[type=submit]:hover, button:hover, .tabs > menu > li:hover {
   background-color: #ccf;
 }
 
+.selected a {
+  color: #EB8F00;
+}
+
 /* border */
 header {
   border-bottom: #eee solid 1px;
@@ -229,7 +237,7 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input[type=submit], button, #dialog-content > *, .dock, .dock li span, #details > * {
+fieldset, legend, input[type=submit], button, #dialog-content > *, .dock, .dock li span, #details > *, .picklist li {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
@@ -296,6 +304,60 @@ input[type=submit]:active, button:active {
   border-color: #aaa;
 }
 
+/* padding and margin */
+noscript,
+button,
+fieldset,
+legend,
+select,
+h2,
+h3,
+section,
+input[type=text],
+input[type=password],
+input[type=submit],
+menu > li,
+#error-msg,
+.cell,
+.picklist li
+ {
+  padding: 2px;
+}
+
+noscript,
+button,
+fieldset,
+legend,
+input[type=submit],
+menu > li,
+#error-msg,
+.field,
+.cell,
+.picklist li {
+  margin: 5px;
+}
+
+#login, #dialog-content > * {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dock li:hover a {
+  margin: 10px
+}
+
+.row > .row {
+  margin-left: 20px;
+}
+
+.editor > h2, .groupEditor > h2 {
+  padding-left: 20px;
+}
+
+hr, .picklist {
+  margin: 0;
+}
+
 /* size and position */
 html {
   overflow-y: auto;
@@ -315,56 +377,21 @@ footer {
   width: 100%;
 }
 
-noscript, header h1, footer span, #error-msg {
-  margin: 0 5px 0 5px;
-}
-
 footer nav {
   float: right;
   list-style-type: none;
 }
 
 footer nav li {
-  margin: 0 5px 0 5px;
   display: inline;
 }
 
-fieldset {
-  padding: 10px;
-  margin: 5px;
+input, select, fieldset, .closeDialog {
   clear: both;
-}
-
-input, select, .closeDialog {
-  clear: both;
-}
-
-input,
-select,
-#dialog-content p,
-#dialog-content > * > h2,
-#details > * > h2,
-.closeDialog,
-.field,
-.tabs > menu > li,
-.list-container > fieldset > button {
-  padding: 5px;
-}
-
-legend, .dock li span {
-  padding: 2px 5px;
 }
 
 form {
   position:relative;
-}
-
-input[type=submit], .closeDialog {
-  margin: 10px;
-}
-
-input[type=submit]:active, .closeDialog:active {
-  margin-top:11px;
 }
 
 section, .no-js #main, .no-js #header-buttons {
@@ -377,7 +404,6 @@ section:target, section.target {
 
 nav li {
   display: inline-block;
-  margin: 0 2px;
 }
 
 nav h2, nav menu {
@@ -395,14 +421,11 @@ nav h2, nav menu {
   width: 100%;
 }
 
-#login {
-  margin-left:auto;
-  margin-right:auto;
-  margin-top: 50px;
+#login, #dialog-content > form, #dialog-content > div {
   width: 250px;
 }
 
-#header-buttons {
+#header-buttons, #details > * > .close, #toolList .dock {
   float: right;
 }
 
@@ -420,15 +443,6 @@ nav h2, nav menu {
   width: 100%;
 }
 
-#dialog-content > * {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#dialog-content > form, #dialog-content > div {
-  width: 250px;
-}
-
 #contextMenu {
   position: absolute;
   width: 100%;
@@ -438,17 +452,11 @@ nav h2, nav menu {
 
 #contextMenu > menu {
   position: absolute;
-  margin: 0;
   list-style-type: none;
-}
-
-#contextMenu > menu > li {
-  padding: 5px;
 }
 
 #currentUser {
   font-weight: bold;
-  margin: 0 5px;
 }
 
 #toolList {
@@ -471,23 +479,12 @@ nav h2, nav menu {
 #details > * {
   display: inline-block;
   overflow: hidden;
-}
-
-#details form h2 {
-  padding-left: 20px;
+  width: 320px;
+  height: 100%;
 }
 
 #details > * > h2:hover {
   cursor: move;
-}
-
-#details > * > .close {
-  float: right;
-  margin: 2px;
-}
-
-#toolList .dock {
-  float:right;
 }
 
 .dock-container {
@@ -514,60 +511,40 @@ nav h2, nav menu {
   position: relative;
   float: left;
   clear: both;
-  margin: 2px;
-  padding: 5px;
 }
 
 .dock li span {
-    display: none;
-    left: 50%;
-    top: -50%;
-    margin: 20px;
-    position: absolute;
-    float: left;
-    white-space: nowrap;
+  display: none;
+  left: 50%;
+  top: -50%;
+  position: absolute;
+  float: left;
+  white-space: nowrap;
 }
 
-/*.dock li:hover span {
-    display: block;
-}*/
-
 .dock li a {
-    /*-moz-transform-origin: 50% 0%;
-    -webkit-transform-origin: 50% 0%;
-    -o-transform-origin: 50% 0%;*/
-    -moz-transition: all 0.4s ease 0s;
-    -webkit-transition: all 0.4s ease 0s;
-    -o-transition: all 0.4s ease 0s;
-    height: 20px;
-    width: 24px;
-    -moz-transform: scale(1.5);
-    -webkit-transform: scale(1.5);
-    -o-transform: scale(1.5);
-    float:left;
+  -moz-transition: all 0.4s ease 0s;
+  -webkit-transition: all 0.4s ease 0s;
+  -o-transition: all 0.4s ease 0s;
+  height: 20px;
+  width: 24px;
+  float:left;
 }
 
 .dock li:hover a {
-    -moz-transform: scale(2);
-    -webkit-transform: scale(2);
-    -o-transform: scale(2);
-    margin: 4px; 4px;
+  -moz-transform: scale(2);
+  -webkit-transform: scale(2);
+  -o-transform: scale(2);
 }
 
-.dock li:hover + li a, .dock li.prev a {
-    -moz-transform: scale(1.5);
-    -webkit-transform: scale(1.5);
-    -o-transform: scale(1.5);
-    margin: 5px 5px;
+.dock li a, .dock li:hover + li a, .dock li.prev a {
+  -moz-transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  -o-transform: scale(1.5);
 }
 
 .list {
-  clear:both;
-  margin: 5px;
-}
-
-.list-container.table .main, .list-container.compact .main {
-  /*padding-left: 20px;*/
+  clear: both;
 }
 
 .table .list {
@@ -589,8 +566,6 @@ nav h2, nav menu {
 
 .table .cell {
   display: table-cell;
-  padding: 5px;
-  margin: 2px;
 }
 
 .table .toggleExpand, .tree .toggleExpand {
@@ -602,19 +577,10 @@ nav h2, nav menu {
 .table .icon, .compact .icon, .tree .icon {
   width: 16px;
   height: 16px;
-  margin: 0 2px;
   display: inline-block;
 }
 
-.table .level2 .main {
-  padding-left: 20px;
-}
-
-.table .level3 .main {
-  padding-left: 40px;
-}
-
-.collapsed .row {
+.collapsed .row, .compact .header, .compact .cell, .gallery .header, .gallery .cell, .tree .header, .tree .cell {
   display: none;
 }
 
@@ -625,22 +591,12 @@ nav h2, nav menu {
   -webkit-column-gap: 5px;
 }
 
-.compact .header, .compact .cell, .gallery .header, .gallery .cell, .tree .header, .tree .cell {
-  display: none;
-}
-
 .compact .list, .tree .list, .checklist {
   list-style-type: none;
 }
 
 .compact .row, .tree .row {
   display: list-item;
-  margin: 2px;
-}
-
-.compact .cell, .tree .cell {
-  padding: 5px;
-  margin: 2px;
 }
 
 .compact .main, .gallery .main, .tree .main {
@@ -651,7 +607,6 @@ nav h2, nav menu {
 .gallery .row {
   display: inline-block;
   float: left;
-  margin: 2px;
   width: 100px;
   height: 100px;
 }
@@ -676,11 +631,6 @@ nav h2, nav menu {
   width: 100%;
 }
 
-.tree .expanded {
-  padding-bottom: 5px;
-  padding-right: 5px;
-}
-
 .tree .row {
   float: left;
   clear: both;
@@ -694,23 +644,13 @@ nav h2, nav menu {
   float: right;
 }
 
-.row .row {
-  margin-left: 20px;
-}
-
 .buttonList {
   width: 100%;
   text-align: right;
 }
 
 .filtrable form {
-  margin: 0;
-  padding: 0;
   position: absolute;
-}
-
-.filtrable .field {
-  padding: 0;
 }
 
 .input label {
@@ -747,6 +687,15 @@ nav h2, nav menu {
   width: 12px;
 }
 
+.option .field {
+  display: inline-block;
+}
+
+.picklist li {
+  list-style-type: none;
+  display: inline-block;
+}
+
 /* z position */
 #dialog {
   z-index: 999;
@@ -766,8 +715,4 @@ nav h2, nav menu {
 
 .ui-resizable-handle {
   z-index: 99999;
-}
-
-.option .field {
-  display: inline-block;
 }

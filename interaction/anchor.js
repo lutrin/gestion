@@ -23,7 +23,7 @@
         target = $( href ),
         action = anchor.data( "action" ),
         trigger = anchor.data( "trigger" ),
-        ajaxObject, dataParams, params;
+        ajaxObject, dataParams, params, navigator;
 
     // empty
     if( target.hasClass( "empty" ) ) {
@@ -102,8 +102,9 @@
       }
     }
 
-    anchor.parents( "li:first" ).addClass( "selected" ).siblings().removeClass( "selected" );
-    target.addClass( "target" ).siblings().removeClass( "target" );
+    navigator = anchor.parent();
+    navigator.addClass( "selected" ).siblings( navigator.get(0).tagName ).removeClass( "selected" );
+    target.addClass( "target" ).siblings( target.get(0).tagName ).removeClass( "target" );
     return false;
   }
 }

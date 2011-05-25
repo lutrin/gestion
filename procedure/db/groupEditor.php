@@ -4,6 +4,6 @@ class db_GroupEditor extends db_Abstract {
 
   /****************************************************************************/
   public static function getEmptyValues() {
-    return array( "toolList" => "" );
+    return array( "active" => 0, "toolList" => "''" );
   }
 }

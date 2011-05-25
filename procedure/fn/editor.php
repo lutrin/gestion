@@ -533,7 +533,7 @@ class fn_Editor extends fn {
   /****************************************************************************/
   public static function getEditGroup( $k ) {
     Includer::add( "dbGroupEditor" );
-    if( !$values = db_GroupEditor::get( array( "k", "name", "longname", "active" ), "k=$k" ) ) {
+    if( !$values = db_GroupEditor::get( array( "k", "parentK", "name", "longname", "active", "toolList" ), "k=$k" ) ) {
       return "Introuvable $k";
     }
 
@@ -608,9 +608,7 @@ class fn_Editor extends fn {
 
       # tool list
       } elseif( $key == "toolList" ) {
-        if( !$value ) {
-          $valuesToSave[$key] = "''";
-        } else {
+        if( $value ) {
           $valuesToSave[$key] = "'" . join( ",", DB::ensureArray( $value ) ) . "'";
         }
         continue;
@@ -678,7 +676,7 @@ class fn_Editor extends fn {
     }
 
     # values
-    $valuesToSave = array();
+    $valuesToSave = db_GroupEditor::getEmptyValues();
     foreach( $values as $key => $value ) {
   
       # not in database
@@ -688,9 +686,7 @@ class fn_Editor extends fn {
 
       # tool list
       if( $key == "toolList" ) {
-        if( !$value ) {
-          $valuesToSave[$key] = "''";
-        } else {
+        if( $value ) {
           $valuesToSave[$key] = "'" . join( ",", DB::ensureArray( $value ) ) . "'";
         }
         continue;
@@ -771,20 +767,34 @@ class fn_Editor extends fn {
       "type"  => "checkbox",
       "value" => "1"
     );
-    if( $k == $_SESSION["editor"]["k"] ) {
-      $admin["disabled"] = "disabled";
-      $active["disabled"] = "disabled";
-    }
 
     # tool list
     Includer::add( "fnEdit" );
-    $toolList = array();
+    $list = array();
     foreach( fn_Edit::getToolList() as $key => $tool ) {
-      $toolList[$key] = array(
+      $list[$key] = array(
         "label" => $tool["label"],
         "value" => $key
       );
     }
+    $toolList = array(
+      "label" => "Outils",
+      "type"  => "checklist",
+      "list"  => $list
+    );
+
+    if( $k == $_SESSION["editor"]["k"] ) {
+      $admin["disabled"] = "disabled";
+      $active["disabled"] = "disabled";
+      $toolList["disabled"] = "disabled";
+    }
+
+
+
+    # groupe list
+    $groupList = array();
+
+    #
 
     return array(
       "k"     => array(
@@ -794,8 +804,8 @@ class fn_Editor extends fn {
         "type" => "hidden",
         "value" => "editor-individual"
       ),
-      "tabs" => array(
-        "type"     => "tabs",
+      "accordion" => array(
+        "type"     => "accordion",
         "itemlist" => array(
           "general" => array(
             "label" => "Propriétés générales",
@@ -856,10 +866,13 @@ class fn_Editor extends fn {
             "content" => array(
               "active" => $active,
               "admin" => $admin,
-              "toolList" => array(
-                "label" => "Outils",
-                "type"  => "checklist",
-                "list" => $toolList
+              "toolList" => $toolList,
+              "groupList" => array(
+                "label"    => "Groupes",
+                "type"     => "picklist",
+                "multiple" => "multiple",
+                "pick"     => "groupEditor",
+                "list"     => $groupList
               )
             )
           )
@@ -873,14 +886,14 @@ class fn_Editor extends fn {
     global $LOGIN, $GROUPEDITOR, $SETTING;
     $lang = getLang();
 
-    # active and admin checkbox
-    $active = array(
-      "label" => $GROUPEDITOR["active"][$lang],
-      "type"  => "checkbox",
-      "value" => "1"
-    );
-    if( $k == $_SESSION["editor"]["k"] ) {
-      $active["disabled"] = "disabled";
+    # tool list
+    Includer::add( "fnEdit" );
+    $toolList = array();
+    foreach( fn_Edit::getToolList() as $key => $tool ) {
+      $toolList[$key] = array(
+        "label" => $tool["label"],
+        "value" => $key
+      );
     }
 
     return array(
@@ -894,24 +907,44 @@ class fn_Editor extends fn {
         "type" => "hidden",
         "value" => "editor-group"
       ),
-      "active" => array(
-        "label" => $GROUPEDITOR["active"][$lang],
-        "type"  => "checkbox",
-        "value" => "1"
-      ),
-      "name" => array(
-        "label"        => $GROUPEDITOR["name"][$lang],
-        "required"     => "required",
-        "maxlength"    => 30,
-        "size"         => 20,
-        "autofocus"    => "autofocus",
-        "autocomplete" => "off",
-      ),
-      "longname" => array(
-        "label" => $SETTING["longname"][$lang],
-        "maxlenght" => 255,
-        "required" => "required",
-        "size" => 20
+      "accordion" => array(
+        "type"     => "accordion",
+        "itemlist" => array(
+          "general" => array(
+            "label" => "Propriétés générales",
+            "content" => array(
+              "name" => array(
+                "label"        => $GROUPEDITOR["name"][$lang],
+                "required"     => "required",
+                "maxlength"    => 30,
+                "size"         => 20,
+                "autofocus"    => "autofocus",
+                "autocomplete" => "off",
+              ),
+              "longname" => array(
+                "label" => $SETTING["longname"][$lang],
+                "maxlenght" => 255,
+                "required" => "required",
+                "size" => 20
+              )
+            )
+          ),
+          "permission" => array(
+            "label"   => "Permissions",
+            "content" => array(
+              "active" => array(
+                "label" => $GROUPEDITOR["active"][$lang],
+                "type"  => "checkbox",
+                "value" => "1"
+              ),
+              "toolList" => array(
+                "label" => "Outils",
+                "type"  => "checklist",
+                "list" => $toolList
+              )
+            )
+          )
+        )
       )
     );
   }
