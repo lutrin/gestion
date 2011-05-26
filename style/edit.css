@@ -17,7 +17,7 @@ a:hover, .main > .icon:hover {
   cursor: pointer;
 }
 
-h3 > a {
+h2, h3 > a {
   white-space: nowrap;
 }
 
@@ -224,10 +224,6 @@ section, #main, #dialog-content > *, .tabs > menu > li.selected, #details > *, #
   background-color: #ccf;
 }
 
-.selected a {
-  color: #EB8F00;
-}
-
 /* border */
 header {
   border-bottom: #eee solid 1px;
@@ -237,13 +233,17 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input[type=submit], button, #dialog-content > *, .dock, .dock li span, #details > *, .picklist li {
+fieldset, legend, input[type=submit], button, #dialog-content > *, #details > *, .picklist li {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
 
 input, select, .header > .cell, #contextMenu > menu {
   border: 1px solid #aaa;
+}
+
+#toolList {
+  border-right: 1px solid #aaa;
 }
 
 input[type=text], input[type=password], select {
@@ -255,7 +255,7 @@ input[type=text]:focus, input[type=password]:focus, select:focus {
   box-shadow: inset rgba(0,0,88,.5) 0px 0px 5px;
 }
 
-input[type=submit], button, .dock li span, #details > *, #contextMenu > menu {
+input[type=submit], button, .dock li span, #contextMenu > menu {
   box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
 }
 
@@ -291,7 +291,7 @@ input[type=submit]:active, button:active {
   box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
 }
 
-#dialog-content > * > h2, #details > * > h2 {
+#dialog-content > * > h2 {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
@@ -312,7 +312,6 @@ legend,
 select,
 h2,
 h3,
-section,
 input[type=text],
 input[type=password],
 input[type=submit],
@@ -331,10 +330,11 @@ legend,
 input[type=submit],
 menu > li,
 #error-msg,
+#details > *,
 .field,
 .cell,
 .picklist li {
-  margin: 5px;
+  margin: 2px;
 }
 
 #login, #dialog-content > * {
@@ -343,7 +343,7 @@ menu > li,
 }
 
 .dock li:hover a {
-  margin: 10px
+  margin: 5px
 }
 
 .row > .row {
@@ -360,7 +360,7 @@ hr, .picklist {
 
 /* size and position */
 html {
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 body {
@@ -369,12 +369,12 @@ body {
 
 header, footer {
   height: 20px;
+  width: 100%;
 }
 
 footer {
   position: absolute;
   bottom: 0;
-  width: 100%;
 }
 
 footer nav {
@@ -394,6 +394,10 @@ form {
   position:relative;
 }
 
+form {
+  position:relative;
+}
+
 section, .no-js #main, .no-js #header-buttons {
   display: none;
 }
@@ -407,7 +411,7 @@ nav li {
 }
 
 nav h2, nav menu {
-  display: inline;
+  display: block;
 }
 
 #title {
@@ -419,13 +423,14 @@ nav h2, nav menu {
   top: 20px;
   bottom: 20px;
   width: 100%;
+  overflow: auto;
 }
 
 #login, #dialog-content > form, #dialog-content > div {
   width: 250px;
 }
 
-#header-buttons, #details > * > .close, #toolList .dock {
+#header-buttons, #details > * > .close {
   float: right;
 }
 
@@ -460,36 +465,36 @@ nav h2, nav menu {
 }
 
 #toolList {
-  top: 20px;
+  /*top: 20px;
   bottom: 20px;
-  overflow: hidden;
+  width: 320px;
+  overflow: hidden;*/
+  display:inline-block;
+  float: left;
+  height: 100%;
+}
+
+#toolList > .dock {
+  height: 100%;
+  float: left;
 }
 
 #toolList > section {
-  text-align: left;
+  float: left;
+  height: 100%;
+  /*text-align: left;
   position: absolute;
   top: 1px;
   bottom: 0;
   left: 0;
   right: 0;
   width: 100%;
-  overflow: auto;
+  overflow: auto;*/
 }
 
-#details > * {
+#details {
   display: inline-block;
-  overflow: hidden;
-  width: 320px;
-  height: 100%;
-}
-
-#details > * > h2:hover {
-  cursor: move;
-}
-
-.dock-container {
-  position: fixed;
-  width: 100%;
+  float: left;
 }
 
 .dock {
@@ -497,13 +502,6 @@ nav h2, nav menu {
   position: relative;
 }
 
-.dock > menu {
-  display: none;
-}
-
-.dock:hover > menu {
-  display: block;
-}
 
 .dock li {
   display: inline;
@@ -593,6 +591,7 @@ nav h2, nav menu {
 
 .compact .list, .tree .list, .checklist {
   list-style-type: none;
+  float: left;
 }
 
 .compact .row, .tree .row {
@@ -696,15 +695,19 @@ nav h2, nav menu {
   display: inline-block;
 }
 
+.tabs-container {
+  height: 100%;
+}
+
 /* z position */
 #dialog {
-  z-index: 999;
+  z-index: 900;
 }
 
 #contextMenu {
   z-index: 800;
 }
-
+/*
 .dock, .dock li span {
   z-index: 2;
 }
@@ -712,7 +715,7 @@ nav h2, nav menu {
 .dock li {
   z-index: 1;
 }
-
+*/
 .ui-resizable-handle {
   z-index: 99999;
 }

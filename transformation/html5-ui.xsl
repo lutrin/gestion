@@ -137,15 +137,12 @@
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
         <ul class="picklist">
-          <li>petitgroupe</li>
-          <li>superlongnomdegroupe</li>
-          <li>pickitem3</li>
-          <li>pickitem4</li>
-          <li>pickitem5</li>
-          <li>pickitem6</li>
-          <li>pickitem7</li>
-          <li>pickitem8</li>
         </ul>
+        <span class="picklistValue">
+          <xsl:if test="ui.value">
+            <xsl:attribute name="value"><xsl:value-of select="ui.value"/></xsl:attribute>
+          </xsl:if>
+        </span>
         <button>Ajouter</button>
       </fieldset>
     </xsl:when>

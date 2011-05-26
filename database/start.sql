@@ -48,3 +48,9 @@ ALTER TABLE `groupEditor` CHANGE `active` `active` TINYINT( 4 ) UNSIGNED NOT NUL
 /* add toolList */
 ALTER TABLE `editor` ADD `toolList` TEXT NOT NULL AFTER `active` ;
 ALTER TABLE `groupEditor` ADD `toolList` TEXT NOT NULL ;
+
+CREATE TABLE `gestion`.`editorInGroup` (
+  `k` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `editorK` MEDIUMINT NOT NULL ,
+  `groupK` MEDIUMINT NOT NULL
+) ENGINE = MYISAM ;

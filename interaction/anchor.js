@@ -103,8 +103,14 @@
     }
 
     navigator = anchor.parent();
-    navigator.addClass( "selected" ).siblings( navigator.get(0).tagName ).removeClass( "selected" );
-    target.addClass( "target" ).siblings( target.get(0).tagName ).removeClass( "target" );
+    navigator.addClass( "selected" );
+    if( navigator.get(0) ) {
+      navigator.siblings( navigator.get(0).tagName ).removeClass( "selected" );
+    }
+    target.addClass( "target" );
+    if( target.get(0) ) {
+      target.siblings( target.get(0).tagName ).removeClass( "target" );
+    }
     return false;
   }
 }

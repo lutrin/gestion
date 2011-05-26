@@ -444,5 +444,9 @@ $INCLUDE_LIST = array(
   "dbGroupEditor" => array(
     "path" => "db/groupEditor.php",
     "depend" => "dbAbstract"
+  ),
+  "dbEditorInGroup" => array(
+    "path" => "db/editorInGroup.php",
+    "depend" => "dbAbstract"
   )
 );

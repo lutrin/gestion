@@ -88,10 +88,13 @@ class fn_Editor extends fn {
     $params = array(
       "id"          => $id,
       "mode"        => array(
+        "tree"   => "Arbre"
+      ),
+      /*"mode"        => array(
         "table"   => "Tableau",
         "compact" => "Compacte",
         "gallery" => "Galerie"
-      ),
+      ),*/
       "primary"     => "k",
       "main"        => "username",
       "mainAction"  => "edit",
@@ -789,12 +792,9 @@ class fn_Editor extends fn {
       $toolList["disabled"] = "disabled";
     }
 
-
-
     # groupe list
     $groupList = array();
-
-    #
+    
 
     return array(
       "k"     => array(
@@ -869,10 +869,10 @@ class fn_Editor extends fn {
               "toolList" => $toolList,
               "groupList" => array(
                 "label"    => "Groupes",
-                "type"     => "picklist",
+                "type"     => "select",
                 "multiple" => "multiple",
                 "pick"     => "groupEditor",
-                "list"     => $groupList
+                "list"     => $groupList //http://tagedit.webwork-albrecht.de/
               )
             )
           )
@@ -893,6 +893,16 @@ class fn_Editor extends fn {
       $toolList[$key] = array(
         "label" => $tool["label"],
         "value" => $key
+      );
+    }
+
+    # get editor list
+    Includer::add( "dbEditor" );
+    $editorList = array();
+    foreach( db_Editor::get( array( "k", "username" ) ) as $editor ) {
+      $editorList[$editor["k"]] = array(
+        "value" => $editor["k"],
+        "label" => $editor["username"]
       );
     }
 
@@ -941,6 +951,12 @@ class fn_Editor extends fn {
                 "label" => "Outils",
                 "type"  => "checklist",
                 "list" => $toolList
+              ),
+              "editorList" => array(
+                "label"    => "Éditeurs",
+                "type"     => "picklist",
+                "multiple" => "multiple",
+                "list"     => $editorList
               )
             )
           )

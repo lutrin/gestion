@@ -126,7 +126,7 @@
     form.find( "input:text,input:hidden,input:password,input:checkbox,select" ).each( function() {
       var object = $( this ),
           type = object.attr( "type" ) || object.tagName,
-          value = _c.trim( object.val() ),
+          value = object.val(),
           name, compareObject;
 
       // password

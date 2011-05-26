@@ -125,9 +125,9 @@ var _edit = {
   /****************************************************************************/
   showDetails: function( details ) {
     _edit.replaceContent( { query: "#details", innerHtml: details } );
-    $( "#details > *" ).resizable().draggable( {
+    /*$( "#details > *" ).resizable().draggable( {
       handle: "h2"
-    } );
+    } );*/
     $( "#details" ).removeClass( "hidden" );
   },
 
