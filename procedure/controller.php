@@ -48,7 +48,7 @@ function main() {
             return edit();
           } elseif( $action == "insert" ) {
             return insert();
-          } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
+          } elseif( in_array( $action, array( "add", "refresh", "dip" ) ) ) {
             return listAction( $action );
           } elseif( $action == "delete" ) {
             return delete();

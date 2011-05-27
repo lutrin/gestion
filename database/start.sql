@@ -54,3 +54,5 @@ CREATE TABLE `gestion`.`editorInGroup` (
   `editorK` MEDIUMINT NOT NULL ,
   `groupK` MEDIUMINT NOT NULL
 ) ENGINE = MYISAM ;
+
+ALTER TABLE `editorInGroup` ADD INDEX ( `editorK` , `groupK` ) ;

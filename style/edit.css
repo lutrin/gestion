@@ -60,7 +60,8 @@ nav h3 {
 .refresh:before,
 .sorted_asc a:after,
 .sorted_desc a:after,
-.toggleExpand:before {
+.toggleExpand:before,
+.diplist .remove:before {
   font-family: "IconicStroke";
   /*font-size: 1.2em;*/
 }
@@ -85,7 +86,7 @@ nav h3 {
   content: "t";
 }
 
-#logout:before, .close:before {
+#logout:before, .close:before, .diplist .remove:before {
   content: "x";
 }
 
@@ -186,8 +187,14 @@ input, select {
   background-color: #fff;
 }
 
-input[type=text]:hover, input[type=password]:hover, select:hover, .row:hover > .cell, .dock li:hover, #contextMenu > menu > li:hover {
-  background-color: #ffc;
+input[type=text]:hover,
+input[type=password]:hover,
+select:hover,
+.row:hover > .cell,
+.dock li:hover,
+#contextMenu > menu > li:hover,
+.diplist li:hover {
+  background-color: #ff9;
 }
 
 input[type=submit], button {
@@ -220,9 +227,9 @@ section, #main, #dialog-content > *, .tabs > menu > li.selected, #details > *, #
   background-color: transparent;
 }
 
-.list-container .row.selected {
-  background-color: #ccf;
-}
+.list-container .row.selected, .diplist li {
+  background-color: #fc9;
+} 
 
 /* border */
 header {
@@ -233,8 +240,13 @@ footer {
   border-top: #eee solid 1px;
 }
 
-fieldset, legend, input[type=submit], button, #dialog-content > *, #details > *, .picklist li {
+fieldset, legend, input[type=submit], button, #dialog-content > *, #details > * {
   border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.diplist li {
+  border: 1px solid #fc9;
   border-radius: 4px;
 }
 
@@ -318,7 +330,8 @@ input[type=submit],
 menu > li,
 #error-msg,
 .cell,
-.picklist li
+.diplist li,
+.diplist li > *
  {
   padding: 2px;
 }
@@ -333,7 +346,7 @@ menu > li,
 #details > *,
 .field,
 .cell,
-.picklist li {
+.diplist li {
   margin: 2px;
 }
 
@@ -352,9 +365,10 @@ menu > li,
 
 .editor > h2, .groupEditor > h2 {
   padding-left: 20px;
+  margin-right: 20px;
 }
 
-hr, .picklist {
+hr, .diplist {
   margin: 0;
 }
 
@@ -426,8 +440,18 @@ nav h2, nav menu {
   overflow: auto;
 }
 
-#login, #dialog-content > form, #dialog-content > div {
+#login, #dialog-content > form {
   width: 250px;
+}
+
+#dialog-content > div {
+  min-width: 320px;
+  display: inline-block;
+  text-align: left;
+}
+
+#details form {
+  min-width: 320px;
 }
 
 #header-buttons, #details > * > .close {
@@ -445,6 +469,7 @@ nav h2, nav menu {
 #dialog-content {
   display: table-cell;
   vertical-align: middle;
+  text-align: center;
   width: 100%;
 }
 
@@ -690,7 +715,7 @@ nav h2, nav menu {
   display: inline-block;
 }
 
-.picklist li {
+.diplist li {
   list-style-type: none;
   display: inline-block;
 }

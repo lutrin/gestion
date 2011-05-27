@@ -130,20 +130,19 @@
       </fieldset>
     </xsl:when>
 
-    <!-- picklist -->
-    <xsl:when test="@type='picklist'">
+    <!-- diplist -->
+    <xsl:when test="@type='diplist'">
       <fieldset>
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
-        <ul class="picklist">
-        </ul>
-        <span class="picklistValue">
+        <span class="diplistValue">
           <xsl:if test="ui.value">
             <xsl:attribute name="value"><xsl:value-of select="ui.value"/></xsl:attribute>
           </xsl:if>
         </span>
-        <button>Ajouter</button>
+        <xsl:apply-templates select="ui.datalist" mode="diplist" />
+        <button data-action="dip" data-params="object={@object}">Piger</button>
       </fieldset>
     </xsl:when>
 
@@ -177,12 +176,27 @@
   </ul>
 </xsl:template>
 
+<xsl:template match="ui.datalist" mode="diplist">
+  <ul class="diplist">
+    <xsl:for-each select="../@id">
+      <xsl:call-template name="apply-attribute" />
+    </xsl:for-each>
+    <xsl:apply-templates select="ui.dataitem" mode="diplist" />
+  </ul>
+</xsl:template>
+
 <xsl:template match="ui.dataitem" mode="select">
   <option>
     <xsl:if test="@value">
       <xsl:attribute name="value"><xsl:value-of select="@value"/></xsl:attribute>
       <xsl:if test="../../ui.value">
-        <xsl:if test="@value=../../ui.value">
+        <xsl:variable name="isInList">
+          <xsl:call-template name="inList">
+            <xsl:with-param name="list" select="../../ui.value" /> 
+            <xsl:with-param name="search" select="@value" />
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$isInList=1">
           <xsl:attribute name="selected">
             <xsl:text>selected</xsl:text>
           </xsl:attribute>
@@ -234,6 +248,36 @@
       <xsl:with-param name="for" select="$id" />
     </xsl:call-template>
   </li>
+</xsl:template>
+
+<xsl:template match="ui.dataitem" mode="diplist">
+  <xsl:if test="../../ui.value">
+    <xsl:variable name="isInList">
+      <xsl:call-template name="inList">
+        <xsl:with-param name="list" select="../../ui.value" /> 
+        <xsl:with-param name="search" select="@value" />
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$isInList=1">
+      <li class="dipitem">
+        <span><xsl:value-of select="@label"/></span>
+        <input type="hidden">
+          <xsl:attribute name="id">
+            <xsl:value-of select="../../@id"/>
+            <xsl:text>-</xsl:text>
+            <xsl:value-of select="@key"/>
+          </xsl:attribute>
+          <xsl:attribute name="name">
+            <xsl:value-of select="../../@name"/>
+          </xsl:attribute>
+          <xsl:attribute name="value">
+            <xsl:value-of select="@key"/>
+          </xsl:attribute>
+        </input>
+        <a class="remove" title="Exclure"></a>
+      </li>
+    </xsl:if>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="ui.dock">

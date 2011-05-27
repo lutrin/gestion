@@ -97,12 +97,14 @@ class ui_List {
     }
 
     # actions
-    foreach( $params["actions"] as $key => $action ) {
-      $colAttribute = $action;
-      $colAttribute["key"] = $key;
+    if( isset( $params["actions"] ) ) {
+      foreach( $params["actions"] as $key => $action ) {
+        $colAttribute = $action;
+        $colAttribute["key"] = $key;
 
-      unset( $colAttribute["label"] );
-      $innerHtml[] = Tag::build( "ui.action", $colAttribute, ( isset( $action["label"] )? $action["label"]: false ) );
+        unset( $colAttribute["label"] );
+        $innerHtml[] = Tag::build( "ui.action", $colAttribute, ( isset( $action["label"] )? $action["label"]: false ) );
+      }
     }
 
     # attributes list

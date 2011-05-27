@@ -85,7 +85,7 @@ var _edit = {
     _c.select( "#dialog" ).removeClass( "hidden" ).click( function( ev ) {
       var target = $( ev.target );
       if( target.attr( "id" ) && target.attr( "id" ) == "dialog-content" ) {
-        target.parent().hide();
+        target.parent().addClass( "hidden" );
         target.html( "" );
       }
     } );
@@ -93,7 +93,7 @@ var _edit = {
 
   /****************************************************************************/
   closeDialog: function() {
-    _c.select( "#dialog" ).addClass( "hidden" );;
+    _c.select( "#dialog" ).addClass( "hidden" );
     _c.select( "#dialog-content" ).html( "" );
   },
 
