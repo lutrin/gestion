@@ -26,11 +26,6 @@
       $( this ).addClass( "changed" );
     } );
 
-    // diplist
-    form.find( ".diplist .remove" ).click( function() {
-      $( this ).parent().remove();
-    } );
-
     // close form
     form.find( "button.close" ).bind( "close", function() {
       form.remove();

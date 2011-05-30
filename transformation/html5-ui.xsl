@@ -136,13 +136,7 @@
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
-        <span class="diplistValue">
-          <xsl:if test="ui.value">
-            <xsl:attribute name="value"><xsl:value-of select="ui.value"/></xsl:attribute>
-          </xsl:if>
-        </span>
         <xsl:apply-templates select="ui.datalist" mode="diplist" />
-        <button data-action="dip" data-params="object={@object}">Piger</button>
       </fieldset>
     </xsl:when>
 
@@ -181,8 +175,12 @@
     <xsl:for-each select="../@id">
       <xsl:call-template name="apply-attribute" />
     </xsl:for-each>
+    <xsl:attribute name="data-name">
+      <xsl:value-of select="../@name" />
+    </xsl:attribute>
     <xsl:apply-templates select="ui.dataitem" mode="diplist" />
   </ul>
+  <button data-action="dip" data-params="object={../@object},for=#{../@id}">Piger</button>
 </xsl:template>
 
 <xsl:template match="ui.dataitem" mode="select">
@@ -480,6 +478,8 @@
       <xsl:with-param name="expandable" select="@expandable"/>
       <xsl:with-param name="main" select="@main"/>
       <xsl:with-param name="mainAction" select="@mainAction"/>
+      <xsl:with-param name="mainTrigger" select="@mainTrigger"/>
+      <xsl:with-param name="mainHref" select="@mainHref"/>
       <xsl:with-param name="action" select="ui.action"/>
       <xsl:with-param name="headercolumn" select="ui.headercolumn"/>
     </xsl:apply-templates>
@@ -493,6 +493,8 @@
   <xsl:param name="expandable" select="0"/>
   <xsl:param name="main" select="0"/>
   <xsl:param name="mainAction" select="0"/>
+  <xsl:param name="mainTrigger" select="0"/>
+  <xsl:param name="mainHref" select="0"/>
   <xsl:param name="action" select="0"/>
   <xsl:param name="headercolumn" select="0"/>
   <xsl:param name="level" select="1"/>
@@ -587,14 +589,42 @@
           </xsl:if>
         </xsl:for-each>
 
-        <!-- mainAction -->
+        <!-- main cell -->
         <xsl:choose>
           <xsl:when test="@key=$main">
             <xsl:if test="$expandable != 0">
               <a href="#expand-{$rowId}" class="toggleExpand" title="Agrandir/minimiser">&amp;nbsp;</a>
             </xsl:if>
             <span class="icon">&amp;nbsp;</span>
-            <a href="#{$rowId}" data-action="{$mainAction}" data-params="object={$object},k={$k}" title="{.}">
+
+            <a data-params="object={$object},k={$k}" title="{.}">
+
+              <!-- mainHref -->
+              <xsl:attribute name="href">
+                <xsl:choose>
+                  <xsl:when test="$mainHref != 0">
+                    <xsl:value-of select="$mainHref" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>#</xsl:text>
+                    <xsl:value-of select="$rowId" />
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:attribute>
+
+              <!-- mainAction -->
+              <xsl:if test="$mainAction != 0">
+                <xsl:attribute name="data-action">
+                  <xsl:value-of select="$mainAction" />
+                </xsl:attribute>
+              </xsl:if>
+
+              <!-- mainTrigger -->
+              <xsl:if test="$mainTrigger != 0">
+                <xsl:attribute name="data-trigger">
+                  <xsl:value-of select="$mainTrigger" />
+                </xsl:attribute>
+              </xsl:if>
               <xsl:value-of select="." />
             </a>
           </xsl:when>
@@ -625,6 +655,7 @@
         <xsl:with-param name="expandable" select="$expandable"/>
         <xsl:with-param name="main" select="$main"/>
         <xsl:with-param name="mainAction" select="$mainAction"/>
+        <xsl:with-param name="mainTrigger" select="$mainTrigger"/>
         <xsl:with-param name="action" select="$action"/>
         <xsl:with-param name="headercolumn" select="$headercolumn"/>
         <xsl:with-param name="level" select="$level + 1"/>

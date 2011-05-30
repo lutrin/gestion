@@ -11,7 +11,8 @@ var _edit = {
     { query: "form",            script: "form" },
     { query: "button",          script: "button" },
     { query: "a[href^=#]",      script: "anchor" },
-    { query: ".list-container", script: "list" }
+    { query: ".list-container", script: "list" },
+    { query: ".diplist",        script: "dip" }
   ],
 
   /****************************************************************************/

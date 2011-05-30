@@ -671,6 +671,7 @@ nav h2, nav menu {
 .buttonList {
   width: 100%;
   text-align: right;
+  clear: both;
 }
 
 .filtrable form {

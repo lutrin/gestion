@@ -55,7 +55,15 @@ class ui_List {
         $primary = $key;
       }
       $colAttribute = $column;
-      unset( $colAttribute["label"] );
+
+      # label
+      if( isset( $colAttribute["label"] ) ) {
+        unset( $colAttribute["label"] );
+      } else {
+        $column["label"] = $key;
+      }
+
+      # field
       unset( $colAttribute["field"] );
       $colAttribute["id"] = $key;
       $innerHtml[] = Tag::build( "ui.headercolumn", $colAttribute, $column["label"] );

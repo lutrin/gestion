@@ -77,7 +77,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function dip_individualList() {
+  public static function dip_individualList( $excludedKList, $for ) {
     # language
     $lang = getLang();
 
@@ -96,8 +96,6 @@ class fn_Editor extends fn {
     Includer::add( "fnSetting" );
 
     $id = "editors-individualList-dip";
-    $storedValue = fn_Setting::getAccountStorage( "$id-sort" );
-    $order = $storedValue? $storedValue: "username";
 
     # params
     $params = array(
@@ -107,16 +105,30 @@ class fn_Editor extends fn {
       ),
       "primary"     => "k",
       "main"        => "username",
-      "mainTrigger"  => "select",
-      "selectable"  => true,
-      "columns"     => self::getIndividualColumns()
+      "mainTrigger" => "add",
+      "mainHref"    => $for,
+      "columns"     => array(
+        "k"        => array(
+          "hidden" => true
+        ),
+        "username" => array(
+          "class"    => "editor"
+        )
+      )
     );
 
     # field
     $fields = self::prepareFields( $params["columns"] );
     Includer::add( array( "dbEditor", "uiList", "uiDialog" ) );
+
+    # excluded
+    $where = false;
+    if( $excludedKList ) {
+      $where = "NOT k IN (" . join( ",", $excludedKList ) . ")";
+    }
+
     return array(
-      "dialog" => ui_Dialog::buildXml( "Liste", ui_List::buildXml( $params, db_Editor::get( $fields, false ) ) ),
+      "dialog" => ui_Dialog::buildXml( "Liste", ui_List::buildXml( $params, db_Editor::get( $fields, $where ) ) ),
     );
   }
 

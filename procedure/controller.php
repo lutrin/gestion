@@ -48,8 +48,10 @@ function main() {
             return edit();
           } elseif( $action == "insert" ) {
             return insert();
-          } elseif( in_array( $action, array( "add", "refresh", "dip" ) ) ) {
+          } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
             return listAction( $action );
+          } elseif( $action == "dip" ) {
+            return dip();
           } elseif( $action == "delete" ) {
             return delete();
           } elseif( $action == "setAccountStorage" ) {
@@ -189,14 +191,16 @@ function listAction( $action ) {
 }
 
 /******************************************************************************/
-/*function refresh() {
+function dip() {
   global $CONTROLLER;
-  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
-    return switchFunction( "refresh", $object );
+  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) && 
+      ( $for = ( isset( $_GET["for"] )? $_GET["for"]: false ) ) ) {
+    $kList = ( isset( $_GET["k"] )? typeValidator::isNumericList( $_GET["k"] ): false );
+    return switchFunction( "dip", $object, array( $kList, $for ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
-*/
+
 /******************************************************************************/
 function delete() {
   global $CONTROLLER;

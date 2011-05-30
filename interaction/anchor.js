@@ -23,6 +23,7 @@
         target = $( href ),
         action = anchor.data( "action" ),
         trigger = anchor.data( "trigger" ),
+        dataParams = anchor.data( "params" ),
         ajaxObject, dataParams, params, navigator;
 
     // empty
@@ -55,20 +56,22 @@
       );
     } else {
 
+      // params
+      if( dataParams ) {
+        params = {};
+        _c.eachItem( dataParams.split( /\,/g ), function( param ) {
+          var paramSplit = param.split( /=/g );
+          params[paramSplit[0]] = paramSplit[1];
+        } );
+      }
+
       // action      
       if( action ) {
         ajaxObject = { folder: "procedure", name: action };
-
-        // params
-        dataParams = anchor.data( "params" );
-        if( dataParams ) {
-          params = {};
-          _c.eachItem( dataParams.split( /\,/g ), function( param ) {
-            var paramSplit = param.split( /=/g );
-            params[paramSplit[0]] = paramSplit[1];
-          } );
+        if( params ){
           ajaxObject["params"] = params;
         }
+
         return _c.callAjax(
           [ ajaxObject ],
           function( ajaxItem ) {
@@ -97,7 +100,7 @@
           }
         );
       } else if( trigger ) {
-        anchor.trigger( trigger );
+        target.trigger( trigger, params );
         return false;
       }
     }
