@@ -656,6 +656,7 @@
         <xsl:with-param name="main" select="$main"/>
         <xsl:with-param name="mainAction" select="$mainAction"/>
         <xsl:with-param name="mainTrigger" select="$mainTrigger"/>
+        <xsl:with-param name="mainHref" select="$mainHref"/>
         <xsl:with-param name="action" select="$action"/>
         <xsl:with-param name="headercolumn" select="$headercolumn"/>
         <xsl:with-param name="level" select="$level + 1"/>

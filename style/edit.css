@@ -353,10 +353,11 @@ menu > li,
 #login, #dialog-content > * {
   margin-left: auto;
   margin-right: auto;
+  text-align: left;
 }
 
 .dock li:hover a {
-  margin: 5px
+  margin: 10px
 }
 
 .row > .row {

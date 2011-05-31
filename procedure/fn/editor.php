@@ -133,6 +133,63 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
+  public static function dip_groupList( $excludedKList, $for ) {
+    # language
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    Includer::add( "fnSetting" );
+
+    $id = "editors-groupList-dip";
+
+    # params
+    $params = array(
+      "id"          => $id,
+      "mode"        => array(
+        "tree" => "Arbre"
+      ),
+      "primary"     => "k",
+      "main"        => "name",
+      "mainTrigger" => "add",
+      "mainHref"    => $for,
+      "expandable"  => true,
+      "columns"     => array(
+        "k"        => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "class"    => "groupEditor"
+        )
+      )
+    );
+
+    # field
+    $fields = self::prepareFields( $params["columns"] );
+    Includer::add( array( "dbGroupEditor", "uiList", "uiDialog" ) );
+
+    # excluded
+    $where = false;
+    if( $excludedKList ) {
+      $where = "NOT k IN (" . join( ",", $excludedKList ) . ")";
+    }
+
+    return array(
+      "dialog" => ui_Dialog::buildXml( "Liste", ui_List::buildXml( $params, db_GroupEditor::getTree( $fields, 0, $where ) ) ),
+    );
+  }
+
+  /****************************************************************************/
   public static function getContent_group() {
     global $TOOLS_EDITOR;
   
@@ -871,8 +928,15 @@ class fn_Editor extends fn {
       $toolList["disabled"] = "disabled";
     }
 
-    # groupe list
+    # get editor list
+    Includer::add( "dbGroupEditor" );
     $groupList = array();
+    foreach( db_GroupEditor::get( array( "k", "name" ) ) as $group ) {
+      $groupList[$group["k"]] = array(
+        "value" => $group["k"],
+        "label" => $group["name"]
+      );
+    }
     
 
     return array(
@@ -945,14 +1009,14 @@ class fn_Editor extends fn {
             "content" => array(
               "active" => $active,
               "admin" => $admin,
-              "toolList" => $toolList,
+              "toolList" => $toolList/*,
               "groupList" => array(
-                "label"    => "Groupes",
-                "type"     => "select",
+                "label"    => "Groupes éditeurs",
+                "type"     => "diplist",
                 "multiple" => "multiple",
-                "pick"     => "groupEditor",
-                "list"     => $groupList //http://tagedit.webwork-albrecht.de/
-              )
+                "object"   => "editors-groupList",
+                "list"     => $groupList
+              )*/
             )
           )
         )
