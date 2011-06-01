@@ -180,7 +180,7 @@
     </xsl:attribute>
     <xsl:apply-templates select="ui.dataitem" mode="diplist" />
   </ul>
-  <button data-action="dip" data-params="object={../@object},for=#{../@id}">Piger</button>
+  <button data-action="dip" data-params="object={../@object},for=#{../@id}">Piger...</button>
 </xsl:template>
 
 <xsl:template match="ui.dataitem" mode="select">
@@ -346,6 +346,23 @@
   </div>
 </xsl:template>
 
+<xsl:template match="ui.separator">
+  <div class="separator-container separator">
+    <xsl:if test="ui.headtitle">
+      <h2><xsl:value-of select="ui.headtitle"/></h2>
+    </xsl:if>
+    <xsl:for-each select="ui.item">
+      <xsl:if test="@label">
+        <h3>
+          <xsl:value-of select="@label"/>
+        </h3>
+      </xsl:if>
+      <xsl:call-template name="apply-itemSection" />
+      <hr />
+    </xsl:for-each>
+  </div>
+</xsl:template>
+
 <xsl:template match="ui.list">
   <div id="{@id}">
 
@@ -403,7 +420,7 @@
   </xsl:variable>
 
   <!-- list -->
-  <div>
+  <fieldset>
 
     <!-- class -->
     <xsl:attribute name="class">
@@ -483,7 +500,7 @@
       <xsl:with-param name="action" select="ui.action"/>
       <xsl:with-param name="headercolumn" select="ui.headercolumn"/>
     </xsl:apply-templates>
-  </div>
+  </fieldset>
 </xsl:template>
 
 <xsl:template match="ui.row">

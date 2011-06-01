@@ -39,6 +39,10 @@ nav h3 {
   font-size: 1.1em;
 }
 
+#login input[type=text], #login input[type=password] {
+  font-size: 1.5em;
+}
+
 /* icon */
 @font-face {
   font-family: "IconicStroke";
@@ -170,8 +174,16 @@ nav h3 {
 }
 
 /* color */
-html, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell, #dialog-content > * > h2, #details > * > h2 {
-  background-color:#eee;
+html, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell {
+  background-color:#F5F5F5;
+}
+
+#dialog-content > * > h2, #details > * > h2 {
+  background-color: #aaa;
+}
+
+#main, #details > *, #dialog-content > *, .dock {
+  background-color: #E9F1F4;
 }
 
 .table .row:nth-child(odd) {
@@ -193,6 +205,8 @@ select:hover,
 .row:hover > .cell,
 .dock li:hover,
 #contextMenu > menu > li:hover,
+.checkbox:hover,
+.checklist li:hover,
 .diplist li:hover {
   background-color: #ff9;
 }
@@ -212,10 +226,15 @@ nav > menu > li:not(.selected) > a {
 
 input[type=submit]:hover, button:hover, .tabs > menu > li:hover {
   background-color: #036;
-  text-shadow: 0px 0px 5px rgba(255,255,255,0.6);
+  /*text-shadow: 0px 0px 5px rgba(255,255,255,0.6);*/
 }
 
-section, #main, #dialog-content > *, .tabs > menu > li.selected, #details > *, #contextMenu > menu {
+input[type=submit]:active, button:active, .tabs > menu > li:active {
+  background-color: #036;
+  text-shadow: 0px 0px 3px rgba(255,255,255,1);
+}
+
+.tabs > menu > li.selected, #contextMenu > menu, fieldset {
   background-color: #fff;
 }
 
@@ -233,11 +252,11 @@ section, #main, #dialog-content > *, .tabs > menu > li.selected, #details > *, #
 
 /* border */
 header {
-  border-bottom: #eee solid 1px;
+  border-bottom: #F5F5F5 solid 1px;
 }
 
 footer {
-  border-top: #eee solid 1px;
+  border-top: #F5F5F5 solid 1px;
 }
 
 fieldset, legend, input[type=submit], button, #dialog-content > *, #details > * {
@@ -259,34 +278,38 @@ input, select, .header > .cell, #contextMenu > menu {
 }
 
 input[type=text], input[type=password], select {
-  box-shadow: inset rgba(0,0,0,.2) 0px 0px 5px;
+  box-shadow: inset rgba(0,0,0,.2) 2px 2px 2px;
 }
 
 input[type=text]:focus, input[type=password]:focus, select:focus {
   border-color: #008;
-  box-shadow: inset rgba(0,0,88,.5) 0px 0px 5px;
+  box-shadow: inset rgba(0,0,88,.5) 2px 2px 2px;
 }
 
 input[type=submit], button, .dock li span, #contextMenu > menu {
-  box-shadow:rgba(0,0,0,.2) 0px 0px 5px;
+  box-shadow: inset rgba(0,0,0,.2) -2px -2px 2px;
 }
 
 input[type=submit]:active, button:active {
-  box-shadow:rgba(0,0,0,.2) 0px 0px 3px;
+  box-shadow: inset rgba(0,0,0,.2) 2px 2px 2px;
 }
 
 .gallery .row, .compact .row, .tree .row, .dock li {
   border-radius: 4px;
 }
 
+.invalid {
+  background-color: rgba(88,0,0,.05);
+}
+
 .changed:invalid, .field.invalid input {
   border-color: #800;
-  box-shadow: inset rgba(88,0,0,.5) 0px 0px 5px;
+  box-shadow: inset rgba(88,0,0,.2) 2px 2px 2px;
 }
 
 .field:not(.invalid) .changed:valid {
   border-color: #080;
-  box-shadow: inset rgba(0,88,0,.5) 0px 0px 5px;
+  box-shadow: inset rgba(0,88,0,.2) 2px 2px 2px;
 }
 
 .tabs > menu > li {
@@ -330,6 +353,8 @@ input[type=submit],
 menu > li,
 #error-msg,
 .cell,
+.checklist li,
+.checklist li > *,
 .diplist li,
 .diplist li > *
  {
@@ -346,6 +371,7 @@ menu > li,
 #details > *,
 .field,
 .cell,
+.checklist li,
 .diplist li {
   margin: 2px;
 }
@@ -417,7 +443,7 @@ section, .no-js #main, .no-js #header-buttons {
   display: none;
 }
 
-section:target, section.target {
+section:target, section.target, .separator > section {
   display: block;
 }
 
@@ -617,7 +643,6 @@ nav h2, nav menu {
 
 .compact .list, .tree .list, .checklist {
   list-style-type: none;
-  float: left;
 }
 
 .compact .row, .tree .row {

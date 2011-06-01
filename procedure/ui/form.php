@@ -88,7 +88,7 @@ class ui_Form {
         }
 
         # tabs
-        if( in_array( $attributes["type"], array( "tabs", "accordion" ) ) ) {
+        if( in_array( $attributes["type"], array( "tabs", "accordion", "separator" ) ) ) {
           return self::getNav( $formId, $attributes, $values, $id, $attributes["type"] );
         }
     } else {

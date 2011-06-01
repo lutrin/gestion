@@ -947,8 +947,8 @@ class fn_Editor extends fn {
         "type" => "hidden",
         "value" => "editor-individual"
       ),
-      "accordion" => array(
-        "type"     => "accordion",
+      "separator" => array(
+        "type"     => "separator",
         "itemlist" => array(
           "general" => array(
             "label" => "Propriétés générales",
@@ -1007,8 +1007,14 @@ class fn_Editor extends fn {
           "permission" => array(
             "label"   => "Permissions",
             "content" => array(
-              "active" => $active,
-              "admin" => $admin,
+              "status" => array(
+                "legend" => "État",
+                "type" => "fieldset",
+                "fieldlist" => array(
+                  "active" => $active,
+                  "admin" => $admin
+                )
+              ),
               "toolList" => $toolList/*,
               "groupList" => array(
                 "label"    => "Groupes éditeurs",
@@ -1060,8 +1066,8 @@ class fn_Editor extends fn {
         "type" => "hidden",
         "value" => "editor-group"
       ),
-      "accordion" => array(
-        "type"     => "accordion",
+      "separator" => array(
+        "type"     => "separator",
         "itemlist" => array(
           "general" => array(
             "label" => "Propriétés générales",
@@ -1091,10 +1097,16 @@ class fn_Editor extends fn {
           "permission" => array(
             "label"   => "Permissions",
             "content" => array(
-              "active" => array(
-                "label" => $GROUPEDITOR["active"][$lang],
-                "type"  => "checkbox",
-                "value" => "1"
+              "status" => array(
+                "legend" => "État",
+                "type" => "fieldset",
+                "fieldlist" => array(
+                  "active" => array(
+                    "label" => $GROUPEDITOR["active"][$lang],
+                    "type"  => "checkbox",
+                    "value" => "1"
+                  )
+                )
               ),
               "toolList" => array(
                 "label" => "Outils",
