@@ -1,7 +1,7 @@
 /* font */
 
 body {
-  /*font-size: 10px;*/
+  font-size: 12px;
 }
 
 hr {
@@ -357,7 +357,7 @@ menu > li,
 }
 
 .dock li:hover a {
-  margin: 10px
+  margin: 5px
 }
 
 .row > .row {

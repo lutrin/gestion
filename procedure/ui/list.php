@@ -24,7 +24,7 @@ class ui_List {
       }
       $storedValue = fn_Setting::getAccountStorage( "$id-mode" );
       $modeKeyList = array_keys( $params["mode"] );
-      $storedValue = $storedValue? $storedValue: $modeKeyList[0];
+      $storedValue = ( $storedValue && in_array( $storedValue, $modeKeyList ) )? $storedValue: $modeKeyList[0];
       $innerHtml[] = Tag::build(
         "ui.option",
         array( "value" => $storedValue, "count" => count( $params["mode"] ) ),
@@ -81,7 +81,7 @@ class ui_List {
     if( $sortableList ) {
       $storedValue = fn_Setting::getAccountStorage( "$id-sort" );
       $sortKeyList = array_keys( $sortableList );
-      $storedValue = $storedValue? $storedValue: $sortKeyList[0];
+      $storedValue = ( $storedValue && in_array( $storedValue, $sortKeyList ) )? $storedValue: $sortKeyList[0];
       $innerHtml[] = Tag::build(
         "ui.option",
         array( "value" => $storedValue, "count" => count( $sortableList ) ),
