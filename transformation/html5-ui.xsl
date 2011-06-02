@@ -130,13 +130,13 @@
       </fieldset>
     </xsl:when>
 
-    <!-- diplist -->
-    <xsl:when test="@type='diplist'">
+    <!-- picklist -->
+    <xsl:when test="@type='picklist'">
       <fieldset>
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
-        <xsl:apply-templates select="ui.datalist" mode="diplist" />
+        <xsl:apply-templates select="ui.datalist" mode="picklist" />
       </fieldset>
     </xsl:when>
 
@@ -170,17 +170,17 @@
   </ul>
 </xsl:template>
 
-<xsl:template match="ui.datalist" mode="diplist">
-  <ul class="diplist">
+<xsl:template match="ui.datalist" mode="picklist">
+  <ul class="picklist">
     <xsl:for-each select="../@id">
       <xsl:call-template name="apply-attribute" />
     </xsl:for-each>
     <xsl:attribute name="data-name">
       <xsl:value-of select="../@name" />
     </xsl:attribute>
-    <xsl:apply-templates select="ui.dataitem" mode="diplist" />
+    <xsl:apply-templates select="ui.dataitem" mode="picklist" />
   </ul>
-  <button data-action="dip" data-params="object={../@object},for=#{../@id}">Piger...</button>
+  <button data-action="pick" data-params="object={../@object},for=#{../@id}">Piger...</button>
 </xsl:template>
 
 <xsl:template match="ui.dataitem" mode="select">
@@ -248,7 +248,7 @@
   </li>
 </xsl:template>
 
-<xsl:template match="ui.dataitem" mode="diplist">
+<xsl:template match="ui.dataitem" mode="picklist">
   <xsl:if test="../../ui.value">
     <xsl:variable name="isInList">
       <xsl:call-template name="inList">
@@ -257,7 +257,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:if test="$isInList=1">
-      <li class="dipitem">
+      <li class="pickitem">
         <span><xsl:value-of select="@label"/></span>
         <input type="hidden">
           <xsl:attribute name="id">

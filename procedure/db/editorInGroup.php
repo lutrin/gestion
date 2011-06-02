@@ -16,12 +16,27 @@ class db_EditorInGroup extends db_Abstract {
       foreach( $editorKList as $editorK ) {
         $valueList[] = array( $editorK, $groupK );
       }
-error_log( print_r( $valueList, 1 ) );
       DB::insert( array(
         "table"     => static::$table,
         "field"     => "editorK, groupK",
         "valuesList" => $valueList
       ) );
     }
+  }
+
+  /****************************************************************************/
+  public static function removeEditor( $kList ) {
+    return DB::delete( array(
+      "table" => static::$table,
+      "where" => "editorK IN (" . join( ",", $kList ) . ")"
+    ) );
+  }
+
+  /****************************************************************************/
+  public static function removeGroup( $kList ) {
+    return DB::delete( array(
+      "table" => static::$table,
+      "where" => "groupK IN (" . join( ",", $kList ) . ")"
+    ) );
   }
 }

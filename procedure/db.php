@@ -100,13 +100,6 @@ abstract class db_Abstract {
   }
 
   /****************************************************************************/
-  public static function removeTree( $kList ) {
-    foreach( $kList as $k ) {
-      $kList = self::getChildKList( $k, $kList );
-    }
-  }
-
-  /****************************************************************************/
   public static function getChildKList( $kList ) {
     $result = DB::select( array(
       "field" => "k",
@@ -122,6 +115,27 @@ abstract class db_Abstract {
         return $item["k"];
       }, $result );
       $kList = self::getChildKList( array_merge( $kList, $newKList ) );
+    }
+    return $kList;
+  }
+
+  /****************************************************************************/
+  public static function getParentKList( $kList ) {
+    $result = DB::select( array(
+      "field" => "parentK",
+      "table" => static::$table,
+      "where" => array(
+        "NOT parentK = 0",
+        "k IN ( " . join( ",", $kList ) . " )",
+        "NOT k IN ( " . join( ",", $kList ) . " )"
+      )
+    ) );
+    $newKList = array();
+    if( $result ) {
+      $newKList = array_map( function( $item ) {
+        return $item["parentK"];
+      }, $result );
+      $kList = self::getParentKList( array_merge( $kList, $newKList ) );
     }
     return $kList;
   }

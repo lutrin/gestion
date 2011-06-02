@@ -14,6 +14,10 @@ $CONTROLLER = array(
     "fr" => "Vous êtes maintenant déconnecté.",
     "en" => "You are disconnected."
   ),
+  "notconnected" => array(
+    "fr" => "Vous avez été déconnecté.",
+    "en" => "You have been disconnected."
+  ),
   "delete" => array(
     "fr" => "Suppression",
     "en" => "Delete"
@@ -41,7 +45,7 @@ $APP = array(
     "../../external/style/holmes.min.css",
     "style/edit.css"
   ),
-  "head_script" => "../external/interaction/modernizr-1.7.min.js",
+  "head_script" => "../external/interaction/modernizr.custom.34026.js",
   "body_script" => array(
       "../external/interaction/jquery-1.6.1.min.js",
       "../external/interaction/jquery-ui-1.8.11.custom.min.js",
@@ -176,6 +180,11 @@ $MSG_NOSCRIPT = array(
   "en" => "Enabling JavaScript is absolutely necessary.",
 );
 
+$MSG_NOSTYLE = array(
+  "fr" => "L'activation des styles CSS est absolument nécessaire.",
+  "en" => "Enabling styles CSS is absolutely necessary.",
+);
+
 $TOOLS = array(
   "headtitle" => array(
     "fr" => "Outils",
@@ -307,6 +316,8 @@ $DBDATA = array(
 $CACHEPATH = "../cache/";
 $TEMPPATH = "../template/";
 $MERGEPATH = "../merge/";
+
+$PUBLICPATH = "../../public/";
 
 $FRAME = "../../library/template/index.html";
 $EDIT = $TEMPPATH . "edit.html";

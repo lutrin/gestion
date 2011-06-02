@@ -50,8 +50,8 @@ function main() {
             return insert();
           } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
             return listAction( $action );
-          } elseif( $action == "dip" ) {
-            return dip();
+          } elseif( $action == "pick" ) {
+            return pick();
           } elseif( $action == "delete" ) {
             return delete();
           } elseif( $action == "setAccountStorage" ) {
@@ -66,6 +66,7 @@ function main() {
           if( $action == "login" ) {
             return login();
           }
+          return logout( $CONTROLLER["notconnected"][$lang] );
         }
       }
     }
@@ -191,12 +192,12 @@ function listAction( $action ) {
 }
 
 /******************************************************************************/
-function dip() {
+function pick() {
   global $CONTROLLER;
   if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) && 
       ( $for = ( isset( $_GET["for"] )? $_GET["for"]: false ) ) ) {
     $kList = ( isset( $_GET["k"] )? typeValidator::isNumericList( $_GET["k"] ): false );
-    return switchFunction( "dip", $object, array( $kList, $for ) );
+    return switchFunction( "pick", $object, array( $kList, $for ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

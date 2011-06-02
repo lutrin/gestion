@@ -12,7 +12,7 @@ var _edit = {
     { query: "button",          script: "button" },
     { query: "a[href^=#]",      script: "anchor" },
     { query: ".list-container", script: "list" },
-    { query: ".diplist",        script: "dip" }
+    { query: ".picklist",       script: "pick" }
   ],
 
   /****************************************************************************/

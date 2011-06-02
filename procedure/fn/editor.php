@@ -10,7 +10,8 @@ class fn_Editor extends fn {
     $lang = getLang();
 
     # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
+           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
       Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
       return array(
         "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
@@ -77,7 +78,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function dip_individualList( $excludedKList, $for ) {
+  public static function pick_individualList( $excludedKList, $for ) {
     # language
     $lang = getLang();
 
@@ -95,7 +96,7 @@ class fn_Editor extends fn {
 
     Includer::add( "fnSetting" );
 
-    $id = "editors-individualList-dip";
+    $id = "editors-individualList-pick";
 
     # params
     $params = array(
@@ -133,7 +134,7 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function dip_groupList( $excludedKList, $for ) {
+  public static function pick_groupList( $excludedKList, $for ) {
     # language
     $lang = getLang();
 
@@ -151,7 +152,7 @@ class fn_Editor extends fn {
 
     Includer::add( "fnSetting" );
 
-    $id = "editors-groupList-dip";
+    $id = "editors-groupList-pick";
 
     # params
     $params = array(
@@ -191,13 +192,14 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function getContent_group() {
-    global $TOOLS_EDITOR;
+    global $TOOLS_EDITOR, $PERMISSION;
   
     # language
     $lang = getLang();
 
     # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
+           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
       Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
       return array(
         "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
@@ -456,7 +458,7 @@ class fn_Editor extends fn {
 
     # remove
     Includer::add( "dbGroupEditor" );
-    db_GroupEditor::remove( db_GroupEditor::getChildKList( $kList ) );
+    db_GroupEditor::remove( $kList );
     
     return array(
       "replacement" => array(
@@ -1018,7 +1020,7 @@ class fn_Editor extends fn {
               "toolList" => $toolList/*,
               "groupList" => array(
                 "label"    => "Groupes éditeurs",
-                "type"     => "diplist",
+                "type"     => "picklist",
                 "multiple" => "multiple",
                 "object"   => "editors-groupList",
                 "list"     => $groupList
@@ -1115,7 +1117,7 @@ class fn_Editor extends fn {
               ),
               "editorList" => array(
                 "label"    => "Membres éditeurs",
-                "type"     => "diplist",
+                "type"     => "picklist",
                 "multiple" => "multiple",
                 "object"   => "editors-individualList",
                 "list"     => $editorList

@@ -31,13 +31,14 @@ class fn_Edit {
 
   /****************************************************************************/
   protected static function getBody( $title ) {
-    global $MSG_NOSCRIPT, $FOOTERLINK, $EDIT;
+    global $MSG_NOSCRIPT, $MSG_NOSTYLE, $FOOTERLINK, $EDIT;
     $lang = getLang();
     return replaceFields( array(
       "lang"          => $lang, 
       "title"         => $title,
       "headerButtons" => self::getHeaderButton(),
       "noscript"      => $MSG_NOSCRIPT[$lang],
+      "nostyle"       => $MSG_NOSTYLE[$lang],
       "main"          => self::getMain(),
       "copyright"     => $FOOTERLINK["copyright"],
       "help"          => $FOOTERLINK["help"][$lang],
@@ -62,8 +63,9 @@ class fn_Edit {
 
     # build list
     $allowedToolList = array();
+    $editorToolList = $_SESSION["editor"]["toolList"];
     foreach( self::getToolList() as $key => $tool ) {
-      if( $isAdmin ) {
+      if( $isAdmin || ( $editorToolList && in_array( $key, $editorToolList ) ) ) {
         $allowedToolList[$key] = $tool;
       }
     }

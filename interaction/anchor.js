@@ -43,6 +43,7 @@
             _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
             if( ajaxItem.hash ) {
               window.location.hash = href;
+              anchor.addClass( "hash" );
             }
             target.removeClass( "empty" );
           }
@@ -113,6 +114,9 @@
     target.addClass( "target" );
     if( target.get(0) ) {
       target.siblings( target.get(0).tagName ).removeClass( "target" );
+    }
+    if( anchor.hasClass( "hash" ) ) {
+      return true;
     }
     return false;
   }

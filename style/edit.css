@@ -65,7 +65,7 @@ nav h3 {
 .sorted_asc a:after,
 .sorted_desc a:after,
 .toggleExpand:before,
-.diplist .remove:before {
+.picklist .remove:before {
   font-family: "IconicStroke";
   /*font-size: 1.2em;*/
 }
@@ -90,7 +90,7 @@ nav h3 {
   content: "t";
 }
 
-#logout:before, .close:before, .diplist .remove:before {
+#logout:before, .close:before, .picklist .remove:before {
   content: "x";
 }
 
@@ -207,7 +207,7 @@ select:hover,
 #contextMenu > menu > li:hover,
 .checkbox:hover,
 .checklist li:hover,
-.diplist li:hover {
+.picklist li:hover {
   background-color: #ff9;
 }
 
@@ -246,7 +246,7 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
   background-color: transparent;
 }
 
-.list-container .row.selected, .diplist li {
+.list-container .row.selected, .picklist li {
   background-color: #fc9;
 } 
 
@@ -264,7 +264,7 @@ fieldset, legend, input[type=submit], button, #dialog-content > *, #details > * 
   border-radius: 4px;
 }
 
-.diplist li {
+.picklist li {
   border: 1px solid #fc9;
   border-radius: 4px;
 }
@@ -355,8 +355,8 @@ menu > li,
 .cell,
 .checklist li,
 .checklist li > *,
-.diplist li,
-.diplist li > *
+.picklist li,
+.picklist li > *
  {
   padding: 2px;
 }
@@ -372,7 +372,7 @@ menu > li,
 .field,
 .cell,
 .checklist li,
-.diplist li {
+.picklist li {
   margin: 2px;
 }
 
@@ -395,7 +395,7 @@ menu > li,
   margin-right: 20px;
 }
 
-hr, .diplist {
+hr, .picklist {
   margin: 0;
 }
 
@@ -742,7 +742,7 @@ nav h2, nav menu {
   display: inline-block;
 }
 
-.diplist li {
+.picklist li {
   list-style-type: none;
   display: inline-block;
 }

@@ -1,19 +1,19 @@
 {
   initialize: function() {
-    var dip = $( this ),
-        app = _c.ajaxList.interaction.dip;
+    var pick = $( this ),
+        app = _c.ajaxList.interaction.pick;
 
     // already initiated
-    if( dip.hasClass( "initiated" ) ) {
+    if( pick.hasClass( "initiated" ) ) {
       return false;
     }
 
     // remove
-    dip.find( ".dipitem > .remove" ).click( app.remove );
+    pick.find( ".pickitem > .remove" ).click( app.remove );
 
     // add
-    dip.bind( "add", app.add );
-    dip.addClass( "initiated" );
+    pick.bind( "add", app.add );
+    pick.addClass( "initiated" );
   },
 
   /****************************************************************************/
@@ -23,12 +23,12 @@
 
   /****************************************************************************/
   add: function( event, params ) {
-    var app = _c.ajaxList.interaction.dip,
+    var app = _c.ajaxList.interaction.pick,
         value = params.k,
         row = $( "#" + params.object + "-" + params.k ),
         text = [ _c.trim( row.children( ".main:first" ).text() ) ],
         ul = $( this ),
-        html = "<li class='dipitem'>" +
+        html = "<li class='pickitem'>" +
                  "<span>###text###</span>" +
                  "<input type='hidden' value='###value###' name='###name###' id='###id###-###value###'>" +
                  "<a title='Exclure' class='remove'></a>" +
