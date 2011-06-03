@@ -886,7 +886,6 @@ class fn_Editor extends fn {
     # password field
     $password = array(
       "type"         => "password",
-      "maxlength"    => 30,
       "size"         => 20,
       "autocomplete" => "off"
     );
@@ -971,7 +970,6 @@ class fn_Editor extends fn {
                   "confirmpassword" => array(
                     "label"        => $EDITOR["confirmpassword"][$lang],
                     "type"         => "password",
-                    "maxlength"    => 30,
                     "size"         => 20,
                     "autocomplete" => "off",
                     "equal"        => "password"

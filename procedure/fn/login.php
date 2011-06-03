@@ -145,7 +145,6 @@ return true;
             "label"        => $LOGIN["password"][$lang],
             "type"         => "password",
             "required"     => "required",
-            "maxlength"    => 30,
             "size"         => 20,
             "autocomplete" => "off",
           )

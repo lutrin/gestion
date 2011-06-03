@@ -140,12 +140,30 @@
       </fieldset>
     </xsl:when>
 
+    <!-- password -->
+    <xsl:when test="@type='password'">
+      <div>
+        <xsl:call-template name="apply-topfield" />
+        <input>
+          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@size|@value|@pattern">
+            <xsl:call-template name="apply-attribute" />
+          </xsl:for-each>
+          <xsl:if test="@equal">
+            <xsl:attribute name="data-equal">
+              <xsl:value-of select="@equal" />
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:call-template name="apply-value-attribute" />
+        </input>
+      </div>
+    </xsl:when>
+
     <!-- input -->
     <xsl:otherwise>
       <div>
         <xsl:call-template name="apply-topfield" />
         <input>
-          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size|@value">
+          <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size|@value|@pattern">
             <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
           <xsl:if test="@equal">

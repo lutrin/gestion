@@ -34,9 +34,21 @@ class fn_Form {
         continue;
       }
 
+      # pattern
+      if( isset( $field["pattern"] ) && $field["pattern"] && !preg_match( "/" . $field["pattern"] . "/", $values[$key] ) ) {
+        $errorList[] = array( "name" => $key, "msg" => "required" );
+        continue;
+      }
+
       # equal
       if( isset( $field["equal"] ) && ( $values[$key] != $values[$field["equal"]] ) ) {
         $errorList[] = array( "name" => $key, "msg" => "notequal" );
+        continue;
+      }
+
+      # maxlength
+      if( isset( $field["maxlength"] ) && ( strlen( $values[$key] ) > $field["maxlength"] ) ) {
+        $errorList[] = array( "name" => $key, "msg" => "toolong" );
         continue;
       }
     }

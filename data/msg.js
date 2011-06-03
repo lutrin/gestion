@@ -11,13 +11,29 @@
     "fr": "Champ obligatoire",
     "en": "Mandatory field"
   },
+  "wrongformat": {
+    "fr": "Mauvais format",
+    "en": "Wrong format"
+  },
   "notequal": {
     "fr": "Champ inégal",
     "en": "Not equal field"
   },
+  "toolong": {
+    "fr": "Trop long",
+    "en": "Too long"
+  },
   "mustbeunique": {
     "fr": "Doit être unique",
     "en": "Must be unique"
+  },
+  "alreadyexists": {
+    "fr": "Existe déjà",
+    "en": "Already exists"
+  },
+  "notwritepermission": {
+    "fr": "Écriture non permise",
+    "en": "Not write permission"
   },
   "incorrectlogin": {
     "fr": "Le nom d'utilisateur ou le mot de passe est incorrect.",

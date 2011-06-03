@@ -46,6 +46,8 @@ function main() {
             return save();
           } elseif( $action == "edit" ) {
             return edit();
+          } elseif( $action == "rename" ) {
+            return re_Name();
           } elseif( $action == "insert" ) {
             return insert();
           } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
@@ -153,11 +155,14 @@ function getContent() {
 /******************************************************************************/
 function save() {
   global $CONTROLLER;
-  if( isset( $_GET["k"] ) &&
-      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
+  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
       ( $token =  ( isset( $_GET["token"] )? $_GET["token"]: false ) ) ) {
-    $k = $_GET["k"];
-    return switchFunction( "save", $object, array( $k, $token ) );
+    if( $object == "file-folder" ) {
+      return switchFunction( "save", $object, array( $token ) );
+    }
+    if( isset( $_GET["k"] ) ) {
+      return switchFunction( "save", $object, array( $_GET["k"], $token ) );
+    }
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
@@ -168,6 +173,15 @@ function edit() {
   if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
       ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
     return switchFunction( "edit", $object, array( $k ) );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+
+/******************************************************************************/
+function re_Name() {
+  global $CONTROLLER;
+  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
+    return switchFunction( "rename", $object );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

@@ -317,7 +317,7 @@ $CACHEPATH = "../cache/";
 $TEMPPATH = "../template/";
 $MERGEPATH = "../merge/";
 
-$PUBLICPATH = "../../public/";
+$PUBLICPATH = "../../public";
 
 $FRAME = "../../library/template/index.html";
 $EDIT = $TEMPPATH . "edit.html";
@@ -361,6 +361,9 @@ $INCLUDE_LIST = array(
 
   "tag" => array(
     "path" => "tag.php"
+  ),
+  "dir" => array(
+    "path" => "dir.php"
   ),
   "fn" => array(
     "path" => "fn.php"
@@ -406,7 +409,7 @@ $INCLUDE_LIST = array(
     "path" => "fn/file.php",
     "depend" => "fn",
     "class" => "fn_File",
-    "entries" => array( "files" )
+    "entries" => array( "files", "folders", "file" )
   ),
   "fnEditor" => array(
     "path" => "fn/editor.php",

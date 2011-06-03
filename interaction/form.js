@@ -149,6 +149,12 @@
         app.showMsg( object, _edit.msg( "required" ) );
       }
 
+      // pattern
+      if( object.attr( "pattern" ) && !value.match( object.attr( "pattern" ) ) ) {
+        error = true;
+        app.showMsg( object, _edit.msg( "wrongformat" ) );
+      }
+
       // equal
       if( object.data( "equal" ) ) {
         compareObject = form.find( "[name=" + object.data( "equal" ) + "]" );

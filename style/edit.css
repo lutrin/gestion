@@ -159,6 +159,10 @@ nav h3 {
   background-image: url(../image/groupEditor.svg);
 }
 
+.list-container .folder > .icon, #details form.folder h2 {
+  background-image: url(../image/folder.svg);
+}
+
 .empty {
   background: url(../image/roller.gif) no-repeat center center;
 }
@@ -390,7 +394,7 @@ menu > li,
   margin-left: 20px;
 }
 
-.editor > h2, .groupEditor > h2 {
+.editor > h2, .groupEditor > h2, .folder > h2 {
   padding-left: 20px;
   margin-right: 20px;
 }
