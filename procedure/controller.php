@@ -44,12 +44,14 @@ function main() {
             return getContent();
           } elseif( $action == "save" ) {
             return save();
-          } elseif( $action == "edit" ) {
+          /*} elseif( $action == "edit" ) {
             return edit();
           } elseif( $action == "rename" ) {
             return re_Name();
           } elseif( $action == "insert" ) {
-            return insert();
+            return insert();*/
+          } elseif( in_array( $action, array( "edit", "rename", "insert", "explore" ) ) ) {
+            return itemAction( $action );
           } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
             return listAction( $action );
           } elseif( $action == "pick" ) {
@@ -192,6 +194,16 @@ function insert() {
   if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
       ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
     return switchFunction( "insert", $object, array( $k ) );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+
+/******************************************************************************/
+function itemAction( $action ) {
+  global $CONTROLLER;
+  if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
+      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
+    return switchFunction( $action, $object, array( $k ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

@@ -150,6 +150,79 @@ class fn_File extends fn {
     );
   }
 
+
+  /****************************************************************************/
+  public static function explore_folder( $k ) {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
+           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # get
+    Includer::add( array( "dir", "uiList" ) );
+
+    $params = array(
+      "id" => "folder-$k",
+      "headtitle" => $k,
+      "mode" => array(
+        "gallery" => "Galerie",
+        "table"   => "Tableau",
+        "compact" => "Compact"
+      ),
+      "main" => "name",
+      "addable" => true,
+      "refreshable" => true,
+      "columns"     => array(
+        "k"    => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "label"    => "Nom de fichier",
+          "class"    => "file"
+        ),
+        "type" => array(
+          "label"    => "Type"
+        ),
+        "encoding" => array(
+          "label"    => "Encodage"
+        ),
+        "size" => array(
+          "label" => "Taille"
+        )
+      ),
+      "actions"     => array(
+        "explore"   => array(
+          "title" => "Explorer"
+        ),
+        "insert"   => array(
+          "title" => "Insérer"
+        ),
+        "rename"   => array(
+          "title" => "Renommer"
+        ),
+        "delete" => array(
+          "title"    => "Supprimer",
+          "multiple" => true
+        )
+      )
+    );
+
+    return array(
+      "details" => ui_List::buildXml( $params, Dir::getExplore( $k ) )
+    );
+  }
+
   /****************************************************************************/
   public static function rename_folder() {
   }
@@ -175,9 +248,15 @@ class fn_File extends fn {
       "refreshable" => true,
       "expandable"  => true,
       "columns"     => array(
+        "k"    => array(
+          "hidden" => true
+        ),
         "name" => array(
           "label"    => "Nom de dossier",
           "class"    => "folder"
+        ),
+        "path" => array(
+          "label"    => "Chemin"
         )
       ),
       "actions"     => array(
@@ -197,7 +276,7 @@ class fn_File extends fn {
       )
     );
 
-    return ui_List::buildXml( $params, Dir::getTree( $PUBLICPATH ) );
+    return ui_List::buildXml( $params, Dir::getTree() );
   }
 
   /****************************************************************************/
