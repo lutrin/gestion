@@ -4,7 +4,7 @@ class Dir {
   protected static $ignore = array( ".", "..", ".git" );
 
   /****************************************************************************/
-  public static function getTree( $path = "", $k = 0 ) {
+  public static function getTree( $path = "" ) {
     global $PUBLICPATH;
 
     # path
@@ -28,13 +28,13 @@ class Dir {
       $subpath = "$path/$file";
       if( is_dir( $subpath ) ) {
         $folder = array(
-          "k"    => str_replace( $PUBLICPATH . "/", "", $subpath ),#self::encrypt( $subpath ),
+          "k"    => db_Path::getK( str_replace( $PUBLICPATH . "/", "", $subpath ) ),
           "name" => $file,
           "path" => str_replace( $PUBLICPATH . "/", "", $path )
         );
 
         # get child list
-        if( $childList = self::getTree( $subpath, $k++ ) ) {
+        if( $childList = self::getTree( $subpath ) ) {
           $folder["childList"] = $childList;
         }
         $list[] = $folder;
@@ -57,7 +57,7 @@ class Dir {
   /****************************************************************************/
   public static function getExplore( $k ) {
     global $PUBLICPATH;
-    $path = "$PUBLICPATH/$k";#self::decrypt( $k );
+    $path = "$PUBLICPATH/" . db_Path::getPath( $k );
 
     # open handle
     if( !$handle = opendir( $path ) ) {
@@ -79,7 +79,7 @@ class Dir {
       $subpath = "$path/$file";
       #if( is_dir( $subpath ) ) {
         $item = array(
-          "k"        => str_replace( $PUBLICPATH . "/", "", $subpath ),#self::encrypt( $subpath ),
+          "k"        => db_Path::getK( str_replace( $PUBLICPATH . "/", "", $subpath ) ),
           "name"     => $file,
           "type"     => finfo_file( $type, $subpath ),
           "encoding" => finfo_file( $encoding, $subpath ),
@@ -96,6 +96,63 @@ class Dir {
   }
 
   /****************************************************************************/
+  protected static function getType( $file, $type ) {
+    $typeList = array(
+      "folder" => array( "directory" ),
+      "gif"    => array( "image/gif" ),
+      "jpg"    => array( "image/jpeg" ),
+      "png"    => array( "image/jpeg" ),
+      "svg"    => array( "image/svg+xml" ),
+      "html"   => array( "text/html" ),
+      "php"    => array( "text/x-php" ),
+      "text"   => array( "text/x-c++", "text/plain", "text/x-c" ),
+      "xml"    => array( "application/xml" )
+    );
+    $textTypeList = array(
+      "js"  => "javascript",
+      "sql" => "sql",
+      "css" => "css"
+    );
+    $actionList = array(
+      "explore" => array( "folder" ),
+      "insert"  => array( "folder" ),
+      "view"    => array( "gif", "svg", "jpg", "png" ),
+      "edit"    => array( "text", "html", "php", "svg", "xml", "javascript", "sql", "css" )
+    );
+
+    # default
+    $class = "file";
+
+    # get class
+    foreach( $typeList as $key => $item ) {
+      if( in_array( $type, $item ) ) {
+        $class = $key;
+        break;
+      }
+    }
+
+    # get 
+    if( $type == "text" ) {
+      $decomposed = explode( ".", $file );
+      $last = $decomposed[( count( $decomposed ) - 1 )];
+      $class = isset( $textTypeList[$last] )? $textTypeList[$last]: $class;
+    }
+    $typeObject = array(
+      "class" => $class
+    );
+    $actions = array();
+    foreach( $actionList as $key => $action ) {
+      if( in_array( $class, $action ) ) {
+        $action[] = $key;
+      }
+    }
+    if( $actions ) {
+      $typeObject["action"] = $actions;
+    }
+    return $typeObject;
+  }
+
+  /****************************************************************************/
   public static function exists( $path ) {
     return file_exists( $path );
   }
@@ -108,44 +165,6 @@ class Dir {
   /****************************************************************************/
   public static function mkdir( $path ) {
     return mkdir( $path, 0777 );
-  }
-
-  /****************************************************************************/
-  protected static function encrypt( $data, $key = "folder" ) {
-    $result = '';
-    
-    for( $i = 0; $i < strlen( $data ); $i++ ) {
-      $char    = substr( $data, $i, 1 );
-      $keyChar = substr( $key, ( $i % strlen( $key ) ) - 1, 1 );
-      $char    = chr( ord( $char ) + ord( $keyChar ) );
-      $result  .= $char;
-    }
-    return self::encode_base64( $result ); 
-  }
-
-  /****************************************************************************/
-  protected static function decrypt( $data, $key = "folder" ) {
-    $result = '';
-    $data   = self::decode_base64( $data );
-    for( $i = 0; $i <= strlen( $data ); $i++ ) {
-      $char    = substr( $data, $i, 1 );
-      $keyChar = substr( $key, ( $i % strlen( $key ) ) - 1, 1 );
-      $char    = chr( ord( $char ) - ord( $keyChar ) );
-      $result .= $char;
-    }
-    return $result;
-  }
-
-  /****************************************************************************/
-  protected static function encode_base64( $data ) {
-    $base64 = base64_encode( $data );
-    return substr( strtr( $base64, '+/', '-_' ), 0, -2 );
-  }
-
-  /****************************************************************************/
-  protected static function decode_base64( $data ) {
-    $base64 = strtr( $data, '-_', '+/' );
-    return base64_decode( $base64.'==' );
   }
 
   /****************************************************************************/

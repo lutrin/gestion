@@ -56,3 +56,11 @@ CREATE TABLE `gestion`.`editorInGroup` (
 ) ENGINE = MYISAM ;
 
 ALTER TABLE `editorInGroup` ADD INDEX ( `editorK` , `groupK` ) ;
+
+
+/* create path table */
+CREATE TABLE `gestion`.`path` (
+`k` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`path` VARCHAR( 255 ) NOT NULL ,
+INDEX ( `path` )
+) ENGINE = MYISAM ;

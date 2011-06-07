@@ -171,16 +171,18 @@ class fn_File extends fn {
 
     # get
     Includer::add( array( "dir", "uiList" ) );
+    
 
     $params = array(
       "id" => "folder-$k",
-      "headtitle" => $k,
+      "headtitle" => db_Path::getPath( $k ) . "&nbsp;-&nbsp;Dossier",
       "mode" => array(
         "gallery" => "Galerie",
         "table"   => "Tableau",
         "compact" => "Compact"
       ),
       "main" => "name",
+      "class" => "folder",
       "addable" => true,
       "refreshable" => true,
       "columns"     => array(
@@ -202,12 +204,6 @@ class fn_File extends fn {
         )
       ),
       "actions"     => array(
-        "explore"   => array(
-          "title" => "Explorer"
-        ),
-        "insert"   => array(
-          "title" => "Insérer"
-        ),
         "rename"   => array(
           "title" => "Renommer"
         ),

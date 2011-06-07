@@ -73,7 +73,7 @@
           ajaxObject["params"] = params;
         }
 
-        return _c.callAjax(
+        _c.callAjax(
           [ ajaxObject ],
           function( ajaxItem ) {
 
@@ -91,6 +91,11 @@
             // replacement
             if( ajaxItem.replacement ) {
               _c.eachItem( ajaxItem.replacement, _edit.replaceContent );
+              if( ajaxItem.hash ) {
+                window.location.hash = href;
+                anchor.addClass( "hash" );
+              }
+              target.removeClass( "empty" );
             }
 
             // details
@@ -100,6 +105,7 @@
             return false;
           }
         );
+        return false;
       } else if( trigger ) {
         target.trigger( trigger, params );
         return false;

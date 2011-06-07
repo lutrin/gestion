@@ -138,11 +138,11 @@ nav h3 {
   background: url(../image/visitor.svg) no-repeat center center;
 }
 
-#details form h2, .list-container .icon {
+#details > * > h2, .list-container .icon {
   background-repeat: no-repeat;
 }
 
-#details form h2, .list-container.table .main, .list-container.compact .main {
+#details > * > h2, .list-container.table .main, .list-container.compact .main {
   background-position: left center;
 }
 
@@ -151,16 +151,20 @@ nav h3 {
   background-size: 48px;
 }
 
-.list-container .editor > .icon, #details form.editor h2 {
+.list-container .editor > .icon, #details .editor h2 {
   background-image: url(../image/editor.svg);
 }
 
-.list-container .groupEditor > .icon, #details form.groupEditor h2 {
+.list-container .groupEditor > .icon, #details .groupEditor h2 {
   background-image: url(../image/groupEditor.svg);
 }
 
-.list-container .folder > .icon, #details form.folder h2 {
+.list-container .folder > .icon, #details .folder h2 {
   background-image: url(../image/folder.svg);
+}
+
+.list-container .file > .icon, #details .file h2 {
+  background-image: url(../image/file.svg);
 }
 
 .empty {
@@ -533,11 +537,14 @@ nav h2, nav menu {
 #toolList > .dock {
   height: 100%;
   float: left;
+  width: 50px;
 }
 
 #toolList > section {
   float: left;
   height: 100%;
+  width: 270px;
+  overflow: auto;
   /*text-align: left;
   position: absolute;
   top: 1px;
@@ -551,6 +558,12 @@ nav h2, nav menu {
 #details {
   display: inline-block;
   float: left;
+  position: absolute;
+  left: 320px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
 }
 
 .dock {

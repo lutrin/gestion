@@ -390,12 +390,15 @@
       <xsl:for-each select="ui.option">
         <xsl:value-of select="concat( ' ', @value )" />
       </xsl:for-each>
+      <xsl:if test="@class">
+        <xsl:value-of select="concat( ' ', @class )" />
+      </xsl:if>
       <!--<xsl:value-of select="concat( 'list-container ', ui.option/@value )" />-->
     </xsl:attribute>
 
     <!-- headtitle -->
     <xsl:if test="ui.headtitle">
-      <h3><xsl:value-of select="ui.headtitle"/></h3>
+      <h2><xsl:value-of select="ui.headtitle"/></h2>
     </xsl:if>
 
     <!-- option -->

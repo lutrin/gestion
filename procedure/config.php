@@ -363,7 +363,8 @@ $INCLUDE_LIST = array(
     "path" => "tag.php"
   ),
   "dir" => array(
-    "path" => "dir.php"
+    "path"   => "dir.php",
+    "depend" => "dbPath"
   ),
   "fn" => array(
     "path" => "fn.php"
@@ -461,6 +462,10 @@ $INCLUDE_LIST = array(
   ),
   "dbEditorInGroup" => array(
     "path" => "db/editorInGroup.php",
+    "depend" => "dbAbstract"
+  ),
+  "dbPath" => array(
+    "path" => "db/path.php",
     "depend" => "dbAbstract"
   )
 );
