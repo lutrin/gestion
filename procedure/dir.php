@@ -77,79 +77,21 @@ class Dir {
 
       # get sub path
       $subpath = "$path/$file";
-      #if( is_dir( $subpath ) ) {
-        $item = array(
-          "k"        => db_Path::getK( str_replace( $PUBLICPATH . "/", "", $subpath ) ),
-          "name"     => $file,
-          "type"     => finfo_file( $type, $subpath ),
-          "encoding" => finfo_file( $encoding, $subpath ),
-          "size"     => self::getHumanFileSize( filesize( $subpath ) )
-        );
-        $list[] = $item;
-      #}
+      $mimetype = finfo_file( $type, $subpath );
+      $item = array(
+        "k"        => db_Path::getK( str_replace( $PUBLICPATH . "/", "", $subpath ) ),
+        "name"     => $file,
+        "mimetype" => finfo_file( $type, $subpath ),
+        "encoding" => finfo_file( $encoding, $subpath ),
+        "size"     => filesize( $subpath )
+      );
+      $list[] = $item;
     }
 
     # close handle
     closedir( $handle );
 
     return $list;
-  }
-
-  /****************************************************************************/
-  protected static function getType( $file, $type ) {
-    $typeList = array(
-      "folder" => array( "directory" ),
-      "gif"    => array( "image/gif" ),
-      "jpg"    => array( "image/jpeg" ),
-      "png"    => array( "image/jpeg" ),
-      "svg"    => array( "image/svg+xml" ),
-      "html"   => array( "text/html" ),
-      "php"    => array( "text/x-php" ),
-      "text"   => array( "text/x-c++", "text/plain", "text/x-c" ),
-      "xml"    => array( "application/xml" )
-    );
-    $textTypeList = array(
-      "js"  => "javascript",
-      "sql" => "sql",
-      "css" => "css"
-    );
-    $actionList = array(
-      "explore" => array( "folder" ),
-      "insert"  => array( "folder" ),
-      "view"    => array( "gif", "svg", "jpg", "png" ),
-      "edit"    => array( "text", "html", "php", "svg", "xml", "javascript", "sql", "css" )
-    );
-
-    # default
-    $class = "file";
-
-    # get class
-    foreach( $typeList as $key => $item ) {
-      if( in_array( $type, $item ) ) {
-        $class = $key;
-        break;
-      }
-    }
-
-    # get 
-    if( $type == "text" ) {
-      $decomposed = explode( ".", $file );
-      $last = $decomposed[( count( $decomposed ) - 1 )];
-      $class = isset( $textTypeList[$last] )? $textTypeList[$last]: $class;
-    }
-    $typeObject = array(
-      "class" => $class
-    );
-    $actions = array();
-    foreach( $actionList as $key => $action ) {
-      if( in_array( $class, $action ) ) {
-        $action[] = $key;
-      }
-    }
-    if( $actions ) {
-      $typeObject["action"] = $actions;
-    }
-    return $typeObject;
   }
 
   /****************************************************************************/
@@ -165,21 +107,5 @@ class Dir {
   /****************************************************************************/
   public static function mkdir( $path ) {
     return mkdir( $path, 0777 );
-  }
-
-  /****************************************************************************/
-  protected static function getHumanFileSize( $size ) {
-    if( is_numeric( $size ) ) {
-      $decr = 1024;
-      $step = 0;
-      $prefix = array( 'Octet', 'Ko', 'Mo', 'Go', 'To', 'Po' );
-      while( ( $size / $decr ) > 0.9 ) {
-        $size = $size / $decr;
-        $step++;
-      }
-      return round( $size, 1 ) . '&nbsp;' . $prefix[$step];
-    } else { 
-      return '-';
-    }
   }
 }

@@ -320,5 +320,5 @@ function replaceFields( $fields, $content ) {
 
 /******************************************************************************/
 function e( $item ) {
-  error_log( print_r( $item ), 1 );
+  error_log( print_r( $item, 1 ) );
 }

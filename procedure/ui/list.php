@@ -136,11 +136,25 @@ class ui_List {
 
   /****************************************************************************/
   public static function getRow( $primary, $fields, $expanded = false ) {
+    $innerHtml = array();
 
     # id
     $attributes["id"] = $fields[$primary];
 
-    $innerHtml = array();
+    # class
+    if( isset( $fields["class"] ) ) {
+      $attributes["class"] = $fields["class"];
+      unset( $fields["class"] );
+    }
+  
+    # action
+    if( isset( $fields["action"] ) ) {
+      foreach( $fields["action"] as $action ) {
+        $innerHtml[] = Tag::build( "ui.action", false, $action );
+      }
+      unset( $fields["action"] );
+    }
+
     $childList = array();
     foreach( $fields as $key => $value ) {
       $attribute = array( "key" => $key );
@@ -158,6 +172,8 @@ class ui_List {
         }
         continue;
       }
+
+      # class
       if( is_numeric( $value ) ) {
         $attribute["class"] = "numeric";
       }

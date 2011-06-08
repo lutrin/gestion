@@ -184,14 +184,14 @@ class fn_File extends fn {
       "main" => "name",
       "class" => "folder",
       "addable" => true,
+      "selectable" => true,
       "refreshable" => true,
       "columns"     => array(
         "k"    => array(
           "hidden" => true
         ),
         "name" => array(
-          "label"    => "Nom de fichier",
-          "class"    => "file"
+          "label"    => "Nom de fichier"
         ),
         "type" => array(
           "label"    => "Type"
@@ -204,8 +204,25 @@ class fn_File extends fn {
         )
       ),
       "actions"     => array(
+        "view"   => array(
+          "title"      => "Visualiser",
+          "individual" => true
+        ),
+        "explore"   => array(
+          "title"      => "Explorer",
+          "individual" => true
+        ),
         "rename"   => array(
-          "title" => "Renommer"
+          "title"      => "Renommer",
+          "individual" => true
+        ),
+        "edit"   => array(
+          "title"      => "Modifier",
+          "individual" => true
+        ),
+        "insert"   => array(
+          "title"      => "Insérer",
+          "individual" => true
         ),
         "delete" => array(
           "title"    => "Supprimer",
@@ -214,8 +231,15 @@ class fn_File extends fn {
       )
     );
 
+    $list = Dir::getExplore( $k );
+    foreach( $list as $key => $item ) {
+      $class = self::getClass( $item["name"], $item["mimetype"] );
+      $list[$key]["class"] = $class;
+      $list[$key]["action"] = self::getAction( $class );
+      $list[$key]["size"] = self::getHumanFileSize( $item["size"] );
+    }
     return array(
-      "details" => ui_List::buildXml( $params, Dir::getExplore( $k ) )
+      "details" => ui_List::buildXml( $params, $list )
     );
   }
 
@@ -305,5 +329,87 @@ class fn_File extends fn {
         "maxlength" => 255
       )
     );
+  }
+
+  /****************************************************************************/
+  protected static function getClass( $file, $type ) {
+
+    # class list
+    $classList = array(
+      "folder" => array( "directory" ),
+      "gif"    => array( "image/gif" ),
+      "jpg"    => array( "image/jpeg" ),
+      "png"    => array( "image/png" ),
+      "svg"    => array( "image/svg+xml" ),
+      "html"   => array( "text/html" ),
+      "php"    => array( "text/x-php" ),
+      "text"   => array( "text/x-c++", "text/plain", "text/x-c" ),
+      "xml"    => array( "application/xml" )
+    );
+
+    # default
+    $class = "file";
+
+    # get simple class
+    foreach( $classList as $key => $item ) {
+      if( in_array( $type, $item ) ) {
+        $class = $key;
+        break;
+      }
+    }
+
+    # get text class
+    if( $class != "text") {
+      return $class;
+    }
+
+    # text list
+    $textList = array(
+      "js"  => "javascript",
+      "sql" => "sql",
+      "css" => "css"
+    );
+    $decomposed = explode( ".", $file );
+    $last = array_pop( $decomposed );
+e( $last );
+    return isset( $textList[$last] )? $textList[$last]: $class;
+  }
+
+  /****************************************************************************/
+  protected static function getAction( $class ) {
+
+    # action list
+    $actionList = array(
+      "rename"  => array( "file", "folder", "gif", "svg", "jpg", "png" ),
+      "explore" => array( "folder" ),
+      "insert"  => array( "folder" ),
+      "view"    => array( "gif", "svg", "jpg", "png" ),
+      "edit"    => array( "text", "html", "php", "svg", "xml", "javascript", "sql", "css" )
+    );
+
+    # get action
+    $actions = array();
+    foreach( $actionList as $key => $action ) {
+      if( in_array( $class, $action ) ) {
+        $actions[] = $key;
+      }
+    }
+    return $actions;
+  }
+
+  /****************************************************************************/
+  protected static function getHumanFileSize( $size ) {
+    if( is_numeric( $size ) ) {
+      $decr = 1024;
+      $step = 0;
+      $prefix = array( 'Octets', 'Ko', 'Mo', 'Go', 'To', 'Po' );
+      while( ( $size / $decr ) > 0.9 ) {
+        $size = $size / $decr;
+        $step++;
+      }
+      return round( $size, 1 ) . '&nbsp;' . $prefix[$step];
+    } else { 
+      return '-';
+    }
   }
 }

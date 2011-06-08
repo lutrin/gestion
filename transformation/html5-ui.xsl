@@ -569,6 +569,10 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
+      <xsl:if test="@class">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@class" />
+      </xsl:if>
       <!--<xsl:if test="$level &gt; 1">
         <xsl:text> hidden</xsl:text>
       </xsl:if>-->
@@ -679,9 +683,16 @@
     <!-- action -->
     <xsl:for-each select="$action">
       <div class="cell action">
-        <button id="{@key}-{$rowId}" class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
-          <span class="hidden"><xsl:value-of select="@title" /></span>
-        </button>
+        <xsl:choose>
+          <xsl:when test="@individual">
+          
+          </xsl:when>
+          <xsl:otherwise>
+            <button id="{@key}-{$rowId}" class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
+              <span class="hidden"><xsl:value-of select="@title" /></span>
+            </button>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </xsl:for-each>
     <hr class="hidden" />

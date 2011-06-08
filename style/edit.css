@@ -159,12 +159,40 @@ nav h3 {
   background-image: url(../image/groupEditor.svg);
 }
 
-.list-container .folder > .icon, #details .folder h2 {
+.list-container .folder .icon, #details .folder h2 {
   background-image: url(../image/folder.svg);
 }
 
-.list-container .file > .icon, #details .file h2 {
+.list-container .file .icon, #details .file h2 {
   background-image: url(../image/file.svg);
+}
+
+.list-container .xml .icon, #details .xml h2 {
+  background-image: url(../image/xml.svg);
+}
+
+.list-container .javascript .icon, #details .javascript h2 {
+  background-image: url(../image/javascript.svg);
+}
+
+.list-container .php .icon, #details .php h2 {
+  background-image: url(../image/php.svg);
+}
+
+.list-container .text .icon, #details .text h2 {
+  background-image: url(../image/text.svg);
+}
+
+.list-container .html .icon, #details .html h2 {
+  background-image: url(../image/html.svg);
+}
+
+.list-container .css .icon, #details .css h2 {
+  background-image: url(../image/css.svg);
+}
+
+.list-container .sql .icon, #details .sql h2 {
+  background-image: url(../image/sql.svg);
 }
 
 .empty {
