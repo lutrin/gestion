@@ -26,11 +26,6 @@
       $( this ).addClass( "changed" );
     } );
 
-    // close form
-    form.find( "button.close" ).bind( "close", function() {
-      form.remove();
-    } );
-
     form.addClass( "initiated" );
   },
 

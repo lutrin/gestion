@@ -11,9 +11,18 @@
     // click
     if( button.hasClass( "closeDialog" ) ) {
       button.click( _edit.closeDialog );
+    } else if( button.hasClass( "close" ) ) {
+      button.click( function() {
+        $( this ).closest( "form,.tabs-container" ).remove();
+      } );
     } else {
       button.click( app.click );
     }
+
+    // close form
+    /*form.find( "button.close" ).bind( "close", function() {
+      form.remove();
+    } );*/
 
     button.addClass( "initiated" );
     //return false;

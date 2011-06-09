@@ -12,9 +12,9 @@ class db_Path extends db_Abstract {
   }
 
   /****************************************************************************/
-  public static function getPath( $k ) {
-    if( !$result = self::get( "path", "k=$k" ) ) {
-      return false;
+  public static function getPath( $k = 0 ) {
+    if( !$k || !$result = self::get( "path", "k=$k" ) ) {
+      return "";
     }
     return $result[0]["path"];
   }

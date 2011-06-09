@@ -79,6 +79,7 @@ class fn_File extends fn {
     # get params
     $params = self::getFormParamsFolder();
     $params["headtitle"] = "Nouveau&nbsp;dossier";
+    $params["closable"] = true;
     $fields = self::getFormFieldsFolder( 0 );
 
     Includer::add( array( "uiForm" ) );
@@ -123,22 +124,46 @@ class fn_File extends fn {
     }
 
     # folder name unique
-    $name = $values["name"];
     Includer::add( "dir" );
-    $newPath = "$PUBLICPATH/" . ( $values["path"]? "{$values['path']}/": "" ) . $name;
-    if( Dir::exists( $newPath ) ) {
-      $result["errorList"][] = array( "name" => "name", "msg" => "alreadyexists" );
-      return $result;
-    }
 
-    # permit
-    if( !Dir::isPermitted( "$PUBLICPATH/" . ( $values["path"]? "{$values['path']}/": "" ) ) ) {
-      $result["errorList"][] = array( "name" => "name", "msg" => "notwritepermission" );
-      return $result;
-    }
+    # get old name
+    $oldPath = db_Path::getPath( $values["k"] );
+    $oldName = Dir::getName( $path );
+    $newName = $values["name"];
+    #TODO newPath
+    $oldName = Dir::getName( $path );
+e( $oldName );
+    if( $newName != $oldName ) {
+      if( Dir::exists( $newPath ) ) {
+        $result["errorList"][] = array( "name" => "name", "msg" => "alreadyexists" );
+        return $result;
+      }
 
-    # add
-    $created = Dir::mkdir( $newPath );
+      # rename
+      if( $oldName ) {
+
+        # permit
+        /*if( !Dir::isPermitted( $values["k"], $oldName ) ) {
+          $result["errorList"][] = array( "name" => "name", "msg" => "notwritepermission" );
+          return $result;
+        }*/
+
+        # add
+        $modified = Dir::rename( $oldPath, $newPath );
+
+      # make
+      } else {
+
+        # permit
+        /*if( !Dir::isPermitted( $values["k"] ) ) {
+          $result["errorList"][] = array( "name" => "name", "msg" => "notwritepermission" );
+          return $result;
+        }*/
+
+        # add
+        $created = Dir::mkdir( $newPath );
+      }        
+    }
 
     # list
     return array(
@@ -152,7 +177,7 @@ class fn_File extends fn {
 
 
   /****************************************************************************/
-  public static function explore_folder( $k ) {
+  public static function edit_folder( $k ) {
     global $PERMISSION;
     $lang = getLang();
 
@@ -170,19 +195,22 @@ class fn_File extends fn {
     }
 
     # get
-    Includer::add( array( "dir", "uiList" ) );
-    
+    Includer::add( array( "dir", "uiNav", "uiList", "uiForm" ) );
 
-    $params = array(
-      "id" => "folder-$k",
-      "headtitle" => db_Path::getPath( $k ) . "&nbsp;-&nbsp;Dossier",
+    # get info
+    $id = "folder-$k";
+    $path = db_Path::getPath( $k );
+    $name = Dir::getName( $path );
+
+    # explore params
+    $exploreParams = array(
+      "id" => "$id-explore",
       "mode" => array(
         "gallery" => "Galerie",
         "table"   => "Tableau",
         "compact" => "Compact"
       ),
       "main" => "name",
-      "class" => "folder",
       "addable" => true,
       "selectable" => true,
       "refreshable" => true,
@@ -204,21 +232,8 @@ class fn_File extends fn {
         )
       ),
       "actions"     => array(
-        "view"   => array(
-          "title"      => "Visualiser",
-          "individual" => true
-        ),
-        "explore"   => array(
-          "title"      => "Explorer",
-          "individual" => true
-        ),
-        "rename"   => array(
-          "title"      => "Renommer",
-          "individual" => true
-        ),
         "edit"   => array(
-          "title"      => "Modifier",
-          "individual" => true
+          "title" => "Ouvrir"
         ),
         "insert"   => array(
           "title"      => "Insérer",
@@ -231,6 +246,7 @@ class fn_File extends fn {
       )
     );
 
+    # get list
     $list = Dir::getExplore( $k );
     foreach( $list as $key => $item ) {
       $class = self::getClass( $item["name"], $item["mimetype"] );
@@ -238,13 +254,37 @@ class fn_File extends fn {
       $list[$key]["action"] = self::getAction( $class );
       $list[$key]["size"] = self::getHumanFileSize( $item["size"] );
     }
-    return array(
-      "details" => ui_List::buildXml( $params, $list )
-    );
-  }
 
-  /****************************************************************************/
-  public static function rename_folder() {
+    # form params
+    $formParams = self::getFormParamsFolder();
+    $fields = self::getFormFieldsFolder( $k );
+    $values = array( "name" => $name );
+
+    # tabs params
+    $navParams = array(
+      "id"        => "folder-$k",
+      "mode"      => "tabs",
+      "class"     => "folder",
+      "headtitle" => "$path&nbsp;-&nbsp;Dossier",
+      "closable"  => true
+    );
+
+    # tabs list
+    $tabList = array(
+      "$id-tabExplore" => array(
+        "label"     => "Contenu",
+        "selected"  => true,
+        "innerHtml" => ui_List::buildXml( $exploreParams, $list )
+      ),
+      "$id-tabRename" => array(
+        "label" => "Propriétés",
+        "innerHtml" => ui_Form::buildXml( $formParams, $fields, $values )
+      )
+    );
+
+    return array(
+      "details" => ui_Nav::buildXml( $navParams, $tabList )
+    );
   }
 
   /****************************************************************************/
@@ -262,8 +302,8 @@ class fn_File extends fn {
       ),
 
       "main"        => "name",
-      "mainAction"  => "explore",
-      "rowAction"   => "rename",
+      "mainAction"  => "edit",
+      "rowAction"   => "edit",
       "addable"     => true,
       "refreshable" => true,
       "expandable"  => true,
@@ -274,20 +314,14 @@ class fn_File extends fn {
         "name" => array(
           "label"    => "Nom de dossier",
           "class"    => "folder"
-        ),
-        "path" => array(
-          "label"    => "Chemin"
         )
       ),
       "actions"     => array(
-        "explore"   => array(
-          "title" => "Explorer"
+        "edit"   => array(
+          "title" => "Ouvrir"
         ),
         "insert"   => array(
           "title" => "Insérer"
-        ),
-        "rename"   => array(
-          "title" => "Renommer"
         ),
         "delete" => array(
           "title"    => "Supprimer",
@@ -306,27 +340,31 @@ class fn_File extends fn {
       "action"   => "save",
       "submit"   => "Enregistrer",
       "method"   => "post",
-      "class"    => "folder",
-      "closable" => true
+      "class"    => "folder"
     );
   }
 
   /****************************************************************************/
-  protected static function getFormFieldsFolder( $path = "" ) {
+  protected static function getFormFieldsFolder( $k = 0 ) {
     return array(
+      "k"     => array(
+        "type" => "hidden",
+        "value" => $k
+      ),
       "object"     => array(
         "type" => "hidden",
         "value" => "file-folder"
       ),
-      "path"     => array(
-        "type" => "hidden",
-        "value" => $path
-      ),
-      "name" => array(
-        "label"     => "Nom du dossier",
-        "required"  => "required",
-        "pattern"   => "[\w\s\(\)\-\!]+",
-        "maxlength" => 255
+      "edition" => array(
+        "type" => "fieldset",
+        "fieldlist" => array(
+          "name" => array(
+            "label"     => "Nom du dossier",
+            "required"  => "required",
+            "pattern"   => "[\w\s\(\)\-\!]+",
+            "maxlength" => 255
+          )
+        )
       )
     );
   }
@@ -380,11 +418,7 @@ e( $last );
 
     # action list
     $actionList = array(
-      "rename"  => array( "file", "folder", "gif", "svg", "jpg", "png" ),
-      "explore" => array( "folder" ),
-      "insert"  => array( "folder" ),
-      "view"    => array( "gif", "svg", "jpg", "png" ),
-      "edit"    => array( "text", "html", "php", "svg", "xml", "javascript", "sql", "css" )
+      "insert"  => array( "folder" )
     );
 
     # get action

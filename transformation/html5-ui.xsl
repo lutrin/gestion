@@ -331,8 +331,18 @@
 </xsl:template>
 
 <xsl:template match="ui.tabs">
-  <div class="tabs-container">
-    <xsl:call-template name="apply-attributelist" />
+  <div>
+    <xsl:attribute name="class">
+      <xsl:text>tabs-container</xsl:text>
+      <xsl:if test="@class">
+        <xsl:value-of select="concat(' ',@class)" />
+      </xsl:if>
+    </xsl:attribute>
+    <xsl:if test="@closable">
+      <button class="close" data-trigger="close">
+        <span class="hidden"><xsl:text>Fermer</xsl:text></span>
+      </button>
+    </xsl:if>
     <nav class="tabs">
       <xsl:if test="ui.headtitle">
         <h2><xsl:value-of select="ui.headtitle"/></h2>
@@ -720,11 +730,11 @@
       <h2><xsl:value-of select="@title" /></h2>
     </xsl:if>
     <p><xsl:apply-templates/></p>
-    <div class="buttonList">
+    <fieldset class="buttonList">
       <xsl:if test="@close">
         <button class="closeDialog"><xsl:value-of select="@close" /></button>
       </xsl:if>
-    </div>
+    </fieldset>
   </div>
 </xsl:template>
 

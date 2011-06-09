@@ -31,10 +31,6 @@ nav > menu > li.selected {
   font-weight: bold;
 }
 
-nav h2 {
-  font-size: 1.2em;
-}
-
 nav h3 {
   font-size: 1.1em;
 }
@@ -138,11 +134,11 @@ nav h3 {
   background: url(../image/visitor.svg) no-repeat center center;
 }
 
-#details > * > h2, .list-container .icon {
+#details h2, .list-container .icon {
   background-repeat: no-repeat;
 }
 
-#details > * > h2, .list-container.table .main, .list-container.compact .main {
+#details h2, .list-container.table .main, .list-container.compact .main {
   background-position: left center;
 }
 
@@ -214,7 +210,7 @@ html, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell {
   background-color:#F5F5F5;
 }
 
-#dialog-content > * > h2, #details > * > h2 {
+#dialog-content > * > h2, #details h2 {
   background-color: #aaa;
 }
 
@@ -426,7 +422,7 @@ menu > li,
   margin-left: 20px;
 }
 
-.editor > h2, .groupEditor > h2, .folder > h2 {
+.editor > h2, .groupEditor > h2, .folder h2 {
   padding-left: 20px;
   margin-right: 20px;
 }
@@ -504,7 +500,7 @@ nav h2, nav menu {
 }
 
 #login, #dialog-content > form {
-  width: 250px;
+  width: 270px;
 }
 
 #dialog-content > div {
@@ -740,7 +736,6 @@ nav h2, nav menu {
 }
 
 .buttonList {
-  width: 100%;
   text-align: right;
   clear: both;
 }
@@ -790,10 +785,6 @@ nav h2, nav menu {
 .picklist li {
   list-style-type: none;
   display: inline-block;
-}
-
-.tabs-container {
-  height: 100%;
 }
 
 /* z position */
