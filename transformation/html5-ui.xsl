@@ -690,12 +690,25 @@
       </div>
     </xsl:for-each>
 
+    <!-- rowAction -->
+    <xsl:variable name="indAction" select="@indAction" />
+
     <!-- action -->
     <xsl:for-each select="$action">
       <div class="cell action">
         <xsl:choose>
           <xsl:when test="@individual">
-          
+            <xsl:variable name="isInList">
+              <xsl:call-template name="inList">
+                <xsl:with-param name="list" select="$indAction" /> 
+                <xsl:with-param name="search" select="@key" />
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="$isInList=1">
+              <button id="{@key}-{$rowId}" class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">
+                <span class="hidden"><xsl:value-of select="@title" /></span>
+              </button>
+            </xsl:if >
           </xsl:when>
           <xsl:otherwise>
             <button id="{@key}-{$rowId}" class="{@key}" data-action="{@key}" data-params="object={$object},k={$k}" title="{@title}">

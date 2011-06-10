@@ -80,13 +80,48 @@ class fn_File extends fn {
     $params = self::getFormParamsFolder();
     $params["headtitle"] = "Nouveau&nbsp;dossier";
     $params["closable"] = true;
-    $fields = self::getFormFieldsFolder( 0 );
+    $fields = self::getFormFieldsFolder();
 
     Includer::add( array( "uiForm" ) );
     return array(
       "details" => ui_Form::buildXml(
         $params,
         $fields
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function insert_folder( $parentK ) {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
+           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # get params
+    $params = self::getFormParamsFolder();
+    $params["headtitle"] = "Nouveau&nbsp;dossier";
+    $params["closable"] = true;
+    $fields = self::getFormFieldsFolder();
+    $values = array( "parentK" => $parentK );
+
+    Includer::add( array( "uiForm" ) );
+    return array(
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields,
+        $values
       )
     );
   }
@@ -125,44 +160,23 @@ class fn_File extends fn {
 
     # folder name unique
     Includer::add( "dir" );
-
-    # get old name
-    $oldPath = db_Path::getPath( $values["k"] );
-    $oldName = Dir::getName( $path );
-    $newName = $values["name"];
-    #TODO newPath
-    $oldName = Dir::getName( $path );
-e( $oldName );
-    if( $newName != $oldName ) {
-      if( Dir::exists( $newPath ) ) {
+    $parentPath = db_Path::getPath( $values["parentK"] );
+    $newPath = Dir::getNewPath( $parentPath, $values["name"] );
+    $newK = db_Path::getK( $newPath );
+    if( $newK != $values["k"] ) {
+      if( Dir::exists( $newK ) ) {
         $result["errorList"][] = array( "name" => "name", "msg" => "alreadyexists" );
         return $result;
       }
 
       # rename
-      if( $oldName ) {
-
-        # permit
-        /*if( !Dir::isPermitted( $values["k"], $oldName ) ) {
-          $result["errorList"][] = array( "name" => "name", "msg" => "notwritepermission" );
-          return $result;
-        }*/
-
-        # add
-        $modified = Dir::rename( $oldPath, $newPath );
+      if( $values["k"] ) {
+        $modified = Dir::rename( $values["k"], $newK );
 
       # make
       } else {
-
-        # permit
-        /*if( !Dir::isPermitted( $values["k"] ) ) {
-          $result["errorList"][] = array( "name" => "name", "msg" => "notwritepermission" );
-          return $result;
-        }*/
-
-        # add
-        $created = Dir::mkdir( $newPath );
-      }        
+        $created = Dir::mkdir( $newK );
+      }
     }
 
     # list
@@ -246,19 +260,29 @@ e( $oldName );
       )
     );
 
-    # get list
-    $list = Dir::getExplore( $k );
-    foreach( $list as $key => $item ) {
+    # get filter list
+    $oldList = Dir::getExplore( $k );
+    $list = array();
+    foreach( $oldList as $key => $item ) {
       $class = self::getClass( $item["name"], $item["mimetype"] );
-      $list[$key]["class"] = $class;
-      $list[$key]["action"] = self::getAction( $class );
-      $list[$key]["size"] = self::getHumanFileSize( $item["size"] );
+      if( $class == "php" ) {
+        continue;
+      }
+      $list[] = array_merge( $item, array(
+        "class"     => $class,
+        "indAction" => self::getAction( $class ),
+        "size"      => self::getHumanFileSize( $item["size"] )
+      ) );
     }
 
     # form params
     $formParams = self::getFormParamsFolder();
     $fields = self::getFormFieldsFolder( $k );
-    $values = array( "name" => $name );
+    $values = array(
+      "k"       => $k,
+      "parentK" => Dir::getParentK( $k ),
+      "name"    => $name
+    );
 
     # tabs params
     $navParams = array(
@@ -284,6 +308,43 @@ e( $oldName );
 
     return array(
       "details" => ui_Nav::buildXml( $navParams, $tabList )
+    );
+  }
+
+  /****************************************************************************/
+  public static function delete_folder( $kList ) {
+    global $PERMISSION, $PUBLICPATH;
+    $lang = getLang();
+
+    # is admin
+    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
+           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    foreach( $kList as $k ) {
+
+      # valid exists
+      Includer::add( "dir" );
+      if( Dir::exists( $k ) ) {
+        Dir::delete( $k );
+      }
+    }
+
+    # list
+    return array(
+      "replacement" => array(
+        "query" => "#" . self::$idList,
+        "innerHtml" => self::getFolderTree()
+      ),
+      "details" => " "
     );
   }
 
@@ -325,7 +386,7 @@ e( $oldName );
         ),
         "delete" => array(
           "title"    => "Supprimer",
-          "multiple" => true
+          "individual" => true
         )
       )
     );
@@ -345,11 +406,13 @@ e( $oldName );
   }
 
   /****************************************************************************/
-  protected static function getFormFieldsFolder( $k = 0 ) {
+  protected static function getFormFieldsFolder() {
     return array(
       "k"     => array(
-        "type" => "hidden",
-        "value" => $k
+        "type" => "hidden"
+      ),
+      "parentK" => array(
+        "type" => "hidden"
       ),
       "object"     => array(
         "type" => "hidden",
@@ -357,6 +420,7 @@ e( $oldName );
       ),
       "edition" => array(
         "type" => "fieldset",
+        "legend" => "Générales",
         "fieldlist" => array(
           "name" => array(
             "label"     => "Nom du dossier",
@@ -409,7 +473,6 @@ e( $oldName );
     );
     $decomposed = explode( ".", $file );
     $last = array_pop( $decomposed );
-e( $last );
     return isset( $textList[$last] )? $textList[$last]: $class;
   }
 
@@ -428,7 +491,7 @@ e( $last );
         $actions[] = $key;
       }
     }
-    return $actions;
+    return join( ",", $actions );
   }
 
   /****************************************************************************/

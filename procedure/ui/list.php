@@ -148,11 +148,9 @@ class ui_List {
     }
   
     # action
-    if( isset( $fields["action"] ) ) {
-      foreach( $fields["action"] as $action ) {
-        $innerHtml[] = Tag::build( "ui.action", false, $action );
-      }
-      unset( $fields["action"] );
+    if( isset( $fields["indAction"] ) ) {
+      $attributes["indAction"] = $fields["indAction"];
+      unset( $fields["indAction"] );
     }
 
     $childList = array();

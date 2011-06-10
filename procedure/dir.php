@@ -35,6 +35,8 @@ class Dir {
         # get child list
         if( $childList = self::getTree( $subpath ) ) {
           $folder["childList"] = $childList;
+        } else {
+          $folder["indAction"] = "delete";
         }
         $list[] = $folder;
       }
@@ -92,8 +94,14 @@ class Dir {
 
     # sort
     usort( $list, function( $a, $b ) {
-      if( $a["name"] == $b["name"] ) {
+      if( $a["name"] == $b["name"] && $a["mimetype"] == $b["mimetype"] ) {
         return 0;
+      }
+      if( $a["mimetype"] == "directory" && $b["mimetype"] != "directory" ) {
+        return -1;
+      }
+      if( $b["mimetype"] == "directory" && $a["mimetype"] != "directory" ) {
+        return 1;
       }
       return ( $a["name"] < $b["name"] )? -1: 1;
     } );
@@ -104,6 +112,13 @@ class Dir {
   public static function getName( $path ) {
     $pathList = explode( "/", $path );
     return array_pop( $pathList );
+  }
+
+  /****************************************************************************/
+  public static function getNewPath( $parentPath, $newName ) {
+    $pathList = explode( "/", $parentPath );
+    $pathList[] = $newName;
+    return join( "/", $pathList );
   }
 
   /****************************************************************************/
@@ -123,8 +138,18 @@ class Dir {
   }
 
   /****************************************************************************/
-  public static function rename( $k, $name, $oldname ) {
-    return rename( self::getPath( $k, $name ), self::getPath( $k, $oldname ) );
+  public static function rename( $oldK, $newK ) {
+    return rename( self::getPath( $oldK ), self::getPath( $newK ) );
+  }
+
+  /***************************************************************************/
+  public static function delete( $k ) {
+    $path = self::getPath( $k );
+    if( is_dir( $path ) ) {
+      return rmdir( $path );
+    } else {
+      return unlink( $path );
+    }
   }
 
   /****************************************************************************/
@@ -136,8 +161,16 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function getParentK( $k ) {
+    return self::getK( self::getParent( $k ) );
+  }
+
+  /****************************************************************************/
   protected static function getK( $subpath ) {
     global $PUBLICPATH;
+    if( $subpath == $PUBLICPATH ) {
+      return 0;
+    }
     return db_Path::getK( str_replace( $PUBLICPATH . "/", "", $subpath ) );
   }
 

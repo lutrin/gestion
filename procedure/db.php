@@ -127,7 +127,7 @@ abstract class db_Abstract {
       "where" => array(
         "NOT parentK = 0",
         "k IN ( " . join( ",", $kList ) . " )",
-        "NOT k IN ( " . join( ",", $kList ) . " )"
+        "NOT parentK IN ( " . join( ",", $kList ) . " )"
       )
     ) );
     $newKList = array();

@@ -49,6 +49,7 @@
       } );
       listContainer.find( ".row > .cell" ).click( app.setSelectRow );
       listContainer.find( ".selectRow" ).change( app.changeSelectRow );
+      listContainer.find( ".selectAll" ).click( app.changeSelectAll );
     }
 
     // row action

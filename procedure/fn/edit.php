@@ -128,7 +128,7 @@ class fn_Edit {
               "title"       =>  $HEADER_BUTTONS["setting"][$lang],
               "data-action" => "displaySetting"
             ),
-            Tag::build( "span", array( "class" => "hidden" ), $HEADER_BUTTONS["setting"][$lang] )
+            Tag::build( "span", false, $HEADER_BUTTONS["setting"][$lang] . "..." )
           )
          . Tag::build(
             "button",
@@ -137,7 +137,7 @@ class fn_Edit {
               "title"       =>  $HEADER_BUTTONS["logout"][$lang],
               "data-action" => "logout"
             ),
-            Tag::build( "span", array( "class" => "hidden" ), $HEADER_BUTTONS["logout"][$lang] )
+            Tag::build( "span", false, $HEADER_BUTTONS["logout"][$lang] )
           );
   }
 }

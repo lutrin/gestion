@@ -49,13 +49,12 @@ nav h3 {
 }
 
 .iconic,
-#displaySetting:before,
-#logout:before,
 #currentUser:before,
 .setFilter,
 .edit,
 .delete,
 .close,
+.insert,
 .add:before,
 .refresh:before,
 .sorted_asc a:after,
@@ -86,15 +85,11 @@ nav h3 {
   content: "t";
 }
 
-#logout:before, .close:before, .picklist .remove:before {
+.close:before, .picklist .remove:before {
   content: "x";
 }
 
-#displaySetting:before {
-  content: "w";
-}
-
-.add:before {
+.add:before, .insert:before {
   content: "+";
 }
 
@@ -394,7 +389,6 @@ menu > li,
 }
 
 noscript,
-button,
 fieldset,
 legend,
 input[type=submit],
