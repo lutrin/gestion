@@ -117,8 +117,8 @@ function displaySetting() {
 /******************************************************************************/
 function setAccountStorage() {
   global $CONTROLLER;
-  if( ( $name = ( isset( $_GET["name"] )? $_GET["name"]: false ) ) &&
-      ( $value = ( isset( $_GET["value"] )? $_GET["value"]: false ) ) ) {
+  if( $name = ( isset( $_GET["name"] )? $_GET["name"]: false ) ) {
+    $value = ( isset( $_GET["value"] )? $_GET["value"]: false );
     Includer::add( "fnSetting" );
     return json_encode( fn_Setting::setAccountStorage( $name, $value ) );
   }

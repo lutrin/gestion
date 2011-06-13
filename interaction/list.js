@@ -68,7 +68,7 @@
     var select = $( this ),
         mode = select.val(),
         listContainer = select.parents( ".list-container:first" );
-    _c.eachItem( ["table", "compact", "tree", "gallery"], function( oldMode ) {
+    _c.eachItem( ["table", "compact", "tree", "gallery", "resume"], function( oldMode ) {
       listContainer.removeClass( oldMode );
     } );
     listContainer.addClass( mode );
@@ -293,6 +293,7 @@
 		listContainer.find( ".expanded" ).each( function() {
 			expandedList.push( $( this ).attr( "id" ).replace( listContainerId, "" ) );
 		} );
+console.log( expandedList );
     _c.setAccountStorage( listContainer.attr( "id" ) + "-expanded", expandedList );
   },
 

@@ -208,6 +208,8 @@ class fn_File extends fn {
       );
     }
 
+    # TODO if directory, binary, else
+
     # get
     Includer::add( array( "dir", "uiNav", "uiList", "uiForm" ) );
 
@@ -218,13 +220,15 @@ class fn_File extends fn {
 
     # explore params
     $exploreParams = array(
-      "id" => "$id-explore",
+      "id" => "files-folder-$k",
       "mode" => array(
         "gallery" => "Galerie",
+        "compact" => "Compact",
         "table"   => "Tableau",
-        "compact" => "Compact"
+        "resume"  => "Résumé",
       ),
       "main" => "name",
+      "mainAction" => "edit",
       "addable" => true,
       "selectable" => true,
       "refreshable" => true,
@@ -492,6 +496,26 @@ class fn_File extends fn {
       }
     }
     return join( ",", $actions );
+  }
+
+  /****************************************************************************/
+  protected static function getTabList( $class ) {
+
+    # tabList
+    $tabList = array(
+      "explore" => array( "folder" ),
+      "view"    => array( "gif", "jpg", "png", "svg" ),
+      "edit"    => array( "svg", "html", "php", "text", "xml" )
+    );
+
+    # get tab
+    $tabs = array();
+    foreach( $tabList as $key => $tab ) {
+      if( in_array( $class, $tab ) ) {
+        $tabs[] = $key;
+      }
+    }
+    return $tabs;
   }
 
   /****************************************************************************/

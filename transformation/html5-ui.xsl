@@ -647,7 +647,7 @@
             <xsl:if test="$expandable != 0">
               <a href="#expand-{$rowId}" class="toggleExpand" title="Agrandir/minimiser">&amp;nbsp;</a>
             </xsl:if>
-            <span class="icon">&amp;nbsp;</span>
+            <span class="icon"></span>
 
             <a data-params="object={$object},k={$k}" title="{.}">
 

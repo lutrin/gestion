@@ -410,7 +410,7 @@ $INCLUDE_LIST = array(
     "path" => "fn/file.php",
     "depend" => "fn",
     "class" => "fn_File",
-    "entries" => array( "files", "folders", "file" )
+    "entries" => array( "files", "folders", "file", "folder" )
   ),
   "fnEditor" => array(
     "path" => "fn/editor.php",
