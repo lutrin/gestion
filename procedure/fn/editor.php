@@ -394,6 +394,53 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
+  public static function activate_individualList( $k ) {
+    return self::changeIndividualActive( $k, 1 );
+  }
+
+  /****************************************************************************/
+  public static function unactivate_individualList( $k ) {
+    return self::changeIndividualActive( $k, 0 );
+  }
+
+  /****************************************************************************/
+  protected static function changeIndividualActive( $k, $value ) {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+
+    # is myself
+    if( $_SESSION["editor"]["k"] == $k ) {
+      Includer::add( array( "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( "Changement de status", "Vous ne pouvez pas changer votre status" )
+      );
+    }
+
+    Includer::add( "dbEditor" );
+    db_Editor::save( array( "active" => $value ), $k );
+
+    return array(
+      "replacement" => array(
+        "query" => "#editors-individual",
+        "innerHtml" => self::getIndividualList()
+      ),
+      "details" => " "
+    );
+  }
+
+  /****************************************************************************/
   public static function delete_individualList( $kList ) {
     global $PERMISSION, $DELETE;
     $lang = getLang();
@@ -706,11 +753,6 @@ class fn_Editor extends fn {
       "mode"        => array(
         "compact" => "Compacte"
       ),
-      /*"mode"        => array(
-        "table"   => "Tableau",
-        "compact" => "Compacte",
-        "gallery" => "Galerie"
-      ),*/
       "primary"     => "k",
       "main"        => "username",
       "mainAction"  => "edit",
@@ -724,6 +766,14 @@ class fn_Editor extends fn {
         "edit"   => array(
           "title" => "Modifier"
         ),
+        "activate"   => array(
+          "title" => "Activer",
+          "individual" => true
+        ),
+        "unactivate"   => array(
+          "title" => "Désactiver",
+          "individual" => true
+        ),
         "delete" => array(
           "title"    => "Supprimer",
           "multiple" => true
@@ -735,7 +785,17 @@ class fn_Editor extends fn {
     $fields = self::prepareFields( $params["columns"] );
     Includer::add( array( "dbEditor", "uiList" ) );
 
-    return ui_List::buildXml( $params, db_Editor::get( $fields, false, $params["order"] ), $partOnly );
+    # editor list
+    $editorList = db_Editor::get( $fields, false, $params["order"] );
+    foreach( $editorList as $key => $editor ) {
+      if( $editor["class"] == "editor" ) {
+        $editorList[$key]["indAction"] = "unactivate";
+      } else {
+        $editorList[$key]["indAction"] = "activate";
+      }
+    }
+
+    return ui_List::buildXml( $params, $editorList, $partOnly );
   }
 
   /****************************************************************************/
@@ -757,7 +817,6 @@ class fn_Editor extends fn {
       "mainAction"  => "edit",
       "rowAction"   => "expand",
       "order"       => $order,
-      "selectable"  => true,
       "addable"     => true,
       "refreshable" => true,
       "expandable"  => true,
@@ -804,24 +863,15 @@ class fn_Editor extends fn {
       ),
       "username" => array(
         "label"    => $TOOLS_EDITOR_INDIVIDUAL["username"][$lang],
-        "class"    => "editor",
-        "sortable" => true/*,
-        "filtrable" => true*/
+        "sortable" => true
       ),
-      "active"   => array(
-        "label" => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang],
+      "active" => array(
+        "label"    => $TOOLS_EDITOR_INDIVIDUAL["active"][$lang],
         "sortable" => true,
-        "field" => "IF( active = 1, '', 'inactif' )"
+        "field" => "IF( active = 1, 'a', 'b' )"
       ),
-      "admin"    => array(
-        "label" => $TOOLS_EDITOR_INDIVIDUAL["admin"][$lang],
-        "sortable" => true,
-        "field" => "IF( admin = 1, 'admin', '' )"
-      ),
-      "longname" => array(
-        "label"  => $TOOLS_EDITOR_INDIVIDUAL["longname"][$lang],
-        "sortable" => true/*,
-        "filtrable" => true*/
+      "class"    => array(
+        "field" => "IF( active = 1, 'editor', 'disabledEditor' )"
       )
     );
   }
@@ -838,19 +888,12 @@ class fn_Editor extends fn {
       ),
       "name" => array(
         "label"    => $TOOLS_EDITOR_GROUP["name"][$lang],
-        "class"    => "groupEditor"/*,
-        "sortable" => true*/
-      )/*,
-      "active"   => array(
-        "label" => $TOOLS_EDITOR_GROUP["active"][$lang],
-        "sortable" => true,
-        "field" => "IF( active = 1, '', 'inactif' )"
+        "class"    => "groupEditor"
       ),
-      "longname" => array(
-        "label"  => $TOOLS_EDITOR_GROUP["longname"][$lang],
-        "sortable" => true
-      )*/
-    );
+      "class"    => array(
+        "field" => "IF( active = 1, 'editor', 'disabledGroupEditor' )"
+      )
+    );        
   }
 
   /****************************************************************************/

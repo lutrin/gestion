@@ -208,106 +208,147 @@ class fn_File extends fn {
       );
     }
 
-    # TODO if directory, binary, else
-
     # get
     Includer::add( array( "dir", "uiNav", "uiList", "uiForm" ) );
-
-    # get info
+    $info = Dir::getInfo( $k );
+    $infoClass = self::getClass( $info["name"], $info["mimetype"] );
+    $tabKeyList = self::getTabList( $infoClass );
+    $tabList = array();
     $id = "folder-$k";
-    $path = db_Path::getPath( $k );
-    $name = Dir::getName( $path );
 
-    # explore params
-    $exploreParams = array(
-      "id" => "files-folder-$k",
-      "mode" => array(
-        "gallery" => "Galerie",
-        "compact" => "Compact",
-        "table"   => "Tableau",
-        "resume"  => "Résumé",
-      ),
-      "main" => "name",
-      "mainAction" => "edit",
-      "addable" => true,
-      "selectable" => true,
-      "refreshable" => true,
-      "columns"     => array(
-        "k"    => array(
-          "hidden" => true
-        ),
-        "name" => array(
-          "label"    => "Nom de fichier"
-        ),
-        "type" => array(
-          "label"    => "Type"
-        ),
-        "encoding" => array(
-          "label"    => "Encodage"
-        ),
-        "size" => array(
-          "label" => "Taille"
-        )
-      ),
-      "actions"     => array(
-        "edit"   => array(
-          "title" => "Ouvrir"
-        ),
-        "insert"   => array(
-          "title"      => "Insérer",
-          "individual" => true
-        ),
-        "delete" => array(
-          "title"    => "Supprimer",
-          "multiple" => true
-        )
-      )
-    );
+    # explore tab
+    if( in_array( "explore", $tabKeyList ) ) {
 
-    # get filter list
-    $oldList = Dir::getExplore( $k );
-    $list = array();
-    foreach( $oldList as $key => $item ) {
-      $class = self::getClass( $item["name"], $item["mimetype"] );
-      if( $class == "php" ) {
-        continue;
+      # params
+      $exploreParams = array(
+        "id" => "files-folder-$k",
+        "mode" => array(
+          "gallery" => "Galerie",
+          "compact" => "Compact",
+          "table"   => "Tableau",
+          "resume"  => "Résumé",
+        ),
+        "main" => "name",
+        "mainAction" => "edit",
+        "addable" => true,
+        "selectable" => true,
+        "refreshable" => true,
+        "columns"     => array(
+          "k"    => array(
+            "hidden" => true
+          ),
+          "name" => array(
+            "label"    => "Nom de fichier"
+          ),
+          "type" => array(
+            "label"    => "Type"
+          ),
+          "encoding" => array(
+            "label"    => "Encodage"
+          ),
+          "size" => array(
+            "label" => "Taille"
+          )
+        ),
+        "actions"     => array(
+          "edit"   => array(
+            "title" => "Ouvrir"
+          ),
+          "insert"   => array(
+            "title"      => "Insérer",
+            "individual" => true
+          ),
+          "delete" => array(
+            "title"    => "Supprimer",
+            "multiple" => true
+          )
+        )
+      );
+
+      # get filter list
+      $oldList = Dir::getExplore( $k );
+      $list = array();
+      foreach( $oldList as $key => $item ) {
+        $class = self::getClass( $item["name"], $item["mimetype"] );
+        if( $class == "php" ) {
+          continue;
+        }
+        $list[] = array_merge( $item, array(
+          "class"     => $class,
+          "indAction" => self::getAction( $class ),
+          "size"      => self::getHumanFileSize( $item["size"] )
+        ) );
       }
-      $list[] = array_merge( $item, array(
-        "class"     => $class,
-        "indAction" => self::getAction( $class ),
-        "size"      => self::getHumanFileSize( $item["size"] )
-      ) );
+
+      $tabList["$id-tabExplore"] = array(
+        "label"     => "Contenu",
+        "innerHtml" => ui_List::buildXml( $exploreParams, $list )
+      );
     }
 
-    # form params
+    # view tab
+
+    # edit tab
+    if( in_array( "edit", $tabKeyList ) ) {
+
+      # TODO get form
+      $formParams = array(
+        "id"       => "$infoClass-new",
+        "action"   => "save",
+        "submit"   => "Enregistrer",
+        "method"   => "post",
+        "class"    => $infoClass
+      );
+      $fields = array(
+        "k"     => array(
+          "type" => "hidden"
+        ),
+        "object"     => array(
+          "type" => "hidden",
+          "value" => "file-content"
+        ),
+        "content" => array(
+          "label" => "Contenu",
+          "type"  => "textarea",
+          "cols"  => 80,
+          "rows"  => 24,
+          "spellcheck" => "false"
+        )
+      );
+      $values = array(
+        "k" => $k,
+        "content" => "<![CDATA[" . Dir::getContent( $info["path"] ) . "]]>"
+      );
+      $tabList["$id-tabEdit"] = array(
+        "label" => "Édition",
+        "innerHtml" => ui_Form::buildXml( $formParams, $fields, $values )
+      );
+    }
+
+    # rename tab
     $formParams = self::getFormParamsFolder();
     $fields = self::getFormFieldsFolder( $k );
     $values = array(
       "k"       => $k,
       "parentK" => Dir::getParentK( $k ),
-      "name"    => $name
+      "name"    => $info["name"]
     );
+    $tabList["$id-tabRename"] = array(
+      "label" => "Propriétés",
+      "innerHtml" => ui_Form::buildXml( $formParams, $fields, $values )
+    );
+    foreach( $tabList as $key => $tab ) {
+      $tabList[$key]["selected"] = true;
+      break;
+    }
 
     # tabs params
     $navParams = array(
       "id"        => "folder-$k",
       "mode"      => "tabs",
-      "class"     => "folder",
-      "headtitle" => "$path&nbsp;-&nbsp;Dossier",
+      "class"     => $infoClass,
+      "headtitle" => $info["path"] . "&nbsp;-&nbsp;Dossier",
       "closable"  => true
-    );
-
-    # tabs list
-    $tabList = array(
-      "$id-tabExplore" => array(
-        "label"     => "Contenu",
-        "selected"  => true,
-        "innerHtml" => ui_List::buildXml( $exploreParams, $list )
-      ),
-      "$id-tabRename" => array(
-        "label" => "Propriétés",
-        "innerHtml" => ui_Form::buildXml( $formParams, $fields, $values )
-      )
     );
 
     return array(
@@ -505,7 +546,7 @@ class fn_File extends fn {
     $tabList = array(
       "explore" => array( "folder" ),
       "view"    => array( "gif", "jpg", "png", "svg" ),
-      "edit"    => array( "svg", "html", "php", "text", "xml" )
+      "edit"    => array( "svg", "html", "php", "text", "xml", "javascript", "sql", "css" )
     );
 
     # get tab

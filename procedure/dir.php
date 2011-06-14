@@ -115,6 +115,22 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function getInfo( $k ) {
+    global $PUBLICPATH;
+    $path = self::getPath( $k );
+    $type = finfo_open( FILEINFO_MIME_TYPE );
+    $encoding = finfo_open( FILEINFO_MIME_ENCODING );
+    return array(
+      "k"        => $k,
+      "name"     => self::getName( $path ),
+      "mimetype" => finfo_file( $type, $path ),
+      "encoding" => finfo_file( $encoding, $path ),
+      "size"     => filesize( $path ),
+      "path"     => str_replace( $PUBLICPATH . "/", "", $path )
+    );
+  }
+
+  /****************************************************************************/
   public static function getNewPath( $parentPath, $newName ) {
     $pathList = explode( "/", $parentPath );
     $pathList[] = $newName;
@@ -163,6 +179,12 @@ class Dir {
   /****************************************************************************/
   public static function getParentK( $k ) {
     return self::getK( self::getParent( $k ) );
+  }
+
+  /****************************************************************************/
+  public static function getContent( $path ) {
+    global $PUBLICPATH;
+    return file_get_contents( $PUBLICPATH . "/" . $path, FILE_USE_INCLUDE_PATH );
   }
 
   /****************************************************************************/

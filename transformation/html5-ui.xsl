@@ -75,7 +75,18 @@
     <xsl:when test="@type='textarea'">
       <div>
         <xsl:call-template name="apply-topfield" />
-        <textarea>Ceci est un text area</textarea>
+        <textarea>
+          <xsl:for-each select="@id|@name|@required|@autofocus|@class|@cols|@rows|@spellcheck">
+            <xsl:call-template name="apply-attribute" />
+          </xsl:for-each>
+          <xsl:apply-templates select="ui.value" />
+        </textarea>
+        <!--<code contenteditable="true">
+          <xsl:for-each select="@id|@name|@required|@autofocus|@class|@cols|@rows">
+            <xsl:call-template name="apply-attribute" />
+          </xsl:for-each>
+          <xsl:apply-templates select="ui.value" />
+        </code>-->
       </div>
     </xsl:when>
 
@@ -176,6 +187,10 @@
       </div>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ui.value">
+  <xsl:value-of select="." />
 </xsl:template>
 
 <xsl:template match="ui.datalist" mode="select">
