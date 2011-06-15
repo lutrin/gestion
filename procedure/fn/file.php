@@ -4,22 +4,8 @@ class fn_File extends fn {
 
   /****************************************************************************/
   public static function getContent() {
-    global $PERMISSION;
-
-    # language
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
     }
 
     return array(
@@ -33,20 +19,8 @@ class fn_File extends fn {
 
   /****************************************************************************/
   public static function refresh_folder() {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
     }
 
     return array(
@@ -60,20 +34,8 @@ class fn_File extends fn {
 
   /****************************************************************************/
   public static function add_folder() {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
     }
 
     # get params
@@ -86,27 +48,16 @@ class fn_File extends fn {
     return array(
       "details" => ui_Form::buildXml(
         $params,
-        $fields
+        $fields,
+        array( "k" => 0 )
       )
     );
   }
 
   /****************************************************************************/
   public static function insert_folder( $parentK ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
     }
 
     # get params
@@ -114,7 +65,7 @@ class fn_File extends fn {
     $params["headtitle"] = "Nouveau&nbsp;dossier";
     $params["closable"] = true;
     $fields = self::getFormFieldsFolder();
-    $values = array( "parentK" => $parentK );
+    $values = array( "k" => 0, "parentK" => $parentK );
 
     Includer::add( array( "uiForm" ) );
     return array(
@@ -127,28 +78,15 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  public static function save_folder() {
-    global $PERMISSION, $PUBLICPATH;
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+  public static function save_name( $k, $values ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
     }
 
     # valid form
-    $values = $_GET;
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
-      self::getFormParamsFolder(),
+      self::getFormParamsFolder( $k ),
       self::getFormFieldsFolder(),
       $values
     );
@@ -163,15 +101,15 @@ class fn_File extends fn {
     $parentPath = db_Path::getPath( $values["parentK"] );
     $newPath = Dir::getNewPath( $parentPath, $values["name"] );
     $newK = db_Path::getK( $newPath );
-    if( $newK != $values["k"] ) {
+    if( $newK != $k ) {
       if( Dir::exists( $newK ) ) {
         $result["errorList"][] = array( "name" => "name", "msg" => "alreadyexists" );
         return $result;
       }
 
       # rename
-      if( $values["k"] ) {
-        $modified = Dir::rename( $values["k"], $newK );
+      if( $k ) {
+        $modified = Dir::rename( $k, $newK );
 
       # make
       } else {
@@ -189,23 +127,42 @@ class fn_File extends fn {
     );
   }
 
+  /****************************************************************************/
+  public static function save_content( $k, $values ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+
+    # valid form
+    Includer::add( "fnForm" );
+    $result = fn_Form::hasErrors(
+      self::getFormParamsContent( "text", $k ),
+      self::getFormFieldsContent(),
+      $values
+    );
+
+    # fatal error or error list
+    if( isset( $result["fatalError"] ) || ( isset( $result["errorList"] ) && $result["errorList"] ) ) {
+      return $result;
+    }
+
+    Includer::add( "dir" );
+    Dir::save( $k, $values["content"] );
+
+    # list
+    return array(
+      "replacement" => array(
+        "query" => "#" . self::$idList,
+        "innerHtml" => self::getFolderTree()
+      ),
+      "details" => " "
+    );
+  }
 
   /****************************************************************************/
   public static function edit_folder( $k ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
     }
 
     # get
@@ -221,7 +178,7 @@ class fn_File extends fn {
 
       # params
       $exploreParams = array(
-        "id" => "files-folder-$k",
+        "id" => self::$idList . "-" . $id,
         "mode" => array(
           "gallery" => "Galerie",
           "compact" => "Compact",
@@ -230,9 +187,10 @@ class fn_File extends fn {
         ),
         "main" => "name",
         "mainAction" => "edit",
-        "addable" => true,
+        "insertable" => true,
         "selectable" => true,
         "refreshable" => true,
+        "key"        => $k,
         "columns"     => array(
           "k"    => array(
             "hidden" => true
@@ -291,30 +249,9 @@ class fn_File extends fn {
     # edit tab
     if( in_array( "edit", $tabKeyList ) ) {
 
-      # TODO get form
-      $formParams = array(
-        "id"       => "$infoClass-new",
-        "action"   => "save",
-        "submit"   => "Enregistrer",
-        "method"   => "post",
-        "class"    => $infoClass
-      );
-      $fields = array(
-        "k"     => array(
-          "type" => "hidden"
-        ),
-        "object"     => array(
-          "type" => "hidden",
-          "value" => "file-content"
-        ),
-        "content" => array(
-          "label" => "Contenu",
-          "type"  => "textarea",
-          "cols"  => 80,
-          "rows"  => 24,
-          "spellcheck" => "false"
-        )
-      );
+      # get form
+      $formParams = self::getFormParamsContent( $infoClass, $k );
+      $fields = self::getFormFieldsContent();
       $values = array(
         "k" => $k,
         "content" => "<![CDATA[" . Dir::getContent( $info["path"] ) . "]]>"
@@ -326,8 +263,8 @@ class fn_File extends fn {
     }
 
     # rename tab
-    $formParams = self::getFormParamsFolder();
-    $fields = self::getFormFieldsFolder( $k );
+    $formParams = self::getFormParamsFolder( $k );
+    $fields = self::getFormFieldsFolder();
     $values = array(
       "k"       => $k,
       "parentK" => Dir::getParentK( $k ),
@@ -358,20 +295,8 @@ class fn_File extends fn {
 
   /****************************************************************************/
   public static function delete_folder( $kList ) {
-    global $PERMISSION, $PUBLICPATH;
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
     }
 
     foreach( $kList as $k ) {
@@ -395,7 +320,6 @@ class fn_File extends fn {
 
   /****************************************************************************/
   protected static function getFolderTree() {
-    global $PUBLICPATH;
 
     # get tree
     Includer::add( array( "dir", "uiList" ) );
@@ -440,9 +364,9 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormParamsFolder() {
+  protected static function getFormParamsFolder( $k = 0 ) {
     return array(
-      "id"       => "folder-new",
+      "id"       => "filename-$k",
       "action"   => "save",
       "submit"   => "Enregistrer",
       "method"   => "post",
@@ -461,7 +385,7 @@ class fn_File extends fn {
       ),
       "object"     => array(
         "type" => "hidden",
-        "value" => "file-folder"
+        "value" => "file-name"
       ),
       "edition" => array(
         "type" => "fieldset",
@@ -474,6 +398,37 @@ class fn_File extends fn {
             "maxlength" => 255
           )
         )
+      )
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormParamsContent( $infoClass = "text", $k = 0 ) {
+    return array(
+      "id"       => "filecontent-$k",
+      "action"   => "save",
+      "submit"   => "Enregistrer",
+      "method"   => "post",
+      "class"    => $infoClass
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormFieldsContent() {
+    return array(
+      "k"     => array(
+        "type" => "hidden"
+      ),
+      "object"     => array(
+        "type" => "hidden",
+        "value" => "file-content"
+      ),
+      "content" => array(
+        "label" => "Contenu",
+        "type"  => "textarea",
+        "cols"  => 80,
+        "rows"  => 24,
+        "spellcheck" => "false"
       )
     );
   }

@@ -144,6 +144,14 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function save( $k, $content ) {
+    $file = fopen( self::getPath( $k ), 'w+' );
+    fwrite( $file, $content );
+    fclose( $file );
+    return true;
+  }
+
+  /****************************************************************************/
   public static function isPermitted( $k, $name = "" ) {
     return fileperms( self::getPath( $k, $name ) ) == 16895;
   }

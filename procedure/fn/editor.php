@@ -4,24 +4,12 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function getContent() {
-    global $PERMISSION, $TOOLS, $TOOLS_EDITOR;
-
-    # language
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    global $TOOLS, $TOOLS_EDITOR;
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
+    $lang = getLang();
     $editorsTabList = array(
       ( self::$idList . "-individual" ) => array(
         "label"     => $TOOLS_EDITOR["individual"][$lang],
@@ -52,20 +40,9 @@ class fn_Editor extends fn {
   /****************************************************************************/
   public static function getContent_individual() {
     global $TOOLS_EDITOR;
-  
-    # language
-    $lang = getLang();
 
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # list
@@ -79,19 +56,8 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function pick_individualList( $excludedKList, $for ) {
-    # language
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     Includer::add( "fnSetting" );
@@ -135,19 +101,8 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function pick_groupList( $excludedKList, $for ) {
-    # language
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     Includer::add( "fnSetting" );
@@ -192,22 +147,9 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function getContent_group() {
-    global $TOOLS_EDITOR, $PERMISSION;
-  
-    # language
-    $lang = getLang();
-
-    # is admin
-    if( !( ( $isAdmin = $_SESSION["editor"]["admin"] ) ||
-           ( in_array( self::$idList, $_SESSION["editor"]["toolList"] ) ) ) ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    global $TOOLS_EDITOR;
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # list
@@ -221,20 +163,10 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function edit_individualList( $k ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
+
     return array(
       "details" => self::getEditIndividual( $k )
     );
@@ -242,20 +174,10 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function edit_groupList( $k ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
+
     return array(
       "details" => self::getEditGroup( $k )
     );
@@ -263,19 +185,8 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function add_individualList() {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # get default values
@@ -300,19 +211,8 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function add_groupList( $parentK = 0 ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # get default values
@@ -343,19 +243,8 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function refresh_individualList() {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     return array(
@@ -369,19 +258,8 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function refresh_groupList() {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     return array(
@@ -405,19 +283,8 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   protected static function changeIndividualActive( $k, $value ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # is myself
@@ -442,19 +309,9 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function delete_individualList( $kList ) {
-    global $PERMISSION, $DELETE;
-    $lang = getLang();
-
-    # is admin
-    if( ( !$isAdmin = $_SESSION["editor"]["admin"] ) ) {
-      Includer::add( array( "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    global $DELETE;
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # is myself
@@ -480,28 +337,9 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function delete_groupList( $kList ) {
-    global $PERMISSION, $DELETE;
-    $lang = getLang();
-
-    # is admin
-    if( ( !$isAdmin = $_SESSION["editor"]["admin"] ) ) {
-      Includer::add( array( "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
-
-    /*# is myself
-    if( in_array( $_SESSION["editor"]["k"], $kList ) ) {
-      Includer::add( array( "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $DELETE["title"][$lang], $DELETE["message"][$lang] )
-      );
-    }*/
 
     # remove
     Includer::add( "dbGroupEditor" );
@@ -517,24 +355,12 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function save_individual( $k ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+  public static function save_individual( $k, $values ) {
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # valid form
-    $values = $_GET;
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
       self::getFormParamsIndividual( $k ),
@@ -602,24 +428,12 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  public static function save_group( $k ) {
-    global $PERMISSION;
-    $lang = getLang();
-
-    # is admin
-    if( !$isAdmin = $_SESSION["editor"]["admin"] ) {
-      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
-        "replacement" => array(
-          "query" => "#main",
-          "innerHtml" => fn_edit::getMain() 
-        )
-      );
+  public static function save_group( $k, $values ) {
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
     }
 
     # valid form
-    $values = $_GET;
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
       self::getFormParamsGroup( $k ),
@@ -1058,14 +872,7 @@ class fn_Editor extends fn {
                   "admin" => $admin
                 )
               ),
-              "toolList" => $toolList/*,
-              "groupList" => array(
-                "label"    => "Groupes éditeurs",
-                "type"     => "picklist",
-                "multiple" => "multiple",
-                "object"   => "editors-groupList",
-                "list"     => $groupList
-              )*/
+              "toolList" => $toolList
             )
           )
         )

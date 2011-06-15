@@ -57,7 +57,7 @@
 
 <!-- user interface -->
 <xsl:template match="ui.form">
-  <form>
+  <form enctype="application/x-www-form-urlencoded">
     <xsl:call-template name="apply-attributelist" />
     <xsl:if test="@closable">
       <button class="close" data-trigger="close">
@@ -441,9 +441,12 @@
     <xsl:call-template name="apply-listpart" />
 
     <!-- addable -->
-    <xsl:if test="@addable|@refreshable">
+    <xsl:if test="@insertable|@addable|@refreshable">
       <fieldset>
         <legend>Fonctions</legend>
+        <xsl:if test="@insertable">
+          <button class="add" data-action="insert" data-params="object={@id},k={@key}">Ajouter</button>
+        </xsl:if>
         <xsl:if test="@addable">
           <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
         </xsl:if>

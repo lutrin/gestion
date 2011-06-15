@@ -115,6 +115,42 @@ return true;
   }
 
   /****************************************************************************/
+  public static function isNotAllowed( $idList = false ) {
+    global $PERMISSION;
+    $lang = getLang();
+
+    # is admin
+    if( !( $isAdmin = $_SESSION["editor"]["admin"] ||
+           ( $idList? in_array( $idList, $_SESSION["editor"]["toolList"] ): false ) ) ) {
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( $PERMISSION["title"][$lang], $PERMISSION["message"][$lang] ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+    }
+    return false;
+  }
+
+  /****************************************************************************/
+  public static function isNotImplanted() {
+    global $IM;
+    $lang = getLang();
+
+    # is admin
+      Includer::add( array( "tag", "fnEdit", "uiDialog" ) );
+      return array(
+        "dialog" => ui_Dialog::buildXml( "Application", "Pas encore implanté." ),
+        "replacement" => array(
+          "query" => "#main",
+          "innerHtml" => fn_edit::getMain() 
+        )
+      );
+  }
+
+  /****************************************************************************/
   protected static function getFormParams( $LOGIN, $msg = "" ) {
     return array(
       "id"     => self::$id,

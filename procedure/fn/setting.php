@@ -15,7 +15,7 @@ class fn_Setting {
   }
 
   /****************************************************************************/
-  public static function save( $k, $token ) {
+  public static function save( $k, $values ) {
     global $SETTING, $APP, $FOOTERLINK;
 
     # allowed
@@ -24,7 +24,6 @@ class fn_Setting {
     }
 
     # valid form
-    $values = $_GET;
     Includer::add( "fnForm" );
     $result = fn_Form::hasErrors(
       self::getFormParams( $SETTING ),

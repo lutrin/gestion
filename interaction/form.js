@@ -56,7 +56,7 @@
 
           // send
           return _c.callAjax(
-            [ { folder: "procedure", name: action, params: fields } ],
+            [ { folder: "procedure", name: action, params: fields, method: "POST" } ],
             function( ajaxItem ) {
               var key;
 
@@ -118,7 +118,7 @@
   serialize: function( form, app ) {
     var fields = {},
         error = false;
-    form.find( "input:text,input:hidden,input:password,input:checkbox,select" ).each( function() {
+    form.find( "input:text,input:hidden,input:password,input:checkbox,select,textarea" ).each( function() {
       var object = $( this ),
           type = object.attr( "type" ) || object.tagName,
           value = object.val(),

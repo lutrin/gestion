@@ -42,8 +42,8 @@ function main() {
             return displaySetting();
           } elseif( $action == "getContent" ) {
             return getContent();
-          } elseif( $action == "save" ) {
-            return save();
+          /*} elseif( $action == "save" ) {
+            return save();*/
           /*} elseif( $action == "edit" ) {
             return edit();
           } elseif( $action == "rename" ) {
@@ -63,10 +63,14 @@ function main() {
           } elseif( $action == "removeAccountStorage" ) {
             return removeAccountStorage();
           }
+        } elseif( $action = isset( $_POST["action"] )? typeValidator::isAlphaNumeric( $_POST["action"] ): false ) {
+          if( $action == "save" ) {
+            return save();
+          }
         }
         return logout( $msg );
       } else {
-        if( $action = isset( $_GET["action"] )? typeValidator::isAlphaNumeric( $_GET["action"] ): false ) {
+        if( $action = isset( $_POST["action"] )? typeValidator::isAlphaNumeric( $_POST["action"] ): false ) {
           if( $action == "login" ) {
             return login();
           }
@@ -81,9 +85,9 @@ function main() {
 /******************************************************************************/
 function login() {
   global $CONTROLLER;
-  if( ( $username = ( isset( $_GET["username"] )? $_GET["username"]: false ) ) &&
-      ( $password = ( isset( $_GET["password"] )? $_GET["password"]: false ) ) &&
-      ( $token    = ( isset( $_GET["token"] )?    $_GET["token"]:    false ) ) ) {
+  if( ( $username = ( isset( $_POST["username"] )? $_POST["username"]: false ) ) &&
+      ( $password = ( isset( $_POST["password"] )? $_POST["password"]: false ) ) &&
+      ( $token    = ( isset( $_POST["token"] )?    $_POST["token"]:    false ) ) ) {
     setHeader( "json" );
     return json_encode( fn_Login::connect( array(
       "username" => $username,
@@ -157,13 +161,13 @@ function getContent() {
 /******************************************************************************/
 function save() {
   global $CONTROLLER;
-  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
-      ( $token =  ( isset( $_GET["token"] )? $_GET["token"]: false ) ) ) {
+  if( ( $object = ( isset( $_POST["object"] )? typeValidator::isAlphaNumeric( $_POST["object"] ): false ) ) &&
+      ( $token =  ( isset( $_POST["token"] )? $_POST["token"]: false ) ) ) {
     if( $object == "file-folder" ) {
       return switchFunction( "save", $object, array( $token ) );
     }
-    if( isset( $_GET["k"] ) ) {
-      return switchFunction( "save", $object, array( $_GET["k"], $token ) );
+    if( isset( $_POST["k"] ) ) {
+      return switchFunction( "save", $object, array( $_POST["k"], $_POST ) );
     }
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
