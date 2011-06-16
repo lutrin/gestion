@@ -47,10 +47,12 @@ class Dir {
 
     # sort
     usort( $list, function( $a, $b ) {
-      if( $a["name"] == $b["name"] ) {
+      $aName = strtolower( $a["name"] );
+      $bName = strtolower( $b["name"] );
+      if( $aName == $bName ) {
         return 0;
       }
-      return ( $a["name"] < $b["name"] )? -1: 1;
+      return ( $aName < $bName )? -1: 1;
     } );
     return $list;
   }
@@ -94,7 +96,9 @@ class Dir {
 
     # sort
     usort( $list, function( $a, $b ) {
-      if( $a["name"] == $b["name"] && $a["mimetype"] == $b["mimetype"] ) {
+      $aName = strtolower( $a["name"] );
+      $bName = strtolower( $b["name"] );
+      if( $aName == $bName && $a["mimetype"] == $b["mimetype"] ) {
         return 0;
       }
       if( $a["mimetype"] == "directory" && $b["mimetype"] != "directory" ) {
@@ -103,7 +107,7 @@ class Dir {
       if( $b["mimetype"] == "directory" && $a["mimetype"] != "directory" ) {
         return 1;
       }
-      return ( $a["name"] < $b["name"] )? -1: 1;
+      return ( $aName < $bName )? -1: 1;
     } );
     return $list;
   }

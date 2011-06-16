@@ -216,7 +216,7 @@ function itemAction( $action ) {
 function listAction( $action ) {
   global $CONTROLLER;
   if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
-    return switchFunction( $action, $object );
+    return switchFunction( $action, $object, array( $object ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

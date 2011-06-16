@@ -134,7 +134,8 @@ var _edit = {
 
   /****************************************************************************/
   replaceContent: function( replacement ) {
-    var object = $( replacement.query );
+    var object = $( replacement.query ),
+        clone;
 
     // inner html
     if( replacement.innerHtml ) {

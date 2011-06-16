@@ -18,18 +18,101 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  public static function refresh_folder() {
+  public static function refresh_folder( $id ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
 
     return array(
       "replacement" => array(
-        "query"     => "#" . self::$idList,
+        "query"     => "#$id",
         "innerHtml" =>  self::getFolderTree()
-      ),
-      "details" => " "
+      )
     );
+  }
+
+  /****************************************************************************/
+  public static function refresh_file( $id ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+
+    $idExploded = explode( "-", $id );
+    $k = array_pop( $idExploded );
+
+    return array(
+      "replacement" => array(
+        "query" => "#$id-tabExplore",
+        "innerHtml" => self::getExploreFolder( $id, $k )
+      )
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getExploreFolder( $id, $k ) {
+    $exploreParams = array(
+      "id" => $id,
+      "mode" => array(
+        "gallery" => "Galerie",
+        "compact" => "Compact",
+        "table"   => "Tableau",
+        "resume"  => "Résumé",
+      ),
+      "main" => "name",
+      "mainAction" => "edit",
+      "insertable" => true,
+      "selectable" => true,
+      "refreshable" => true,
+      "key"        => $k,
+      "columns"     => array(
+        "k"    => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "label"    => "Nom de fichier"
+        ),
+        "type" => array(
+          "label"    => "Type"
+        ),
+        "encoding" => array(
+          "label"    => "Encodage"
+        ),
+        "size" => array(
+          "label" => "Taille"
+        )
+      ),
+      "actions"     => array(
+        "edit"   => array(
+          "title" => "Ouvrir"
+        ),
+        "insert"   => array(
+          "title"      => "Insérer",
+          "individual" => true
+        ),
+        "delete" => array(
+          "title"    => "Supprimer",
+          "multiple" => true
+        )
+      )
+    );
+
+    # get filter list
+    Includer::add( array( "dir", "uiList" ) );
+    $oldList = Dir::getExplore( $k );
+    $list = array();
+    foreach( $oldList as $key => $item ) {
+      $class = self::getClass( $item["name"], $item["mimetype"] );
+      if( $class == "php" ) {
+        continue;
+      }
+      $list[] = array_merge( $item, array(
+        "class"     => $class,
+        "indAction" => self::getAction( $class ),
+        "size"      => self::getHumanFileSize( $item["size"] )
+      ) );
+    }
+
+    return ui_List::buildXml( $exploreParams, $list );
   }
 
   /****************************************************************************/
@@ -75,6 +158,11 @@ class fn_File extends fn {
         $values
       )
     );
+  }
+
+  /****************************************************************************/
+  public static function insert_file( $parentK ) {
+    return self::insert_folder( $parentK );
   }
 
   /****************************************************************************/
@@ -171,11 +259,11 @@ class fn_File extends fn {
     $infoClass = self::getClass( $info["name"], $info["mimetype"] );
     $tabKeyList = self::getTabList( $infoClass );
     $tabList = array();
-    $id = "folder-$k";
+    $id = "files-file-$k";
 
     # explore tab
     if( in_array( "explore", $tabKeyList ) ) {
-
+/*
       # params
       $exploreParams = array(
         "id" => self::$idList . "-" . $id,
@@ -236,11 +324,12 @@ class fn_File extends fn {
           "indAction" => self::getAction( $class ),
           "size"      => self::getHumanFileSize( $item["size"] )
         ) );
-      }
+      }*/
 
       $tabList["$id-tabExplore"] = array(
         "label"     => "Contenu",
-        "innerHtml" => ui_List::buildXml( $exploreParams, $list )
+        "innerHtml" => self::getExploreFolder( $id, $k )
+/*        "innerHtml" => ui_List::buildXml( $exploreParams, $list )*/
       );
     }
 
@@ -294,7 +383,37 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
+  public static function edit_file( $k ) {
+    return self::edit_folder( $k );
+  }
+
+  /****************************************************************************/
   public static function delete_folder( $kList ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+
+    foreach( $kList as $k ) {
+
+      # valid exists
+      Includer::add( "dir" );
+      if( Dir::exists( $k ) ) {
+        Dir::delete( $k );
+      }
+    }
+
+    # list
+    return array(
+      "replacement" => array(
+        "query" => "#" . self::$idList,
+        "innerHtml" => self::getFolderTree()
+      ),
+      "details" => " "
+    );
+  }
+
+  /****************************************************************************/
+  public static function delete_file( $kList ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
