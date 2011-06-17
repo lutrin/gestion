@@ -31,7 +31,7 @@ textarea {
   text-shadow: 0px 0px 5px rgba(0,88,88,.7);
 }
 
-nav > menu > li.selected {
+.selected, [selected=selected] {
   font-weight: bold;
 }
 
@@ -261,6 +261,8 @@ select:hover,
 #contextMenu > menu > li:hover,
 .checkbox:hover,
 .checklist li:hover,
+.radio:hover,
+.radiolist li:hover,
 .picklist li:hover {
   background-color: #ff9;
 }
@@ -300,7 +302,7 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
   background-color: transparent;
 }
 
-.list-container .row.selected, .picklist li {
+.list-container .row.selected, .picklist li, .checkbox.selected, .checklist .selected, .radiolist .selected {
   background-color: #fc9;
 } 
 
@@ -352,7 +354,7 @@ input[type=submit]:active, button:active {
   box-shadow: inset rgba(0,0,0,.2) 2px 2px 2px;
 }
 
-.gallery .row, .compact .row, .tree .row, .dock li {
+.gallery .row, .compact .row, .tree .row, .dock li, .checkbox, .checklist li, .radiolist li  {
   border-radius: 4px;
 }
 
@@ -414,8 +416,11 @@ menu > li,
 .cell,
 .checklist li,
 .checklist li > *,
+.radiolist li,
+.radiolist li > *,
 .picklist li,
-.picklist li > *
+.picklist li > *,
+.checkbox
  {
   padding: 2px;
 }
@@ -430,7 +435,9 @@ menu > li,
 .field,
 .cell,
 .checklist li,
-.picklist li {
+.radiolist li,
+.picklist li,
+.checkbox {
   margin: 2px;
 }
 
@@ -446,6 +453,12 @@ menu > li,
 
 .row > .row {
   margin-left: 20px;
+}
+
+.checkbox {
+  margin-left: 2em;
+  float: left;
+  clear: both;
 }
 
 .editor > h2,
@@ -729,8 +742,12 @@ nav h2, nav menu {
   -webkit-column-gap: 5px;
 }
 
-.compact .list, .tree .list, .checklist {
+.compact .list, .tree .list, .checklist, .radiolist {
   list-style-type: none;
+}
+
+.checklist, .radiolist {
+  display: inline-block;
 }
 
 .compact .row, .tree .row {
@@ -861,6 +878,20 @@ nav h2, nav menu {
   display: inline-block;
 }
 
+.fileUpload {
+  position: relative;
+}
+
+.fileUpload [type=file] {
+  opacity: 0;
+}
+
+
+.fileUpload [type=file] {
+  position: absolute;
+  left: 0;
+}
+
 /* z position */
 #dialog {
   z-index: 900;
@@ -868,6 +899,10 @@ nav h2, nav menu {
 
 #contextMenu {
   z-index: 800;
+}
+
+.fileUpload [type=file] {
+    z-index: 2;
 }
 /*
 .dock, .dock li span {

@@ -315,6 +315,7 @@ class fn_Editor extends fn {
     }
 
     # is myself
+    $lang = getLang();
     if( in_array( $_SESSION["editor"]["k"], $kList ) ) {
       Includer::add( array( "uiDialog" ) );
       return array(

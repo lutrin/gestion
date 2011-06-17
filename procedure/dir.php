@@ -200,6 +200,22 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function calculateMaxFileSize() {
+    $uploadMaxFilesize = ini_get( "upload_max_filesize" );
+    $value = intval( $uploadMaxFilesize );
+    $size = str_replace( ( string ) $value, "", $uploadMaxFilesize );
+    $multiple = 0;
+    if( $size == "K" ) {
+      $multiple = 1;
+    } elseif( $size == "M" ) {
+      $multiple = 2;
+    } elseif( $size == "G" ) {
+      $multiple = 3;
+    }
+    return $value * pow( 1024, $multiple );
+  }
+
+  /****************************************************************************/
   protected static function getK( $subpath ) {
     global $PUBLICPATH;
     if( $subpath == $PUBLICPATH ) {

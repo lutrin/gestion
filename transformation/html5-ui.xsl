@@ -116,14 +116,23 @@
     <!-- checkbox -->
     <xsl:when test="@type='checkbox'">
       <div>
+        <xsl:variable name="selected">
+          <xsl:if test="ui.value=@value">
+            <xsl:text>1</xsl:text>
+          </xsl:if>
+        </xsl:variable>
+
         <xsl:attribute name="class">
           <xsl:text>field checkbox</xsl:text>
+          <xsl:if test="$selected = '1'">
+            <xsl:text> selected</xsl:text>
+          </xsl:if>
         </xsl:attribute>
         <input>
           <xsl:for-each select="@id|@name|@type|@required|@value|@disabled">
             <xsl:call-template name="apply-attribute" />
           </xsl:for-each>
-          <xsl:if test="ui.value=@value">
+          <xsl:if test="$selected = '1'">
             <xsl:attribute name="checked"><xsl:text>checked</xsl:text></xsl:attribute>
           </xsl:if>
         </input>
@@ -132,12 +141,16 @@
     </xsl:when>
 
     <!-- checklist -->
-    <xsl:when test="@type='checklist'">
+    <xsl:when test="(@type='checklist') or (@type='radiolist')">
       <fieldset>
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
-        <xsl:apply-templates select="ui.datalist" mode="checklist" />
+        <xsl:apply-templates select="ui.datalist" mode="checklist">
+          <xsl:with-param name="type">
+            <xsl:value-of select="@type" />
+          </xsl:with-param>
+        </xsl:apply-templates>
       </fieldset>
     </xsl:when>
 
@@ -166,6 +179,23 @@
           </xsl:if>
           <xsl:call-template name="apply-value-attribute" />
         </input>
+      </div>
+    </xsl:when>
+
+    <xsl:when test="@type='fileUpload'">
+      <div class="field fileUpload">
+        <xsl:if test="@maxFileSize">
+          <input type="hidden" name="MAX_FILE_SIZE" value="{@maxFileSize}" />
+        </xsl:if>
+        <input>
+          <xsl:for-each select="@id|@name|@required|@accept|@autofocus|@multiple">
+            <xsl:call-template name="apply-attribute" />
+          </xsl:for-each>
+          <xsl:attribute name="type">
+            <xsl:text>file</xsl:text>
+          </xsl:attribute>
+        </input>
+        <input type="button" value="{@label}" />
       </div>
     </xsl:when>
 
@@ -198,8 +228,20 @@
 </xsl:template>
 
 <xsl:template match="ui.datalist" mode="checklist">
-  <ul class="checklist">
-    <xsl:apply-templates select="ui.dataitem" mode="checklist" />
+  <xsl:param name="type" />
+  <ul class="{$type}">
+    <xsl:apply-templates select="ui.dataitem" mode="checklist">
+      <xsl:with-param name="type">
+        <xsl:choose>
+          <xsl:when test="$type = 'radiolist'">
+            <xsl:text>radio</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>checkbox</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:apply-templates>
   </ul>
 </xsl:template>
 
@@ -239,6 +281,7 @@
 </xsl:template>
 
 <xsl:template match="ui.dataitem" mode="checklist">
+  <xsl:param name="type" />
   <li>
     <xsl:variable name="id">
       <xsl:value-of select="../../@id"/>
@@ -246,7 +289,22 @@
       <xsl:value-of select="@key"/>
     </xsl:variable>
 
-    <input type="checkbox">
+    <xsl:variable name="isInList">
+      <xsl:if test="(../../ui.value) and (@value)">
+        <xsl:call-template name="inList">
+          <xsl:with-param name="list" select="../../ui.value" /> 
+          <xsl:with-param name="search" select="@value" />
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:if test="$isInList=1">
+      <xsl:attribute name="class">
+        <xsl:text>selected</xsl:text>
+      </xsl:attribute>
+    </xsl:if>
+
+    <input type="{$type}">
       <xsl:attribute name="id">
         <xsl:value-of select="$id"/>
       </xsl:attribute>
@@ -260,18 +318,10 @@
         <xsl:attribute name="value">
           <xsl:value-of select="@value"/>
         </xsl:attribute>
-        <xsl:if test="../../ui.value">
-          <xsl:variable name="isInList">
-            <xsl:call-template name="inList">
-              <xsl:with-param name="list" select="../../ui.value" /> 
-              <xsl:with-param name="search" select="@value" />
-            </xsl:call-template>
-          </xsl:variable>
-          <xsl:if test="$isInList=1">
-            <xsl:attribute name="checked">
-              <xsl:text>checked</xsl:text>
-            </xsl:attribute>
-          </xsl:if>
+        <xsl:if test="$isInList=1">
+          <xsl:attribute name="checked">
+            <xsl:text>checked</xsl:text>
+          </xsl:attribute>
         </xsl:if>
       </xsl:if>
     </input>

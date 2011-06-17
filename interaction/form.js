@@ -21,6 +21,20 @@
       form.find( "input[autofocus]" ).focus();
     }
 
+    // radio and checkbox
+    form.find( "input:checkbox,input:radio" ).click( function() {
+      var checkbox = $( this ),
+          selected = checkbox.is(":checked");
+      if( checkbox.is(":radio" ) ) {
+        form.find( "[name=" + checkbox.attr( "name" ) + "]" ).parent().removeClass( "selected" );
+      }
+      if( checkbox.is(":checked") ) {
+        checkbox.parent().addClass( "selected" );
+      } else {
+        checkbox.parent().removeClass( "selected" );
+      }
+    } );
+
     // apply change
     form.find( "input:text,input:password,textarea" ).change( function() {
       $( this ).addClass( "changed" );

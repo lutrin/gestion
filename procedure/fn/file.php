@@ -143,21 +143,62 @@ class fn_File extends fn {
       return $allowResult;
     }
 
-    # get params
-    $params = self::getFormParamsFolder();
-    $params["headtitle"] = "Nouveau&nbsp;dossier";
-    $params["closable"] = true;
-    $fields = self::getFormFieldsFolder();
-    $values = array( "k" => 0, "parentK" => $parentK );
+    # section list
+    Includer::add( array( "dir", "uiNav", "uiForm" ) );
+    $sectionList = array();
+    $id = "file-$parentK";
 
-    Includer::add( array( "uiForm" ) );
+    # get folder params
+    $params = self::getFormParamsFolder();
+    $fields = self::getFormFieldsFolder( true );
+    $values = array( "k" => 0, "parentK" => $parentK );
+    $sectionList["$id-sectionCreation"] = array(
+      "label"     => "Création",
+      "innerHtml" => ui_Form::buildXml( $params, $fields, $values ),
+      "selected"  => true
+    );
+
+    # get file upload form
+    $params = array(
+      "id"       => "fileupload-$parentK",
+      "action"   => "upload",
+      "method"   => "post"
+    );
+    $fields = array(
+      "fileUpload"    => array(
+        "type"        => "fileUpload",
+        "label"       => "Parcourir",
+        "maxFileSize" => Dir::calculateMaxFileSize(),
+        "required"    => "required",
+        "multiple"    => "multiple"
+      )
+    );
+    $sectionList["$id-sectionUpload"] = array(
+      "label"     => "Importation",
+      "innerHtml" => ui_Form::buildXml( $params, $fields )
+    );
+
+    # tabs params
+    $navParams = array(
+      "id"        => $id,
+      "mode"      => "accordion",
+      "class"     => "file",
+      "headtitle" => "Nouveau&nbsp;-&nbsp;Dossier/Fichier",
+      "closable"  => true
+    );
+
+    return array(
+      "details" => ui_Nav::buildXml( $navParams, $sectionList )
+    );
+/*
+    Includer::add( array( "uiNav", "uiForm" ) );
     return array(
       "details" => ui_Form::buildXml(
         $params,
         $fields,
         $values
       )
-    );
+    );*/
   }
 
   /****************************************************************************/
@@ -494,8 +535,8 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormFieldsFolder() {
-    return array(
+  protected static function getFormFieldsFolder( $showType = false ) {
+    $fieldlist = array(
       "k"     => array(
         "type" => "hidden"
       ),
@@ -511,7 +552,7 @@ class fn_File extends fn {
         "legend" => "Générales",
         "fieldlist" => array(
           "name" => array(
-            "label"     => "Nom du dossier",
+            "label"     => "Nom",
             "required"  => "required",
             "pattern"   => "[\w\s\(\)\-\!]+",
             "maxlength" => 255
@@ -519,6 +560,26 @@ class fn_File extends fn {
         )
       )
     );
+
+    # type
+    if( $showType ) {
+      $fieldlist["type"] = array(
+        "label" => "Type",
+        "type" => "radiolist",
+        "list" => array(
+          "folder" => array(
+            "label" => "Dossier",
+            "value" => "folder"
+          ),
+          "file" => array(
+            "label" => "Fichier texte",
+            "value" => "file"
+          )
+        )
+      );
+    }
+
+    return $fieldlist;
   }
 
   /****************************************************************************/
