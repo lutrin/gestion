@@ -12,7 +12,7 @@ a {
   text-decoration: none;
 }
 
-a:hover, .main > .icon:hover {
+a:hover, .main > .icon:hover, input[type=file]:hover {
   text-decoration: underline;
   cursor: pointer;
 }
@@ -41,6 +41,10 @@ nav h3 {
 
 #login input[type=text], #login input[type=password] {
   font-size: 1.5em;
+}
+
+input[type=button] {
+  align: left;
 }
 
 /* icon */
@@ -227,7 +231,8 @@ nav h3 {
 }
 
 /* color */
-html, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell {
+html, fieldset, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell,
+.table .row:nth-child(odd), .resume .row:nth-child(odd) {
   background-color:#F5F5F5;
 }
 
@@ -237,10 +242,6 @@ html, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell {
 
 #main, #details > *, #dialog-content > *, .dock {
   background-color: #E9F1F4;
-}
-
-.table .row:nth-child(odd), .resume .row:nth-child(odd) {
-  background-color:#f5f5f5;
 }
 
 noscript, #error-msg, .alertMsg, .formMsg {
@@ -254,7 +255,6 @@ input, select {
 
 input[type=text]:hover,
 input[type=password]:hover,
-textarea:hover,
 select:hover,
 .row:hover > .cell,
 .dock li:hover,
@@ -267,7 +267,13 @@ select:hover,
   background-color: #ff9;
 }
 
-input[type=submit], button {
+textarea:hover {
+  background: -moz-radial-gradient(circle, #fff, #ffc);
+  background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#ff9));
+  background: -webkit-radial-gradient(circle, #fff, #ff9);
+}
+
+input[type=submit], input[type=button], button {
   color: #fff;
   background-color: #607890;
 }
@@ -280,7 +286,10 @@ nav > menu > li:not(.selected) > a {
   color: #fff;
 }
 
-input[type=submit]:hover, button:hover, .tabs > menu > li:hover {
+input[type=submit]:hover,
+.fileUpload div:hover input[type=button],
+button:hover,
+.tabs > menu > li:hover {
   background-color: #036;
   /*text-shadow: 0px 0px 5px rgba(255,255,255,0.6);*/
 }
@@ -290,7 +299,7 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
   text-shadow: 0px 0px 3px rgba(255,255,255,1);
 }
 
-.tabs > menu > li.selected, #contextMenu > menu, fieldset {
+.tabs > menu > li.selected, #contextMenu > menu, .list, .formlist {
   background-color: #fff;
 }
 
@@ -315,7 +324,7 @@ footer {
   border-top: #F5F5F5 solid 1px;
 }
 
-fieldset, legend, input[type=submit], button, #dialog-content > *, #details > * {
+fieldset, legend, input[type=submit], input[type=button], button, #dialog-content > *, #details > * {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
@@ -346,7 +355,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus
   box-shadow: inset rgba(0,0,88,.5) 2px 2px 2px;
 }
 
-input[type=submit], button, .dock li span, #contextMenu > menu {
+input[type=submit], input[type=button], button, .dock li span, #contextMenu > menu {
   box-shadow: inset rgba(0,0,0,.2) -2px -2px 2px;
 }
 
@@ -411,6 +420,7 @@ input[type=text],
 input[type=password],
 textarea,
 input[type=submit],
+input[type=button],
 menu > li,
 #error-msg,
 .cell,
@@ -529,6 +539,10 @@ section, .no-js #main, .no-js #header-buttons {
 
 section:target, section.target, .separator > section {
   display: block;
+}
+
+.separator hr, .accordion hr {
+  margin: 10px;
 }
 
 nav li {
@@ -884,12 +898,26 @@ nav h2, nav menu {
 
 .fileUpload [type=file] {
   opacity: 0;
-}
-
-
-.fileUpload [type=file] {
   position: absolute;
   left: 0;
+}
+
+.fileUpload [type=button] {
+  width: 237px;
+  height: 23px;
+}
+
+.fileUpload div {
+  display:inline;
+}
+
+.fileUpload iframe {
+  width: 0;
+  height: 0;
+}
+
+.fileUpload .status {
+  display: none;
 }
 
 /* z position */

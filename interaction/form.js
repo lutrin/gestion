@@ -10,6 +10,7 @@
 
     // submit
     form.submit( function() {
+      app.submit();
       return false;
     } );
     form.find( "input:submit" ).each( function() {

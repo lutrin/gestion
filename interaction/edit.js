@@ -12,7 +12,8 @@ var _edit = {
     { query: "button",          script: "button" },
     { query: "a[href^=#]",      script: "anchor" },
     { query: ".list-container", script: "list" },
-    { query: ".picklist",       script: "pick" }
+    { query: ".picklist",       script: "pick" },
+    { query: ".fileUpload",     script: "fileupload" }
   ],
 
   /****************************************************************************/

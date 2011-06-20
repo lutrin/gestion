@@ -1,11 +1,13 @@
-entete de colonne
-clic - tri
-right clic - liste
-  editer
-  cacher
-  tri
-  filtre
-  supprimer
+Copier/Coller
+Déplacer
+Avertissement avant suppression
+
+
+Fichiers:
+- Mettre le nom du fichier et le texte dans le même formulaire
+
+Dictionnaire:
+- Créer un fichier dictionnaire central
 
 Perfectionnement des détails
 - Dans template, afficher la liste d'objets qui utilisent le gabarit
@@ -13,8 +15,6 @@ Perfectionnement des détails
 - Find dans les textarea
 - Outils pour textarea: compter les mots, remplacer, élastique
     - http://www.electrictoolbox.com/jquery-count-words-textarea-input/
-- Raccourci, option de visualiser les sous-pages seulement ou toutes les pages du sites
-- Afficher la liste de sous-objets, surtout pour les dossiers
 - Changer le wysiwyg ou le perfectionner pour transformer les <br> en <p>, les <i> en <em>, les <b> en strong
 - Dans wysiwyg, filtrer les attributs permis.
 - Couleur de code pour mots réservés html, css, js: http://www.quackit.com/javascript/javascript_reserved_words.cfm Brush 
@@ -23,36 +23,24 @@ Perfectionnement des détails
 - Lier un objet gabarit à un fichier Html.  Même chose pour un objet page
 - Option du nombre de colonnes dans les attribute list au lieu de samerow, peut etre avec objet row et cell ou content pour formulaire
 - Commentaire d'article: Option pour déterminer le controle des commentaire, qui approuve?
-- Adapter http://www.modernizr.com/
-- Tree et select multiple, laisser la liste affichée tant qu'il n'y a pas eu de click extérieure au sur un bouton "fermer"
-- Ajax au lieu de iframe
 - Importer l'image directement par l'article
 - Dans fil rss, afficher le graphique et ajouter les champs dans les emplacement (entete, contenu, côté gauche, côté droit...) pour chacun des mode (rss, liste, détail)
-- Vérification de version de navigateur avant la connexion
 - Des paramètres pour les raccourcis
 - ctrl s pour sauvegarder
 - Utiliser les pages et content en tant que gabarit
-- self::getTable au lieu de cms_object
-- Séparer les parties du formulaire par onglet
 - Image par défaut pour rss, image par défaut pour catégorie
 - Afficher l'arbre dans la page au lieu d'être à la suite.
 - Arbre multiple sélection reste affichée tant qu'on a pas pesé le X
 - Image, choisir Importer, Url, picasa...
 - Annuler les fonctions PAGEUP et PAGEDOWN pour la page lorsqu'on est dans un champ "number", wheelup wheeldown
 - Nouveau mode d'édition de page, se sentir comme dans un wysiwyg avec attribut contenteditable
-- Personnaliser les icones
-- Fenêtre Détails redimensionnable
 - Compartiment pour catalogue
 - Photo selector
 
 Perfectionnement pour l'arbre
-- Séparer les arbres pages, fichiers et autres.
 - Lister différement les paramètres, les champs supplémentaires et les articles.
 - Ajouter les fonctions dans le menu du haut
 - Fonction, Faire le ménage qui efface la cache et qui optimize la BD "OPTIMIZE"
-- Personnaliser les icones
-- Token pour ne pas ouvrir des formulaires details ailleurs
-- Expiration pour la page au complet
 - Bienvenu, afficher la liste des dernieres opérations.
 - Icone de l'image avec la vraie image en 16x16
 - Effacer avec un multiselect d'objets, ou autres opérations

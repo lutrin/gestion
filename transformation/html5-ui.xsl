@@ -142,7 +142,7 @@
 
     <!-- checklist -->
     <xsl:when test="(@type='checklist') or (@type='radiolist')">
-      <fieldset>
+      <fieldset class="formlist">
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
@@ -156,7 +156,7 @@
 
     <!-- picklist -->
     <xsl:when test="@type='picklist'">
-      <fieldset>
+      <fieldset class="formlist">
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
@@ -187,15 +187,25 @@
         <xsl:if test="@maxFileSize">
           <input type="hidden" name="MAX_FILE_SIZE" value="{@maxFileSize}" />
         </xsl:if>
-        <input>
-          <xsl:for-each select="@id|@name|@required|@accept|@autofocus|@multiple">
-            <xsl:call-template name="apply-attribute" />
-          </xsl:for-each>
-          <xsl:attribute name="type">
-            <xsl:text>file</xsl:text>
-          </xsl:attribute>
-        </input>
-        <input type="button" value="{@label}" />
+        <fieldset>
+          <xsl:variable name="formtarget">
+            <xsl:value-of select="@id" />
+            <xsl:text>-target</xsl:text>
+          </xsl:variable>
+          <legend>Fichiers</legend>
+          <div>
+            <input type="file">
+              <xsl:for-each select="@id|@name|@required|@accept|@autofocus|@multiple">
+                <xsl:call-template name="apply-attribute" />
+              </xsl:for-each>
+            </input>
+            <input type="button" value="{@label}..." />
+          </div>
+          <div class="status hidden">Téléversement...</div>
+          <iframe id="{$formtarget}"></iframe>
+          <ul class="uploadedList">
+          </ul>
+        </fieldset>
       </div>
     </xsl:when>
 
