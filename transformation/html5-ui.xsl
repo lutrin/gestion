@@ -201,8 +201,6 @@
             </input>
             <input type="button" value="{@label}..." />
           </div>
-          <div class="status hidden">Téléversement...</div>
-          <iframe id="{$formtarget}"></iframe>
           <ul class="uploadedList">
           </ul>
         </fieldset>
