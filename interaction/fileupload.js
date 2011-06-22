@@ -19,30 +19,40 @@
   /****************************************************************************/
   change: function() {
     var app = _c.ajaxList.interaction.fileupload,
+        appForm = _c.ajaxList.interaction.form,
+        inputFile = $( this ),
         files = this.files,
-        fileupload = $( this ).parents( ".fileupload:first" ),
+        fileupload = inputFile.parents( ".fileUpload:first" ),
+        fields = _c.jsonToUrl( appForm.serialize( inputFile.parents( "form:first" ) ) ),
         i, l;
     for( i = 0, l = files.length; i < l; ) {
-      app.send( files[i++], fileupload );
+      app.send( files[i++], fileupload, fields );
     }
   },
 
   /****************************************************************************/
-  send: function( file, fileupload ) {
+  send: function( file, fileupload, fields ) {
     var app = _c.ajaxList.interaction.fileupload,
         xhr = new XMLHttpRequest(),
-        progress;
+        filename = file.name || file.fileName,
+        progress = fileupload.append( "<progress value='0' max='100'>Téléchargement...</progress>" );
 
-    xhr.upload.onprogress = app.progress;
-    xhr.upload.onloadstart = function( ev ) {
-      progress = fileupload.append( "<progress value='0' max='100'>Téléchargement...</progress>" );
-    };    
+
+
+/*    xhr.upload.addEventListener('progress', app.progress, false);*/
+    /*xhr.onreadystatechange = function( ev ) {
+      if( xhr.readyState == 4 ) {
+        app.success();
+      }
+    };*/
+    xhr.open( "PUT", "procedure/controller.php?filename=" + encodeURIComponent( filename ) + "&" + fields, true ); //TODO PHP: file_get_contents("php://input")
+
+    xhr.upload.onprogress = function( ev ) {
+      progress.attr( "value", ev.loaded / ev.total * 100 );
+    };
     xhr.upload.onload = app.success;
     xhr.upload.onerror = app.error;
-
-    xhr.open( "POST", "procedure/controller.php", true ); //TODO PHP: file_get_contents("php://input")
     xhr.setRequestHeader("Content-Type", "application/octet-stream" );
-    xhr.setRequestHeader( "X-Filename", ( file.name || file.fileName ) ); //TODO PHP: $_SERVER['HTTP_X_Filename']
 
     if( 'getAsBinary' in file ) {
       // Firefox 3.5
@@ -51,6 +61,7 @@
       // W3C-blessed interface
       xhr.send(file);
     }
+    xhr.upload.onload = app.success;
   },
 
   /****************************************************************************/

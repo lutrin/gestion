@@ -200,8 +200,12 @@ class Dir {
   }
 
   /****************************************************************************/
-  public static function calculateMaxFileSize() {
-    $uploadMaxFilesize = ini_get( "upload_max_filesize" );
+  public static function calculateMaxFileSize( $ini = "file" ) {
+    $iniList = array(
+      "file" => "upload_max_filesize",
+      "post" => "post_max_size"
+    );
+    $uploadMaxFilesize = ini_get( $iniList[$ini] );
     $value = intval( $uploadMaxFilesize );
     $size = str_replace( ( string ) $value, "", $uploadMaxFilesize );
     $multiple = 0;
@@ -213,6 +217,11 @@ class Dir {
       $multiple = 3;
     }
     return $value * pow( 1024, $multiple );
+  }
+
+  /****************************************************************************/
+  public static function putFile( $targetK, $filename ) {
+    
   }
 
   /****************************************************************************/

@@ -159,23 +159,11 @@ class fn_File extends fn {
     );
 
     # get file upload form
-    $params = array(
-      "id"       => "fileupload-$parentK",
-      "action"   => "upload",
-      "method"   => "post"
-    );
-    $fields = array(
-      "fileUpload"    => array(
-        "type"        => "fileUpload",
-        "label"       => "Parcourir",
-        "maxFileSize" => Dir::calculateMaxFileSize(),
-        "required"    => "required",
-        "multiple"    => "multiple"
-      )
-    );
+    $params = self::getFormParamsUpload( $parentK );
+    $fields = self::getFormFieldsUpload();
     $sectionList["$id-sectionUpload"] = array(
       "label"     => "Importation",
-      "innerHtml" => ui_Form::buildXml( $params, $fields )
+      "innerHtml" => ui_Form::buildXml( $params, $fields, array( "targetK" => $parentK ) )
     );
 
     # tabs params
@@ -204,6 +192,36 @@ class fn_File extends fn {
   /****************************************************************************/
   public static function insert_file( $parentK ) {
     return self::insert_folder( $parentK );
+  }
+
+  /****************************************************************************/
+  public static function upload( $values ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+return $_SERVER['REQUEST_URI'];
+    Includer::add( "dir" );
+
+    # get form
+    $params = self::getFormParamsUpload( $values["targetK"] );
+    $fields = self::getFormFieldsUpload();
+
+    # valid token
+    if( !Tokenizer::exists( $params["id"], $values["token"] ) ) {
+      return array( "fatalError" => "tokenerror" );
+    }
+
+    # valid size
+    /*if( !Dir::validFileSize() ) {
+      return array( "errorFile" => "toobig" );
+    }*/
+
+    # store file
+    if( !Dir::putFile( $values["targetK"], $values["filename"] ) ) {
+      return array( "errorFile" => "nostore" );
+    }
+    //file put contents
+    return array( "success" => true );
   }
 
   /****************************************************************************/
@@ -609,6 +627,35 @@ class fn_File extends fn {
         "cols"  => 80,
         "rows"  => 24,
         "spellcheck" => "false"
+      )
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormParamsUpload( $parentK ) {
+    return array(
+      "id"       => "fileupload-$parentK",
+      "action"   => "upload",
+      "method"   => "post"
+    );
+  }
+
+  /****************************************************************************/
+  protected static function getFormFieldsUpload() {
+    return array(
+      "targetK"     => array(
+        "type" => "hidden"
+      ),
+      "object"     => array(
+        "type" => "hidden",
+        "value" => "file"
+      ),
+      "fileUpload"    => array(
+        "type"        => "fileUpload",
+        "label"       => "Parcourir",
+        "maxFileSize" => Dir::calculateMaxFileSize( "post" ),
+        "required"    => "required",
+        "multiple"    => "multiple"
       )
     );
   }

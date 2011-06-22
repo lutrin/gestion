@@ -61,7 +61,7 @@
 
     // serialize
     _c.callAjax( scriptList, function( ajaxItem ) {
-      var fields = app.serialize( form, app ),
+      var fields = app.serialize( form ),
           action, trigger;
 
       if( fields ) {
@@ -130,8 +130,9 @@
   },
 
   /****************************************************************************/
-  serialize: function( form, app ) {
-    var fields = {},
+  serialize: function( form ) {
+    var app = _c.ajaxList.interaction.form,
+        fields = {},
         error = false;
     form.find( "input:text,input:hidden,input:password,input:checkbox,select,textarea" ).each( function() {
       var object = $( this ),

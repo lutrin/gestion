@@ -1,4 +1,9 @@
 <?php
+
+# error log
+ini_set('log_errors', 1);
+ini_set('error_log', 'error.log');
+
 # start session
 if( substr_count( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ) {
   ob_start("ob_gzhandler");
@@ -10,9 +15,10 @@ session_start();
 # include
 include "config.php";
 include "../../library/procedure/includer.php";
-
 echo main();
 exit;
+
+
 
 /******************************************************************************/
 function main() {
@@ -42,8 +48,6 @@ function main() {
             return displaySetting();
           } elseif( $action == "getContent" ) {
             return getContent();
-          /*} elseif( $action == "save" ) {
-            return save();*/
           /*} elseif( $action == "edit" ) {
             return edit();
           } elseif( $action == "rename" ) {
@@ -62,6 +66,8 @@ function main() {
             return setAccountStorage();
           } elseif( $action == "removeAccountStorage" ) {
             return removeAccountStorage();
+          } elseif( $action == "upload" ) {
+            return upload();
           }
         } elseif( $action = isset( $_POST["action"] )? typeValidator::isAlphaNumeric( $_POST["action"] ): false ) {
           if( $action == "save" ) {
@@ -174,30 +180,12 @@ function save() {
 }
 
 /******************************************************************************/
-function edit() {
+function upload() {
   global $CONTROLLER;
-  if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
-      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
-    return switchFunction( "edit", $object, array( $k ) );
-  }
-  return logout( $CONTROLLER["wrongentry"][getLang()] );
-}
-
-/******************************************************************************/
-function re_Name() {
-  global $CONTROLLER;
-  if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
-    return switchFunction( "rename", $object );
-  }
-  return logout( $CONTROLLER["wrongentry"][getLang()] );
-}
-
-/******************************************************************************/
-function insert() {
-  global $CONTROLLER;
-  if( ( $k = ( isset( $_GET["k"] )? typeValidator::isNumeric( $_GET["k"] ): false ) ) &&
-      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
-    return switchFunction( "insert", $object, array( $k ) );
+  if( ( $targetK = ( isset( $_GET["targetK"] )? typeValidator::isNumeric( $_GET["targetK"] ): false ) ) &&
+      ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) &&
+      ( $token =  ( isset( $_GET["token"] )? $_GET["token"]: false ) ) ) {
+    return switchFunction( "upload", $object, array( $_GET ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
