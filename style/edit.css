@@ -31,7 +31,7 @@ textarea {
   text-shadow: 0px 0px 5px rgba(0,88,88,.7);
 }
 
-.selected, [selected=selected] {
+dt, .selected, [selected=selected] {
   font-weight: bold;
 }
 
@@ -756,7 +756,7 @@ nav h2, nav menu {
   -webkit-column-gap: 5px;
 }
 
-.compact .list, .tree .list, .checklist, .radiolist {
+.compact .list, .tree .list, .checklist, .radiolist, .uploadedList {
   list-style-type: none;
 }
 
@@ -918,6 +918,11 @@ nav h2, nav menu {
 
 .fileUpload .status {
   display: none;
+}
+
+.uploadedList dt {
+  float:left;
+  width: 175px;
 }
 
 /* z position */

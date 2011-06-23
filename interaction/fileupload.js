@@ -23,35 +23,56 @@
         inputFile = $( this ),
         files = this.files,
         fileupload = inputFile.parents( ".fileUpload:first" ),
+        uploadedList = fileupload.find( ".uploadedList" ),
         fields = _c.jsonToUrl( appForm.serialize( inputFile.parents( "form:first" ) ) ),
         i, l;
+    fileupload.find( "input" ).addClass( "hidden" );
     for( i = 0, l = files.length; i < l; ) {
-      app.send( files[i++], fileupload, fields );
+      app.send( files[i++], uploadedList, fields );
     }
   },
 
   /****************************************************************************/
-  send: function( file, fileupload, fields ) {
+  send: function( file, uploadedList, fields ) {
     var app = _c.ajaxList.interaction.fileupload,
         xhr = new XMLHttpRequest(),
         filename = file.name || file.fileName,
-        progress = fileupload.append( "<progress value='0' max='100'>Téléchargement...</progress>" );
-
-
-
-/*    xhr.upload.addEventListener('progress', app.progress, false);*/
-    /*xhr.onreadystatechange = function( ev ) {
-      if( xhr.readyState == 4 ) {
-        app.success();
-      }
-    };*/
-    xhr.open( "PUT", "procedure/controller.php?filename=" + encodeURIComponent( filename ) + "&" + fields, true ); //TODO PHP: file_get_contents("php://input")
-
+        filesize = file.size || file.fileSize,
+        filetype = file.type,
+        index = uploadedList.find( "li" ).size(),
+        progress;
+    uploadedList.append( "<li>" +
+                           "<dl>" +
+                              "<dt>Nom de fichier</dt><dd>" + filename + "</dd>" +
+                              "<dt>Taille</dt><dd>" + filesize + "</dd>" +
+                              "<dt>Type</dt><dd>" + filetype + "</dd>" +
+                           "</dl>" +
+                           "<progress data-index='" + index + "' value='0' max='100'>" +
+                             "Téléchargement...<span>0</span>%" +
+                           "</progress>" +
+                           "<hr />" +
+                         "</li>" );
+    progress = uploadedList.find( "progress[data-index=" + index + "]" );
     xhr.upload.onprogress = function( ev ) {
-      progress.attr( "value", ev.loaded / ev.total * 100 );
+      var percent = parseInt( ev.loaded / ev.total * 100 );
+      progress.attr( "value", percent );
+      progress.children( "span" ).html( percent );
     };
-    xhr.upload.onload = app.success;
-    xhr.upload.onerror = app.error;
+    xhr.upload.addEventListener('progress', function( ev ) {
+      var percent = parseInt( ev.loaded / ev.total * 100 );
+      progress.attr( "value", percent );
+      progress.children( "span" ).html( percent );
+    }, false);
+    xhr.upload.onload = function( ev ) {
+      progress.attr( "value", 100 );
+      progress.children( "span" ).html( 100 );
+    };
+    xhr.upload.onerror = function( ev ) {
+      progress.after( "<div>Erreur</div>" );
+      progress.remove();
+    };
+    xhr.open( "POST", "procedure/controller.php?filename=" + encodeURIComponent( filename ) + "&" + fields, true ); //TODO PHP: file_get_contents("php://input")
+
     xhr.setRequestHeader("Content-Type", "application/octet-stream" );
 
     if( 'getAsBinary' in file ) {
@@ -61,22 +82,5 @@
       // W3C-blessed interface
       xhr.send(file);
     }
-    xhr.upload.onload = app.success;
-  },
-
-  /****************************************************************************/
-  progress: function( ev ) {
-    var percent = ev.loaded / ev.total * 100;
-console.log('Upload progress: ' + percent + '%');
-  },
-
-  /****************************************************************************/
-  success: function( ev ) {
-console.log('Success');
-  },
-
-  /****************************************************************************/
-  error: function( ev ) {
-console.log('Error');
   }
 }
