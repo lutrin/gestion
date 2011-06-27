@@ -199,7 +199,6 @@ class fn_File extends fn {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
-return $_SERVER['REQUEST_URI'];
     Includer::add( "dir" );
 
     # get form
@@ -265,6 +264,9 @@ return $_SERVER['REQUEST_URI'];
     }
 
     # list
+    if( isset( $values["parentK"] ) && $values["parentK"] ) {
+      return self::edit_folder( $values["parentK"] );
+    }
     return array(
       "replacement" => array(
         "query" => "#" . self::$idList,
@@ -295,8 +297,11 @@ return $_SERVER['REQUEST_URI'];
 
     Includer::add( "dir" );
     Dir::save( $k, $values["content"] );
-
+//TODO put parentK in content form
     # list
+    if( isset( $values["parentK"] ) && $values["parentK"] ) {
+      return self::edit_folder( $values["parentK"] );
+    }
     return array(
       "replacement" => array(
         "query" => "#" . self::$idList,
@@ -664,17 +669,7 @@ return $_SERVER['REQUEST_URI'];
   protected static function getClass( $file, $type ) {
 
     # class list
-    $classList = array(
-      "folder" => array( "directory" ),
-      "gif"    => array( "image/gif" ),
-      "jpg"    => array( "image/jpeg" ),
-      "png"    => array( "image/png" ),
-      "svg"    => array( "image/svg+xml" ),
-      "html"   => array( "text/html" ),
-      "php"    => array( "text/x-php" ),
-      "text"   => array( "text/x-c++", "text/plain", "text/x-c" ),
-      "xml"    => array( "application/xml" )
-    );
+    $classList = getData( "filetype" );
 
     # default
     $class = "file";
@@ -693,11 +688,7 @@ return $_SERVER['REQUEST_URI'];
     }
 
     # text list
-    $textList = array(
-      "js"  => "javascript",
-      "sql" => "sql",
-      "css" => "css"
-    );
+    $textList = getData( "texttype" );
     $decomposed = explode( ".", $file );
     $last = array_pop( $decomposed );
     return isset( $textList[$last] )? $textList[$last]: $class;

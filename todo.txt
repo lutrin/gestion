@@ -1,7 +1,13 @@
 Copier/Coller
 Déplacer
 Avertissement avant suppression
-
+File d'ariane
+Retour vers la liste de l'item modifié
+Appliquer cette régle
+.resume .cell[data-label]:before {
+    background-color:  #f99;
+    content: attr(data-label) ": ";
+}
 
 Fichiers:
 - Mettre le nom du fichier et le texte dans le même formulaire

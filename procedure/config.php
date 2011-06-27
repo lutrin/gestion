@@ -315,6 +315,7 @@ $DBDATA = array(
 );
 $CACHEPATH = "../cache/";
 $TEMPPATH = "../template/";
+$DATAPATH = "../data/";
 $MERGEPATH = "../merge/";
 
 $PUBLICPATH = "../../public";

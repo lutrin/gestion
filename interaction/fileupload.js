@@ -15,21 +15,26 @@
 
     fileupload.addClass( "initiated" );
   },
-
+//TODO call ajax data file type and text type
   /****************************************************************************/
   change: function() {
-    var app = _c.ajaxList.interaction.fileupload,
-        appForm = _c.ajaxList.interaction.form,
-        inputFile = $( this ),
-        files = this.files,
-        fileupload = inputFile.parents( ".fileUpload:first" ),
-        uploadedList = fileupload.find( ".uploadedList" ),
-        fields = _c.jsonToUrl( appForm.serialize( inputFile.parents( "form:first" ) ) ),
-        i, l;
-    fileupload.find( "input" ).addClass( "hidden" );
-    for( i = 0, l = files.length; i < l; ) {
-      app.send( files[i++], uploadedList, fields );
-    }
+    var inputFile = $( this ),
+        files = this.files;
+    return _c.callAjax( [
+          { folder: "data", name: "filetype" },
+          { folder: "data", name: "texttype" }
+        ], function( ajaxItem ) {
+      var app = _c.ajaxList.interaction.fileupload,
+          appForm = _c.ajaxList.interaction.form,
+          fileupload = inputFile.parents( ".fileUpload:first" ),
+          uploadedList = fileupload.find( ".uploadedList" ),
+          fields = _c.jsonToUrl( appForm.serialize( inputFile.parents( "form:first" ) ) ),
+          i, l;
+      fileupload.find( "input" ).addClass( "hidden" );
+      for( i = 0, l = files.length; i < l; ) {
+        app.send( files[i++], uploadedList, fields );
+      }
+    } );
   },
 
   /****************************************************************************/
@@ -37,27 +42,23 @@
     var app = _c.ajaxList.interaction.fileupload,
         xhr = new XMLHttpRequest(),
         filename = file.name || file.fileName,
-        filesize = file.size || file.fileSize,
+        filesize = _c.getHumanSize( file.size || file.fileSize ),
         filetype = file.type,
         index = uploadedList.find( "li" ).size(),
+        className = app.getClass( filename, filetype ),
         progress;
-    uploadedList.append( "<li>" +
+    uploadedList.append( "<li class='" + className + "'>" +
                            "<dl>" +
                               "<dt>Nom de fichier</dt><dd>" + filename + "</dd>" +
                               "<dt>Taille</dt><dd>" + filesize + "</dd>" +
                               "<dt>Type</dt><dd>" + filetype + "</dd>" +
                            "</dl>" +
                            "<progress data-index='" + index + "' value='0' max='100'>" +
-                             "Téléchargement...<span>0</span>%" +
+                             "Téléversement...<span>0</span>%" +
                            "</progress>" +
                            "<hr />" +
                          "</li>" );
     progress = uploadedList.find( "progress[data-index=" + index + "]" );
-    xhr.upload.onprogress = function( ev ) {
-      var percent = parseInt( ev.loaded / ev.total * 100 );
-      progress.attr( "value", percent );
-      progress.children( "span" ).html( percent );
-    };
     xhr.upload.addEventListener('progress', function( ev ) {
       var percent = parseInt( ev.loaded / ev.total * 100 );
       progress.attr( "value", percent );
@@ -82,5 +83,23 @@
       // W3C-blessed interface
       xhr.send(file);
     }
+  },
+
+  /****************************************************************************/
+  getClass: function( file, type ) {
+    var classList = _c.ajaxList.data.filetype,
+        className = "file",
+        decomposed;
+    for( key in classList ) {
+      if( _c.inList( type, classList[key] ) ) {
+        className = key;
+        break;
+      }
+    }
+    if( className != "text" ) {
+      return className;
+    }
+    decomposed = file.split( /\./ );
+    return _c.ajaxList.data.texttype[decomposed.pop()] || className;
   }
 }

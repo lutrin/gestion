@@ -4,8 +4,8 @@ class db_Path extends db_Abstract {
 
   /****************************************************************************/
   public static function getK( $path ) {
+    $path = DB::mysql_prep( $path );
     if( !$result = self::get( "k", "path='$path'" ) ) {
-error_log( $path );
       $result = self::save( array( "path" => "'$path'" ) );
       return $result[0];
     }

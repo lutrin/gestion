@@ -221,7 +221,40 @@ class Dir {
 
   /****************************************************************************/
   public static function putFile( $targetK, $filename ) {
-    
+    $path = self::getPath( $targetK ) . "/";
+    $file = $path . $filename;
+
+    # already exists
+    while( file_exists( $file ) ) {
+      $exploded = exploded( ".", $filename );
+
+      # get extension
+      $ext = false;
+      if( count( $exploded ) > 1 ) {
+        $ext = array_pop( $exploded );
+      }
+      $tmp = join( ".", $exploded );
+
+      # get index
+      $exploded = exploded( "-", $tmp );
+      $index = 1;
+      if( count( $exploded ) > 1 ) {
+        $index = array_pop( $exploded );
+        if( !is_numeric( $index ) ) {
+          $index .= "-1";
+        } else {
+          $index = (int)$index + 1;
+        }
+      }
+      array_push( $exploded, $index );
+      $file = join( "-", $exploded );
+    }
+
+    # write file
+    $f = fopen( $file, 'w+' );
+    fwrite( $f, file_get_contents( "php://input" ) );
+    fclose( $f );
+    return true;
   }
 
   /****************************************************************************/

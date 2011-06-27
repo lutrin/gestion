@@ -47,6 +47,11 @@ input[type=button] {
   align: left;
 }
 
+.resume .main a {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 /* icon */
 @font-face {
   font-family: "IconicStroke";
@@ -105,11 +110,13 @@ input[type=button] {
   content: "[";
 }
 
-.collapsed > .main > .toggleExpand:before {
+.collapsed > .main > .toggleExpand:before,
+.accordion > h3 > a:before {
   content: "+";
 }
 
-.expanded > .main > .toggleExpand:before {
+.expanded > .main > .toggleExpand:before,
+.accordion > h3.selected > a:before {
   content: "-";
 }
 
@@ -137,7 +144,7 @@ input[type=button] {
   background: url(../image/visitor.svg) no-repeat center center;
 }
 
-#details h2, .list-container .icon {
+#details h2, .list-container .icon, .uploadedList > li {
   background-repeat: no-repeat;
 }
 
@@ -145,11 +152,11 @@ input[type=button] {
   background-position: left center;
 }
 
-.gallery .icon, .resume .icon {
+.gallery .icon, .resume .icon, .uploadedList > li {
   background-size: 64px;
 }
 
-.gallery .icon {
+.gallery .icon, .updatedList > li {
   background-position: top center;
 
 }
@@ -179,40 +186,40 @@ input[type=button] {
   background-image: url(../image/folder.svg);
 }
 
-.list-container .file .icon, #details .file h2,
-.list-container .png .icon, #details .png h2,
-.list-container .jpg .icon, #details .jpg h2,
-.list-container .gif .icon, #details .gif h2,
-.list-container .svg .icon, #details .svg h2
+.list-container .file .icon, #details .file h2, .uploadedList > .file,
+.list-container .png .icon, #details .png h2, .uploadedList > .png,
+.list-container .jpg .icon, #details .jpg h2, .uploadedList > .jpg,
+.list-container .gif .icon, #details .gif h2, .uploadedList > .gif,
+.list-container .imagesvg .icon, #details .imagesvg h2, .uploadedList > .svg
  {
   background-image: url(../image/file.svg);
 }
 
-.list-container .xml .icon, #details .xml h2 {
+.list-container .xml .icon, #details .xml h2, .uploadedList > .xml {
   background-image: url(../image/xml.svg);
 }
 
-.list-container .javascript .icon, #details .javascript h2 {
+.list-container .javascript .icon, #details .javascript h2, .uploadedList > .javascript {
   background-image: url(../image/javascript.svg);
 }
 
-.list-container .php .icon, #details .php h2 {
+.list-container .php .icon, #details .php h2, .uploadedList > .php {
   background-image: url(../image/php.svg);
 }
 
-.list-container .text .icon, #details .text h2 {
+.list-container .text .icon, #details .text h2, .uploadedList > .text {
   background-image: url(../image/text.svg);
 }
 
-.list-container .html .icon, #details .html h2 {
+.list-container .html .icon, #details .html h2, .uploadedList > .html {
   background-image: url(../image/html.svg);
 }
 
-.list-container .css .icon, #details .css h2 {
+.list-container .css .icon, #details .css h2, .uploadedList > .css {
   background-image: url(../image/css.svg);
 }
 
-.list-container .sql .icon, #details .sql h2 {
+.list-container .sql .icon, #details .sql h2, .uploadedList > .sql {
   background-image: url(../image/sql.svg);
 }
 
@@ -475,7 +482,7 @@ menu > li,
 .groupEditor > h2,
 .folder h2,
 .javascript h2,
-.svg h2,
+.imagesvg h2,
 .css h2,
 .jpg h2,
 .html h2,
@@ -489,7 +496,11 @@ menu > li,
   margin-right: 20px;
 }
 
-hr, .picklist {
+.uploadedList dl, .uploadedList progress {
+  margin-left: 68px;
+}
+
+hr, .picklist, .uploadedList {
   margin: 0;
 }
 
@@ -725,7 +736,8 @@ nav h2, nav menu {
   display: table-cell;
 }
 
-.table .toggleExpand, .tree .toggleExpand {
+.table .toggleExpand, .tree .toggleExpand,
+.accordion > h3 > a:before {
   width: 12px;
   height: 16px;
   display: inline-block;
@@ -804,7 +816,7 @@ nav h2, nav menu {
   float: left;
   height: 64px;
   width: 64px;
-
+  margin-right: 5px;
 }
 
 .resume .row {
@@ -812,11 +824,6 @@ nav h2, nav menu {
   clear: both;
 }
 
-.resume .cell.main {
-  width: 200px;
-  height: 66px;
-  float:left;
-}
 
 /*.resume .cell {
   display: inline;
@@ -922,7 +929,7 @@ nav h2, nav menu {
 
 .uploadedList dt {
   float:left;
-  width: 175px;
+  width: 120px;
 }
 
 /* z position */
