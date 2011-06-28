@@ -1,7 +1,7 @@
 <?php
 class fn_Login {
   protected static $id = "login";
-
+//TODO function get Editor from session
   /****************************************************************************/
   public static function isConnected() {
 
@@ -109,6 +109,35 @@ return true;
     return array(
       "replacement" => array(
         array( "query" => "#main",           "innerHtml" => fn_Edit::getMain( $msg ) ),
+        array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton() )
+      )
+    );
+  }
+
+  /****************************************************************************/
+  public static function use( $k ) {
+
+    # get user info
+    Includer::add( "dbEditor" );
+    if( !$editor = db_Editor::getInfoByK( $values["username"], $values["password"] ) ) {
+      $result["formError"] = "incorrectlogin";
+      return $result;
+    }
+
+    # account disabled
+    if( !$editor["active"] ) {
+      $result["formError"] = "disabledaccount";
+      return $result;
+    }
+
+    # set session
+    $_SESSION["useEditor"] = $editor;
+
+    # replacement
+    Includer::add( "fnEdit" );
+    return array(
+      "replacement" => array(
+        array( "query" => "#main",           "innerHtml" => fn_Edit::getMain() ),
         array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton() )
       )
     );

@@ -54,7 +54,7 @@ function main() {
             return re_Name();
           } elseif( $action == "insert" ) {
             return insert();*/
-          } elseif( in_array( $action, array( "edit", "insert", "activate", "unactivate" ) ) ) {
+          } elseif( in_array( $action, array( "edit", "insert", "activate", "unactivate", "use" ) ) ) {
             return itemAction( $action );
           } elseif( in_array( $action, array( "add", "refresh" ) ) ) {
             return listAction( $action );

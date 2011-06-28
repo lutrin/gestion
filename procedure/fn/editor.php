@@ -272,6 +272,14 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
+  public static function use_individualList( $k ) {
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
+    }
+
+  }
+
+  /****************************************************************************/
   public static function activate_individualList( $k ) {
     return self::changeIndividualActive( $k, 1 );
   }
@@ -589,9 +597,14 @@ class fn_Editor extends fn {
           "title" => "Désactiver",
           "individual" => true
         ),
+        "use"     => array(
+          "title" => "Utiliser",
+          "individual" => true
+        ),
         "delete" => array(
           "title"    => "Supprimer",
-          "multiple" => true
+          "multiple" => true,
+          "individual" => true
         )
       )
     );
@@ -601,12 +614,17 @@ class fn_Editor extends fn {
     Includer::add( array( "dbEditor", "uiList" ) );
 
     # editor list
+    $myK = $_SESSION["editor"]["k"];
     $editorList = db_Editor::get( $fields, false, $params["order"] );
     foreach( $editorList as $key => $editor ) {
-      if( $editor["class"] == "editor" ) {
-        $editorList[$key]["indAction"] = "unactivate";
-      } else {
-        $editorList[$key]["indAction"] = "activate";
+      if( $myK != $editor["k"] ) {
+        $indList = array( "delete" );
+        if( $editor["class"] == "editor" ) {
+          array_push( $indList, "unactivate", "use" );
+        } else {
+          $indList[] = "activate";
+        }
+        $editorList[$key]["indAction"] = join( ",", $indList );
       }
     }
 

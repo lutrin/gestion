@@ -1,6 +1,7 @@
 <?php
 class db_Editor extends db_Abstract {
   public static $table = "editor";
+  protected static $infoField = array( "k", "username", "admin", "active", "longname", "lang", "toolList" );
 
   /****************************************************************************/
   public static function getEmptyValues() {
@@ -14,7 +15,7 @@ class db_Editor extends db_Abstract {
       $where[] = "password = PASSWORD( '$password' )";
     }
     $result = DB::select( array(
-      "field" => array( "k", "username", "admin", "active", "longname", "lang", "toolList" ),
+      "field" => self::$infoField,
       "table" => self::$table,
       "where" => $where
     ) );
@@ -22,23 +23,27 @@ class db_Editor extends db_Abstract {
       return false;
     }
     $editor = $result[0];
-    $toolList = explode( ",", $editor["toolList"] );
 
     # get editor in group list
-    Includer::add( array( "dbGroupEditor", "dbEditorInGroup" ) );
-    $groupKList = db_EditorInGroup::get( "groupK", "editorK = {$editor['k']}" );
-    if( $kList = array_map( function( $item ) {
-        return $item["groupK"];
-      }, $groupKList ) ) {
-      $kList = db_GroupEditor::getParentKList( $kList );
-      $result = db_GroupEditor::get( "toolList", "k IN ( " . join( ",", $kList ) . " ) " );
-      foreach( $result as $item ) {
-        if( $item["toolList"] ) {
-          $toolList = array_unique( array_merge( $toolList, explode( ",", $item["toolList"] ) ) );
-        }
-      }
+    $editor["toolList"] = self::getGroupToolList( $editor["k"], explode( ",", $editor["toolList"] ) );
+
+    # get
+    return $editor;
+  }
+
+  /****************************************************************************/
+  public static function getInfoByK( $k ) {
+    $result = DB::select( array(
+      "field" => self::$infoField,
+      "table" => self::$table,
+      "where" => "k = $k"
+    ) );
+    if( !$result ) {
+      return false;
     }
-    $editor["toolList"] = $toolList;
+
+    # get editor in group list
+    $editor["toolList"] = self::getGroupToolList( $editor["k"], explode( ",", $editor["toolList"] ) );
 
     # get
     return $editor;
@@ -53,5 +58,23 @@ class db_Editor extends db_Abstract {
 
     # remove editor    
     return parent::remove( $kList );
+  }
+
+  /****************************************************************************/
+  protected static function getGroupToolList( $k, $toolList ) {
+    Includer::add( array( "dbGroupEditor", "dbEditorInGroup" ) );
+    $groupKList = db_EditorInGroup::get( "groupK", "editorK = $k" );
+    if( $kList = array_map( function( $item ) {
+        return $item["groupK"];
+      }, $groupKList ) ) {
+      $kList = db_GroupEditor::getParentKList( $kList );
+      $result = db_GroupEditor::get( "toolList", "k IN ( " . join( ",", $kList ) . " ) " );
+      foreach( $result as $item ) {
+        if( $item["toolList"] ) {
+          $toolList = array_unique( array_merge( $toolList, explode( ",", $item["toolList"] ) ) );
+        }
+      }
+    }
+    return $toolList;
   }
 }
