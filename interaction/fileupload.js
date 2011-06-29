@@ -15,7 +15,7 @@
 
     fileupload.addClass( "initiated" );
   },
-//TODO call ajax data file type and text type
+
   /****************************************************************************/
   change: function() {
     var inputFile = $( this ),

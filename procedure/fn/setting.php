@@ -7,11 +7,12 @@ class fn_Setting {
     global $SETTING;
 
     Includer::add( "uiForm" );
+    $sessionEditor = fn_Login::getSessionEditor();
     return array( "dialog" => ui_Form::buildXml(
       self::getFormParams( $SETTING ),
       self::getFormFields( $SETTING ),
-      $_SESSION["editor"]
-    ), $_SESSION["editor"] );
+      $sessionEditor
+    ), $sessionEditor );
   }
 
   /****************************************************************************/
@@ -19,7 +20,8 @@ class fn_Setting {
     global $SETTING, $APP, $FOOTERLINK;
 
     # allowed
-    if( $k != $_SESSION["editor"]["k"] ) {
+    $sessionEditor = fn_Login::getSessionEditor();
+    if( $k != $sessionEditor["k"] ) {
       return array( "fatalError" => "notpermitted" );
     }
 
@@ -46,7 +48,7 @@ class fn_Setting {
     if( !db_Editor::save( $valuesToSave, $k ) ) {
       return array();
     }
-    $_SESSION["editor"] = db_Editor::getInfo( $_SESSION["editor"]["username"] );
+    $sessionEditor = fn_Login::setSessionEditor( db_Editor::getInfo( $sessionEditor["username"] ) );
     $lang = getLang();
 
     # title
@@ -59,7 +61,7 @@ class fn_Setting {
         array( "query" => "#main",           "innerHtml" => fn_Edit::getMain() ),
         array( "query" => "#header-buttons", "innerHtml" => fn_Edit::getHeaderButton() ),
         array( "query" => "#title",          "innerHtml" => $APP["name"][$lang] . "&nbsp;-&nbsp;" . $APP["site"] ),
-        array( "query" => "#currentUser",    "innerHtml" => $_SESSION["editor"]["longname"] ),
+        array( "query" => "#currentUser",    "innerHtml" => $sessionEditor["longname"] ),
         array( "query" => "#about",          "innerHtml" => $FOOTERLINK["about"][$lang] ),
         array( "query" => "#condition",      "innerHtml" => $FOOTERLINK["condition"][$lang] ),
         array( "query" => "#help",           "innerHtml" => $FOOTERLINK["help"][$lang] ),
@@ -110,15 +112,17 @@ class fn_Setting {
 
   /****************************************************************************/
   protected static function setStorage( $storage ) {
+    $sessionEditor = fn_Login::getSessionEditor();
     return db_Editor::save(
       array( "storage" => "'" . DB::mysql_prep( json_encode( $storage ) ) . "'" ),
-      $_SESSION["editor"]["k"]
+      $sessionEditor["k"]
     );
   }
 
   /****************************************************************************/
   protected static function getStorage() {
-    if( $result = db_Editor::get( "storage", "k=" . $_SESSION["editor"]["k"] ) ) {
+    $sessionEditor = fn_Login::getSessionEditor();
+    if( $result = db_Editor::get( "storage", "k=" . $sessionEditor["k"] ) ) {
       return json_decode( $result[0]["storage"], true );
     }
     return false;

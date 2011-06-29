@@ -319,9 +319,18 @@
       <xsl:attribute name="name">
         <xsl:value-of select="../../@name"/>
       </xsl:attribute>
-      <xsl:for-each select="@disabled">
-        <xsl:call-template name="apply-attribute" />
-      </xsl:for-each>
+      <xsl:choose>
+        <xsl:when test="../../@disabled = 'disabled'">
+          <xsl:attribute name="disabled">
+            <xsl:text>disabled</xsl:text>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:for-each select="@disabled">
+            <xsl:call-template name="apply-attribute" />
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="@value">
         <xsl:attribute name="value">
           <xsl:value-of select="@value"/>
@@ -433,7 +442,18 @@
 </xsl:template>
 
 <xsl:template match="ui.accordion">
-  <div class="accordion-container accordion">
+  <div class="accordion-container">
+    <xsl:attribute name="class">
+      <xsl:text>accordion-container</xsl:text>
+      <xsl:if test="@class">
+        <xsl:value-of select="concat(' ',@class)" />
+      </xsl:if>
+    </xsl:attribute>
+    <xsl:if test="@closable">
+      <button class="close" data-trigger="close">
+        <span class="hidden"><xsl:text>Fermer</xsl:text></span>
+      </button>
+    </xsl:if>
     <xsl:if test="ui.headtitle">
       <h2><xsl:value-of select="ui.headtitle"/></h2>
     </xsl:if>

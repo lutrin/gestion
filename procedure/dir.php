@@ -258,6 +258,14 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function write( $k, $content ) {
+    $f = fopen( self::getPath( $k ), 'w+' );
+    fwrite( $f, $content );
+    fclose( $f );
+    return true;
+  }
+
+  /****************************************************************************/
   protected static function getK( $subpath ) {
     global $PUBLICPATH;
     if( $subpath == $PUBLICPATH ) {

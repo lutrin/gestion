@@ -276,7 +276,7 @@ class fn_Editor extends fn {
     if( $allowResult = fn_Login::isNotAllowed() ) {
       return $allowResult;
     }
-
+    return fn_Login::useAccount( $k );
   }
 
   /****************************************************************************/
@@ -296,7 +296,7 @@ class fn_Editor extends fn {
     }
 
     # is myself
-    if( $_SESSION["editor"]["k"] == $k ) {
+    if( in_array( $k, fn_Login::getSessionKList() ) ) {
       Includer::add( array( "uiDialog" ) );
       return array(
         "dialog" => ui_Dialog::buildXml( "Changement de status", "Vous ne pouvez pas changer votre status" )
@@ -324,11 +324,14 @@ class fn_Editor extends fn {
 
     # is myself
     $lang = getLang();
-    if( in_array( $_SESSION["editor"]["k"], $kList ) ) {
-      Includer::add( array( "uiDialog" ) );
-      return array(
-        "dialog" => ui_Dialog::buildXml( $DELETE["title"][$lang], $DELETE["message"][$lang] )
-      );
+    $sessionKList = fn_Login::getSessionKList();
+    foreach( $kList as $k ) {
+      if( in_array( $k, $sessionKList ) ) {
+        Includer::add( array( "uiDialog" ) );
+        return array(
+          "dialog" => ui_Dialog::buildXml( $DELETE["title"][$lang], $DELETE["message"][$lang] )
+        );
+      }
     }
 
     # remove
@@ -614,10 +617,10 @@ class fn_Editor extends fn {
     Includer::add( array( "dbEditor", "uiList" ) );
 
     # editor list
-    $myK = $_SESSION["editor"]["k"];
+    $sessionKList = fn_Login::getSessionKList();;
     $editorList = db_Editor::get( $fields, false, $params["order"] );
     foreach( $editorList as $key => $editor ) {
-      if( $myK != $editor["k"] ) {
+      if( !in_array( $editor["k"], $sessionKList ) ) {
         $indList = array( "delete" );
         if( $editor["class"] == "editor" ) {
           array_push( $indList, "unactivate", "use" );
@@ -788,10 +791,12 @@ class fn_Editor extends fn {
     Includer::add( "fnEdit" );
     $list = array();
     foreach( fn_Edit::getToolList() as $key => $tool ) {
-      $list[$key] = array(
-        "label" => $tool["label"],
-        "value" => $key
-      );
+      if( $key != "editors" ) {
+        $list[$key] = array(
+          "label" => $tool["label"],
+          "value" => $key
+        );
+      }
     }
     $toolList = array(
       "label" => "Outils",
@@ -799,7 +804,7 @@ class fn_Editor extends fn {
       "list"  => $list
     );
 
-    if( $k == $_SESSION["editor"]["k"] ) {
+    if( in_array( $k, fn_Login::getSessionKList() ) ) {
       $admin["disabled"] = "disabled";
       $active["disabled"] = "disabled";
       $toolList["disabled"] = "disabled";
@@ -908,10 +913,12 @@ class fn_Editor extends fn {
     Includer::add( "fnEdit" );
     $toolList = array();
     foreach( fn_Edit::getToolList() as $key => $tool ) {
-      $toolList[$key] = array(
-        "label" => $tool["label"],
-        "value" => $key
-      );
+      if( $key != "editors" ) {
+        $toolList[$key] = array(
+          "label" => $tool["label"],
+          "value" => $key
+        );
+      }
     }
 
     # get editor list

@@ -13,7 +13,7 @@
       button.click( _edit.closeDialog );
     } else if( button.hasClass( "close" ) ) {
       button.click( function() {
-        $( this ).closest( "form,.tabs-container" ).remove();
+        $( this ).closest( "form,.tabs-container,.accordion-container" ).remove();
       } );
     } else {
       button.click( app.click );

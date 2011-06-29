@@ -26,6 +26,12 @@
         dataParams = anchor.data( "params" ),
         ajaxObject, dataParams, params, navigator;
 
+
+    // disabled
+    if( anchor.hasClass( "disabled" ) ) {
+      return false;
+    }
+
     // empty
     if( target.hasClass( "empty" ) ) {
       _c.callAjax(

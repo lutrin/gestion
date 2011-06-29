@@ -59,11 +59,12 @@ class fn_Edit {
     $lang = getLang();
 
     # is admin
-    $isAdmin = $_SESSION["editor"]["admin"];
+    $sessionEditor = fn_Login::getSessionEditor();
+    $isAdmin = $sessionEditor["admin"];
 
     # build list
     $allowedToolList = array();
-    $editorToolList = $_SESSION["editor"]["toolList"];
+    $editorToolList = $sessionEditor["toolList"];
     foreach( self::getToolList() as $key => $tool ) {
       if( $isAdmin || ( $editorToolList && in_array( $key, $editorToolList ) ) ) {
         $allowedToolList[$key] = $tool;
@@ -120,7 +121,8 @@ class fn_Edit {
 
     # editor
     Includer::add( "tag" );
-    return Tag::build( "span", array( "id" => "currentUser" ), $_SESSION["editor"]["longname"] )
+    $sessionEditor = fn_Login::getSessionEditor();
+    return Tag::build( "span", array( "id" => "currentUser" ), $sessionEditor["longname"] )
          . Tag::build(
             "button",
             array(

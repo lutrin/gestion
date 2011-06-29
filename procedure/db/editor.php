@@ -41,6 +41,7 @@ class db_Editor extends db_Abstract {
     if( !$result ) {
       return false;
     }
+    $editor = $result[0];
 
     # get editor in group list
     $editor["toolList"] = self::getGroupToolList( $editor["k"], explode( ",", $editor["toolList"] ) );

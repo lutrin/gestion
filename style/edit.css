@@ -111,12 +111,12 @@ input[type=button] {
 }
 
 .collapsed > .main > .toggleExpand:before,
-.accordion > h3 > a:before {
+.accordion-container > h3 > a:before {
   content: "+";
 }
 
 .expanded > .main > .toggleExpand:before,
-.accordion > h3.selected > a:before {
+.accordion-container > h3.selected > a:before {
   content: "-";
 }
 
@@ -238,7 +238,7 @@ input[type=button] {
 }
 
 /* color */
-html, fieldset, legend, .dock, .dock li span, .tabs, .accordion, .header > .cell,
+html, fieldset, legend, .dock, .dock li span, .tabs, .accordion-container, .header > .cell,
 .table .row:nth-child(odd), .resume .row:nth-child(odd) {
   background-color:#F5F5F5;
 }
@@ -552,7 +552,7 @@ section:target, section.target, .separator > section {
   display: block;
 }
 
-.separator hr, .accordion hr {
+.separator hr, .accordion-container hr {
   margin: 10px;
 }
 
@@ -737,7 +737,7 @@ nav h2, nav menu {
 }
 
 .table .toggleExpand, .tree .toggleExpand,
-.accordion > h3 > a:before {
+.accordion-container > h3 > a:before {
   width: 12px;
   height: 16px;
   display: inline-block;

@@ -293,7 +293,8 @@ function setHeader( $type = "html" ) {
 /******************************************************************************/
 function getLang() {
   global $DEFAULT_LANG;
-  return isset( $_SESSION["editor"]["lang"] )? $_SESSION["editor"]["lang"]: $DEFAULT_LANG;
+  $sessionEditor = fn_Login::getSessionEditor();
+  return isset( $sessionEditor["lang"] )? $sessionEditor["lang"]: $DEFAULT_LANG;
 }
 
 /******************************************************************************/
