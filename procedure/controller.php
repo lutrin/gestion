@@ -225,7 +225,7 @@ function delete() {
   global $CONTROLLER;
   if( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) {
     if( $kList = ( isset( $_GET["k"] )? typeValidator::isNumericList( $_GET["k"] ): false ) ) {
-      return switchFunction( "delete", $object, array( $kList ) );
+      return switchFunction( "delete", $object, array( $kList, $object ) );
     }
     setHeader( "json" );
     Includer::add( "uiDialog" );

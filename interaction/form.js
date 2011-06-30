@@ -1,7 +1,11 @@
 {
+  changeable: "input:text,input:password,input:checkbox,input:radio,select,textarea",
+
+  /****************************************************************************/
   initialize: function() {
     var form = $( this ),
-        app = _c.ajaxList.interaction.form;
+        app = _c.ajaxList.interaction.form,
+        changeable;
 
     // already initiated
     if( form.hasClass( "initiated" ) ) {
@@ -36,12 +40,56 @@
       }
     } );
 
-    // apply change
-    form.find( "input:text,input:password,textarea" ).change( function() {
-      $( this ).addClass( "changed" );
+    // changeable
+    changeable = form.find( app.changeable );
+
+    // data-display
+    form.find( "[data-display]" ).each( function() {
+      var object = $( this ),
+          displayList = object.data( "display" ).split( "=" ),
+          inputValue = _c.trim( displayList[1] ),
+          inputList = changeable.filter( "[name=" + _c.trim( displayList[0] ) + "]" );
+      inputList.change( function() {
+        // get value
+        var finaleValue;
+        inputList.each( function() {
+          var input = $( this ),
+              value = input.val();
+                // checkbox
+          if( input.attr( "type" ) && _c.inList( input.attr( "type" ), ["checkbox","radio"] ) ) {
+            value = app.getCheckedValue( input );
+          }
+          if( value !== null ) {
+            if( finaleValue ) {
+              finaleValue = _c.makeArray( value );
+              finaleValue.push( value );
+            } else {
+              finaleValue = value;
+            }
+          }
+        } );
+        if( finaleValue == inputValue ) {
+          object.removeClass( "hidden" );
+        } else {
+          object.addClass( "hidden" );
+        }
+      } );
     } );
 
+    // apply change
+    changeable.change( app.change );
+
     form.addClass( "initiated" );
+  },
+
+  /****************************************************************************/
+  change: function() {
+    $( this ).addClass( "changed" );
+  },
+
+  /****************************************************************************/
+  getCheckedValue: function( input ) {
+    return input.is(":checked")? ( input.val() || 1 ): null;
   },
 
   /****************************************************************************/
@@ -134,7 +182,7 @@
     var app = _c.ajaxList.interaction.form,
         fields = {},
         error = false;
-    form.find( "input:text,input:hidden,input:password,input:checkbox,select,textarea" ).each( function() {
+    form.find( "input:text,input:hidden,input:password,input:checkbox,input:radio,select,textarea" ).each( function() {
       var object = $( this ),
           type = object.attr( "type" ) || object.tagName,
           value = object.val(),
@@ -146,12 +194,8 @@
       }
 
       // checkbox
-      if( type == "checkbox" ) {
-        if( object.is(":checked") ) {
-          value = value || 1;
-        } else {
-          value = null;
-        }
+      if( _c.inList( type, ["checkbox","radio"] ) ) {
+        value = app.getCheckedValue( object );
       }
 
       // required

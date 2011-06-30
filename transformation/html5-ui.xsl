@@ -74,6 +74,7 @@
     <!-- textarea -->
     <xsl:when test="@type='textarea'">
       <div>
+        <xsl:call-template name="apply-data-display" />
         <xsl:call-template name="apply-topfield" />
         <textarea>
           <xsl:for-each select="@id|@name|@required|@autofocus|@class|@cols|@rows|@spellcheck">
@@ -93,6 +94,7 @@
     <!-- select -->
     <xsl:when test="@type='select'">
       <div>
+        <xsl:call-template name="apply-data-display" />
         <xsl:call-template name="apply-topfield" />
         <select>
           <xsl:for-each select="@id|@name|@required|@autofocus|@autocomplete|@multiple|@class">
@@ -116,6 +118,7 @@
     <!-- checkbox -->
     <xsl:when test="@type='checkbox'">
       <div>
+        <xsl:call-template name="apply-data-display" />
         <xsl:variable name="selected">
           <xsl:if test="ui.value=@value">
             <xsl:text>1</xsl:text>
@@ -143,6 +146,7 @@
     <!-- checklist -->
     <xsl:when test="(@type='checklist') or (@type='radiolist')">
       <fieldset class="formlist">
+        <xsl:call-template name="apply-data-display" />
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
@@ -157,6 +161,7 @@
     <!-- picklist -->
     <xsl:when test="@type='picklist'">
       <fieldset class="formlist">
+        <xsl:call-template name="apply-data-display" />
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
@@ -167,6 +172,7 @@
     <!-- password -->
     <xsl:when test="@type='password'">
       <div>
+        <xsl:call-template name="apply-data-display" />
         <xsl:call-template name="apply-topfield" />
         <input>
           <xsl:for-each select="@id|@name|@type|@required|@autofocus|@size|@value|@pattern">
@@ -184,6 +190,7 @@
 
     <xsl:when test="@type='fileUpload'">
       <div class="field fileUpload">
+        <xsl:call-template name="apply-data-display" />
         <xsl:if test="@maxFileSize">
           <input type="hidden" name="MAX_FILE_SIZE" value="{@maxFileSize}" />
         </xsl:if>
@@ -210,6 +217,7 @@
     <!-- input -->
     <xsl:otherwise>
       <div>
+        <xsl:call-template name="apply-data-display" />
         <xsl:call-template name="apply-topfield" />
         <input>
           <xsl:for-each select="@id|@name|@type|@required|@autofocus|@autocomplete|@maxlength|@size|@value|@pattern">
@@ -429,13 +437,15 @@
       <xsl:if test="ui.headtitle">
         <h2><xsl:value-of select="ui.headtitle"/></h2>
       </xsl:if>
-      <menu>
-        <xsl:for-each select="ui.item">
-          <li>
-            <xsl:call-template name="apply-itemAnchor" />
-          </li>
-        </xsl:for-each>
-      </menu>
+      <xsl:if test="ui.item/@count > 1">
+        <menu>
+          <xsl:for-each select="ui.item">
+            <li>
+              <xsl:call-template name="apply-itemAnchor" />
+            </li>
+          </xsl:for-each>
+        </menu>
+      </xsl:if>
     </nav>
     <xsl:call-template name="apply-itemlist" />
   </div>
@@ -861,6 +871,14 @@
 
 <xsl:template name="apply-attribute">
   <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+</xsl:template>
+
+<xsl:template name="apply-data-display">
+  <xsl:if test="@display">
+    <xsl:attribute name="data-display">
+      <xsl:value-of select="@display" />
+    </xsl:attribute>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="apply-topfield">

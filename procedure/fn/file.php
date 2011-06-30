@@ -32,7 +32,7 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  public static function refresh_file( $id ) {
+  public static function refresh_explore( $id ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
@@ -42,77 +42,10 @@ class fn_File extends fn {
 
     return array(
       "replacement" => array(
-        "query" => "#$id-tabExplore",
+        "query" => "#$id",
         "innerHtml" => self::getExploreFolder( $id, $k )
       )
     );
-  }
-
-  /****************************************************************************/
-  protected static function getExploreFolder( $id, $k ) {
-    $exploreParams = array(
-      "id" => "folder",
-      "mode" => array(
-        "gallery" => "Galerie",
-        "compact" => "Compact",
-        "table"   => "Tableau",
-        "resume"  => "Résumé",
-      ),
-      "main" => "name",
-      "mainAction" => "edit",
-      "insertable" => true,
-      "selectable" => true,
-      "refreshable" => true,
-      "key"        => $k,
-      "columns"     => array(
-        "k"    => array(
-          "hidden" => true
-        ),
-        "name" => array(
-          "label"    => "Nom de fichier"
-        ),
-        "type" => array(
-          "label"    => "Type"
-        ),
-        "encoding" => array(
-          "label"    => "Encodage"
-        ),
-        "size" => array(
-          "label" => "Taille"
-        )
-      ),
-      "actions"     => array(
-        "edit"   => array(
-          "title" => "Ouvrir"
-        ),
-        "insert"   => array(
-          "title"      => "Insérer",
-          "individual" => true
-        ),
-        "delete" => array(
-          "title"    => "Supprimer",
-          "multiple" => true
-        )
-      )
-    );
-
-    # get filter list
-    Includer::add( array( "dir", "uiList" ) );
-    $oldList = Dir::getExplore( $k );
-    $list = array();
-    foreach( $oldList as $key => $item ) {
-      $class = self::getClass( $item["name"], $item["mimetype"] );
-      if( $class == "php" ) {
-        continue;
-      }
-      $list[] = array_merge( $item, array(
-        "class"     => $class,
-        "indAction" => self::getAction( $class ),
-        "size"      => self::getHumanFileSize( $item["size"] )
-      ) );
-    }
-
-    return ui_List::buildXml( $exploreParams, $list );
   }
 
   /****************************************************************************/
@@ -138,7 +71,7 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  public static function insert( $parentK ) {
+  public static function insert_folder( $parentK ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
@@ -151,6 +84,7 @@ class fn_File extends fn {
     # get folder params
     $params = self::getFormParamsFolder( "file" );
     $fields = self::getFormFieldsFolder();
+    $fields["content"] = self::getFormFieldsContent( true );
     $values = array( "k" => 0, "parentK" => $parentK );
     $sectionList["$id-sectionCreation"] = array(
       "label"     => "Création",
@@ -190,7 +124,7 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  public static function insert_file( $parentK ) {
+  public static function insert_explore( $parentK ) {
     return self::insert_folder( $parentK );
   }
 
@@ -339,7 +273,7 @@ class fn_File extends fn {
 
     # explore tab
     if( in_array( "explore", $tabKeyList ) ) {
-      $tabList["tabExplore"] = array(
+      $tabList["$id-tabExplore"] = array(
         "label"     => "Contenu",
         "innerHtml" => self::getExploreFolder( $id, $k )
       );
@@ -347,7 +281,7 @@ class fn_File extends fn {
 
     # edit
     $formParams = self::getFormParamsFolder( $infoClass, $k );
-    $fields = self::getFormFieldsFolder();
+    $fields = self::getFormFieldsFolder( $infoClass );
     $values = array(
       "k"       => $k,
       "parentK" => Dir::getParentK( $k ),
@@ -362,18 +296,10 @@ class fn_File extends fn {
       $fields["content"] = self::getFormFieldsContent();
       $values["content"] = "<![CDATA[" . Dir::getContent( $info["path"] ) . "]]>";
     }
-    $tabList["tabEdit"] = array(
+    $tabList["$id-tabEdit"] = array(
       "label" => "Édition",
       "innerHtml" => ui_Form::buildXml( $formParams, $fields, $values )
     );
-
-    # lonely tab
-    if( count( $tabList ) == 1 ) {
-      $tab = current( $tabList );
-      return array(
-        "details" =>$tab["innerHtml"]
-      );
-    }
 
     # select first
     foreach( $tabList as $key => $tab ) {
@@ -393,6 +319,11 @@ class fn_File extends fn {
     return array(
       "details" => ui_Nav::buildXml( $navParams, $tabList )
     );
+  }
+
+  /****************************************************************************/
+  public static function edit_explore( $k ) {
+    return self::edit_folder( $k );
   }
 
   /****************************************************************************/
@@ -421,7 +352,7 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  public static function delete_file( $kList ) {
+  public static function delete_explore( $kList, $id ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
@@ -435,14 +366,83 @@ class fn_File extends fn {
       }
     }
 
-    # list
+    $idExploded = explode( "-", $id );
+    $k = array_pop( $idExploded );
+
     return array(
       "replacement" => array(
-        "query" => "#" . self::$idList,
-        "innerHtml" => self::getFolderTree()
-      ),
-      "details" => " "
+        "query" => "#$id",
+        "innerHtml" => self::getExploreFolder( $id, $k )
+      )
     );
+
+  }
+
+  /****************************************************************************/
+  protected static function getExploreFolder( $id, $k ) {
+    $exploreParams = array(
+      "id" => "files-explore-$k",
+      "mode" => array(
+        "gallery" => "Galerie",
+        "compact" => "Compact",
+        "table"   => "Tableau",
+        "resume"  => "Résumé",
+      ),
+      "main" => "name",
+      "mainAction" => "edit",
+      "insertable" => true,
+      "selectable" => true,
+      "refreshable" => true,
+      "key"        => $k,
+      "columns"     => array(
+        "k"    => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "label"    => "Nom de fichier"
+        ),
+        "type" => array(
+          "label"    => "Type"
+        ),
+        "encoding" => array(
+          "label"    => "Encodage"
+        ),
+        "size" => array(
+          "label" => "Taille"
+        )
+      ),
+      "actions"     => array(
+        "edit"   => array(
+          "title" => "Ouvrir"
+        ),
+        "insert"   => array(
+          "title"      => "Insérer",
+          "individual" => true
+        ),
+        "delete" => array(
+          "title"    => "Supprimer",
+          "multiple" => true
+        )
+      )
+    );
+
+    # get filter list
+    Includer::add( array( "dir", "uiList" ) );
+    $oldList = Dir::getExplore( $k );
+    $list = array();
+    foreach( $oldList as $key => $item ) {
+      $class = self::getClass( $item["name"], $item["mimetype"] );
+      if( $class == "php" ) {
+        continue;
+      }
+      $list[] = array_merge( $item, array(
+        "class"     => $class,
+        "indAction" => self::getAction( $class ),
+        "size"      => self::getHumanFileSize( $item["size"] )
+      ) );
+    }
+
+    return ui_List::buildXml( $exploreParams, $list );
   }
 
   /****************************************************************************/
@@ -522,6 +522,7 @@ class fn_File extends fn {
             "label"     => "Nom",
             "required"  => "required",
             "pattern"   => "[\w\s\(\)\-\!]+",
+            "size"      => 30,
             "maxlength" => 255
           )
         )
@@ -566,14 +567,18 @@ class fn_File extends fn {
   }*/
 
   /****************************************************************************/
-  protected static function getFormFieldsContent() {
-    return array(
+  protected static function getFormFieldsContent( $hide = false) {
+    $field = array(
       "label" => "Contenu",
       "type"  => "textarea",
       "cols"  => 80,
       "rows"  => 24,
       "spellcheck" => "false"
     );
+    if( $hide ) {
+      $field["display"] = "type = file";
+    }
+    return $field;
   }
 
   /****************************************************************************/
