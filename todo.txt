@@ -9,6 +9,17 @@ Appliquer cette régle
     content: attr(data-label) ": ";
 }
 
+background pour fichier image
+html { 
+		margin:0;
+		padding:0;
+		background: url(image/bg.jpg) no-repeat center fixed; 
+		-webkit-background-size: cover; /* pour Chrome et Safari */
+		-moz-background-size: cover; /* pour Firefox */
+		-o-background-size: cover; /* pour Opera */
+		background-size: cover; /* version standardisée */
+		}
+
 Fichiers:
 - Mettre le nom du fichier et le texte dans le même formulaire
 

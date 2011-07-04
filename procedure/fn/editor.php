@@ -554,6 +554,14 @@ class fn_Editor extends fn {
     }
 
     $params = self::getFormParamsGroup( $k );
+
+    // bread crumb
+    if( $parentInfoList = db_GroupEditor::getParentInfoList( $k ) ) {
+      Includer::add( "uiBreadcrumb" );
+      $params["breadcrumb"] = ui_Breadcrumb::buildXml( $parentInfoList, "editors-groupList" );
+    }
+
+//TODO array reverse
     $params["headtitle"] = $values["name"] . "&nbsp;-&nbsp;Groupe";
     $fields = self::getFormFieldsGroup( $k );
 

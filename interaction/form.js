@@ -45,41 +45,55 @@
 
     // data-display
     form.find( "[data-display]" ).each( function() {
-      var object = $( this ),
-          displayList = object.data( "display" ).split( "=" ),
-          inputValue = _c.trim( displayList[1] ),
-          inputList = changeable.filter( "[name=" + _c.trim( displayList[0] ) + "]" );
-      inputList.change( function() {
-        // get value
-        var finaleValue;
-        inputList.each( function() {
-          var input = $( this ),
-              value = input.val();
-                // checkbox
-          if( input.attr( "type" ) && _c.inList( input.attr( "type" ), ["checkbox","radio"] ) ) {
-            value = app.getCheckedValue( input );
-          }
-          if( value !== null ) {
-            if( finaleValue ) {
-              finaleValue = _c.makeArray( value );
-              finaleValue.push( value );
-            } else {
-              finaleValue = value;
-            }
-          }
-        } );
-        if( finaleValue == inputValue ) {
-          object.removeClass( "hidden" );
-        } else {
-          object.addClass( "hidden" );
-        }
-      } );
+      app.setDisplay( $( this ), changeable );
     } );
 
     // apply change
-    changeable.change( app.change );
+    form.find( app.changeable ).change( app.change );
 
     form.addClass( "initiated" );
+  },
+
+  /****************************************************************************/
+  setDisplay: function( object, changeable ) {
+    var app = _c.ajaxList.interaction.form,
+        displayList = object.data( "display" ).split( "=" ),
+        inputValue = _c.trim( displayList[1] ),
+        inputList = changeable.filter( "[name=" + _c.trim( displayList[0] ) + "]" );
+
+    // get value
+    app.setDisplayVisibility( inputList, object, inputValue );
+    inputList.change( function() {
+      app.setDisplayVisibility( inputList, object, inputValue );
+    } );
+  },
+
+  /****************************************************************************/
+  setDisplayVisibility: function( inputList, object, inputValue ) {
+    var finaleValue,
+        app = _c.ajaxList.interaction.form;
+    inputList.each( function() {
+      var input = $( this ),
+          value = input.val();
+
+      // checkbox
+      if( input.attr( "type" ) && _c.inList( input.attr( "type" ), ["checkbox","radio"] ) ) {
+        value = app.getCheckedValue( input );
+      }
+      if( value !== null ) {
+        if( finaleValue ) {
+          finaleValue = _c.makeArray( finaleValue );
+          finaleValue.push( value );
+        } else {
+          finaleValue = value;
+        }
+      }
+    } );
+    if( finaleValue == inputValue ) {
+      object.removeClass( "hidden" );
+    } else {
+      object.addClass( "hidden" );
+    }
   },
 
   /****************************************************************************/

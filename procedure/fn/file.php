@@ -316,6 +316,12 @@ class fn_File extends fn {
       "closable"  => true
     );
 
+    # breadcrumb
+    if( $parentInfoList = Dir::getParentInfoList( $k ) ) {
+      Includer::add( "uiBreadcrumb" );
+      $navParams["breadcrumb"] = ui_Breadcrumb::buildXml( $parentInfoList, "files-explore" );
+    }
+
     return array(
       "details" => ui_Nav::buildXml( $navParams, $tabList )
     );
@@ -390,6 +396,7 @@ class fn_File extends fn {
       ),
       "main" => "name",
       "mainAction" => "edit",
+      "rowAction"  => "edit",
       "insertable" => true,
       "selectable" => true,
       "refreshable" => true,

@@ -25,6 +25,12 @@ class ui_Nav {
       unset( $params["headtitle"] );
     }
 
+    # bread crumb
+    if( isset( $params["breadcrumb"] ) ) {
+      $innerHtml[] = $params["breadcrumb"];
+      unset( $params["breadcrumb"] );
+    }
+
     # attributes list
     foreach( $params as $key => $param ) {
       $attributes[$key] = $param;

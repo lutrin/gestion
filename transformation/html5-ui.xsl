@@ -437,7 +437,8 @@
       <xsl:if test="ui.headtitle">
         <h2><xsl:value-of select="ui.headtitle"/></h2>
       </xsl:if>
-      <xsl:if test="ui.item/@count > 1">
+      <xsl:apply-templates select="ui.breadcrumb" />
+      <xsl:if test="count( ui.item ) > 1">
         <menu>
           <xsl:for-each select="ui.item">
             <li>
@@ -855,6 +856,30 @@
       </xsl:if>
     </fieldset>
   </div>
+</xsl:template>
+
+<xsl:template match="ui.breadcrumb">
+  <menu class="breadcrumb">
+    <xsl:for-each select="ui.breaditem">
+      <li>
+        <a data-action="edit">
+          <xsl:attribute name="href">
+            <xsl:text>#</xsl:text>
+            <xsl:value-of select="../@object" />
+            <xsl:text>-</xsl:text>
+            <xsl:value-of select="@k" />
+          </xsl:attribute>
+          <xsl:attribute name="data-params">
+            <xsl:text>object=</xsl:text>
+            <xsl:value-of select="../@object" />
+            <xsl:text>,k=</xsl:text>
+            <xsl:value-of select="@k" />
+          </xsl:attribute>
+          <xsl:value-of select="." />
+        </a>
+      </li>
+    </xsl:for-each>
+  </menu>
 </xsl:template>
 
 <!-- common template -->

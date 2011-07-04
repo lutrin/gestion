@@ -322,6 +322,10 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
   background-color: #fc9;
 } 
 
+.invalid {
+  background-color: rgba(88,0,0,.05);
+}
+
 /* border */
 header {
   border-bottom: #F5F5F5 solid 1px;
@@ -374,10 +378,6 @@ input[type=submit]:active, button:active {
   border-radius: 4px;
 }
 
-.invalid {
-  background-color: rgba(88,0,0,.05);
-}
-
 .changed:invalid, .field.invalid input, .field.invalid textarea {
   border-color: #800;
   box-shadow: inset rgba(88,0,0,.2) 2px 2px 2px;
@@ -413,6 +413,10 @@ input[type=submit]:active, button:active {
 
 .tree .expanded {
   border-color: #aaa;
+}
+
+.table .list {
+  border-collapse: collapse;
 }
 
 /* padding and margin */
@@ -930,6 +934,14 @@ nav h2, nav menu {
 .uploadedList dt {
   float:left;
   width: 120px;
+}
+
+.breadcrumb li {
+  display: inline;
+}
+
+.breadcrumb li:after {
+  content: " /";
 }
 
 /* z position */

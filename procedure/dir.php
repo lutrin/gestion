@@ -182,6 +182,9 @@ class Dir {
 
   /****************************************************************************/
   public static function getParent( $k ) {
+    if( $k == 0 ) {
+      return "";
+    }
     $path = self::getPath( $k );
     $pathList = explode( "/", $path );
     array_pop( $pathList );
@@ -191,6 +194,17 @@ class Dir {
   /****************************************************************************/
   public static function getParentK( $k ) {
     return self::getK( self::getParent( $k ) );
+  }
+
+  /****************************************************************************/
+  public static function getParentInfoList( $k ) {
+    $nextK = $k;
+    $parentInfoList = array();
+    while( $parent = self::getParent( $nextK ) ) {
+      $nextK = self::getK( $parent );
+      $parentInfoList[$nextK] = self::getName( $parent );
+    }
+    return array_reverse( $parentInfoList );
   }
 
   /****************************************************************************/

@@ -28,6 +28,12 @@ class ui_Form {
       unset( $params["headtitle"] );
     }
 
+    # bread crumb
+    if( isset( $params["breadcrumb"] ) ) {
+      $innerHtml[] = $params["breadcrumb"];
+      unset( $params["breadcrumb"] );
+    }
+
     foreach( $params as $key => $param ) {
       if( $key == "submit" ) {
         $submit = $param;
