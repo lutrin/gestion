@@ -245,6 +245,14 @@
         }
       }
     } );
+    form.find( "[data-required]" ).each( function() {
+      var object = $( this ),
+          name = object.data( "name" );
+      if( !fields[name] ) {
+        error = true;
+        app.showMsg( object, _edit.msg( "required" ) );
+      }
+    } );
     if( error ) {
       return false;
     }
@@ -253,7 +261,7 @@
 
   /****************************************************************************/
   showMsg: function( field, msg ) {
-    var div = field.parents( ".field:first" );
+    var div = field.parents( ".field:first, .formlist:first" );
     if( div.hasClass( "invalid" ) ) {
       return false;
     }

@@ -199,10 +199,15 @@ class Dir {
   /****************************************************************************/
   public static function getParentInfoList( $k ) {
     $nextK = $k;
-    $parentInfoList = array();
-    while( $parent = self::getParent( $nextK ) ) {
-      $nextK = self::getK( $parent );
-      $parentInfoList[$nextK] = self::getName( $parent );
+    $parentInfoList = array(
+      array(
+        "k" => $nextK,
+        "name" => self::getName( self::getPath( $nextK ) )
+      )
+    );
+    while( ( $parent = self::getParent( $nextK ) ) &&
+           ( $nextK = self::getK( $parent ) ) ) {
+      $parentInfoList[] = array( "k" => $nextK, "name" => self::getName( $parent ) );
     }
     return array_reverse( $parentInfoList );
   }

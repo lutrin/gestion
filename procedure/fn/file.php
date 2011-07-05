@@ -18,32 +18,32 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  public static function refresh_folder( $id ) {
+  public static function refresh_folder( $id, $object ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
 
     return array(
       "replacement" => array(
-        "query"     => "#$id",
+        "query"     => "#$object",
         "innerHtml" =>  self::getFolderTree()
       )
     );
   }
 
   /****************************************************************************/
-  public static function refresh_explore( $id ) {
+  public static function refresh_explore( $id, $object ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
 
-    $idExploded = explode( "-", $id );
+    $idExploded = explode( "-", $object );
     $k = array_pop( $idExploded );
 
     return array(
       "replacement" => array(
-        "query" => "#$id",
-        "innerHtml" => self::getExploreFolder( $id, $k )
+        "query" => "#$object",
+        "innerHtml" => self::getExploreFolder( $object, $k )
       )
     );
   }
@@ -165,7 +165,7 @@ class fn_File extends fn {
 
     # valid form
     Includer::add( "fnForm" );
-    $type = $values["type"];
+    $type = isset( $values["type"] )? $values["type"]: false;
     $result = fn_Form::hasErrors(
       self::getFormParamsFolder( $type, $k ),
       self::getFormFieldsFolder(),
@@ -312,7 +312,7 @@ class fn_File extends fn {
       "id"        => "tabs-$k",
       "mode"      => "tabs",
       "class"     => $infoClass,
-      "headtitle" => $info["path"] . "&nbsp;-&nbsp;Dossier",
+      "headtitle" => $info["name"] . "&nbsp;-&nbsp;Dossier",
       "closable"  => true
     );
 
@@ -546,6 +546,7 @@ class fn_File extends fn {
       $fieldlist["type"] = array(
         "label" => "Type",
         "type" => "radiolist",
+        "required" => "required",
         "list" => array(
           "folder" => array(
             "label" => "Dossier",

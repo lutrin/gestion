@@ -60,6 +60,8 @@ function main() {
             return listAction( $action );
           } elseif( $action == "pick" ) {
             return pick();
+          } elseif( $action == "duplicate" ) {
+            return duplicate();
           } elseif( $action == "delete" ) {
             return delete();
           } elseif( $action == "setAccountStorage" ) {
@@ -204,7 +206,7 @@ function itemAction( $action ) {
 function listAction( $action ) {
   global $CONTROLLER;
   if( ( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) ) {
-    return switchFunction( $action, $object, array( $object ) );
+    return switchFunction( $action, $object, array( 0, $object ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }
@@ -216,6 +218,22 @@ function pick() {
       ( $for = ( isset( $_GET["for"] )? $_GET["for"]: false ) ) ) {
     $kList = ( isset( $_GET["k"] )? typeValidator::isNumericList( $_GET["k"] ): false );
     return switchFunction( "pick", $object, array( $kList, $for ) );
+  }
+  return logout( $CONTROLLER["wrongentry"][getLang()] );
+}
+
+/******************************************************************************/
+function duplicate() {
+  global $CONTROLLER;
+  if( $object = ( isset( $_GET["object"] )? typeValidator::isAlphaNumeric( $_GET["object"] ): false ) ) {
+    if( $kList = ( isset( $_GET["k"] )? typeValidator::isNumericList( $_GET["k"] ): false ) ) {
+      return switchFunction( "duplicate", $object, array( $kList, $object ) );
+    }
+    setHeader( "json" );
+    Includer::add( "uiDialog" );
+    return json_encode( array(
+      "dialog" => ui_Dialog::buildXml( $CONTROLLER["delete"][getLang()], $CONTROLLER["noitem"][getLang()] )
+    ) );
   }
   return logout( $CONTROLLER["wrongentry"][getLang()] );
 }

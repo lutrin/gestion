@@ -246,6 +246,9 @@
 <xsl:template match="ui.datalist" mode="checklist">
   <xsl:param name="type" />
   <ul class="{$type}">
+    <xsl:for-each select="../@name|../@required">
+      <xsl:call-template name="apply-data-attribute" />
+    </xsl:for-each>
     <xsl:apply-templates select="ui.dataitem" mode="checklist">
       <xsl:with-param name="type">
         <xsl:choose>
@@ -859,27 +862,34 @@
 </xsl:template>
 
 <xsl:template match="ui.breadcrumb">
-  <menu class="breadcrumb">
+  <ul class="breadcrumb">
     <xsl:for-each select="ui.breaditem">
       <li>
-        <a data-action="edit">
-          <xsl:attribute name="href">
-            <xsl:text>#</xsl:text>
-            <xsl:value-of select="../@object" />
-            <xsl:text>-</xsl:text>
-            <xsl:value-of select="@k" />
-          </xsl:attribute>
-          <xsl:attribute name="data-params">
-            <xsl:text>object=</xsl:text>
-            <xsl:value-of select="../@object" />
-            <xsl:text>,k=</xsl:text>
-            <xsl:value-of select="@k" />
-          </xsl:attribute>
-          <xsl:value-of select="." />
-        </a>
+        <xsl:choose>
+          <xsl:when test="position()=last() and ../@includePresent=''">
+            <strong><xsl:value-of select="." /></strong>
+          </xsl:when>
+          <xsl:otherwise>
+            <a data-action="edit">
+              <xsl:attribute name="href">
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="../@object" />
+                <xsl:text>-</xsl:text>
+                <xsl:value-of select="@k" />
+              </xsl:attribute>
+              <xsl:attribute name="data-params">
+                <xsl:text>object=</xsl:text>
+                <xsl:value-of select="../@object" />
+                <xsl:text>,k=</xsl:text>
+                <xsl:value-of select="@k" />
+              </xsl:attribute>
+              <xsl:value-of select="." />
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
       </li>
     </xsl:for-each>
-  </menu>
+  </ul>
 </xsl:template>
 
 <!-- common template -->
@@ -896,6 +906,10 @@
 
 <xsl:template name="apply-attribute">
   <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+</xsl:template>
+
+<xsl:template name="apply-data-attribute">
+  <xsl:attribute name="data-{name()}"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 
 <xsl:template name="apply-data-display">

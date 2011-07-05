@@ -26,17 +26,18 @@ class db_GroupEditor extends db_Abstract {
 
     # get parent k list
     if( ( !$parentKList = self::getParentKList( array( $k ) ) ) ||
-        ( count( $parentKList ) < 2 ) ) {
+        ( !count( $parentKList ) ) ) {
       return false;
     }
 
-    # remove k
-    array_shift( $parentKList );
-
     # get name
-    $parentInfoList = array_fill_keys( array_reverse( $parentKList ), false );
+    $tempList = array_fill_keys( array_reverse( $parentKList ), false );
     foreach( self::get( array( "k", "name" ), "k IN (" . join( ",", $parentKList ) . ")" ) as $item ) {
-      $parentInfoList[$item["k"]] = $item["name"];
+      $tempList[$item["k"]] = $item["name"];
+    }
+    $parentInfoList = array();
+    foreach( $tempList as $key => $item ) {
+        $parentInfoList[] = array( "k" => $key, "name" => $item );
     }
     return $parentInfoList;
   }

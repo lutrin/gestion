@@ -223,6 +223,14 @@ class fn_Editor extends fn {
 
     # get params
     $params = self::getFormParamsGroup();
+
+    // breadcrumb
+    if( $parentInfoList = db_GroupEditor::getParentInfoList( $parentK ) ) {
+      Includer::add( "uiBreadcrumb" );
+      $params["breadcrumb"] = ui_Breadcrumb::buildXml( $parentInfoList, "editors-groupList", true );
+    }
+
+    // headtitle
     $params["headtitle"] = "Nouveau&nbsp;groupe";
     $fields = self::getFormFieldsGroup( 0 );
 
@@ -396,6 +404,7 @@ class fn_Editor extends fn {
 
     # values
     $valuesToSave = db_Editor::getEmptyValues();
+    $groupKList = array();
     foreach( $values as $key => $value ) {
   
       # not in database
@@ -415,6 +424,14 @@ class fn_Editor extends fn {
       } elseif( $key == "toolList" ) {
         if( $value ) {
           $valuesToSave[$key] = "'" . join( ",", DB::ensureArray( $value ) ) . "'";
+        }
+        continue;
+      }
+
+      # editor list
+      if( $key == "groupList" ) {
+        if( $value ) {
+          $groupKList = DB::ensureArray( $value );
         }
         continue;
       }
@@ -555,13 +572,13 @@ class fn_Editor extends fn {
 
     $params = self::getFormParamsGroup( $k );
 
-    // bread crumb
+    // breadcrumb
     if( $parentInfoList = db_GroupEditor::getParentInfoList( $k ) ) {
       Includer::add( "uiBreadcrumb" );
       $params["breadcrumb"] = ui_Breadcrumb::buildXml( $parentInfoList, "editors-groupList" );
     }
 
-//TODO array reverse
+    // headtitle
     $params["headtitle"] = $values["name"] . "&nbsp;-&nbsp;Groupe";
     $fields = self::getFormFieldsGroup( $k );
 
@@ -904,7 +921,14 @@ class fn_Editor extends fn {
                   "admin" => $admin
                 )
               ),
-              "toolList" => $toolList
+              "toolList" => $toolList,
+              "groupList" => array(
+                "label"    => "Groupes éditeurs",
+                "type"     => "picklist",
+                "multiple" => "multiple",
+                "object"   => "editors-groupList",
+                "list"     => $groupList
+              )
             )
           )
         )
