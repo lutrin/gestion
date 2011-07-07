@@ -65,7 +65,7 @@ class fn_File extends fn {
       "details" => ui_Form::buildXml(
         $params,
         $fields,
-        array( "k" => 0 )
+        array( "k" => 0, "type" => "folder" )
       )
     );
   }
@@ -85,7 +85,16 @@ class fn_File extends fn {
     $params = self::getFormParamsFolder( "file" );
     $fields = self::getFormFieldsFolder();
     $fields["content"] = self::getFormFieldsContent( true );
-    $values = array( "k" => 0, "parentK" => $parentK );
+
+    # get info
+    $info = Dir::getInfo( $parentK );
+
+    $values = array(
+      "k" => 0,
+      "parentK" => $parentK,
+      "type" => "file",
+      "url"  => "<a href='{$info["url"]}'>{$info["path"]}</a>"
+    );
     $sectionList["$id-sectionCreation"] = array(
       "label"     => "Création",
       "innerHtml" => ui_Form::buildXml( $params, $fields, $values ),
@@ -524,6 +533,7 @@ class fn_File extends fn {
       "edition" => array(
         "type" => "fieldset",
         "legend" => "Générales",
+        "class" => $type,
         "fieldlist" => array(
           "name" => array(
             "label"     => "Nom",
@@ -531,6 +541,19 @@ class fn_File extends fn {
             "pattern"   => "[\w\s\(\)\-\!]+",
             "size"      => 30,
             "maxlength" => 255
+          ),
+          "type" => array(
+            "label" => "Type",
+            "type"  => "info"
+          ),
+          "size" => array(
+            "label" => "Taille",
+            "type"  => "info"
+          ),
+          "url" => array(
+            "label" => "Emplacement",
+            "type"  => "info",
+            "format" => "url"
           )
         )
       )

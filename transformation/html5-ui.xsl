@@ -188,6 +188,7 @@
       </div>
     </xsl:when>
 
+    <!-- password -->
     <xsl:when test="@type='fileUpload'">
       <div class="field fileUpload">
         <xsl:call-template name="apply-data-display" />
@@ -212,6 +213,37 @@
           </ul>
         </fieldset>
       </div>
+    </xsl:when>
+
+    <!-- info -->
+    <xsl:when test="@type='info'">
+      <dl class="info">
+        <dt><xsl:value-of select="@label" /></dt>
+
+        <!-- value -->
+        <xsl:variable name="value">
+          <xsl:choose>
+            <xsl:when test="ui.value">
+              <xsl:value-of select="ui.value"/>
+            </xsl:when>
+            <xsl:when test="@value">
+              <xsl:value-of select="@value" />
+            </xsl:when>
+          </xsl:choose>
+        </xsl:variable>
+        <dd>
+          <xsl:choose>
+            <!--<xsl:when test="@format='url'">
+              <a href="{$value}" target="_blank">
+                <xsl:value-of select="$value" />
+              </a>
+            </xsl:when>-->
+            <xsl:otherwise>
+              <xsl:value-of select="$value" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </dd>
+      </dl>
     </xsl:when>
 
     <!-- input -->

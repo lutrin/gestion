@@ -125,3 +125,4 @@ http://www.paulrhayes.com/experiments/modal
 http://css-tricks.com/responsive-data-tables/
 http://gokercebeci.com/dev/droparea
 http://code.google.com/p/swfobject/
+http://www.html5rocks.com/en/tutorials/audio/quick/

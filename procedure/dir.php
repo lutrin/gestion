@@ -130,7 +130,8 @@ class Dir {
       "mimetype" => finfo_file( $type, $path ),
       "encoding" => finfo_file( $encoding, $path ),
       "size"     => filesize( $path ),
-      "path"     => str_replace( $PUBLICPATH . "/", "", $path )
+      "path"     => str_replace( $PUBLICPATH . "/", "", $path ),
+      "url"      => $path
     );
   }
 
