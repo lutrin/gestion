@@ -131,7 +131,8 @@ class Dir {
       "encoding" => finfo_file( $encoding, $path ),
       "size"     => filesize( $path ),
       "path"     => str_replace( $PUBLICPATH . "/", "", $path ),
-      "url"      => $path
+      "url"      => $path,
+      "extension" => pathinfo( $path, PATHINFO_EXTENSION )
     );
   }
 
@@ -144,7 +145,6 @@ class Dir {
 
   /****************************************************************************/
   public static function exists( $k, $name = "" ) {
-    global $PUBLICPATH;
     return file_exists( self::getPath( $k, $name ) );
   }
 

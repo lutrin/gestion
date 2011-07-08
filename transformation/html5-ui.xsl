@@ -41,14 +41,14 @@
 </xsl:template>
 
 <!-- adaptation -->
-<!--<xsl:template match="a">
+<xsl:template match="a">
   <a>
     <xsl:call-template name="apply-tag" />
     <xsl:if test=".=''">
       <xsl:value-of select="@href" />
     </xsl:if>
   </a>
-</xsl:template>-->
+</xsl:template>
 
 <!-- application -->
 <xsl:template match="app.start">
@@ -221,28 +221,17 @@
         <dt><xsl:value-of select="@label" /></dt>
 
         <!-- value -->
-        <xsl:variable name="value">
-          <xsl:choose>
-            <xsl:when test="ui.value">
-              <xsl:value-of select="ui.value"/>
-            </xsl:when>
-            <xsl:when test="@value">
-              <xsl:value-of select="@value" />
-            </xsl:when>
-          </xsl:choose>
-        </xsl:variable>
-        <dd>
-          <xsl:choose>
-            <!--<xsl:when test="@format='url'">
-              <a href="{$value}" target="_blank">
-                <xsl:value-of select="$value" />
-              </a>
-            </xsl:when>-->
-            <xsl:otherwise>
-              <xsl:value-of select="$value" />
-            </xsl:otherwise>
-          </xsl:choose>
-        </dd>
+        <xsl:choose>
+          <xsl:when test="ui.value">
+            <dd>
+              <xsl:apply-templates select="ui.value" />
+              <!--<xsl:value-of select="ui.value"/>-->
+            </dd>
+          </xsl:when>
+          <xsl:when test="@value">
+            <dd><xsl:value-of select="@value" /></dd>
+          </xsl:when>
+        </xsl:choose>
       </dl>
     </xsl:when>
 
@@ -268,7 +257,7 @@
 </xsl:template>
 
 <xsl:template match="ui.value">
-  <xsl:value-of select="." />
+  <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="ui.datalist" mode="select">
@@ -922,6 +911,27 @@
       </li>
     </xsl:for-each>
   </ul>
+</xsl:template>
+
+<xsl:template match="ui.audio">
+  <audio class="audio" controls="controls">
+    <xsl:apply-templates select="source" />
+    <xsl:apply-templates select="ui.mp3player" />
+  </audio>
+</xsl:template>
+
+<xsl:template match="ui.mp3player">
+  <xsl:variable name="flashvars">
+    <xsl:text>mp3=</xsl:text>
+    <xsl:value-of select="@src" />
+  </xsl:variable>
+  <object class="playerpreview" type="application/x-shockwave-flash" data="../external/tool/player_mp3_mini.swf" width="200" height="20">
+    <param name="movie" value="../external/tool/player_mp3_mini.swf" />
+    <param name="bgcolor" value="#607890" />
+    <param name="FlashVars" value="{$flashvars}" />
+    <embed href="../external/tool/player_mp3_mini.swf" bgcolor="#607890" width="200" height="20" name="movie" align="" type="application/x-shockwave-flash" flashvars="{$flashvars}">
+    </embed>
+  </object>
 </xsl:template>
 
 <!-- common template -->

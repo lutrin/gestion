@@ -451,6 +451,10 @@ $INCLUDE_LIST = array(
     "path" => "ui/breadcrumb.php",
     "depend" => "tag"
   ),
+  "uiAudio" => array(
+    "path" => "ui/audio.php",
+    "depend" => "tag"
+  ),
 
   # data base table
   "dbAbstract" => array(

@@ -14,6 +14,7 @@ var _edit = {
     { query: ".list-container", script: "list" },
     { query: ".picklist",       script: "pick" },
     { query: ".fileUpload",     script: "fileupload" }
+//TODO audio
   ],
 
   /****************************************************************************/

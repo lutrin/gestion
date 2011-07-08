@@ -222,6 +222,10 @@ input[type=button] {
   background-image: url(../image/sql.svg);
 }
 
+.list-container .audio .icon, #details .audio h2, .uploadedList > .audio {
+  background-image: url(../image/audio.svg);
+}
+
 .empty {
   background: url(../image/roller.gif) no-repeat center center;
 }
@@ -508,7 +512,8 @@ menu > li,
 .text h2,
 .file h2,
 .gif h2,
-.sql h2 {
+.sql h2,
+.audio h2 {
   padding-left: 20px;
   margin-right: 20px;
 }
@@ -563,7 +568,7 @@ dt:after {
 
 dt, dd {
   display: inline-block;
-  height: 15px;
+  min-height: 15px;
 }
 
 section, .no-js #main, .no-js #header-buttons {

@@ -92,8 +92,7 @@ class fn_File extends fn {
     $values = array(
       "k" => 0,
       "parentK" => $parentK,
-      "type" => "file",
-      "url"  => "<a href='{$info["url"]}'>{$info["path"]}</a>"
+      "url"  => Tag::build( "a", array( "href" => $info["url"], "target" => "_blank" ), $info["path"] )
     );
     $sectionList["$id-sectionCreation"] = array(
       "label"     => "Création",
@@ -232,41 +231,6 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  /*public static function save_content( $k, $values ) {
-    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
-      return $allowResult;
-    }
-
-    # valid form
-    Includer::add( "fnForm" );
-    $result = fn_Form::hasErrors(
-      self::getFormParamsContent( "text", $k ),
-      self::getFormFieldsContent(),
-      $values
-    );
-
-    # fatal error or error list
-    if( isset( $result["fatalError"] ) || ( isset( $result["errorList"] ) && $result["errorList"] ) ) {
-      return $result;
-    }
-
-    Includer::add( "dir" );
-    Dir::save( $k, $values["content"] );
-//TODO put parentK in content form
-    # list
-    if( isset( $values["parentK"] ) && $values["parentK"] ) {
-      return self::edit_folder( $values["parentK"] );
-    }
-    return array(
-      "replacement" => array(
-        "query" => "#" . self::$idList,
-        "innerHtml" => self::getFolderTree()
-      ),
-      "details" => " "
-    );
-  }*/
-
-  /****************************************************************************/
   public static function edit_folder( $k ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
@@ -291,10 +255,15 @@ class fn_File extends fn {
     # edit
     $formParams = self::getFormParamsFolder( $infoClass, $k );
     $fields = self::getFormFieldsFolder( $infoClass );
+
+    # set values
     $values = array(
       "k"       => $k,
       "parentK" => Dir::getParentK( $k ),
-      "name"    => $info["name"]
+      "name"    => $info["name"],
+      "type"    => $infoClass . " ({$info["mimetype"]})",
+      "size"    => self::getHumanFileSize( $info["size"] ),
+      "url"     => Tag::build( "a", array( "href" => $info["url"], "target" => "_blank" ), $info["path"] )
     );
 
     # content
@@ -304,6 +273,21 @@ class fn_File extends fn {
       //$formParams = array_merge( $formParams, self::getFormParamsContent( $infoClass, $k ) );
       $fields["content"] = self::getFormFieldsContent();
       $values["content"] = "<![CDATA[" . Dir::getContent( $info["path"] ) . "]]>";
+    } elseif( $infoClass == "audio" ) {
+      Includer::add( "uiAudio" );
+      $fields["read"] = array(
+        "type" => "fieldset",
+        "fieldlist" => array(
+          "audio" => array(
+            "type" => "info",
+            "label" => "Lecture"
+          )
+        )
+      );
+      #$values["audio"] = "<audio controls='controls'><source src='{$info["url"]}' type='{$info["mimetype"]}' />Non fonctionnel</audio>";
+      // get current extension
+      
+      $values["audio"] = ui_Audio::buildXml( $info, "Impossible de lire le fichier" );
     }
     $tabList["$id-tabEdit"] = array(
       "label" => "Édition",
