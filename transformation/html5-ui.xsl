@@ -914,7 +914,7 @@
 </xsl:template>
 
 <xsl:template match="ui.audio">
-  <audio class="audio" controls="controls">
+  <audio controls="controls" autobuffer="autobuffer">
     <xsl:apply-templates select="source" />
     <xsl:apply-templates select="ui.mp3player" />
   </audio>
@@ -925,11 +925,11 @@
     <xsl:text>mp3=</xsl:text>
     <xsl:value-of select="@src" />
   </xsl:variable>
-  <object class="playerpreview" type="application/x-shockwave-flash" data="../external/tool/player_mp3_mini.swf" width="200" height="20">
+  <object class="playerpreview" type="application/x-shockwave-flash" data="../external/tool/player_mp3_mini.swf" width="300" height="28">
     <param name="movie" value="../external/tool/player_mp3_mini.swf" />
     <param name="bgcolor" value="#607890" />
     <param name="FlashVars" value="{$flashvars}" />
-    <embed href="../external/tool/player_mp3_mini.swf" bgcolor="#607890" width="200" height="20" name="movie" align="" type="application/x-shockwave-flash" flashvars="{$flashvars}">
+    <embed href="../external/tool/player_mp3_mini.swf" bgcolor="#607890" width="300" height="28" name="movie" align="" type="application/x-shockwave-flash" flashvars="{$flashvars}">
     </embed>
   </object>
 </xsl:template>

@@ -13,8 +13,8 @@ var _edit = {
     { query: "a[href^=#]",      script: "anchor" },
     { query: ".list-container", script: "list" },
     { query: ".picklist",       script: "pick" },
-    { query: ".fileUpload",     script: "fileupload" }
-//TODO audio
+    { query: ".fileUpload",     script: "fileupload" },
+    { query: "audio",           script: "audio" }
   ],
 
   /****************************************************************************/
