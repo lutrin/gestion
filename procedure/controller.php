@@ -36,6 +36,8 @@ function main() {
   # switch action
   if( $adminMode ) {
     return displayEdit();
+  } elseif( $image = isset( $_GET["image"] )? $_GET["image"]: false ) {
+    return $_GET["image"];
   } else {
     if( $pageMode ) {
       return getPage();
