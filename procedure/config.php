@@ -370,6 +370,10 @@ $INCLUDE_LIST = array(
   "fn" => array(
     "path" => "fn.php"
   ),
+  "image" => array(
+    "path"   => "image.php",
+    "depend" => "dir"
+  ),
 
   # function
   "fnLogin" => array(

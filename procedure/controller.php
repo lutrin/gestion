@@ -37,7 +37,7 @@ function main() {
   if( $adminMode ) {
     return displayEdit();
   } elseif( $image = isset( $_GET["image"] )? $_GET["image"]: false ) {
-    return $_GET["image"];
+    return getImage();
   } else {
     if( $pageMode ) {
       return getPage();
@@ -289,6 +289,12 @@ function switchFunction( $action, $object, $params = false ) {
 }
 
 /******************************************************************************/
+function getImage() {
+  Includer::add( "image" );
+  return Image::generate( $_GET );
+}
+
+/******************************************************************************/
 function callCleanAll() {
   Includer::add( "clean" );
   $clean = cleanAll();
@@ -304,8 +310,12 @@ function getNow( $format = "Y-m-d h:i:s" ) {
 function setHeader( $type = "html" ) {
   global $CHARSET;
   $typeList = array(
-    "html" => "Content-Type: text/html; charset=$CHARSET",
-    "json" => "Content-Type: application/json; charset=$CHARSET"
+    "html"  => "Content-Type: text/html; charset=$CHARSET",
+    "json"  => "Content-Type: application/json; charset=$CHARSET",
+    "jpeg"  => "Content-Type: image/jpeg",
+    "pjpeg" => "Content-Type: image/pjpeg",
+    "gif"   => "Content-Type: image/gif",
+    "png"   => "Content-Type: image/png"
   );
   return header( in_array( $type, array_keys( $typeList ) )? $typeList[$type]: $typeList["html"] );
 }
