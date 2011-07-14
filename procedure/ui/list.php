@@ -146,6 +146,12 @@ class ui_List {
       $attributes["class"] = $fields["class"];
       unset( $fields["class"] );
     }
+
+    # icon
+    if( isset( $fields["icon"] ) ) {
+      $attributes["icon"] = $fields["icon"];
+      unset( $fields["icon"] );
+    }
   
     # action
     if( isset( $fields["indAction"] ) ) {

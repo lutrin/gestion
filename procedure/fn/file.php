@@ -435,11 +435,16 @@ class fn_File extends fn {
       if( $class == "php" ) {
         continue;
       }
-      $list[] = array_merge( $item, array(
+      $new = array_merge( $item, array(
         "class"     => $class,
         "indAction" => self::getAction( $class ),
         "size"      => self::getHumanFileSize( $item["size"] )
       ) );
+      if( in_array( $class, array( "jpg", "png", "gif" ) ) ) {
+        $new["icon"] = $item["path"];
+      }
+      unset( $new["path"] );
+      $list[] = $new;
     }
 
     return ui_List::buildXml( $exploreParams, $list );

@@ -40,25 +40,26 @@ class Image {
 
     # image string
     if( count( $params ) > 1 ) {
-
+#TODO alt=png, quality=[0-9], bgcolor=#fff, rotate=[-0-9], mode=scale|fit|crop|stretch
+#http://www.nodstrum.com/2006/12/09/image-manipulation-using-php/
       # mode
-      $mode = isset( $params["mode"] )? $params["mode"]: "max"; //max, crop, stretch ...
-      if( $mode == "maximized" ) {
+
+      $mode = isset( $params["mode"] )? $params["mode"]: "scale"; //max, crop, stretch ...
+      if( in_array( $mode, array( "scale", "thumb" ) ) ) {
         $width = isset( $params["width"] )? $params["width"]: false;
         $height = isset( $params["height"] )? $params["height"]: false;
         if( $width || $height ) {
 
           # get new size
-          $newSize = self::resize( $info, array( $width, $height ) );
+          $newSize = self::resize( $info, array( $width, $height ), $mode );
 
           # get im object
           if( !$im = self::open( $path, $mimeType ) ) {
             return "unable to open";
           }
-          $w = imagesx( $im );
-          $h = imagesy( $im );
+
           $im2 = ImageCreateTrueColor( $newSize[0], $newSize[1] );
-          imagecopyResampled( $im2, $im, 0, 0, 0, 0, $newSize[0], $newSize[1], $w, $h );
+          imagecopyResampled( $im2, $im, 0, 0, $newSize[2], $newSize[3], $newSize[0], $newSize[1], $newSize[4], $newSize[5] );
           imagedestroy( $im );
 
           setHeader( $mimeExt );
@@ -108,16 +109,32 @@ class Image {
   }
 
   /****************************************************************************/
-  protected static function resize( $info, $params ) {
+  protected static function resize( $info, $params, $mode ) {
+    global $MAXSIZE;
     list( $width, $height ) = $info;
-    if( $params[0] && ( $width > $params[0] ) ) {
-      $height = ( ( $height / $width ) * $params[1] );
-      $width = $params[0];
+    list( $newWidth, $newHeight ) = $params;
+
+    # scale
+    if( $mode == "scale" ) {
+      $newWidth = $newWidth && $newWidth <= $MAXSIZE["width"]? $newWidth: $MAXSIZE["width"];
+      $newHeight = $newHeight && $newHeight <= $MAXSIZE["height"]? $newHeight: $MAXSIZE["height"];
+      $ratio = min( $newWidth / $width, $newHeight / $height );
+      $newWidth = $width * $ratio;
+      $newHeight = $height * $ratio;
+      $x = 0;
+      $y = 0;
+
+    # thumb
+    } elseif( $mode == "thumb" ) {
+      $newWidth = min( ( $newWidth? $newWidth: $newHeight ), $MAXSIZE["width"] );
+      $newHeight = min( ( $newHeight? $newHeight: $newWidth ), $MAXSIZE["height"] );
+      $ratio = max( $newWidth / $width, $newHeight / $height );
+      $x = ( $width - $newWidth / $ratio ) / 2;
+      $y = ( $height - $newHeight / $ratio ) / 2;
+      $width = $newWidth / $ratio;
+      $height = $newHeight / $ratio;
     }
-    if( $params[1] && ( $height > $params[1] ) ) {
-      $width = ( ( $width / $height ) * $params[1] );
-      $height = $params[1];
-    }
-    return array( $width, $height );
+
+    return array( (int)$newWidth, (int)$newHeight, (int)$x, (int)$y, (int)$width, (int)$height );
   }
 }

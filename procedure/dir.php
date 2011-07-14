@@ -86,7 +86,8 @@ class Dir {
         "name"     => $file,
         "mimetype" => finfo_file( $type, $subpath ),
         "encoding" => finfo_file( $encoding, $subpath ),
-        "size"     => filesize( $subpath )
+        "size"     => filesize( $subpath ),
+        "path"     => $subpath
       );
       $list[] = $item;
     }

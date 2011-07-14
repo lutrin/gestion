@@ -152,6 +152,12 @@ input[type=button] {
   background-position: left center;
 }
 
+.compact img,
+.table img {
+  width: 16px;
+  height: 16px;
+}
+
 .gallery .icon, .resume .icon, .uploadedList > li {
   background-size: 64px;
 }
@@ -381,7 +387,7 @@ input[type=submit]:active, button:active {
   box-shadow: inset rgba(0,0,0,.2) 2px 2px 2px;
 }
 
-.gallery .row, .compact .row, .tree .row, .dock li, .checkbox, .checklist li, .radiolist li  {
+.gallery .row, .compact .row, .tree .row, .dock li, .checkbox, .checklist li, .radiolist li, .resume img, .gallery img {
   border-radius: 4px;
 }
 

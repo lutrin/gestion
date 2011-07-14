@@ -329,6 +329,11 @@ $COMPRESS_LIST = array(
   "js"   => array( "../data/", "../interaction/" )
 );
 
+$MAXSIZE = array(
+  "width" => 1000,
+  "height" => 1000
+);
+
 $INCLUDE_LIST = array(
 
   # external
