@@ -193,9 +193,9 @@ input[type=button] {
 }
 
 .list-container .file .icon, #details .file h2, .uploadedList > .file,
-.list-container .png .icon, #details .png h2, .uploadedList > .png,
-.list-container .jpg .icon, #details .jpg h2, .uploadedList > .jpg,
-.list-container .gif .icon, #details .gif h2, .uploadedList > .gif,
+.uploadedList > .png,
+.uploadedList > .jpg,
+.uploadedList > .gif,
 .list-container .imagesvg .icon, #details .imagesvg h2, .uploadedList > .svg {
   background-image: url(../image/file.svg);
 }

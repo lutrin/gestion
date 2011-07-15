@@ -87,7 +87,7 @@ class Dir {
         "mimetype" => finfo_file( $type, $subpath ),
         "encoding" => finfo_file( $encoding, $subpath ),
         "size"     => filesize( $subpath ),
-        "path"     => $subpath
+        "path"     => str_replace( $PUBLICPATH . "/", "", $subpath )
       );
       $list[] = $item;
     }

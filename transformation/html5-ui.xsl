@@ -780,7 +780,7 @@
             </xsl:if>
             <span class="icon">
               <xsl:if test="../@icon">
-                <img src="{../@icon}?mode=thumb&amp;width=64" width="64" height="64"/>
+                <img src="{../@icon}" />
               </xsl:if>
             </span>
 

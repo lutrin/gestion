@@ -284,10 +284,19 @@ class fn_File extends fn {
           )
         )
       );
-      #$values["audio"] = "<audio controls='controls'><source src='{$info["url"]}' type='{$info["mimetype"]}' />Non fonctionnel</audio>";
-      // get current extension
-      
       $values["audio"] = ui_Audio::buildXml( $info, "Impossible de lire le fichier" );
+    } elseif( self::isImage( $infoClass, $info["name"] ) ) {
+      $fields["view"] = array(
+        "type" => "fieldset",
+        "fieldlist" => array(
+          "image" => array(
+            "type" => "info",
+            "label" => "Aperçu"
+          )
+        )
+      );
+#TODO use encode
+      $values["image"] = Tag::build( "img", array( "src" => $info["url"] . "?width=320&height=320" ) );
     }
     $tabList["$id-tabEdit"] = array(
       "label" => "Édition",
@@ -379,6 +388,8 @@ class fn_File extends fn {
 
   /****************************************************************************/
   protected static function getExploreFolder( $id, $k ) {
+    global $PUBLICPATH;
+
     $exploreParams = array(
       "id" => "files-explore-$k",
       "mode" => array(
@@ -440,14 +451,22 @@ class fn_File extends fn {
         "indAction" => self::getAction( $class ),
         "size"      => self::getHumanFileSize( $item["size"] )
       ) );
-      if( in_array( $class, array( "jpg", "png", "gif" ) ) ) {
-        $new["icon"] = $item["path"];
+      if( self::isImage( $class, $item["name"] ) ) {
+        Includer::add( "encode" );
+        $new["icon"] = "procedure/controller.php?encode=" . Encode::getString( array( "image" => $item["path"], "width" => 64, "height" => 64, "mode" => "thumb" ) );
+#        $new["icon"] = "procedure/controller.php?image=" . $item["path"] . "&width=64&mode=thumb";
       }
       unset( $new["path"] );
       $list[] = $new;
     }
 
     return ui_List::buildXml( $exploreParams, $list );
+  }
+
+  /****************************************************************************/
+  protected static function isImage( $class, $name ) {
+    return in_array( $class, array( "jpg", "png", "gif" ) ) &&
+           preg_match( '/\.(jpg|jpe|png|gif)$/i', $name );
   }
 
   /****************************************************************************/

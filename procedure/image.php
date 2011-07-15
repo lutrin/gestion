@@ -1,19 +1,7 @@
 <?php
 class Image {
-  public static function generate( $params ) {
-    global $PUBLICPATH;
-
-    $encoded = false;
-
-    # TODO encoded
-    if( isset( $params["encoded"] ) ) {
-      $encoded = true;
-
-      # TODO already cached
-
-
-      # decode and generate params
-    }
+  public static function generate( $params, $encoded = false ) {
+    global $CACHEPATH, $PUBLICPATH, $IMAGEQUALITY, $IMAGETYPE;
 
     # image exists
     if( !isset( $params["image"] ) ) {
@@ -24,18 +12,36 @@ class Image {
       header( "HTTP/1.0 404 Not Found" );
       return "No exists";
     }
-    $info = getimagesize( $path );
-
-    # image type
-    $mimeType = $info["mime"];
-    if( !in_array( $mimeType, array( "image/jpeg", "image/pjpeg", "image/gif", "image/png" ) ) ) {
-      return "Not an image $mimeType";
-    }
-    list( $format, $mimeExt ) = explode( "/", $mimeType );
 
     # image size
     if( !$size = filesize( $path ) ) {
       return "Empty";
+    }
+    $info = getimagesize( $path );
+
+    # image type
+    $mimeType = $info["mime"];
+    if( !in_array( $mimeType, array_merge( $IMAGETYPE["jpg"], $IMAGETYPE["gif"], $IMAGETYPE["png"] ) ) ) {
+      return "Not an image $mimeType";
+    }
+    list( $format, $mimeExt ) = explode( "/", $mimeType );
+
+    # cache exists
+    $encodeToUse = $encoded;
+    if( !$encodeToUse ) {
+      Includer::add( "encode" );
+      $encodeToUse = Encode::getString( $params );
+    }
+    $cache = $CACHEPATH . "/" . $encodeToUse;
+    if( file_exists( $cache ) ) {
+      setHeader( $mimeExt );
+      header( 'Content-Disposition: inline; filename="' . Dir::getName( $path ) . '"' );
+      header( "Content-Transfer-Encoding: binary" );
+      header( 'Content-Length: ' . $size );
+      ob_clean();
+      flush();
+      readfile( $cache );
+      return true;
     }
 
     # image string
@@ -59,22 +65,41 @@ class Image {
           }
 
           $im2 = ImageCreateTrueColor( $newSize[0], $newSize[1] );
+
+          # transparent
+          if( in_array( $mimeType, array_merge( $IMAGETYPE["gif"], $IMAGETYPE["png"] ) ) ) {
+            imagealphablending( $im2, false );
+            imagesavealpha( $im2, true );
+            $transparent = imagecolorallocatealpha( $im2, 255, 255, 255, 127 );
+            imagefilledrectangle( $im2, 0, 0, $resize[0], $resize[1], $transparent );
+          }
+
           imagecopyResampled( $im2, $im, 0, 0, $newSize[2], $newSize[3], $newSize[0], $newSize[1], $newSize[4], $newSize[5] );
           imagedestroy( $im );
 
           setHeader( $mimeExt );
           header( 'Content-Disposition: inline; filename="' . Dir::getName( $path ) . '"' );
           header( "Content-Transfer-Encoding: binary" );
-          ob_clean();
-          flush();
-          if( in_array( $mimeType, array( "image/jpeg", "image/pjpeg" ) ) ) {
-            imagejpeg( $im2, null, 100 );
-          } elseif( $mimeType == "image/gif" ) {
+          ob_start();
+          if( in_array( $mimeType, $IMAGETYPE["jpg"] ) ) {
+            imagejpeg( $im2, null, $IMAGEQUALITY );
+          } elseif( in_array( $mimeType, $IMAGETYPE["gif"] ) ) {
             imagegif( $im2 );
-          } elseif( $mimeType == "image/png" ) {
-            imagepng( $im, null, 0 );
+          } elseif( in_array( $mimeType, $IMAGETYPE["png"] ) ) {
+            imagepng( $im2, null, round( abs( ( $IMAGEQUALITY - 100 ) / 11.111111 ) ) );
           }
           imagedestroy( $im2 );
+          $imgString = ob_get_contents();
+          ob_end_clean();
+
+          # cache
+          if( $encoded ) {
+            $f = fopen( $cache, 'w+' );
+            fwrite( $f, $imgString );
+            fclose( $f );
+          }
+
+          return $imgString;
         } else {
           return "no dimension";
         }
@@ -96,14 +121,15 @@ class Image {
 
   /****************************************************************************/
   protected static function open( $path, $mimeType ) {
-    if( in_array( $mimeType, array( "image/jpeg", "image/pjpeg" ) ) ) {
+    global $IMAGETYPE;
+    if( in_array( $mimeType, $IMAGETYPE["jpg"] ) ) {
       return imagecreatefromjpeg( $path );
     }
-    if( $mimeType == "image/gif" ) {
+    if( in_array( $mimeType, $IMAGETYPE["gif"] ) ) {
       return imagecreatefromgif( $path );
     }
-    if( $mimeType == "image/png" ) {
-      return imagecreatefromgif( $path );
+    if( in_array( $mimeType, $IMAGETYPE["png"] ) ) {
+      return imagecreatefrompng( $path );
     }
     return false;
   }

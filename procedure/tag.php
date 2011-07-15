@@ -9,13 +9,19 @@ class Tag {
   }
 
   /****************************************************************************/
+  public static function escapeQuot( $str ) {
+    return preg_replace( '/\'/', "&apos;", $str );
+  }
+
+  /****************************************************************************/
   protected static function getAttributes( $attributes ) {
     if( !$attributes ) {
       return "";
     }
     $attributeList = array();
     foreach( $attributes as $key => $value ) {
-      $attributeList[] = "$key='$value'";
+      
+      $attributeList[] = "$key='" . self::escapeQuot( $value ) . "'";
     }
     return " " . join( " ", $attributeList );
   }
@@ -25,6 +31,10 @@ class Tag {
     if( $innerHtml === false ) {
       return "/";
     }
-    return ">" . ( is_array( $innerHtml )? join( "", $innerHtml ): $innerHtml ) . "</$tagName";    
+    $content = ( is_array( $innerHtml )? join( "", $innerHtml ): $innerHtml );
+    if( $content == strip_tags( $content ) ) {
+      $content = self::escapeQuot( $content );
+    }    
+    return ">$content</$tagName";    
   }
 }

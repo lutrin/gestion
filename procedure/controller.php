@@ -36,7 +36,9 @@ function main() {
   # switch action
   if( $adminMode ) {
     return displayEdit();
-  } elseif( $image = isset( $_GET["image"] )? $_GET["image"]: false ) {
+  } elseif( isset( $_GET["encode"] ) ) {
+    return getEncode();
+  } elseif( isset( $_GET["image"] ) ) {
     return getImage();
   } else {
     if( $pageMode ) {
@@ -289,9 +291,21 @@ function switchFunction( $action, $object, $params = false ) {
 }
 
 /******************************************************************************/
-function getImage() {
+function getEncode() {
+  Includer::add( "encode" );
+  $get = Encode::getArray( $_GET["encode"] );
+  if( is_array( $get ) ) {
+    if( isset( $get["image"] ) ) {
+      return getImage( $get, $_GET["encode"] );
+    }
+  }
+  return false;
+}
+
+/******************************************************************************/
+function getImage( $get = false, $encoded = false ) {
   Includer::add( "image" );
-  return Image::generate( $_GET );
+  return Image::generate( $get? $get: $_GET, $encoded );
 }
 
 /******************************************************************************/

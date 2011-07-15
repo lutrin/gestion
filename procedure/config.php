@@ -313,7 +313,7 @@ $DBDATA = array(
   "password" => "admin",
   "database" => "gestion"
 );
-$CACHEPATH = "../cache/";
+$CACHEPATH = "../../cache/";
 $TEMPPATH = "../template/";
 $DATAPATH = "../data/";
 $MERGEPATH = "../merge/";
@@ -333,6 +333,15 @@ $MAXSIZE = array(
   "width" => 1000,
   "height" => 1000
 );
+
+$IMAGEQUALITY = 70;
+$IMAGETYPE = array(
+  "jpg" => array( "image/jpeg", "image/pjpeg" ),
+  "gif" => array( "image/gif" ),
+  "png" => array( "image/png" )
+);
+
+$ENCRYPTKEY = "lutrin";
 
 $INCLUDE_LIST = array(
 
@@ -378,6 +387,9 @@ $INCLUDE_LIST = array(
   "image" => array(
     "path"   => "image.php",
     "depend" => "dir"
+  ),
+  "encode" => array(
+    "path"   => "encode.php"
   ),
 
   # function

@@ -21,7 +21,6 @@
 
       }
     } );
-console.log( this.error.code );
     if( !Modernizr.audio || !audio.find( "source" ).size() ) {
       $( audio.html() ).insertAfter( audio );
       audio.remove();
