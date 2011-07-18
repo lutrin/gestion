@@ -4,7 +4,7 @@
   "jpg"        : ["image/jpeg"],
   "png"        : ["image/png"],
   "imagesvg"   : ["image/svg+xml"],
-  "audio"      : ["audio/mpeg", "application/ogg"],
+  "music"      : ["audio/mpeg", "application/ogg"],
   "html"       : ["text/html"],
   "php"        : ["text/x-php", "application/x-httpd-php"],
   "text"       : ["text/x-c++", "text/plain", "text/x-c"],

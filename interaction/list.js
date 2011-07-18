@@ -20,7 +20,13 @@
     // fitrable
     listContainer.find( ".setFilter" ).bind( "setFilter", app.setFilter );
 
+    // initialize
     app.initializeRowList( listContainer );
+
+    // list to pick
+    if( listContainer.hasClass( "listToPick" ) ) {
+      listContainer.find( ".level1" ).each( app.removeDisabled );
+    }
 
     listContainer.addClass( "initiated" );
   },
@@ -293,9 +299,24 @@
 		listContainer.find( ".expanded" ).each( function() {
 			expandedList.push( $( this ).attr( "id" ).replace( listContainerId, "" ) );
 		} );
-console.log( expandedList );
     _c.setAccountStorage( listContainer.attr( "id" ) + "-expanded", expandedList );
   },
 
+  /****************************************************************************/
+  removeDisabled: function() {
+    var row = $( this ),
+        app = _c.ajaxList.interaction.list,
+        children = row.children( ".row" ),
+        main, inner;
+    children.each( app.removeDisabled );
+    children = row.children( ".row" );
+    if( row.hasClass( "disabled" ) && !children.size() ) {
+      row.remove();
+    } else {
+      main = row.children( ".main:first > a:last" );
+      inner = main.html();
+      main.replaceWith( "<span>" + inner + "</span>" );
+    }
+  }
   
 }

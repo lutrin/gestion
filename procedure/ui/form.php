@@ -66,9 +66,10 @@ class ui_Form {
     # submit
     if( $submit ) {
       $innerHtml[] = Tag::build( "fieldset", array( "class" => "buttonList" ), Tag::build( "input", array(
-        "type"  => "submit",
-        "name"  => "submit",
-        "value" => $submit
+        "type"     => "submit",
+        "name"     => "submit",
+        "disabled" => "disabled",
+        "value"    => $submit
       ) ) );
     }
 

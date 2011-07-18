@@ -1,0 +1,9 @@
+# BEGIN drop-file hack stopper
+RemoveHandler application/x-httpd-php .php
+<FilesMatch ".(php|php5|php4|php3|phtml|phpt)$">
+  SetHandler x-httpd-php5
+</FilesMatch>
+<FilesMatch ".phps$">
+  SetHandler x-httpd-php5-source
+</FilesMatch>
+# END drop-file hack stopperz

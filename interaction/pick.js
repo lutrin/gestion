@@ -18,7 +18,9 @@
 
   /****************************************************************************/
   remove: function() {
-    $( this ).parent().remove();
+    var object = $( this );
+    object.parents( ".picklist:first" ).trigger( "change" );
+    object.parent().remove();
   },
 
   /****************************************************************************/
@@ -32,20 +34,31 @@
                  "<span>###text###</span>" +
                  "<input type='hidden' value='###value###' name='###name###' id='###id###-###value###'>" +
                  "<a title='Exclure' class='remove'></a>" +
-               "</li>";
+               "</li>",
+        inner, main, toRemove;
 
     // text
     row.parents( ".row" ).each( function() {
       text.unshift( _c.trim( $( this ).children( ".main:first" ).text() ) );
     } );
 
-    html = html.replace( "###text###", text.join( "/" ) )
+    html = html.replace( "###text###", text.pop() )
                .replace( "###value###", params.k )
                .replace( "###name###", ul.data( "name" ) )
                .replace( "###id###", ul.attr( "id" ) );
-    row.parents( ".row" ).remove();
-    row.remove();
+    if( row.find( ".row" ).size() ) {
+      main = row.find( ".main:first > a:last" );
+      inner = main.html();
+      main.replaceWith( "<span>" + inner + "</span>" );
+      row.addClass( "disabled" );
+    } else {
+      toRemove = row;
+      while( toRemove.parent().hasClass( "disabled" ) ) {
+        toRemove = toRemove.parent();
+      }
+      toRemove.remove();
+    }
     ul.append( html ).find( ".remove" ).click( app.remove );
-
+    ul.trigger( "change" );
   }
 }

@@ -161,11 +161,36 @@
     <!-- picklist -->
     <xsl:when test="@type='picklist'">
       <fieldset class="formlist">
-        <xsl:call-template name="apply-data-display" />
+        <xsl:attribute name="class">
+          <xsl:text>formlist</xsl:text>
+          <xsl:if test="@class">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="@class" />
+          </xsl:if>
+        </xsl:attribute>
         <xsl:if test="@label">
           <legend><xsl:value-of select="@label" /></legend>
         </xsl:if>
         <xsl:apply-templates select="ui.datalist" mode="picklist" />
+      </fieldset>
+    </xsl:when>
+
+    <!-- portrait -->
+    <xsl:when test="@type='image'">
+      <fieldset class="image">
+        <xsl:call-template name="apply-data-display" />
+        <xsl:if test="@label">
+          <legend><xsl:value-of select="@label" /></legend>
+        </xsl:if>
+        <div title="Piger">
+          <xsl:if test="@default">
+            <xsl:attribute name="class">
+              <xsl:value-of select="@default" />
+            </xsl:attribute>
+          </xsl:if>
+        </div>
+        <button data-action="pick" data-params="object={../@object},for=#{../@id}">Piger...</button>
+        <!--<xsl:apply-templates select="ui.datalist" mode="picklist" />-->
       </fieldset>
     </xsl:when>
 
@@ -188,7 +213,7 @@
       </div>
     </xsl:when>
 
-    <!-- password -->
+    <!-- fileUpload -->
     <xsl:when test="@type='fileUpload'">
       <div class="field fileUpload">
         <xsl:call-template name="apply-data-display" />

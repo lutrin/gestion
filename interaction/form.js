@@ -50,6 +50,7 @@
 
     // apply change
     form.find( app.changeable ).change( app.change );
+    form.find( ".picklist" ).bind( "change", app.change );
 
     form.addClass( "initiated" );
   },
@@ -98,7 +99,10 @@
 
   /****************************************************************************/
   change: function() {
-    $( this ).addClass( "changed" );
+    var object = $( this );
+    object.addClass( "changed" );
+    object.parents( "form:first" ).find( "input[type=submit][disabled=disabled]" ).attr( "disabled", false );
+    
   },
 
   /****************************************************************************/
@@ -115,6 +119,7 @@
     // remove alert message
     form.find( ".alertMsg,.formMsg" ).remove();
     form.find( ".invalid" ).removeClass( "invalid" );
+    form.find( "input[type=submit]" ).attr( "disabled", true );
 
     // prepare
     if( form.find( "input:password" ).size() ) {

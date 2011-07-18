@@ -8,10 +8,30 @@ class fn_File extends fn {
       return $allowResult;
     }
 
+    # tab list
+    $tabList = array(
+      ( self::$idList . "-folderTree" ) => array(
+        "label"     => "Arborescence",
+        "selected"  => true,
+        "innerHtml" => self::getFolderTree()
+      ),
+      ( self::$idList . "-mountPoint" ) => array(
+        "label"  => "Points de montage",
+        "innerHtml" => "Coming soon..."
+      )
+    );
+
+    # params
+    $params = array(
+      "id"   => ( self::$idList . "-nav" ),
+      "mode" => "tabs"
+    );
+
+    Includer::add( "uiNav" );
     return array(
       "replacement" => array(
         "query"     => "#" . self::$idList,
-        "innerHtml" =>  self::getFolderTree()
+        "innerHtml" => ui_Nav::buildXml( $params, $tabList )
       ),
       "hash" => true
     );
@@ -273,7 +293,7 @@ class fn_File extends fn {
       //$formParams = array_merge( $formParams, self::getFormParamsContent( $infoClass, $k ) );
       $fields["content"] = self::getFormFieldsContent();
       $values["content"] = "<![CDATA[" . Dir::getContent( $info["path"] ) . "]]>";
-    } elseif( $infoClass == "audio" ) {
+    } elseif( $infoClass == "music" ) {
       Includer::add( "uiAudio" );
       $fields["read"] = array(
         "type" => "fieldset",

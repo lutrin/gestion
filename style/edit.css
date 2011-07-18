@@ -17,6 +17,10 @@ a:hover, .main > .icon:hover, input[type=file]:hover {
   cursor: pointer;
 }
 
+.image div {
+  cursor: pointer;
+}
+
 h2, h3 > a {
   white-space: nowrap;
 }
@@ -122,33 +126,40 @@ input[type=button] {
 
 #toolList-pages a {
   background: url(../image/page.svg) no-repeat center center;
+  background-size: 16px 16px;
 }
 
 #toolList-templates a {
   background: url(../image/template.svg) no-repeat center center;
+  background-size: 16px 16px;
 }
 
 #toolList-articles a {
   background: url(../image/article.svg) no-repeat center center;
+  background-size: 16px 16px;
 }
 
 #toolList-files a {
   background: url(../image/folder.svg) no-repeat center center;
+  background-size: 16px 16px;
 }
 
 #toolList-editors a {
   background: url(../image/editor.svg) no-repeat center center;
+  background-size: 16px 16px;
 }
 
 #toolList-visitors a {
   background: url(../image/visitor.svg) no-repeat center center;
+  background-size: 16px 16px;
 }
 
-#details h2, .list-container .icon, .uploadedList > li {
+#details h2, .list-container .icon, .uploadedList > li,
+.pickitem {
   background-repeat: no-repeat;
 }
 
-#details h2, .list-container.table .main, .list-container.compact .main {
+#details h2, .list-container.table .main, .list-container.compact .main, .pickitem {
   background-position: left center;
 }
 
@@ -158,8 +169,18 @@ input[type=button] {
   height: 16px;
 }
 
-.gallery .icon, .resume .icon, .uploadedList > li {
+h2, .compact .icon,
+.pickitem {
+  background-size: 16px;
+}
+
+.gallery .icon, .resume .icon, .uploadedList > li, .image div {
   background-size: 64px;
+}
+
+.image div {
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .gallery .icon, .updatedList > li {
@@ -173,18 +194,22 @@ input[type=button] {
 
 .list-container .editor .icon,
 .list-container .disabledEditor .icon,
-#details .editor h2 {
+#details .editor h2,
+fieldset.editor .pickitem,
+.image .editor {
   background-image: url(../image/editor.svg);
 }
 
 .list-container .groupEditor > .icon,
 .list-container .disabledGroupEditor .icon,
-#details .groupEditor h2 {
+#details .groupEditor h2,
+fieldset.groupEditor .pickitem {
   background-image: url(../image/groupEditor.svg);
 }
 
 .list-container .disabledEditor .icon,
-.list-container .disabledGroupEditor .icon {
+.list-container .disabledGroupEditor .icon,
+.disabled > .main .icon {
   filter: url(../image/ressource.svg#disabled);
 }
 
@@ -228,7 +253,7 @@ input[type=button] {
   background-image: url(../image/sql.svg);
 }
 
-.list-container .audio .icon, #details .audio h2, .uploadedList > .audio {
+.list-container .music .icon, #details .music h2, .uploadedList > .music {
   background-image: url(../image/audio.svg);
 }
 
@@ -283,7 +308,8 @@ select:hover,
 .checklist li:hover,
 .radio:hover,
 .radiolist li:hover,
-.picklist li:hover {
+.picklist li:hover,
+.image div:hover {
   background-color: #ff9;
 }
 
@@ -296,6 +322,14 @@ textarea:hover {
 input[type=submit], input[type=button], button {
   color: #fff;
   background-color: #607890;
+}
+
+input[type=submit]:disabled, input[type=button]:disabled, button:disabled {
+  background-color: #aaa;
+}
+
+input[type=submit]:disabled:hover, input[type=button]:disabled:hover, button:disabled:hover {
+  background-color: #ccc;
 }
 
 .tabs > menu > li {
@@ -319,7 +353,7 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
   text-shadow: 0px 0px 3px rgba(255,255,255,1);
 }
 
-.tabs > menu > li.selected, #contextMenu > menu, .list, .formlist {
+.tabs > menu > li.selected, #contextMenu > menu, .list, .formlist, .image div {
   background-color: #fff;
 }
 
@@ -327,7 +361,7 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
 }
 
-#dialog-content {
+#dialog-content, .buttonList {
   background-color: transparent;
 }
 
@@ -362,7 +396,7 @@ fieldset, legend, input[type=submit], input[type=button], button, #dialog-conten
   border-radius: 4px;
 }
 
-input, select, textarea, .header > .cell, #contextMenu > menu {
+input, select, textarea, .header > .cell, #contextMenu > menu, .image div {
   border: 1px solid #aaa;
 }
 
@@ -387,7 +421,7 @@ input[type=submit]:active, button:active {
   box-shadow: inset rgba(0,0,0,.2) 2px 2px 2px;
 }
 
-.gallery .row, .compact .row, .tree .row, .dock li, .checkbox, .checklist li, .radiolist li, .resume img, .gallery img {
+.gallery .row, .compact .row, .tree .row, .dock li, .checkbox, .checklist li, .radiolist li, .resume img, .gallery img, .image div {
   border-radius: 4px;
 }
 
@@ -519,9 +553,13 @@ menu > li,
 .file h2,
 .gif h2,
 .sql h2,
-.audio h2 {
+.music h2 {
   padding-left: 20px;
   margin-right: 20px;
+}
+
+fieldset.editor .pickitem, fieldset.groupEditor .pickitem {
+  padding-left: 20px;
 }
 
 .uploadedList dl, .uploadedList progress {
@@ -549,11 +587,17 @@ header, footer {
 footer {
   position: absolute;
   bottom: 0;
+  width: 100%;
+}
+
+footer span {
+  margin: 2px;
 }
 
 footer nav {
   float: right;
   list-style-type: none;
+  margin: 2px;
 }
 
 footer nav li {
@@ -971,6 +1015,11 @@ nav h2, nav menu {
 
 .breadcrumb li:after {
   content: " / ";
+}
+
+.image div {
+  width: 68px;
+  height: 68px;
 }
 
 /* z position */

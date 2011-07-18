@@ -70,6 +70,7 @@ class fn_Editor extends fn {
       "mode"        => array(
         "compact" => "Compacte"
       ),
+      "class"       => "listToPick",
       "primary"     => "k",
       "main"        => "username",
       "mainTrigger" => "add",
@@ -95,7 +96,7 @@ class fn_Editor extends fn {
     }
 
     return array(
-      "dialog" => ui_Dialog::buildXml( "Liste", ui_List::buildXml( $params, db_Editor::get( $fields, $where ) ) ),
+      "dialog" => ui_Dialog::buildXml( "Liste d'éditeurs", ui_List::buildXml( $params, db_Editor::get( $fields, $where ) ) ),
     );
   }
 
@@ -115,6 +116,7 @@ class fn_Editor extends fn {
       "mode"        => array(
         "tree" => "Arbre"
       ),
+      "class"       => "listToPick",
       "primary"     => "k",
       "main"        => "name",
       "mainTrigger" => "add",
@@ -132,6 +134,9 @@ class fn_Editor extends fn {
 
     # field
     $fields = self::prepareFields( $params["columns"] );
+    if( $excludedKList ) {
+      $fields["class"] = "IF( k IN ( " . join( ",", $excludedKList ) . " ), 'disabled', '' ) AS class";
+    }
     Includer::add( array( "dbGroupEditor", "uiList", "uiDialog" ) );
 
     # excluded
@@ -141,7 +146,7 @@ class fn_Editor extends fn {
     }
 
     return array(
-      "dialog" => ui_Dialog::buildXml( "Liste", ui_List::buildXml( $params, db_GroupEditor::getTree( $fields, 0, $where ) ) ),
+      "dialog" => ui_Dialog::buildXml( "Liste de groupes éditeurs", ui_List::buildXml( $params, db_GroupEditor::getTree( $fields, 0 ) ) ),
     );
   }
 
@@ -446,6 +451,9 @@ class fn_Editor extends fn {
       $k = $newK[0];
     }
 
+    # save editor list
+    db_EditorInGroup::saveGroupList( $groupKList, $k );
+
    # list
     return array(
       "replacement" => array(
@@ -536,19 +544,29 @@ class fn_Editor extends fn {
 
   /****************************************************************************/
   public static function getEditIndividual( $k ) {
+
+    # inner value
+    Includer::add( array( "dbEditor", "dbEditorInGroup", "dbGroupEditor" ) );
     if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active", "toolList" ), "k=$k" ) ) {
       return "Introuvable $k";
     }
-
     $params = self::getFormParamsIndividual( $k );
     $params["headtitle"] = $values[0]["username"] . "&nbsp;-&nbsp;Éditeur";
     $fields = self::getFormFieldsIndividual( $k );
+    $values = $values[0];
+
+    # outer values
+    if( $groupList = db_EditorInGroup::get( "groupK", "editorK=$k" ) ) {
+      $values["groupList"] = join( ",", array_map( function( $group ) {
+        return $group["groupK"];
+      }, $groupList ) );
+    }
 
     Includer::add( array( "uiForm" ) );
     return ui_Form::buildXml(
       $params,
       $fields,
-      $values[0]
+      $values
     );
   }
 
@@ -563,7 +581,6 @@ class fn_Editor extends fn {
     $values = $values[0];
 
     # outer values
-    $editors = array();
     if( $editorList = db_EditorInGroup::get( "editorK", "groupK=$k" ) ) {
       $values["editorList"] = join( ",", array_map( function( $editor ) {
         return $editor["editorK"];
@@ -926,6 +943,7 @@ class fn_Editor extends fn {
                 "label"    => "Groupes éditeurs",
                 "type"     => "picklist",
                 "multiple" => "multiple",
+                "class"    => "groupEditor",
                 "object"   => "editors-groupList",
                 "list"     => $groupList
               )
@@ -1025,6 +1043,7 @@ class fn_Editor extends fn {
                 "label"    => "Membres éditeurs",
                 "type"     => "picklist",
                 "multiple" => "multiple",
+                "class"    => "editor",
                 "object"   => "editors-individualList",
                 "list"     => $editorList
               )
