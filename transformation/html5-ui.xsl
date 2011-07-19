@@ -580,16 +580,16 @@
 
     <!-- addable -->
     <xsl:if test="@insertable|@addable|@refreshable">
-      <fieldset>
+      <fieldset class="function">
         <legend>Fonctions</legend>
         <xsl:if test="@insertable">
-          <button class="add" data-action="insert" data-params="object={@id},k={@key}">Ajouter</button>
+          <button id="{@id}-insert" class="add" data-action="insert" data-params="object={@id},k={@key}">Ajouter</button>
         </xsl:if>
         <xsl:if test="@addable">
-          <button class="add" data-action="add" data-params="object={@id}">Ajouter</button>
+          <button id="{@id}-add" class="add" data-action="add" data-params="object={@id}">Ajouter</button>
         </xsl:if>
         <xsl:if test="@refreshable">
-          <button class="refresh" data-action="refresh" data-params="object={@id}">Actualiser</button>
+          <button id="{@id}-refresh" class="refresh" data-action="refresh" data-params="object={@id}">Actualiser</button>
         </xsl:if>
       </fieldset>
     </xsl:if>
@@ -805,7 +805,7 @@
             </xsl:if>
             <span class="icon">
               <xsl:if test="../@icon">
-                <img src="{../@icon}" />
+                <img data-src="{../@icon}" />
               </xsl:if>
             </span>
 

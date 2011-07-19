@@ -28,6 +28,9 @@
       listContainer.find( ".level1" ).each( app.removeDisabled );
     }
 
+    // list right click
+    listContainer.find( ".list" ).rightClick( app.listRightClick );
+
     listContainer.addClass( "initiated" );
   },
 
@@ -284,6 +287,38 @@
   },
 
   /****************************************************************************/
+  listRightClick: function( event ) {
+    var list = $( event.target ),
+        targetList;
+    if( !list.is( ".list" ) ) {
+      return false;
+    }
+    targetList = [];
+
+    // function
+    list.next( ".function" ).children( "button" ).each( function() {
+      var object = $( this );
+      targetList.push( { "id": object.attr( "id" ), "title": object.html() } );
+    } );
+
+    // option
+    list.prev( ".option" ).children( ".field" ).each( function() {
+      var label = $( this ).find( "label" );
+      targetList.push( { "id": label.attr( "for" ), "title": label.html(), "tag": "select" } );
+    } );
+
+    // selection
+    if( list.children( ".selected" ).size() ) {
+      list.find( ".header button" ).each( function() {
+        var object = $( this );
+        targetList.push( { "id": object.attr( "id" ), "title": object.attr( "title" ) } );
+      } );
+    }
+
+    _edit.showContextMenu( targetList, event );
+  },
+
+  /****************************************************************************/
   toggleExpand: function() {
     var app = _c.ajaxList.interaction.list,
         row = $( this ).parents( ".row:first" ),
@@ -310,13 +345,14 @@
         main, inner;
     children.each( app.removeDisabled );
     children = row.children( ".row" );
-    if( row.hasClass( "disabled" ) && !children.size() ) {
-      row.remove();
-    } else {
-      main = row.children( ".main:first > a:last" );
-      inner = main.html();
-      main.replaceWith( "<span>" + inner + "</span>" );
+    if( row.hasClass( "disabled" ) ) {
+      if( !children.size() ) {
+        row.remove();
+      } else {
+        main = row.find( ".main:first > a:last" );
+        inner = main.html();
+        main.replaceWith( "<span>" + inner + "</span>" );
+      }
     }
   }
-  
 }

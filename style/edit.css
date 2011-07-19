@@ -169,7 +169,9 @@ input[type=button] {
   height: 16px;
 }
 
-h2, .compact .icon,
+h2,
+.compact .icon,
+.tree .icon,
 .pickitem {
   background-size: 16px;
 }
@@ -303,7 +305,7 @@ input[type=password]:hover,
 select:hover,
 .row:hover > .cell,
 .dock li:hover,
-#contextMenu > menu > li:hover,
+#contextMenu a:hover,
 .checkbox:hover,
 .checklist li:hover,
 .radio:hover,
@@ -324,13 +326,9 @@ input[type=submit], input[type=button], button {
   background-color: #607890;
 }
 
-input[type=submit]:disabled, input[type=button]:disabled, button:disabled {
-  background-color: #aaa;
-}
-
-input[type=submit]:disabled:hover, input[type=button]:disabled:hover, button:disabled:hover {
+/*input[type=submit]:disabled:hover, input[type=button]:disabled:hover, button:disabled:hover {
   background-color: #ccc;
-}
+}*/
 
 .tabs > menu > li {
   background-color: #607890;
@@ -353,7 +351,14 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
   text-shadow: 0px 0px 3px rgba(255,255,255,1);
 }
 
-.tabs > menu > li.selected, #contextMenu > menu, .list, .formlist, .image div {
+input[type=submit]:disabled, input[type=button]:disabled, button:disabled,
+input[type=submit]:disabled:hover, input[type=button]:disabled:hover, button:disabled:hover,
+input[type=submit]:disabled:active, input[type=button]:disabled:active, button:disabled:active {
+  background-color: #aaa;
+  text-shadow: 0;
+}
+
+.tabs > menu > li.selected, #contextMenu menu, .list, .formlist, .image div {
   background-color: #fff;
 }
 
@@ -371,6 +376,10 @@ input[type=submit]:active, button:active, .tabs > menu > li:active {
 
 .invalid {
   background-color: rgba(88,0,0,.05);
+}
+
+.disabled > .main > span {
+  color: #ccc;
 }
 
 /* border */
@@ -396,7 +405,7 @@ fieldset, legend, input[type=submit], input[type=button], button, #dialog-conten
   border-radius: 4px;
 }
 
-input, select, textarea, .header > .cell, #contextMenu > menu, .image div {
+input, select, textarea, .header > .cell, #contextMenu menu, .image div {
   border: 1px solid #aaa;
 }
 
@@ -413,7 +422,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus
   box-shadow: inset rgba(0,0,88,.5) 2px 2px 2px;
 }
 
-input[type=submit], input[type=button], button, .dock li span, #contextMenu > menu {
+input[type=submit], input[type=button], button, .dock li span, #contextMenu menu {
   box-shadow: inset rgba(0,0,0,.2) -2px -2px 2px;
 }
 
@@ -693,7 +702,7 @@ nav h2, nav menu {
   top: 0;
 }
 
-#contextMenu > menu {
+#contextMenu menu {
   position: absolute;
   list-style-type: none;
 }
@@ -843,6 +852,11 @@ nav h2, nav menu {
   -webkit-column-width: 150px;
   -moz-column-gap: 5px;
   -webkit-column-gap: 5px;
+}
+
+.compact .row {
+  height: 25px;
+  overflow: hidden;
 }
 
 .compact .list, .tree .list, .checklist, .radiolist, .uploadedList {
@@ -1020,6 +1034,22 @@ nav h2, nav menu {
 .image div {
   width: 68px;
   height: 68px;
+}
+
+#contextMenu span:after {
+  content: " >";
+}
+
+#contextMenu menu menu {
+  left: 30px;
+}
+
+[data-select] {
+  display: none;
+}
+
+li:hover [data-select] {
+  display: block;
 }
 
 /* z position */

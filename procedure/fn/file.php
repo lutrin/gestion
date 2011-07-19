@@ -306,6 +306,7 @@ class fn_File extends fn {
       );
       $values["audio"] = ui_Audio::buildXml( $info, "Impossible de lire le fichier" );
     } elseif( self::isImage( $infoClass, $info["name"] ) ) {
+      Includer::add( "encode" );
       $fields["view"] = array(
         "type" => "fieldset",
         "fieldlist" => array(
@@ -315,8 +316,19 @@ class fn_File extends fn {
           )
         )
       );
-#TODO use encode
-      $values["image"] = Tag::build( "img", array( "src" => $info["url"] . "?width=320&height=320" ) );
+      $values["image"] = Tag::build(
+        "img",
+        array(
+          "data-src" => "procedure/controller.php?encode="
+                      . Encode::getString(
+                         array(
+                           "image" => $info["path"],
+                           "width" => 320,
+                           "height" => 320
+                         )
+                       )
+        )
+      );
     }
     $tabList["$id-tabEdit"] = array(
       "label" => "Édition",
@@ -473,7 +485,15 @@ class fn_File extends fn {
       ) );
       if( self::isImage( $class, $item["name"] ) ) {
         Includer::add( "encode" );
-        $new["icon"] = "procedure/controller.php?encode=" . Encode::getString( array( "image" => $item["path"], "width" => 64, "height" => 64, "mode" => "thumb" ) );
+        $new["icon"] = "procedure/controller.php?encode="
+                     . Encode::getString(
+                        array(
+                          "image" => $item["path"],
+                          "width" => 64,
+                          "height" => 64,
+                          "mode" => "thumb"
+                        )
+                      );
 #        $new["icon"] = "procedure/controller.php?image=" . $item["path"] . "&width=64&mode=thumb";
       }
       unset( $new["path"] );

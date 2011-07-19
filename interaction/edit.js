@@ -14,7 +14,8 @@ var _edit = {
     { query: ".list-container", script: "list" },
     { query: ".picklist",       script: "pick" },
     { query: ".fileUpload",     script: "fileupload" },
-    { query: "audio",           script: "audio" }
+    { query: "audio",           script: "audio" },
+    { query: "img[data-src]",   script: "image" }
   ],
 
   /****************************************************************************/
@@ -102,21 +103,40 @@ var _edit = {
 
   /****************************************************************************/
   showContextMenu: function( targetList, event ) {
-    var actionList = [];
+    var actionList = [], optionList, contextMenu;
 
     // build
     _c.eachItem( targetList, function( targetItem ) {
-      actionList.push( "<li><a data-query='#" + targetItem.id + "'>" + targetItem.title + "</a></li>" );
+      if( targetItem.tag && targetItem.tag == "select" ) {
+        optionList = [];
+        $( "#" + targetItem.id ).find( "option" ).each( function() {
+          var option = $( this );
+          optionList.push( option.attr( "value" ) + "'>" + option.html() );
+        } )
+        actionList.push(
+          "<span>" + targetItem.title + "</span>" +
+          "<menu data-select='#" + targetItem.id + "'><li><a data-value='" + optionList.join( "</a></li><li><a data-value='" ) + "</a></li></menu>"
+        );
+      } else {
+        actionList.push( "<a data-query='#" + targetItem.id + "'>" + targetItem.title + "</a>" );
+      }
     } );
-    $( "#contextMenu" ).html( "<menu>" + actionList.join( "" ) + "</menu>" ).removeClass( "hidden" );
+    $( "#contextMenu" ).html( "<menu><li>" + actionList.join( "</li><li>" ) + "</li></menu>" ).removeClass( "hidden" );
 
     // menu
-    $( "#contextMenu > menu" ).css( {
+    contextMenu = $( "#contextMenu > menu" );
+    contextMenu.css( {
       "top": event.pageY + "px",
       "left": event.pageX + "px"
-    } )
-    .find( "a" ).click( function() {
+    } );
+    contextMenu.find( "a[data-query]" ).click( function() {
       $( $( this ).data( "query" ) ).trigger( "click" );
+    } );
+    contextMenu.find( "a[data-value]" ).click( function() {
+      var option = $( this ),
+          select = $( option.parent().parent().data( "select" ) );
+      select.val( option.data( "value" ) );
+      select.trigger( "change" );
     } );
   },
 

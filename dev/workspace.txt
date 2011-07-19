@@ -6,3 +6,52 @@ Gérer les z-index pour plusieur fenêtres
 Générer le timestamp dans data-timestamp=123123 le dernier focus
 Retrier les z-index à partir de 100 par exemple
 
+
+Visualiser/Piger/Explorer
+Renommer
+Éditer le contenu (dedans)
+Supprimer
+Ajouter dedans
+
+    /*if( $audioTags = getID3v11( $uploadAudioFile ) ) {
+        $infoList = array();
+        $infoTagList = array(
+            array( "label" => "Titre",   "key"   => "title" ),
+            array( "label" => "Artiste", "key"   => "artist" ),
+            array( "label" => "Album",   "key"   => "album" ),
+            array( "label" => "Année",   "key"   => "year" )
+        );
+        foreach( $infoTagList as $infoTag ) {
+            $key = $infoTag['key'];
+            if( isset( $audioTags[$key] ) && trim( $audioTags[$key] ) ) {
+                $audioTag = trim( $audioTags[$key] );
+                $infoList[] = "<dt>{$infoTag['label']}</dt><dd>$audioTag</dd>";
+                $infoValue[] = $infoTag['label'] . ":" . $audioTag;
+            }
+        }
+        if( $infoList ) {
+            $info .= "<fieldset>"
+                  .   "<legend>Informations</legend>"
+                  .   "<dl>"
+                  .     join( "", $infoList )
+                  .   "</dl>"
+                  . "</fieldset>";
+        }
+    }*/
+
+
+function getID3v11($file) {
+	if (!file_exists($file)) return array();
+	if (!$file=fopen($file, "rb")) return array();
+	fseek($file, -128, SEEK_END);
+	$tagheader = fgets($file, 129);
+	if (substr($tagheader,0,3)=='TAG') {
+
+		$ID3v11['title'] = trim(substr($tagheader,3,30));
+		$ID3v11['artist'] = trim(substr($tagheader,33,30));
+		$ID3v11['album'] = trim(substr($tagheader,63,30));
+		$ID3v11['year'] = substr($tagheader,93,4);
+		return $ID3v11;
+	}
+	else return array();
+}

@@ -38,6 +38,9 @@ class Image {
       header( 'Content-Disposition: inline; filename="' . Dir::getName( $path ) . '"' );
       header( "Content-Transfer-Encoding: binary" );
       header( 'Content-Length: ' . $size );
+      header( 'Cache-Control: max-age=3600, must-revalidate' );
+      header( 'Expires: Fri, 30 Oct 1998 14:19:41 GMT' );
+      header( 'Last-Modified: Mon, 29 Jun 1998 02:28:12 GMT' );
       ob_clean();
       flush();
       readfile( $cache );
@@ -80,6 +83,9 @@ class Image {
           setHeader( $mimeExt );
           header( 'Content-Disposition: inline; filename="' . Dir::getName( $path ) . '"' );
           header( "Content-Transfer-Encoding: binary" );
+          header( 'Cache-Control: max-age=3600, must-revalidate' );
+          header( 'Expires: Fri, 30 Oct 1998 14:19:41 GMT' );
+          header( 'Last-Modified: Mon, 29 Jun 1998 02:28:12 GMT' );
           ob_start();
           if( in_array( $mimeType, $IMAGETYPE["jpg"] ) ) {
             imagejpeg( $im2, null, $IMAGEQUALITY );
@@ -113,6 +119,9 @@ class Image {
       header( 'Content-Disposition: inline; filename="' . Dir::getName( $path ) . '"' );
       header( "Content-Transfer-Encoding: binary" );
       header( 'Content-Length: ' . $size );
+      header( 'Cache-Control: max-age=3600, must-revalidate' );
+      header( 'Expires: Fri, 30 Oct 1998 14:19:41 GMT' );
+      header( 'Last-Modified: Mon, 29 Jun 1998 02:28:12 GMT' );
       ob_clean();
       flush();
       readfile( $path );

@@ -2,13 +2,54 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg2">
+   width="64"
+   height="64"
+   id="svg2"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="folder.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1200"
+     inkscape:window-height="1571"
+     id="namedview19"
+     showgrid="false"
+     inkscape:zoom="16.609375"
+     inkscape:cx="32"
+     inkscape:cy="32"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
   <defs
      id="defs4">
     <linearGradient
@@ -65,24 +106,56 @@
        id="linearGradient3628"
        xlink:href="#linearGradient3614"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3598"
+       id="linearGradient2999"
+       gradientUnits="userSpaceOnUse"
+       x1="14"
+       y1="1036.3622"
+       x2="2"
+       y2="1052.3622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3614"
+       id="linearGradient3001"
+       gradientUnits="userSpaceOnUse"
+       x1="12.999999"
+       y1="1047.3622"
+       x2="16.000004"
+       y2="1047.3622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3614"
+       id="linearGradient3004"
+       gradientUnits="userSpaceOnUse"
+       x1="12.999999"
+       y1="1047.3622"
+       x2="16.000004"
+       y2="1047.3622"
+       gradientTransform="matrix(0,-3.9977327,-3.9942042,0,4202.0832,67.752184)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3598"
+       id="linearGradient3007"
+       gradientUnits="userSpaceOnUse"
+       x1="14"
+       y1="1036.3622"
+       x2="2"
+       y2="1052.3622"
+       gradientTransform="matrix(3.9973054,0,0,4.1980088,-67.979375,-4416.2415)" />
   </defs>
-  <g
-     transform="translate(0,-1036.3622)"
-     id="layer1">
-    <g
-       transform="matrix(0,-1,-1,0,1052.3623,1053.3622)"
-       id="g3622">
-      <rect
-         width="11.001126"
-         height="15.001126"
-         x="2.4994366"
-         y="1036.8616"
-         id="rect2846"
-         style="fill:url(#linearGradient3626);fill-opacity:1;stroke:#8b5c00;stroke-width:0.99887335;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
-      <path
-         d="m 13.49231,1051.9053 2.050742,-2.1185 -0.03536,-4.802 -2.050742,-2.1656 0.03536,9.0861 z"
-         id="path2818"
-         style="fill:url(#linearGradient3628);fill-opacity:1;stroke:#8b5c00;stroke-width:0.91390157px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
-    </g>
-  </g>
+  <rect
+     width="43.974861"
+     height="62.974861"
+     x="-57.988358"
+     y="-63.487427"
+     id="rect2846"
+     style="fill:url(#linearGradient3007);fill-opacity:1;stroke:#8b5c00;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     transform="matrix(0,-1,-1,0,0,0)" />
+  <path
+     d="M 0.55858651,13.813535 9.0203078,5.615217 28.200477,5.7565768 36.850326,13.954895 0.55858651,13.813535 z"
+     id="path2818"
+     style="fill:url(#linearGradient3004);fill-opacity:1;stroke:#8b5c00;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     inkscape:connector-curvature="0" />
 </svg>
