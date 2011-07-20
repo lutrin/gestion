@@ -51,22 +51,11 @@ class db_Editor extends db_Abstract {
   }
 
   /****************************************************************************/
-  public static function remove( $kList ) {
-
-    # remove editor in group
-    Includer::add( "dbEditorInGroup" );
-    db_EditorInGroup::removeEditor( $kList );
-
-    # remove editor    
-    return parent::remove( $kList );
-  }
-
-  /****************************************************************************/
   protected static function getGroupToolList( $k, $toolList ) {
-    Includer::add( array( "dbGroupEditor", "dbEditorInGroup" ) );
-    $groupKList = db_EditorInGroup::get( "groupK", "editorK = $k" );
+    Includer::add( array( "dbGroupEditor", "dbAssociation" ) );
+    $groupKList = db_Association::get( "groupEditor", "editor", $k );
     if( $kList = array_map( function( $item ) {
-        return $item["groupK"];
+        return $item["k"];
       }, $groupKList ) ) {
       $kList = db_GroupEditor::getParentKList( $kList );
       $result = db_GroupEditor::get( "toolList", "k IN ( " . join( ",", $kList ) . " ) " );

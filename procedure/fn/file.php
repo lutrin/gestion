@@ -17,7 +17,7 @@ class fn_File extends fn {
       ),
       ( self::$idList . "-mountPoint" ) => array(
         "label"  => "Points de montage",
-        "innerHtml" => "Coming soon..."
+        "innerHtml" => self::getMountpointList()
       )
     );
 
@@ -140,20 +140,80 @@ class fn_File extends fn {
     return array(
       "details" => ui_Nav::buildXml( $navParams, $sectionList )
     );
-/*
-    Includer::add( array( "uiNav", "uiForm" ) );
-    return array(
-      "details" => ui_Form::buildXml(
-        $params,
-        $fields,
-        $values
-      )
-    );*/
   }
 
   /****************************************************************************/
   public static function insert_explore( $parentK ) {
     return self::insert_folder( $parentK );
+  }
+
+  /****************************************************************************/
+  public static function add_mountpoint() {
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
+    }
+
+    # get params
+    $params = array(
+      "id"        => "mountpoint-0",
+      "action"    => "save",
+      "submit"    => "Enregistrer",
+      "method"    => "post",
+      "class"     => "mountpoint",
+      "headtitle" => "Nouveau&nbsp;point de montage",
+      "closable"  => true
+    );
+    $fields = array(
+      "k" => array(
+        "type" => "hidden",
+        "value" => 0
+      ),
+      "object" => array(
+        "type" => "hidden",
+        "value" => "mountpoint"
+      ),
+      "identification" => array(
+        "type" => "fieldset",
+        "legend" => "Identification",
+        "fieldlist" => array(
+          "name" => array(
+            "label" => "Nom",
+            "required" => "required",
+            "maxlength" => 255,
+            "size"      => 20
+          )
+        )
+      )
+/*
+mountpoint
+k      medium int  autoincrement
+
+Identification
+name   varchar 255 input[type=text][required]
+
+Chemin
+pathK  medium int  pick in folderstree[required]
+
+Permissions
+view   tiny int    checkbox
+rename tiny int    checkbox, cond = view
+edit   tiny int    checkbox, cond = view
+delete tiny int    checkbox, cond = view
+add    tiny int    checkbox, cont = view
+
+Groupes
+
+Éditeurs
+*/
+    );
+
+    Includer::add( array( "uiForm" ) );
+    return array(
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields
+      )
+    );
   }
 
   /****************************************************************************/
@@ -447,9 +507,6 @@ class fn_File extends fn {
         "type" => array(
           "label"    => "Type"
         ),
-        "encoding" => array(
-          "label"    => "Encodage"
-        ),
         "size" => array(
           "label" => "Taille"
         )
@@ -552,6 +609,46 @@ class fn_File extends fn {
     );
 
     return ui_List::buildXml( $params, Dir::getTree() );
+  }
+
+  /****************************************************************************/
+  protected static function getMountpointList() {
+    Includer::add( array( "uiList", "dbMountpoint" ) );
+
+    # params
+    $params = array(
+      "id"          => "files-mountpoint",
+      "mode"        => array(
+        "tree" => "compact"
+      ),
+      "main"        => "name",
+      "mainAction"  => "edit",
+      "rowAction"   => "edit",
+      "addable"     => true,
+      "refreshable" => true,
+      "columns"     => array(
+        "k"    => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "label"    => "Nom",
+          "class"    => "mountpoint"
+        )
+      ),
+      "actions"     => array(
+        "edit"   => array(
+          "title" => "Ouvrir"
+        ),
+        "add"   => array(
+          "title" => "Ajouter"
+        ),
+        "delete" => array(
+          "title"    => "Supprimer",
+          "individual" => true
+        )
+      )
+    );
+    return ui_List::buildXml( $params, db_Mountpoint::get( "k,name" ) );
   }
 
   /****************************************************************************/

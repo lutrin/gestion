@@ -13,10 +13,6 @@ class db_GroupEditor extends db_Abstract {
     # get child k list
     $newKList = self::getChildKList( $kList );
 
-    # remove editor in group
-    Includer::add( "dbEditorInGroup" );
-    db_EditorInGroup::removeGroup( $newKList );
-
     # remove editor    
     return parent::remove( $newKList );
   }

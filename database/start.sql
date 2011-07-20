@@ -64,3 +64,31 @@ CREATE TABLE `gestion`.`path` (
 `path` VARCHAR( 255 ) NOT NULL ,
 INDEX ( `path` )
 ) ENGINE = MYISAM ;
+
+
+/* create association table */
+CREATE TABLE `gestion`.`association` (
+`k` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`table1` VARCHAR( 50 ) NOT NULL ,
+`table1K` MEDIUMINT NOT NULL ,
+`table2` VARCHAR( 50 ) NOT NULL ,
+`table2K` MEDIUMINT NOT NULL
+) ENGINE = MYISAM ;
+
+/* drop editorInGroup */
+DROP TABLE `editorInGroup` 
+
+/* create mountpoint */
+CREATE TABLE `gestion`.`mountpoint` (
+`k` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`active` TINYINT NOT NULL DEFAULT '1',
+`name` VARCHAR( 255 ) NOT NULL ,
+`pathK` MEDIUMINT NOT NULL ,
+`view` TINYINT NOT NULL DEFAULT '1',
+`rename` TINYINT NOT NULL ,
+`edit` TINYINT NOT NULL ,
+`delete` TINYINT NOT NULL ,
+`add` TINYINT NOT NULL
+) ENGINE = MYISAM ;
+
+

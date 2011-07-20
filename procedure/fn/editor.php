@@ -452,7 +452,10 @@ class fn_Editor extends fn {
     }
 
     # save editor list
-    db_EditorInGroup::saveGroupList( $groupKList, $k );
+    db_Association::save( array(
+        "editor" => $k,
+        "groupEditor" => $groupKList
+    ) );
 
    # list
     return array(
@@ -487,7 +490,7 @@ class fn_Editor extends fn {
     # name unique
     $name = $values["name"];
     $parentK = $values["parentK"];
-    Includer::add( array( "dbGroupEditor", "dbEditorInGroup" ) );
+    Includer::add( array( "dbGroupEditor", "dbAssociation" ) );
     if( db_GroupEditor::count( "k", array( "NOT k=$k", "name='$name'", "parentK='$parentK'" ) ) ) {
       $result["errorList"][] = array( "name" => "name", "msg" => "mustbeunique" );
       return $result;
@@ -530,7 +533,10 @@ class fn_Editor extends fn {
     }
 
     # save editor list
-    db_EditorInGroup::saveEditorList( $editorKList, $k );
+    db_Association::save( array(
+      "editor"      => $editorKList,
+      "groupEditor" => $k
+    ) );
 
     # list
     return array(
@@ -546,7 +552,7 @@ class fn_Editor extends fn {
   public static function getEditIndividual( $k ) {
 
     # inner value
-    Includer::add( array( "dbEditor", "dbEditorInGroup", "dbGroupEditor" ) );
+    Includer::add( array( "dbEditor", "dbAssociation", "dbGroupEditor" ) );
     if( !$values = db_Editor::get( array( "k", "username", "longname", "lang", "admin", "active", "toolList" ), "k=$k" ) ) {
       return "Introuvable $k";
     }
@@ -556,9 +562,9 @@ class fn_Editor extends fn {
     $values = $values[0];
 
     # outer values
-    if( $groupList = db_EditorInGroup::get( "groupK", "editorK=$k" ) ) {
+    if( $groupList = db_Association::get( "groupEditor", "editor", $k ) ) {
       $values["groupList"] = join( ",", array_map( function( $group ) {
-        return $group["groupK"];
+        return $group["k"];
       }, $groupList ) );
     }
 
@@ -574,16 +580,16 @@ class fn_Editor extends fn {
   public static function getEditGroup( $k ) {
 
     # inner value
-    Includer::add( array( "dbGroupEditor", "dbEditorInGroup", "dbEditor" ) );
+    Includer::add( array( "dbGroupEditor", "dbAssociation", "dbEditor" ) );
     if( !$values = db_GroupEditor::get( array( "k", "parentK", "name", "longname", "active", "toolList" ), "k=$k" ) ) {
       return "Introuvable $k";
     }
     $values = $values[0];
 
     # outer values
-    if( $editorList = db_EditorInGroup::get( "editorK", "groupK=$k" ) ) {
+    if( $editorList = db_Association::get( "editor", "groupEditor", $k ) ) {
       $values["editorList"] = join( ",", array_map( function( $editor ) {
-        return $editor["editorK"];
+        return $editor["k"];
       }, $editorList ) );
     }
 

@@ -482,6 +482,10 @@ $INCLUDE_LIST = array(
     "path" => "db.php",
     "depend" => "dbConnect"
   ),
+  "dbAssociation" => array(
+    "path" => "db/association.php",
+    "depend" => "dbConnect"
+  ),
   "dbEditor" => array(
     "path" => "db/editor.php",
     "depend" => "dbAbstract"
@@ -490,12 +494,12 @@ $INCLUDE_LIST = array(
     "path" => "db/groupEditor.php",
     "depend" => "dbAbstract"
   ),
-  "dbEditorInGroup" => array(
-    "path" => "db/editorInGroup.php",
-    "depend" => "dbAbstract"
-  ),
   "dbPath" => array(
     "path" => "db/path.php",
+    "depend" => "dbAbstract"
+  ),
+  "dbMountpoint" => array(
+    "path" => "db/mountpoint.php",
     "depend" => "dbAbstract"
   )
 );

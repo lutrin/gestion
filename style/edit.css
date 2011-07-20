@@ -172,6 +172,7 @@ input[type=button] {
 h2,
 .compact .icon,
 .tree .icon,
+.table .icon,
 .pickitem {
   background-size: 16px;
 }
@@ -217,6 +218,10 @@ fieldset.groupEditor .pickitem {
 
 .list-container .folder .icon, #details .folder h2 {
   background-image: url(../image/folder.svg);
+}
+
+.list-container .mountpoint .icon, #details .mountpoint h2 {
+  background-image: url(../image/mountpoint.svg), url(../image/folder.svg);
 }
 
 .list-container .file .icon, #details .file h2, .uploadedList > .file,
@@ -551,6 +556,7 @@ menu > li,
 .editor > h2,
 .groupEditor > h2,
 .folder h2,
+.mountpoint h2,
 .javascript h2,
 .imagesvg h2,
 .css h2,

@@ -85,7 +85,7 @@ class Dir {
         "k"        => self::getK( $subpath ),
         "name"     => $file,
         "mimetype" => finfo_file( $type, $subpath ),
-        "encoding" => finfo_file( $encoding, $subpath ),
+        #"encoding" => finfo_file( $encoding, $subpath ),
         "size"     => filesize( $subpath ),
         "path"     => str_replace( $PUBLICPATH . "/", "", $subpath )
       );
@@ -129,7 +129,7 @@ class Dir {
       "k"        => $k,
       "name"     => self::getName( $path ),
       "mimetype" => finfo_file( $type, $path ),
-      "encoding" => finfo_file( $encoding, $path ),
+      #"encoding" => finfo_file( $encoding, $path ),
       "size"     => filesize( $path ),
       "path"     => str_replace( $PUBLICPATH . "/", "", $path ),
       "url"      => $path,

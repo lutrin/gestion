@@ -93,6 +93,12 @@ abstract class db_Abstract {
 
   /****************************************************************************/
   public static function remove( $kList ) {
+
+    # association
+    Includer::add( "dbAssociation" );
+    db_Association::remove( static::$table, $kList );
+
+    # this
     return DB::delete( array(
       "table" => static::$table,
       "where" => "k IN (" . join( ",", $kList ) . ")"
