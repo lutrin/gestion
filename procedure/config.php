@@ -434,6 +434,12 @@ $INCLUDE_LIST = array(
     "class" => "fn_File",
     "entries" => array( "files", "folders", "file", "folder" )
   ),
+  "fnMountpoint" => array(
+    "path" => "fn/mountpoint.php",
+    "depend" => "fn",
+    "class" => "fn_Mountpoint",
+    "entries" => array( "mountpoint" )
+  ),
   "fnEditor" => array(
     "path" => "fn/editor.php",
     "depend" => "fn",

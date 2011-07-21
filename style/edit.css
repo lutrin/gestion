@@ -124,34 +124,25 @@ input[type=button] {
   content: "-";
 }
 
+.dock a {
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
 #toolList-pages a {
-  background: url(../image/page.svg) no-repeat center center;
-  background-size: 16px 16px;
+  background-image: url(../image/page.svg);
 }
 
 #toolList-templates a {
-  background: url(../image/template.svg) no-repeat center center;
-  background-size: 16px 16px;
+  background-image: url(../image/template.svg);
 }
 
 #toolList-articles a {
-  background: url(../image/article.svg) no-repeat center center;
-  background-size: 16px 16px;
-}
-
-#toolList-files a {
-  background: url(../image/folder.svg) no-repeat center center;
-  background-size: 16px 16px;
-}
-
-#toolList-editors a {
-  background: url(../image/editor.svg) no-repeat center center;
-  background-size: 16px 16px;
+  background-image: url(../image/article.svg);
 }
 
 #toolList-visitors a {
-  background: url(../image/visitor.svg) no-repeat center center;
-  background-size: 16px 16px;
+  background-image: url(../image/visitor.svg);
 }
 
 #details h2, .list-container .icon, .uploadedList > li,
@@ -170,15 +161,18 @@ input[type=button] {
 }
 
 h2,
-.compact .icon,
-.tree .icon,
-.table .icon,
 .pickitem {
   background-size: 16px;
 }
 
-.gallery .icon, .resume .icon, .uploadedList > li, .image div {
-  background-size: 64px;
+.icon,
+.uploadedList > li,
+.image div,
+.dock a {
+  -webkit-background-size: cover; /* pour Chrome et Safari */
+  -moz-background-size: cover; /* pour Firefox */
+  -o-background-size: cover; /* pour Opera */
+  background-size: cover; /* version standardisée */
 }
 
 .image div {
@@ -195,6 +189,7 @@ h2,
   background-position: top left;
 }
 
+#toolList-editors a,
 .list-container .editor .icon,
 .list-container .disabledEditor .icon,
 #details .editor h2,
@@ -216,7 +211,9 @@ fieldset.groupEditor .pickitem {
   filter: url(../image/ressource.svg#disabled);
 }
 
-.list-container .folder .icon, #details .folder h2 {
+#toolList-files a,
+.list-container .folder .icon, 
+#details .folder h2 {
   background-image: url(../image/folder.svg);
 }
 
@@ -315,7 +312,7 @@ select:hover,
 .checklist li:hover,
 .radio:hover,
 .radiolist li:hover,
-.picklist li:hover,
+.picklist > *:hover,
 .image div:hover {
   background-color: #ff9;
 }
@@ -363,7 +360,7 @@ input[type=submit]:disabled:active, input[type=button]:disabled:active, button:d
   text-shadow: 0;
 }
 
-.tabs > menu > li.selected, #contextMenu menu, .list, .formlist, .image div {
+.tabs > menu > li.selected, #contextMenu menu, .list, .formlist, .image div, span.picklist {
   background-color: #fff;
 }
 
@@ -375,7 +372,7 @@ input[type=submit]:disabled:active, input[type=button]:disabled:active, button:d
   background-color: transparent;
 }
 
-.list-container .row.selected, .picklist li, .checkbox.selected, .checklist .selected, .radiolist .selected {
+.list-container .row.selected, .picklist > *, .checkbox.selected, .checklist .selected, .radiolist .selected {
   background-color: #fc9;
 } 
 
@@ -405,12 +402,12 @@ fieldset, legend, input[type=submit], input[type=button], button, #dialog-conten
   border-bottom: 1px solid #aaa;
 }
 
-.picklist li {
+.picklist > * {
   border: 1px solid #fc9;
   border-radius: 4px;
 }
 
-input, select, textarea, .header > .cell, #contextMenu menu, .image div {
+input, select, textarea, .header > .cell, #contextMenu menu, .image div, span.picklist {
   border: 1px solid #aaa;
 }
 
@@ -418,7 +415,7 @@ input, select, textarea, .header > .cell, #contextMenu menu, .image div {
   border-right: 1px solid #aaa;
 }
 
-input[type=text], input[type=password], textarea, select {
+input[type=text], input[type=password], textarea, select, span.picklist {
   box-shadow: inset rgba(0,0,0,.2) 2px 2px 2px;
 }
 
@@ -439,7 +436,7 @@ input[type=submit]:active, button:active {
   border-radius: 4px;
 }
 
-.changed:invalid, .field.invalid input, .field.invalid textarea {
+.changed:invalid, .field.invalid input, .field.invalid textarea, .field.invalid span.picklist {
   border-color: #800;
   box-shadow: inset rgba(88,0,0,.2) 2px 2px 2px;
 }
@@ -494,6 +491,7 @@ h2,
 h3,
 input[type=text],
 input[type=password],
+span.picklist,
 textarea,
 input[type=submit],
 input[type=button],
@@ -504,8 +502,8 @@ menu > li,
 .checklist li > *,
 .radiolist li,
 .radiolist li > *,
-.picklist li,
-.picklist li > *,
+.picklist > *,
+.picklist > * > *,
 .checkbox,
 .breadcrumb,
 label,
@@ -527,11 +525,13 @@ menu > li,
 .cell,
 .checklist li,
 .radiolist li,
-.picklist li,
+.picklist > *,
 .checkbox,
 .breadcrumb {
   margin: 2px;
 }
+
+
 
 #login, #dialog-content > * {
   margin-left: auto;
@@ -539,8 +539,12 @@ menu > li,
   text-align: left;
 }
 
-.dock li:hover a {
+.dock li a {
   margin: 5px
+}
+
+.dock li:hover a {
+  margin: 10px;
 }
 
 .row > .row {
@@ -786,7 +790,7 @@ nav h2, nav menu {
   -moz-transition: all 0.4s ease 0s;
   -webkit-transition: all 0.4s ease 0s;
   -o-transition: all 0.4s ease 0s;
-  height: 20px;
+  height: 24px;
   width: 24px;
   float:left;
 }
@@ -885,7 +889,7 @@ nav h2, nav menu {
 .gallery .row {
   display: inline-block;
   width: 100px;
-  height: 100px;
+  height: 107px;
 }
 
 .gallery .main {
@@ -904,9 +908,10 @@ nav h2, nav menu {
 
 .gallery .icon {
   display: block;
-  height: 100%;
+  height: 64px;
   text-align: center;
-  width: 100%;
+  width: 64px;
+  margin: 0 14px;
 }
 
 .resume .icon {
@@ -991,7 +996,7 @@ nav h2, nav menu {
   display: inline-block;
 }
 
-.picklist li {
+.picklist > * {
   list-style-type: none;
   display: inline-block;
 }
@@ -1056,6 +1061,12 @@ nav h2, nav menu {
 
 li:hover [data-select] {
   display: block;
+}
+
+span.picklist {
+  display: inline-block;
+  height: 25px;
+  min-width: 50px;
 }
 
 /* z position */

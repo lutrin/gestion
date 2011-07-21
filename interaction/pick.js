@@ -29,23 +29,33 @@
         value = params.k,
         row = $( "#" + params.object + "-" + params.k ),
         text = [ _c.trim( row.children( ".main:first" ).text() ) ],
-        ul = $( this ),
-        html = "<li class='pickitem'>" +
-                 "<span>###text###</span>" +
-                 "<input type='hidden' value='###value###' name='###name###' id='###id###-###value###'>" +
-                 "<a title='Exclure' class='remove'></a>" +
-               "</li>",
-        inner, main, toRemove;
+        picklist = $( this ),
+        html, inner, main, toRemove;
+
+    // html
+    if( picklist.hasClass( "multiple" ) ) {
+      html = "<li class='pickitem'>" +
+               "<span>{text}</span>" +
+               "<input type='hidden' value='{value}' name='{name}' id='{id}-{value}'>" +
+               "<a title='Exclure' class='remove'></a>" +
+             "</li>";
+    } else {
+      html = "<div class='pickitem'>" +
+               "<span>{text}</span>" +
+               "<input type='hidden' value='{value}' name='{name}' id='{id}-{value}'>" +
+               "<a title='Exclure' class='remove'></a>" +
+             "</div>";
+    }
 
     // text
     row.parents( ".row" ).each( function() {
       text.unshift( _c.trim( $( this ).children( ".main:first" ).text() ) );
     } );
 
-    html = html.replace( "###text###", text.pop() )
-               .replace( "###value###", params.k )
-               .replace( "###name###", ul.data( "name" ) )
-               .replace( "###id###", ul.attr( "id" ) );
+    html = html.replace( /\{text\}/g, text.pop() )
+               .replace( /\{value\}/g, params.k )
+               .replace( /\{name\}/g, picklist.data( "name" ) )
+               .replace( /\{id\}/g, picklist.attr( "id" ) );
     if( row.find( ".row" ).size() ) {
       main = row.find( ".main:first > a:last" );
       inner = main.html();
@@ -58,7 +68,13 @@
       }
       toRemove.remove();
     }
-    ul.append( html ).find( ".remove" ).click( app.remove );
-    ul.trigger( "change" );
+    if( picklist.hasClass( "multiple" ) ) {
+      picklist.append( html ).find( ".remove" ).click( app.remove );
+    } else {
+      picklist.html( html ).find( ".remove" ).click( app.remove );
+      _edit.closeDialog();
+    }
+    picklist.trigger( "change" );
+
   }
 }

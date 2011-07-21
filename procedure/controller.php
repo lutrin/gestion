@@ -356,7 +356,7 @@ function replaceFields( $fields, $content ) {
   return str_replace(
     array_map(
       function( $key ) {
-        return "###$key###";
+        return "{" . $key . "}";
       },
       array_keys( $fields )
     ),

@@ -21,4 +21,13 @@ abstract class fn {
   public static function delete( $kList ) {
     return fn_Login::isNotImplanted();
   }
+
+  /****************************************************************************/
+  protected static function prepareFields( $columns ) {
+    $fields = array();
+    foreach( $columns as $key => $column ) {
+      $fields[] = isset( $column["field"] )? ( $column["field"] . " AS $key" ): $key;
+    }
+    return $fields;
+  }
 }

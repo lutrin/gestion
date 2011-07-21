@@ -727,15 +727,6 @@ class fn_Editor extends fn {
   }
 
   /****************************************************************************/
-  protected static function prepareFields( $columns ) {
-    $fields = array();
-    foreach( $columns as $key => $column ) {
-      $fields[] = isset( $column["field"] )? ( $column["field"] . " AS $key" ): $key;
-    }
-    return $fields;
-  }
-
-  /****************************************************************************/
   protected static function getIndividualColumns() {
     global $TOOLS_EDITOR_INDIVIDUAL;
     $lang = getLang();

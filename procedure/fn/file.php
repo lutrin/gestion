@@ -9,15 +9,28 @@ class fn_File extends fn {
     }
 
     # tab list
+    $folderTree = self::getFolderTree();
+    if( fn_Login::isNotAllowed() ) {
+      return array(
+        "replacement" => array(
+          "query" => "#" .  self::$idList,
+          "innerHtml" => $folderTree
+        ),
+        "hash" => true
+      );
+    }
+
+    # admin user
+    Includer::add( "fnMountpoint" );
     $tabList = array(
       ( self::$idList . "-folderTree" ) => array(
         "label"     => "Arborescence",
         "selected"  => true,
-        "innerHtml" => self::getFolderTree()
+        "innerHtml" => $folderTree
       ),
       ( self::$idList . "-mountPoint" ) => array(
         "label"  => "Points de montage",
-        "innerHtml" => self::getMountpointList()
+        "innerHtml" => fn_Mountpoint::getContent()
       )
     );
 
@@ -65,6 +78,46 @@ class fn_File extends fn {
         "query" => "#$object",
         "innerHtml" => self::getExploreFolder( $object, $k )
       )
+    );
+  }
+
+  /****************************************************************************/
+  public static function pick_folder( $excludedKList, $for ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+
+    # params
+    $params = array(
+      "id"          => "files-folder-pick",
+      "mode"        => array(
+        "tree" => "Arbre"
+      ),
+      "class"       => "listToPick",
+      "primary"     => "k",
+      "main"        => "name",
+      "mainTrigger" => "add",
+      "mainHref"    => $for,
+      "expandable"  => true,
+      "columns"     => array(
+        "k"        => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "class"    => "folder"
+        )
+      )
+    );
+
+    # field
+    $fields = self::prepareFields( $params["columns"] );
+    /*if( $excludedKList ) {
+      $fields["class"] = "IF( k IN ( " . join( ",", $excludedKList ) . " ), 'disabled', '' ) AS class";
+    }*/
+    Includer::add( array( "uiDialog" ) );
+
+    return array(
+      "dialog" => ui_Dialog::buildXml( "Répertoire", self::getFolderTree( $params ) ),
     );
   }
 
@@ -145,75 +198,6 @@ class fn_File extends fn {
   /****************************************************************************/
   public static function insert_explore( $parentK ) {
     return self::insert_folder( $parentK );
-  }
-
-  /****************************************************************************/
-  public static function add_mountpoint() {
-    if( $allowResult = fn_Login::isNotAllowed() ) {
-      return $allowResult;
-    }
-
-    # get params
-    $params = array(
-      "id"        => "mountpoint-0",
-      "action"    => "save",
-      "submit"    => "Enregistrer",
-      "method"    => "post",
-      "class"     => "mountpoint",
-      "headtitle" => "Nouveau&nbsp;point de montage",
-      "closable"  => true
-    );
-    $fields = array(
-      "k" => array(
-        "type" => "hidden",
-        "value" => 0
-      ),
-      "object" => array(
-        "type" => "hidden",
-        "value" => "mountpoint"
-      ),
-      "identification" => array(
-        "type" => "fieldset",
-        "legend" => "Identification",
-        "fieldlist" => array(
-          "name" => array(
-            "label" => "Nom",
-            "required" => "required",
-            "maxlength" => 255,
-            "size"      => 20
-          )
-        )
-      )
-/*
-mountpoint
-k      medium int  autoincrement
-
-Identification
-name   varchar 255 input[type=text][required]
-
-Chemin
-pathK  medium int  pick in folderstree[required]
-
-Permissions
-view   tiny int    checkbox
-rename tiny int    checkbox, cond = view
-edit   tiny int    checkbox, cond = view
-delete tiny int    checkbox, cond = view
-add    tiny int    checkbox, cont = view
-
-Groupes
-
-Éditeurs
-*/
-    );
-
-    Includer::add( array( "uiForm" ) );
-    return array(
-      "details" => ui_Form::buildXml(
-        $params,
-        $fields
-      )
-    );
   }
 
   /****************************************************************************/
@@ -567,88 +551,50 @@ Groupes
   }
 
   /****************************************************************************/
-  protected static function getFolderTree() {
+  protected static function getFolderTree( $params = false ) {
 
     # get tree
     Includer::add( array( "dir", "uiList" ) );
 
     # params
-    $params = array(
-      "id"          => "files-folder",
-      "mode"        => array(
-        "tree" => "Arbre"
-      ),
+    if( !$params ) {
+      $params = array(
+        "id"          => "files-folder",
+        "mode"        => array(
+          "tree" => "Arbre"
+        ),
 
-      "main"        => "name",
-      "mainAction"  => "edit",
-      "rowAction"   => "edit",
-      "addable"     => true,
-      "refreshable" => true,
-      "expandable"  => true,
-      "columns"     => array(
-        "k"    => array(
-          "hidden" => true
+        "main"        => "name",
+        "mainAction"  => "edit",
+        "rowAction"   => "edit",
+        "addable"     => true,
+        "refreshable" => true,
+        "expandable"  => true,
+        "columns"     => array(
+          "k"    => array(
+            "hidden" => true
+          ),
+          "name" => array(
+            "label"    => "Nom de dossier",
+            "class"    => "folder"
+          )
         ),
-        "name" => array(
-          "label"    => "Nom de dossier",
-          "class"    => "folder"
+        "actions"     => array(
+          "edit"   => array(
+            "title" => "Ouvrir"
+          ),
+          "insert"   => array(
+            "title" => "Insérer"
+          ),
+          "delete" => array(
+            "title"    => "Supprimer",
+            "individual" => true
+          )
         )
-      ),
-      "actions"     => array(
-        "edit"   => array(
-          "title" => "Ouvrir"
-        ),
-        "insert"   => array(
-          "title" => "Insérer"
-        ),
-        "delete" => array(
-          "title"    => "Supprimer",
-          "individual" => true
-        )
-      )
-    );
+      );
+    }
 
     return ui_List::buildXml( $params, Dir::getTree() );
-  }
-
-  /****************************************************************************/
-  protected static function getMountpointList() {
-    Includer::add( array( "uiList", "dbMountpoint" ) );
-
-    # params
-    $params = array(
-      "id"          => "files-mountpoint",
-      "mode"        => array(
-        "tree" => "compact"
-      ),
-      "main"        => "name",
-      "mainAction"  => "edit",
-      "rowAction"   => "edit",
-      "addable"     => true,
-      "refreshable" => true,
-      "columns"     => array(
-        "k"    => array(
-          "hidden" => true
-        ),
-        "name" => array(
-          "label"    => "Nom",
-          "class"    => "mountpoint"
-        )
-      ),
-      "actions"     => array(
-        "edit"   => array(
-          "title" => "Ouvrir"
-        ),
-        "add"   => array(
-          "title" => "Ajouter"
-        ),
-        "delete" => array(
-          "title"    => "Supprimer",
-          "individual" => true
-        )
-      )
-    );
-    return ui_List::buildXml( $params, db_Mountpoint::get( "k,name" ) );
   }
 
   /****************************************************************************/

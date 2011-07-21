@@ -160,19 +160,30 @@
 
     <!-- picklist -->
     <xsl:when test="@type='picklist'">
-      <fieldset class="formlist">
-        <xsl:attribute name="class">
-          <xsl:text>formlist</xsl:text>
-          <xsl:if test="@class">
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="@class" />
-          </xsl:if>
-        </xsl:attribute>
-        <xsl:if test="@label">
-          <legend><xsl:value-of select="@label" /></legend>
-        </xsl:if>
-        <xsl:apply-templates select="ui.datalist" mode="picklist" />
-      </fieldset>
+      <xsl:choose>
+        <xsl:when test="@multiple">
+          <fieldset class="formlist">
+            <xsl:attribute name="class">
+              <xsl:text>formlist</xsl:text>
+              <xsl:if test="@class">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="@class" />
+              </xsl:if>
+            </xsl:attribute>
+            <xsl:if test="@label">
+              <legend><xsl:value-of select="@label" /></legend>
+            </xsl:if>
+            <xsl:apply-templates select="ui.datalist" mode="picklist-multiple" />
+          </fieldset>
+        </xsl:when>
+        <xsl:otherwise>
+          <div>
+            <xsl:call-template name="apply-data-display" />
+            <xsl:call-template name="apply-topfield" />
+            <xsl:apply-templates select="ui.datalist" mode="picklist" />
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
 
     <!-- portrait -->
@@ -311,7 +322,20 @@
 </xsl:template>
 
 <xsl:template match="ui.datalist" mode="picklist">
-  <ul class="picklist">
+  <span class="picklist">
+    <xsl:for-each select="../@id">
+      <xsl:call-template name="apply-attribute" />
+    </xsl:for-each>
+    <xsl:attribute name="data-name">
+      <xsl:value-of select="../@name" />
+    </xsl:attribute>
+    <xsl:apply-templates select="ui.dataitem" mode="picklist" />
+  </span>
+  <button data-action="pick" data-params="object={../@object},for=#{../@id}">Piger...</button>
+</xsl:template>
+
+<xsl:template match="ui.datalist" mode="picklist-multiple">
+  <ul class="picklist multiple">
     <xsl:for-each select="../@id">
       <xsl:call-template name="apply-attribute" />
     </xsl:for-each>
