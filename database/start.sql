@@ -91,4 +91,10 @@ CREATE TABLE `gestion`.`mountpoint` (
 `add` TINYINT NOT NULL
 ) ENGINE = MYISAM ;
 
+ALTER TABLE `mountpoint` CHANGE `view` `canView` TINYINT( 4 ) NOT NULL DEFAULT '1';
+ALTER TABLE `mountpoint` CHANGE `rename` `canRename` TINYINT( 4 ) NOT NULL ;
+ALTER TABLE `mountpoint` CHANGE `edit` `canEdit` TINYINT( 4 ) NOT NULL ;
+ALTER TABLE `mountpoint` CHANGE `delete` `canDelete` TINYINT( 4 ) NOT NULL ;
+ALTER TABLE `mountpoint` CHANGE `add` `canAdd` TINYINT( 4 ) NOT NULL ;
+
 

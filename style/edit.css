@@ -213,6 +213,7 @@ fieldset.groupEditor .pickitem {
 
 #toolList-files a,
 .list-container .folder .icon, 
+fieldset.folder .pickitem,
 #details .folder h2 {
   background-image: url(../image/folder.svg);
 }
@@ -577,7 +578,7 @@ menu > li,
   margin-right: 20px;
 }
 
-fieldset.editor .pickitem, fieldset.groupEditor .pickitem {
+.editor .pickitem, .groupEditor .pickitem, .folder .pickitem {
   padding-left: 20px;
 }
 
@@ -860,8 +861,10 @@ nav h2, nav menu {
 .compact .list {
   -moz-column-width: 150px;
   -webkit-column-width: 150px;
+  column-width: 150px;
   -moz-column-gap: 5px;
   -webkit-column-gap: 5px;
+  column-gap: 5px;
 }
 
 .compact .row {
@@ -1063,10 +1066,8 @@ li:hover [data-select] {
   display: block;
 }
 
-span.picklist {
+.formlist ul, .formlist button {
   display: inline-block;
-  height: 25px;
-  min-width: 50px;
 }
 
 /* z position */

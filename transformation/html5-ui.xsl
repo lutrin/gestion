@@ -160,8 +160,8 @@
 
     <!-- picklist -->
     <xsl:when test="@type='picklist'">
-      <xsl:choose>
-        <xsl:when test="@multiple">
+      <!--<xsl:choose>
+        <xsl:when test="@multiple">-->
           <fieldset class="formlist">
             <xsl:attribute name="class">
               <xsl:text>formlist</xsl:text>
@@ -173,17 +173,24 @@
             <xsl:if test="@label">
               <legend><xsl:value-of select="@label" /></legend>
             </xsl:if>
-            <xsl:apply-templates select="ui.datalist" mode="picklist-multiple" />
+            <xsl:apply-templates select="ui.datalist" mode="picklist" />
           </fieldset>
-        </xsl:when>
+        <!--</xsl:when>
         <xsl:otherwise>
           <div>
+            <xsl:attribute name="class">
+              <xsl:text>formlist</xsl:text>
+              <xsl:if test="@class">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="@class" />
+              </xsl:if>
+            </xsl:attribute>
             <xsl:call-template name="apply-data-display" />
             <xsl:call-template name="apply-topfield" />
             <xsl:apply-templates select="ui.datalist" mode="picklist" />
           </div>
-        </xsl:otherwise>
-      </xsl:choose>
+        </xsl:otherwise>-->
+      <!--</xsl:choose>-->
     </xsl:when>
 
     <!-- portrait -->
@@ -321,7 +328,7 @@
   </ul>
 </xsl:template>
 
-<xsl:template match="ui.datalist" mode="picklist">
+<!--<xsl:template match="ui.datalist" mode="picklist">
   <span class="picklist">
     <xsl:for-each select="../@id">
       <xsl:call-template name="apply-attribute" />
@@ -332,10 +339,19 @@
     <xsl:apply-templates select="ui.dataitem" mode="picklist" />
   </span>
   <button data-action="pick" data-params="object={../@object},for=#{../@id}">Piger...</button>
-</xsl:template>
+</xsl:template>-->
 
-<xsl:template match="ui.datalist" mode="picklist-multiple">
-  <ul class="picklist multiple">
+<xsl:template match="ui.datalist" mode="picklist">
+  <ul>
+    <xsl:attribute name="class">
+      <xsl:text>picklist</xsl:text>
+      <xsl:if test="../@multiple">
+        <xsl:text> multiple</xsl:text>
+      </xsl:if>
+    </xsl:attribute>
+    <xsl:for-each select="../@name|../@required">
+      <xsl:call-template name="apply-data-attribute" />
+    </xsl:for-each>
     <xsl:for-each select="../@id">
       <xsl:call-template name="apply-attribute" />
     </xsl:for-each>

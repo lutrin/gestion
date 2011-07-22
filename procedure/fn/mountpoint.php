@@ -48,6 +48,83 @@ class fn_Mountpoint extends fn {
 
   /****************************************************************************/
   public static function save( $k, $values ) {
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
+    }
+
+    # valid form
+    Includer::add( "fnForm" );
+    $result = fn_Form::hasErrors(
+      self::getFormParams( $k ),
+      self::getFormFields(),
+      $values,
+      $k
+    );
+
+    # fatal error or error list
+    if( isset( $result["fatalError"] ) || ( isset( $result["errorList"] ) && $result["errorList"] ) ) {
+      return $result;
+    }
+
+    # name unique
+    $name = $values["name"];
+    Includer::add( "dbMountpoint" );
+    if( db_Mountpoint::count( "k", array( "NOT k=$k", "name='$name'" ) ) ) {
+      $result["errorList"][] = array( "name" => "name", "msg" => "mustbeunique" );
+      return $result;
+    }
+
+    # values
+    $valuesToSave = db_Mountpoint::getEmptyValues();
+    $editorKList = array(); //editorList
+    $groupKList = array();  //groupList
+    foreach( $values as $key => $value ) {
+  
+      # not in database
+      if( in_array( $key, array( "token", "k", "object", "action" ) ) ) {
+        continue;
+      }
+
+      # editor list
+      if( $key == "editorList" ) {
+        if( $value ) {
+          $editorKList = DB::ensureArray( $value );
+        }
+        continue;
+      }
+
+      # group list
+      if( $key == "groupList" ) {
+        if( $value ) {
+          $groupKList = DB::ensureArray( $value );
+        }
+        continue;
+      }
+
+      # add quotes
+      $valuesToSave[$key] = "'" . DB::mysql_prep( $value ) . "'";
+    }
+
+    # update or insert
+    $newK = db_Mountpoint::save( $valuesToSave, $k );
+    if( !$k ) {
+      $k = $newK[0];
+    }
+
+    # save editor list
+    db_Association::save( array(
+        "mountpoint" => $k,
+        "editor" => $editorKList
+    ) );
+
+    # save group list
+    db_Association::save( array(
+        "mountpoint" => $k,
+        "groupEditor" => $groupKList
+    ) );
+
+    # list
+    return self::refresh();
   }
 
   /****************************************************************************/
@@ -121,15 +198,16 @@ class fn_Mountpoint extends fn {
             "required" => "required",
             "maxlength" => 255,
             "size"      => 30
-          ),
-          "pathK" => array(
-            "label"  => "Répertoire",
-            "type"   => "picklist",
-            "class"  => "folder",
-            "object" => "files-folder",
-            "list"   => array()
           )
         )
+      ),
+      "pathK" => array(
+        "label"    => "Répertoire",
+        "type"     => "picklist",
+        "class"    => "folder",
+        "required" => "required",
+        "object"   => "files-folder",
+        "list"     => array()
       ),
       "status" => array(
         "type" => "fieldset",
@@ -146,32 +224,48 @@ class fn_Mountpoint extends fn {
         "type" => "fieldset",
         "legend" => "Droits",
         "fieldlist" => array(
-          "view" => array(
+          "canView" => array(
             "label" => "Visualiser",
             "type"  => "checkbox",
             "value" => 1
           ),
-          "rename" => array(
+          "canRename" => array(
             "label" => "Renommer",
             "type"  => "checkbox",
             "value" => 1
           ),
-          "edit" => array(
+          "canEdit" => array(
             "label" => "Modifier le contenu",
             "type"  => "checkbox",
             "value" => 1
           ),
-          "delete" => array(
+          "canDelete" => array(
             "label" => "Supprimer",
             "type"  => "checkbox",
             "value" => 1
           ),
-          "add" => array(
+          "canAdd" => array(
             "label" => "Ajouter",
             "type"  => "checkbox",
             "value" => 1
           )
         )
+      ),
+      "editorList" => array(
+        "label"    => "Éditeurs",
+        "type"     => "picklist",
+        "multiple" => "multiple",
+        "class"    => "editor",
+        "object"   => "editors-individualList",
+        "list"     => array()
+      ),
+      "groupList" => array(
+        "label"    => "Groupes",
+        "type"     => "picklist",
+        "multiple" => "multiple",
+        "class"    => "groupEditor",
+        "object"   => "editors-groupList",
+        "list"     => array()
       )
     );
   }
