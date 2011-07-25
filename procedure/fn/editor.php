@@ -408,8 +408,9 @@ class fn_Editor extends fn {
     }
 
     # values
-    $valuesToSave = db_Editor::getEmptyValues();
+    $valuesToSave = db_Editor::$emptyValues;
     $groupKList = array();
+    $mountpointKList = array();
     foreach( $values as $key => $value ) {
   
       # not in database
@@ -433,10 +434,18 @@ class fn_Editor extends fn {
         continue;
       }
 
-      # editor list
+      # group list
       if( $key == "groupList" ) {
         if( $value ) {
           $groupKList = DB::ensureArray( $value );
+        }
+        continue;
+      }
+
+      # mountpoint list
+      if( $key == "mountpointList" ) {
+        if( $value ) {
+          $mountpointKList = DB::ensureArray( $value );
         }
         continue;
       }
@@ -451,10 +460,16 @@ class fn_Editor extends fn {
       $k = $newK[0];
     }
 
-    # save editor list
+    # save group list
     db_Association::save( array(
         "editor" => $k,
         "groupEditor" => $groupKList
+    ) );
+
+    # save mountpoint list
+    db_Association::save( array(
+        "editor" => $k,
+        "mountpoint" => $mountpointKList
     ) );
 
    # list
@@ -497,8 +512,9 @@ class fn_Editor extends fn {
     }
 
     # values
-    $valuesToSave = db_GroupEditor::getEmptyValues();
+    $valuesToSave = db_GroupEditor::$emptyValues;
     $editorKList = array();
+    $mountpointKList = array();
     foreach( $values as $key => $value ) {
   
       # not in database
@@ -522,6 +538,14 @@ class fn_Editor extends fn {
         continue;
       }
 
+      # mountpoint list
+      if( $key == "mountpointList" ) {
+        if( $value ) {
+          $mountpointKList = DB::ensureArray( $value );
+        }
+        continue;
+      }
+
       # add quotes
       $valuesToSave[$key] = "'" . DB::mysql_prep( $value ) . "'";
     }
@@ -535,6 +559,12 @@ class fn_Editor extends fn {
     # save editor list
     db_Association::save( array(
       "editor"      => $editorKList,
+      "groupEditor" => $k
+    ) );
+
+    # save mountpoint list
+    db_Association::save( array(
+      "mountpoint"  => $mountpointKList,
       "groupEditor" => $k
     ) );
 
@@ -567,6 +597,11 @@ class fn_Editor extends fn {
         return $group["k"];
       }, $groupList ) );
     }
+    if( $mountpointList = db_Association::get( "mountpoint", "editor", $k ) ) {
+      $values["mountpointList"] = join( ",", array_map( function( $mountpoint ) {
+        return $mountpoint["k"];
+      }, $mountpointList ) );
+    }
 
     Includer::add( array( "uiForm" ) );
     return ui_Form::buildXml(
@@ -591,6 +626,11 @@ class fn_Editor extends fn {
       $values["editorList"] = join( ",", array_map( function( $editor ) {
         return $editor["k"];
       }, $editorList ) );
+    }
+    if( $mountpointList = db_Association::get( "mountpoint", "groupEditor", $k ) ) {
+      $values["mountpointList"] = join( ",", array_map( function( $mountpoint ) {
+        return $mountpoint["k"];
+      }, $mountpointList ) );
     }
 
     $params = self::getFormParamsGroup( $k );
@@ -849,7 +889,7 @@ class fn_Editor extends fn {
       $toolList["disabled"] = "disabled";
     }
 
-    # get editor list
+    # get group list
     Includer::add( "dbGroupEditor" );
     $groupList = array();
     foreach( db_GroupEditor::get( array( "k", "name" ) ) as $group ) {
@@ -859,6 +899,15 @@ class fn_Editor extends fn {
       );
     }
     
+    # get mount point list
+    Includer::add( "dbMountpoint" );
+    $mountpointList = array();
+    foreach( db_Mountpoint::get( array( "k", "name" ) ) as $mountpoint ) {
+      $mountpointList[$mountpoint["k"]] = array(
+        "value" => $mountpoint["k"],
+        "label" => $mountpoint["name"]
+      );
+    }
 
     return array(
       "k"     => array(
@@ -943,6 +992,14 @@ class fn_Editor extends fn {
                 "class"    => "groupEditor",
                 "object"   => "editors-groupList",
                 "list"     => $groupList
+              ),
+              "mountpointList" => array(
+                "label"    => "Points de montage",
+                "type"     => "picklist",
+                "multiple" => "multiple",
+                "class"    => "mountpoint",
+                "object"   => "mountpoint",
+                "list"     => $mountpointList
               )
             )
           )
@@ -975,6 +1032,16 @@ class fn_Editor extends fn {
       $editorList[$editor["k"]] = array(
         "value" => $editor["k"],
         "label" => $editor["username"]
+      );
+    }
+
+    # get mount point list
+    Includer::add( "dbMountpoint" );
+    $mountpointList = array();
+    foreach( db_Mountpoint::get( array( "k", "name" ) ) as $mountpoint ) {
+      $mountpointList[$mountpoint["k"]] = array(
+        "value" => $mountpoint["k"],
+        "label" => $mountpoint["name"]
       );
     }
 
@@ -1043,6 +1110,14 @@ class fn_Editor extends fn {
                 "class"    => "editor",
                 "object"   => "editors-individualList",
                 "list"     => $editorList
+              ),
+              "mountpointList" => array(
+                "label"    => "Points de montage",
+                "type"     => "picklist",
+                "multiple" => "multiple",
+                "class"    => "mountpoint",
+                "object"   => "mountpoint",
+                "list"     => $mountpointList
               )
             )
           )

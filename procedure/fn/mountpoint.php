@@ -9,6 +9,52 @@ class fn_Mountpoint extends fn {
   }
 
   /****************************************************************************/
+  public static function pick( $excludedKList, $for ) {
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
+    }
+
+    Includer::add( "fnSetting" );
+
+    $id = "mountpoint-pick";
+
+    # params
+    $params = array(
+      "id"          => $id,
+      "mode"        => array(
+        "compact" => "Compacte"
+      ),
+      "class"       => "listToPick",
+      "primary"     => "k",
+      "main"        => "name",
+      "mainTrigger" => "add",
+      "mainHref"    => $for,
+      "columns"     => array(
+        "k"        => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "class"    => "mountpoint"
+        )
+      )
+    );
+
+    # field
+    $fields = self::prepareFields( $params["columns"] );
+    Includer::add( array( "dbMountpoint", "uiList", "uiDialog" ) );
+
+    # excluded
+    $where = false;
+    if( $excludedKList ) {
+      $where = "NOT k IN (" . join( ",", $excludedKList ) . ")";
+    }
+
+    return array(
+      "dialog" => ui_Dialog::buildXml( "Liste de points de montage", ui_List::buildXml( $params, db_Mountpoint::get( $fields, $where ) ) ),
+    );
+  }
+
+  /****************************************************************************/
   public static function refresh() {
     return array(
       "replacement" => array(
@@ -44,6 +90,43 @@ class fn_Mountpoint extends fn {
 
   /****************************************************************************/
   public static function edit( $k ) {
+    if( $allowResult = fn_Login::isNotAllowed() ) {
+      return $allowResult;
+    }
+
+    # get values
+    Includer::add( array( "uiForm", "dbMountpoint" ) );
+    if( !$values = db_Mountpoint::get( db_Mountpoint::$fields, "k=$k" ) ) {
+      return "Introuvable $k";
+    }
+    $values = $values[0];
+
+    # get fields
+    $fields = self::getFormFields();
+
+    # get params
+    $params = self::getFormParams( $k );
+    $params["headtitle"] = $values["name"] . "&nbsp;-&nbsp;Point de montage";
+
+    # outer values
+    if( $editorList = db_Association::get( "editor", "mountpoint", $k ) ) {
+      $values["editorList"] = join( ",", array_map( function( $editor ) {
+        return $editor["k"];
+      }, $editorList ) );
+    }
+    if( $groupList = db_Association::get( "groupEditor", "mountpoint", $k ) ) {
+      $values["groupList"] = join( ",", array_map( function( $group ) {
+        return $group["k"];
+      }, $groupList ) );
+    }
+
+    return array(
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields,
+        $values
+      )
+    );
   }
 
   /****************************************************************************/
@@ -75,7 +158,7 @@ class fn_Mountpoint extends fn {
     }
 
     # values
-    $valuesToSave = db_Mountpoint::getEmptyValues();
+    $valuesToSave = db_Mountpoint::$emptyValues;
     $editorKList = array(); //editorList
     $groupKList = array();  //groupList
     foreach( $values as $key => $value ) {
@@ -180,7 +263,37 @@ class fn_Mountpoint extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFormFields() {
+  protected static function getFormFields( $pathK = false ) {
+    # get path list
+    Includer::add( "dir" );
+    $pathList = array();
+    foreach( Dir::getList() as $path ) {
+      $pathList[$path["k"]] = array(
+        "value" => $path["k"],
+        "label" => $path["name"]
+      );
+    }
+
+    # get editor list
+    Includer::add( "dbEditor" );
+    $editorList = array();
+    foreach( db_Editor::get( array( "k", "username" ) ) as $editor ) {
+      $editorList[$editor["k"]] = array(
+        "value" => $editor["k"],
+        "label" => $editor["username"]
+      );
+    }
+
+    # get group list
+    Includer::add( "dbGroupEditor" );
+    $groupList = array();
+    foreach( db_GroupEditor::get( array( "k", "name" ) ) as $group ) {
+      $groupList[$group["k"]] = array(
+        "value" => $group["k"],
+        "label" => $group["name"]
+      );
+    }
+
     return array(
       "k" => array(
         "type" => "hidden"
@@ -207,7 +320,7 @@ class fn_Mountpoint extends fn {
         "class"    => "folder",
         "required" => "required",
         "object"   => "files-folder",
-        "list"     => array()
+        "list"     => $pathList
       ),
       "status" => array(
         "type" => "fieldset",
@@ -257,7 +370,7 @@ class fn_Mountpoint extends fn {
         "multiple" => "multiple",
         "class"    => "editor",
         "object"   => "editors-individualList",
-        "list"     => array()
+        "list"     => $editorList
       ),
       "groupList" => array(
         "label"    => "Groupes",
@@ -265,7 +378,7 @@ class fn_Mountpoint extends fn {
         "multiple" => "multiple",
         "class"    => "groupEditor",
         "object"   => "editors-groupList",
-        "list"     => array()
+        "list"     => $groupList
       )
     );
   }

@@ -58,6 +58,48 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function getList( $path = "" ) {
+    global $PUBLICPATH;
+
+    # path
+    $path = $path? $path: $PUBLICPATH;
+
+    # open handle
+    if( !$handle = opendir( $path ) ) {
+      return false;
+    }
+
+    # get list
+    $list = array();
+    while( false !== ( $file = readdir( $handle ) ) ) {
+
+      # ignore
+      if( in_array( $file, self::$ignore ) ) {
+        continue;
+      }
+
+      # get sub path
+      $subpath = "$path/$file";
+      if( is_dir( $subpath ) ) {
+        $folder = array(
+          "k"    => self::getK( $subpath ),
+          "name" => $file
+        );
+        $list[] = $folder;
+
+        # get child list
+        if( $childList = self::getList( $subpath ) ) {
+          $list = array_merge( $list, $childList );
+        }
+      }
+    }
+
+    # close handle
+    closedir( $handle );
+    return $list;
+  }
+
+  /****************************************************************************/
   public static function getExplore( $k ) {
     global $PUBLICPATH;
     $path = self::getPath( $k );

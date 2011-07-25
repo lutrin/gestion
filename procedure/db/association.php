@@ -53,16 +53,8 @@ class db_Association {
 
   /****************************************************************************/
   public static function get( $want, $from, $k ) {
+#TODO ensureArray $k
     if( $from < $want ) {
-error_log( json_encode( array(
-        "field" => "table2K AS k",
-        "table" => static::$table,
-        "where" => array(
-          "table1k=$k",
-          "table2='$want'",
-          "table1='$from'"
-        )
-      ) ) );
       return DB::select( array(
         "field" => "table2K AS k",
         "table" => static::$table,
@@ -73,15 +65,6 @@ error_log( json_encode( array(
         )
       ) );
     }
-error_log( json_encode( array(
-      "field" => "table1K AS k",
-      "table" => static::$table,
-      "where" => array(
-        "table2k=$k",
-        "table1='$want'",
-        "table2='$from'"
-      )
-    ) ) );
     return DB::select( array(
       "field" => "table1K AS k",
       "table" => static::$table,

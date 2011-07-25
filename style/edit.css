@@ -218,7 +218,9 @@ fieldset.folder .pickitem,
   background-image: url(../image/folder.svg);
 }
 
-.list-container .mountpoint .icon, #details .mountpoint h2 {
+.list-container .mountpoint .icon,
+#details .mountpoint h2,
+fieldset.mountpoint .pickitem {
   background-image: url(../image/mountpoint.svg), url(../image/folder.svg);
 }
 

@@ -9,8 +9,21 @@ class fn_File extends fn {
     }
 
     # tab list
-    $folderTree = self::getFolderTree();
     if( fn_Login::isNotAllowed() ) {
+
+      # get mount point list
+      Includer::add( "dbAssociation" );
+      $editor = fn_Login::getSessionEditor()
+      $mountpointList = db_Association::get( "mountpoint", "editor", $editor["k"] );
+      if( $groupList =  db_Association::get( "groupEditor", "editor", $editor["k"] ) ) {
+        $groupKList = array_map( function( $group ) {
+          return $group["k"];
+        }, $groupList );
+        $mountpoinList = array_merge( $mountpoinList, db_Association::get( "mountpoint", "groupEditor", $groupKList )
+      }      
+
+      # foreach mount point, get folder tree
+      $folderTree = self::getFolderTree();
       return array(
         "replacement" => array(
           "query" => "#" .  self::$idList,
@@ -26,7 +39,7 @@ class fn_File extends fn {
       ( self::$idList . "-folderTree" ) => array(
         "label"     => "Arborescence",
         "selected"  => true,
-        "innerHtml" => $folderTree
+        "innerHtml" => self::getFolderTree()
       ),
       ( self::$idList . "-mountPoint" ) => array(
         "label"  => "Points de montage",

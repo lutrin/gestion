@@ -1,10 +1,7 @@
 <?php
 abstract class db_Abstract {
-
-  /****************************************************************************/
-  public static function getEmptyValues() {
-    return array();
-  }
+  public static $table = false;
+  public static $emptyValues = false;
 
   /****************************************************************************/
   public static function get( $fields, $where = false, $orders = false ) {
