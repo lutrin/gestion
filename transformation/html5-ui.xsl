@@ -252,8 +252,16 @@
             </input>
             <input type="button" value="{@label}..." />
           </div>
-          <ul class="uploadedList">
-          </ul>
+          <div class="list-container resume">
+            <xsl:if test="@id">
+              <xsl:attribute name="id">
+                <xsl:value-of select="@id" />
+                <xsl:text>-list</xsl:text>
+              </xsl:attribute>
+            </xsl:if>
+            <fieldset class="list uploadedList">
+            </fieldset>
+          </div>
         </fieldset>
       </div>
     </xsl:when>

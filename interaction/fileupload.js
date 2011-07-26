@@ -44,10 +44,25 @@
         filename = file.name || file.fileName,
         filesize = _c.getHumanSize( file.size || file.fileSize ),
         filetype = file.type,
-        index = uploadedList.find( "li" ).size(),
+        index = uploadedList.find( ".row" ).size(),
         className = app.getClass( filename, filetype ),
         progress;
-    uploadedList.append( "<li class='" + className + "'>" +
+    uploadedList.append( "<div class='row level1 " + className + "'>" +
+                           "<div class='cell main'>" +
+                             "<span class='icon'></span>" +
+                             "<span title'" + filename + "'>" +
+                               filename +
+                             "</span>" +
+                           "</div>" +
+                           "<div class='cell'>" + filesize + "</div>" +
+                           "<div class='cell'>" + filetype + "</div>" +
+                           "<div class='cell'>" +
+                             "<progress data-index='" + index + "' value='0' max='100'>" +
+                               "Téléversement...<span>0</span>%" +
+                              "</progress>" +
+                           "</div>" +
+                         "</div>" );
+    /*uploadedList.append( "<li class='" + className + "'>" +
                            "<dl>" +
                               "<dt>Nom de fichier</dt><dd>" + filename + "</dd>" +
                               "<dt>Taille</dt><dd>" + filesize + "</dd>" +
@@ -57,7 +72,8 @@
                              "Téléversement...<span>0</span>%" +
                            "</progress>" +
                            "<hr />" +
-                         "</li>" );
+                         "</li>" );*/
+    
     progress = uploadedList.find( "progress[data-index=" + index + "]" );
     xhr.upload.addEventListener('progress', function( ev ) {
       var percent = parseInt( ev.loaded / ev.total * 100 );

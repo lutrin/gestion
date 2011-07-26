@@ -558,14 +558,14 @@ class fn_Editor extends fn {
 
     # save editor list
     db_Association::save( array(
-      "editor"      => $editorKList,
-      "groupEditor" => $k
+      "groupEditor" => $k,
+      "editor"      => $editorKList
     ) );
 
     # save mountpoint list
     db_Association::save( array(
-      "mountpoint"  => $mountpointKList,
-      "groupEditor" => $k
+      "groupEditor" => $k,
+      "mountpoint"  => $mountpointKList
     ) );
 
     # list

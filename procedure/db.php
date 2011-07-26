@@ -19,6 +19,11 @@ abstract class db_Abstract {
   }
 
   /****************************************************************************/
+  public static function mapK( $item ) {
+    return $item["k"];
+  }
+
+  /****************************************************************************/
   public static function getTree( $fields, $parentK = 0, $where = false, $orders = false ) {
     # add parentK
     $whereWithParent = array( "parentK=$parentK" );

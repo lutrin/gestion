@@ -8,6 +8,21 @@ class db_Association {
       return false;
     }
     $keys = array_keys( $params );
+    $condition = "";
+    if( $keys[1] < $keys[0] ) {
+      $table1 = $keys[1];
+      $table2 = $keys[0];
+      $table1K = DB::ensureArray( $params[$table1] );
+      $table2K = DB::ensureArray( $params[$table2] );
+      $condition = "table2K IN (" . join( ",", DB::ensureArray( $table2K ) ) . ")";
+    } else {
+      $table1 = $keys[0];
+      $table2 = $keys[1];
+      $table1K = DB::ensureArray( $params[$table1] );
+      $table2K = DB::ensureArray( $params[$table2] );
+      $condition = "table1K IN (" . join( ",", DB::ensureArray( $table1K ) ) . ")";
+    }
+
     list( $table1, $table2 ) = ( $keys[1] < $keys[0] )? array( $keys[1], $keys[0] ): array( $keys[0], $keys[1] );
     $table1K = DB::ensureArray( $params[$table1] );
     $table2K = DB::ensureArray( $params[$table2] );
@@ -18,11 +33,7 @@ class db_Association {
       "where" => array(
         "table1 = '$table1'",
         "table2 = '$table2'",
-        "("
-          . ( $table1K? "table1K IN (" . join( ",", DB::ensureArray( $table1K ) ) . ")": 1 )
-          . " OR "
-          . ( $table2K? "table2K IN (" . join( ",", DB::ensureArray( $table2K ) ) . ")": 1 )
-        . ")"
+        $condition
       )
     ) );
 
@@ -52,14 +63,14 @@ class db_Association {
   }
 
   /****************************************************************************/
-  public static function get( $want, $from, $k ) {
-#TODO ensureArray $k
+  public static function get( $want, $from, $kList ) {
+    $k = join( ",", DB::ensureArray( $kList ) );
     if( $from < $want ) {
       return DB::select( array(
         "field" => "table2K AS k",
         "table" => static::$table,
         "where" => array(
-          "table1k=$k",
+          "table1k IN ( $k )",
           "table2='$want'",
           "table1='$from'"
         )
@@ -69,7 +80,7 @@ class db_Association {
       "field" => "table1K AS k",
       "table" => static::$table,
       "where" => array(
-        "table2k=$k",
+        "table2k IN ( $k )",
         "table1='$want'",
         "table2='$from'"
       )

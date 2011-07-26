@@ -12,22 +12,42 @@ class fn_File extends fn {
     if( fn_Login::isNotAllowed() ) {
 
       # get mount point list
-      Includer::add( "dbAssociation" );
-      $editor = fn_Login::getSessionEditor()
+      Includer::add( array( "dbAssociation", "dbMountpoint", "dbEditor" ) );
+      $editor = fn_Login::getSessionEditor();
       $mountpointList = db_Association::get( "mountpoint", "editor", $editor["k"] );
-      if( $groupList =  db_Association::get( "groupEditor", "editor", $editor["k"] ) ) {
-        $groupKList = array_map( function( $group ) {
-          return $group["k"];
-        }, $groupList );
-        $mountpoinList = array_merge( $mountpoinList, db_Association::get( "mountpoint", "groupEditor", $groupKList )
-      }      
+      if( $groupKList = db_Editor::getGroupKList( $editor["k"] ) ) {
+        foreach( db_Association::get( "mountpoint", "groupEditor", $groupKList ) as $mountpoint ) {
+          $mountpointList[] = $mountpoint;
+        }
+      }
+      if( $mountpointList ) {
 
-      # foreach mount point, get folder tree
-      $folderTree = self::getFolderTree();
+        # foreach mount point, get folder tree
+        function mapK( $item ) {
+          return $item["k"];
+        }
+        $folderTree = self::getFolderTree(
+          false,
+          array_map(
+            "mapK",
+            db_Mountpoint::get(
+              "pathK as k",
+              "k IN ( " . join( ",", array_map( "mapK", $mountpointList ) ) . ")"
+            )
+          )
+        );
+        return array(
+          "replacement" => array(
+            "query" => "#" .  self::$idList,
+            "innerHtml" => $folderTree
+          ),
+          "hash" => true
+        );
+      }
       return array(
         "replacement" => array(
           "query" => "#" .  self::$idList,
-          "innerHtml" => $folderTree
+          "innerHtml" => ""
         ),
         "hash" => true
       );
@@ -564,7 +584,7 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFolderTree( $params = false ) {
+  protected static function getFolderTree( $params = false, $pathKList = false ) {
 
     # get tree
     Includer::add( array( "dir", "uiList" ) );
@@ -607,6 +627,9 @@ class fn_File extends fn {
       );
     }
 
+    if( $pathKList ) {
+      return ui_List::buildXml( $params, Dir::getTreeList( $pathKList ) );
+    }
     return ui_List::buildXml( $params, Dir::getTree() );
   }
 

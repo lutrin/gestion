@@ -58,6 +58,25 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function getTreeList( $pathKList ) {
+    $treeList = array();
+    foreach( $pathKList as $pathK ) {
+      $path = self::getPath( $pathK );
+      $folder = array(
+        "k" => $pathK,
+        "name" => self::getName( $path ),
+      );
+      if( $childList = self::getTree( $path ) ) {
+        $folder["childList"] = $childList;
+      } else {
+        $folder["indAction"] = "delete";
+      }
+      $treeList[] = $folder;
+    }
+    return $treeList;
+  }
+
+  /****************************************************************************/
   public static function getList( $path = "" ) {
     global $PUBLICPATH;
 

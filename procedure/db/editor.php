@@ -48,6 +48,23 @@ class db_Editor extends db_Abstract {
   }
 
   /****************************************************************************/
+  public static function getGroupKList( $k ) {
+    $activeKList = array();
+    Includer::add( array( "dbGroupEditor", "dbAssociation" ) );
+    $groupKList = db_Association::get( "groupEditor", "editor", $k );
+    if( $kList = array_map( function( $item ) {
+        return $item["k"];
+      }, $groupKList ) ) {
+      $kList = db_GroupEditor::getParentKList( $kList );
+      $result = db_GroupEditor::get( "k", array( "k IN ( " . join( ",", $kList ) . " )", "active=1") );
+      $activeKList = array_map( function( $item ) {
+        return $item["k"];
+      }, $result );
+    }
+    return $activeKList;
+  }
+#TODO active
+  /****************************************************************************/
   protected static function getGroupToolList( $k, $toolList ) {
     Includer::add( array( "dbGroupEditor", "dbAssociation" ) );
     $groupKList = db_Association::get( "groupEditor", "editor", $k );
@@ -55,7 +72,7 @@ class db_Editor extends db_Abstract {
         return $item["k"];
       }, $groupKList ) ) {
       $kList = db_GroupEditor::getParentKList( $kList );
-      $result = db_GroupEditor::get( "toolList", "k IN ( " . join( ",", $kList ) . " ) " );
+      $result = db_GroupEditor::get( "toolList", array( "k IN ( " . join( ",", $kList ) . " )", "active=1") );
       foreach( $result as $item ) {
         if( $item["toolList"] ) {
           $toolList = array_unique( array_merge( $toolList, explode( ",", $item["toolList"] ) ) );
