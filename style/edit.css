@@ -79,7 +79,6 @@ input[type=button] {
 .toggleExpand:before,
 .picklist .remove:before {
   font-family: "IconicStroke";
-  /*font-size: 1.2em;*/
 }
 
 #currentUser:before {
@@ -145,7 +144,7 @@ input[type=button] {
   background-image: url(../image/visitor.svg);
 }
 
-#details h2, .list-container .icon, .uploadedList > li,
+#details h2, .list-container .icon,
 .pickitem {
   background-repeat: no-repeat;
 }
@@ -166,7 +165,6 @@ h2,
 }
 
 .icon,
-.uploadedList > li,
 .image div,
 .dock a {
   -webkit-background-size: cover; /* pour Chrome et Safari */
@@ -224,43 +222,42 @@ fieldset.mountpoint .pickitem {
   background-image: url(../image/mountpoint.svg), url(../image/folder.svg);
 }
 
-.list-container .file .icon, #details .file h2, .uploadedList > .file,
-.uploadedList > .png,
-.uploadedList > .jpg,
-.uploadedList > .gif,
-.list-container .imagesvg .icon, #details .imagesvg h2, .uploadedList > .svg {
+.list-container .file .icon,
+#details .file h2,
+.list-container .imagesvg .icon,
+#details .imagesvg h2 {
   background-image: url(../image/file.svg);
 }
 
-.list-container .xml .icon, #details .xml h2, .uploadedList > .xml {
+.list-container .xml .icon, #details .xml h2 {
   background-image: url(../image/xml.svg);
 }
 
-.list-container .javascript .icon, #details .javascript h2, .uploadedList > .javascript {
+.list-container .javascript .icon, #details .javascript h2 {
   background-image: url(../image/javascript.svg);
 }
 
-.list-container .php .icon, #details .php h2, .uploadedList > .php {
+.list-container .php .icon, #details .php h2 {
   background-image: url(../image/php.svg);
 }
 
-.list-container .text .icon, #details .text h2, .uploadedList > .text {
+.list-container .text .icon, #details .text h2 {
   background-image: url(../image/text.svg);
 }
 
-.list-container .html .icon, #details .html h2, .uploadedList > .html {
+.list-container .html .icon, #details .html h2 {
   background-image: url(../image/html.svg);
 }
 
-.list-container .css .icon, #details .css h2, .uploadedList > .css {
+.list-container .css .icon, #details .css h2 {
   background-image: url(../image/css.svg);
 }
 
-.list-container .sql .icon, #details .sql h2, .uploadedList > .sql {
+.list-container .sql .icon, #details .sql h2 {
   background-image: url(../image/sql.svg);
 }
 
-.list-container .music .icon, #details .music h2, .uploadedList > .music {
+.list-container .music .icon, #details .music h2 {
   background-image: url(../image/audio.svg);
 }
 
@@ -331,10 +328,6 @@ input[type=submit], input[type=button], button {
   background-color: #607890;
 }
 
-/*input[type=submit]:disabled:hover, input[type=button]:disabled:hover, button:disabled:hover {
-  background-color: #ccc;
-}*/
-
 .tabs > menu > li {
   background-color: #607890;
 }
@@ -348,7 +341,6 @@ input[type=submit]:hover,
 button:hover,
 .tabs > menu > li:hover {
   background-color: #036;
-  /*text-shadow: 0px 0px 5px rgba(255,255,255,0.6);*/
 }
 
 input[type=submit]:active, button:active, .tabs > menu > li:active {
@@ -379,7 +371,7 @@ input[type=submit]:disabled:active, input[type=button]:disabled:active, button:d
   background-color: #fc9;
 } 
 
-.invalid {
+.invalid, .row:nth-child(2n+1).invalid {
   background-color: rgba(88,0,0,.05);
 }
 
@@ -584,10 +576,6 @@ menu > li,
   padding-left: 20px;
 }
 
-.uploadedList dl, .uploadedList progress {
-  margin-left: 68px;
-}
-
 hr, .picklist, .uploadedList {
   margin: 0;
 }
@@ -725,10 +713,6 @@ nav h2, nav menu {
 }
 
 #toolList {
-  /*top: 20px;
-  bottom: 20px;
-  width: 320px;
-  overflow: hidden;*/
   display:inline-block;
   float: left;
   height: 100%;
@@ -745,14 +729,6 @@ nav h2, nav menu {
   height: 100%;
   width: 270px;
   overflow: auto;
-  /*text-align: left;
-  position: absolute;
-  top: 1px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  overflow: auto;*/
 }
 
 #details {
@@ -874,7 +850,7 @@ nav h2, nav menu {
   overflow: hidden;
 }
 
-.compact .list, .tree .list, .checklist, .radiolist, .uploadedList {
+.compact .list, .tree .list, .checklist, .radiolist {
   list-style-type: none;
 }
 
@@ -930,11 +906,6 @@ nav h2, nav menu {
   display: block;
   clear: both;
 }
-
-
-/*.resume .cell {
-  display: inline;
-}*/
 
 .resume .action {
   display: inline-block;
@@ -1021,24 +992,6 @@ nav h2, nav menu {
   height: 23px;
 }
 
-.fileUpload div {
-  display:inline;
-}
-
-.fileUpload iframe {
-  width: 0;
-  height: 0;
-}
-
-.fileUpload .status {
-  display: none;
-}
-
-.uploadedList dt {
-  float:left;
-  width: 120px;
-}
-
 .breadcrumb li {
   display: inline;
 }
@@ -1084,15 +1037,7 @@ li:hover [data-select] {
 .fileUpload [type=file] {
     z-index: 2;
 }
-/*
-.dock, .dock li span {
-  z-index: 2;
-}
 
-.dock li {
-  z-index: 1;
-}
-*/
 .ui-resizable-handle {
   z-index: 99999;
 }

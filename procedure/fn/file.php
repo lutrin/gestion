@@ -144,9 +144,6 @@ class fn_File extends fn {
 
     # field
     $fields = self::prepareFields( $params["columns"] );
-    /*if( $excludedKList ) {
-      $fields["class"] = "IF( k IN ( " . join( ",", $excludedKList ) . " ), 'disabled', '' ) AS class";
-    }*/
     Includer::add( array( "uiDialog" ) );
 
     return array(
@@ -206,23 +203,56 @@ class fn_File extends fn {
       "selected"  => true
     );
 
-    # get file upload form
-    $params = self::getFormParamsUpload( $parentK );
-    $fields = self::getFormFieldsUpload();
-    $sectionList["$id-sectionUpload"] = array(
-      "label"     => "Importation",
-      "innerHtml" => ui_Form::buildXml( $params, $fields, array( "targetK" => $parentK ) )
-    );
-
     # tabs params
     $navParams = array(
       "id"        => $id,
-      "mode"      => "accordion",
+      "mode"      => "separator",
       "class"     => "file",
       "headtitle" => "Nouveau&nbsp;-&nbsp;Dossier/Fichier",
       "closable"  => true
     );
 
+    # breadcrumb
+    if( $parentInfoList = Dir::getParentInfoList( $parentK ) ) {
+      Includer::add( "uiBreadcrumb" );
+      $navParams["breadcrumb"] = ui_Breadcrumb::buildXml( $parentInfoList, "files-explore", true );
+    }
+
+    return array(
+      "details" => ui_Nav::buildXml( $navParams, $sectionList )
+    );
+  }
+
+  /****************************************************************************/
+  public static function import_folder( $parentK ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+    Includer::add( array( "dir", "uiNav", "uiForm" ) );
+    $params = self::getFormParamsUpload( $parentK );
+    $fields = self::getFormFieldsUpload();
+    $id = "file-$parentK";
+    $sectionList = array(
+      "$id-sectionUpload" => array(
+        "label"     => "Importation",
+        "innerHtml" => ui_Form::buildXml( $params, $fields, array( "targetK" => $parentK ) )
+      )
+    );
+
+    # separator params
+    $navParams = array(
+      "id"        => $id,
+      "mode"      => "separator",
+      "class"     => "file",
+      "headtitle" => "Importation de fichier",
+      "closable"  => true
+    );
+
+    # breadcrumb
+    if( $parentInfoList = Dir::getParentInfoList( $parentK ) ) {
+      Includer::add( "uiBreadcrumb" );
+      $navParams["breadcrumb"] = ui_Breadcrumb::buildXml( $parentInfoList, "files-explore", true );
+    }
     return array(
       "details" => ui_Nav::buildXml( $navParams, $sectionList )
     );
@@ -231,6 +261,11 @@ class fn_File extends fn {
   /****************************************************************************/
   public static function insert_explore( $parentK ) {
     return self::insert_folder( $parentK );
+  }
+
+  /****************************************************************************/
+  public static function import_explore( $parentK ) {
+    return self::import_folder( $parentK );
   }
 
   /****************************************************************************/
@@ -511,6 +546,7 @@ class fn_File extends fn {
       "mainAction" => "edit",
       "rowAction"  => "edit",
       "insertable" => true,
+      "importable" => true,
       "selectable" => true,
       "refreshable" => true,
       "key"        => $k,
@@ -534,6 +570,10 @@ class fn_File extends fn {
         ),
         "insert"   => array(
           "title"      => "Insérer",
+          "individual" => true
+        ),
+        "import"   => array(
+          "title"      => "Importer",
           "individual" => true
         ),
         "delete" => array(
@@ -618,6 +658,9 @@ class fn_File extends fn {
           ),
           "insert"   => array(
             "title" => "Insérer"
+          ),
+          "import"   => array(
+            "title" => "Importer"
           ),
           "delete" => array(
             "title"    => "Supprimer",
@@ -714,17 +757,6 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  /*protected static function getFormParamsContent( $infoClass = "text", $k = 0 ) {
-    return array(
-      "id"       => "filecontent-$k",
-      "action"   => "save",
-      "submit"   => "Enregistrer",
-      "method"   => "post",
-      "class"    => $infoClass
-    );
-  }*/
-
-  /****************************************************************************/
   protected static function getFormFieldsContent( $hide = false) {
     $field = array(
       "label" => "Contenu",
@@ -802,7 +834,8 @@ class fn_File extends fn {
 
     # action list
     $actionList = array(
-      "insert"  => array( "folder" )
+      "insert"  => array( "folder" ),
+      "import"  => array( "folder" )
     );
 
     # get action

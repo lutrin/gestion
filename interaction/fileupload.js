@@ -21,60 +21,57 @@
     var inputFile = $( this ),
         files = this.files;
     return _c.callAjax( [
-          { folder: "data", name: "filetype" },
-          { folder: "data", name: "texttype" }
+          { folder: "data",     name: "filetype" },
+          { folder: "data",     name: "texttype" },
+          { folder: "template", name: "uploadrow" }
         ], function( ajaxItem ) {
       var app = _c.ajaxList.interaction.fileupload,
           appForm = _c.ajaxList.interaction.form,
           fileupload = inputFile.parents( ".fileUpload:first" ),
           uploadedList = fileupload.find( ".uploadedList" ),
+          maxfilesize = fileupload.find( "[name=MAX_FILE_SIZE]:first" ).val(),
           fields = _c.jsonToUrl( appForm.serialize( inputFile.parents( "form:first" ) ) ),
           i, l;
       fileupload.find( "input" ).addClass( "hidden" );
       for( i = 0, l = files.length; i < l; ) {
-        app.send( files[i++], uploadedList, fields );
+        app.send( files[i++], uploadedList, fields, maxfilesize );
       }
     } );
   },
 
   /****************************************************************************/
-  send: function( file, uploadedList, fields ) {
+  send: function( file, uploadedList, fields, maxfilesize ) {
     var app = _c.ajaxList.interaction.fileupload,
         xhr = new XMLHttpRequest(),
         filename = file.name || file.fileName,
-        filesize = _c.getHumanSize( file.size || file.fileSize ),
+        filesize = file.size || file.fileSize,
+        filehumansize = _c.getHumanSize( filesize ),
         filetype = file.type,
         index = uploadedList.find( ".row" ).size(),
         className = app.getClass( filename, filetype ),
         progress;
-    uploadedList.append( "<div class='row level1 " + className + "'>" +
-                           "<div class='cell main'>" +
-                             "<span class='icon'></span>" +
-                             "<span title'" + filename + "'>" +
-                               filename +
-                             "</span>" +
-                           "</div>" +
-                           "<div class='cell'>" + filesize + "</div>" +
-                           "<div class='cell'>" + filetype + "</div>" +
-                           "<div class='cell'>" +
-                             "<progress data-index='" + index + "' value='0' max='100'>" +
-                               "Téléversement...<span>0</span>%" +
-                              "</progress>" +
-                           "</div>" +
-                         "</div>" );
-    /*uploadedList.append( "<li class='" + className + "'>" +
-                           "<dl>" +
-                              "<dt>Nom de fichier</dt><dd>" + filename + "</dd>" +
-                              "<dt>Taille</dt><dd>" + filesize + "</dd>" +
-                              "<dt>Type</dt><dd>" + filetype + "</dd>" +
-                           "</dl>" +
-                           "<progress data-index='" + index + "' value='0' max='100'>" +
-                             "Téléversement...<span>0</span>%" +
-                           "</progress>" +
-                           "<hr />" +
-                         "</li>" );*/
-    
+
+    // template
+    uploadedList.append(
+      _c.ajaxList.template.uploadrow
+        .replace( /{className}/g, className )
+        .replace( /{filename}/g, filename )
+        .replace( /{filesize}/g, filesize )
+        .replace( /{filetype}/g, filetype )
+        .replace( /{index}/g, index )
+        .replace( /{uploading}/g, "Téléversement" )
+    );
+
+    //progress
     progress = uploadedList.find( "progress[data-index=" + index + "]" );
+
+    //validation
+    if( filesize > maxfilesize ) {
+      progress.parents( ".row:first" ).addClass( "invalid" );
+      progress.replaceWith( "<div class='alertMsg'>" + _edit.msg( "toobig" ) + "</span>" );
+      return false;
+    }
+
     xhr.upload.addEventListener('progress', function( ev ) {
       var percent = parseInt( ev.loaded / ev.total * 100 );
       progress.attr( "value", percent );
@@ -88,7 +85,7 @@
       progress.after( "<div>Erreur</div>" );
       progress.remove();
     };
-    xhr.open( "POST", "procedure/controller.php?filename=" + encodeURIComponent( filename ) + "&" + fields, true ); //TODO PHP: file_get_contents("php://input")
+    xhr.open( "POST", "procedure/controller.php?filename=" + encodeURIComponent( filename ) + "&" + fields, true );
 
     xhr.setRequestHeader("Content-Type", "application/octet-stream" );
 

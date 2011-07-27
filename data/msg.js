@@ -23,6 +23,10 @@
     "fr": "Trop long",
     "en": "Too long"
   },
+  "toobig": {
+    "fr": "Taille maximale exédée",
+    "en": "Max file size exeeds"
+  },
   "mustbeunique": {
     "fr": "Doit être unique",
     "en": "Must be unique"

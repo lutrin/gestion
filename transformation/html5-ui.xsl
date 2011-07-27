@@ -59,11 +59,7 @@
 <xsl:template match="ui.form">
   <form enctype="application/x-www-form-urlencoded">
     <xsl:call-template name="apply-attributelist" />
-    <xsl:if test="@closable">
-      <button class="close" data-trigger="close">
-        <span class="hidden"><xsl:text>Fermer</xsl:text></span>
-      </button>
-    </xsl:if>
+    <xsl:call-template name="apply-closable" />
     <xsl:apply-templates/>
   </form>
 </xsl:template>
@@ -487,9 +483,7 @@
   <div class="dock-container">
     <xsl:call-template name="apply-attributelist" />
     <nav class="dock">
-      <xsl:if test="ui.headtitle">
-        <h2><xsl:value-of select="ui.headtitle"/></h2>
-      </xsl:if>
+      <xsl:apply-templates select="ui.headtitle" />
       <menu>
         <xsl:for-each select="ui.item">
           <li>
@@ -525,16 +519,10 @@
         <xsl:value-of select="concat(' ',@class)" />
       </xsl:if>
     </xsl:attribute>
-    <xsl:if test="@closable">
-      <button class="close" data-trigger="close">
-        <span class="hidden"><xsl:text>Fermer</xsl:text></span>
-      </button>
-    </xsl:if>
+    <xsl:call-template name="apply-closable" />
+    <xsl:apply-templates select="ui.headtitle" />
+    <xsl:apply-templates select="ui.breadcrumb" />
     <nav class="tabs">
-      <xsl:if test="ui.headtitle">
-        <h2><xsl:value-of select="ui.headtitle"/></h2>
-      </xsl:if>
-      <xsl:apply-templates select="ui.breadcrumb" />
       <xsl:if test="count( ui.item ) > 1">
         <menu>
           <xsl:for-each select="ui.item">
@@ -557,14 +545,9 @@
         <xsl:value-of select="concat(' ',@class)" />
       </xsl:if>
     </xsl:attribute>
-    <xsl:if test="@closable">
-      <button class="close" data-trigger="close">
-        <span class="hidden"><xsl:text>Fermer</xsl:text></span>
-      </button>
-    </xsl:if>
-    <xsl:if test="ui.headtitle">
-      <h2><xsl:value-of select="ui.headtitle"/></h2>
-    </xsl:if>
+    <xsl:call-template name="apply-closable" />
+    <xsl:apply-templates select="ui.headtitle" />
+    <xsl:apply-templates select="ui.breadcrumb" />
     <xsl:for-each select="ui.item">
       <h3>
         <xsl:call-template name="apply-itemAnchor" />
@@ -576,10 +559,16 @@
 </xsl:template>
 
 <xsl:template match="ui.separator">
-  <div class="separator-container separator">
-    <xsl:if test="ui.headtitle">
-      <h2><xsl:value-of select="ui.headtitle"/></h2>
-    </xsl:if>
+  <div>
+    <xsl:attribute name="class">
+      <xsl:text>separator-container separator</xsl:text>
+      <xsl:if test="@class">
+        <xsl:value-of select="concat(' ',@class)" />
+      </xsl:if>
+    </xsl:attribute>
+    <xsl:call-template name="apply-closable" />
+    <xsl:apply-templates select="ui.headtitle" />
+    <xsl:apply-templates select="ui.breadcrumb" />
     <xsl:for-each select="ui.item">
       <xsl:if test="@label">
         <h3>
@@ -608,9 +597,7 @@
     </xsl:attribute>
 
     <!-- headtitle -->
-    <xsl:if test="ui.headtitle">
-      <h2><xsl:value-of select="ui.headtitle"/></h2>
-    </xsl:if>
+    <xsl:apply-templates select="ui.headtitle" />
 
     <!-- option -->
     <xsl:if test="ui.option/@count > 1">
@@ -627,7 +614,7 @@
     <xsl:call-template name="apply-listpart" />
 
     <!-- addable -->
-    <xsl:if test="@insertable|@addable|@refreshable">
+    <xsl:if test="@insertable|@addable|@importable|@refreshable">
       <fieldset class="function">
         <legend>Fonctions</legend>
         <xsl:if test="@insertable">
@@ -635,6 +622,9 @@
         </xsl:if>
         <xsl:if test="@addable">
           <button id="{@id}-add" class="add" data-action="add" data-params="object={@id}">Ajouter</button>
+        </xsl:if>
+        <xsl:if test="@importable">
+          <button id="{@id}-import" class="import" data-action="import" data-params="object={@id},k={@key}">Importer</button>
         </xsl:if>
         <xsl:if test="@refreshable">
           <button id="{@id}-refresh" class="refresh" data-action="refresh" data-params="object={@id}">Actualiser</button>
@@ -959,6 +949,10 @@
   </div>
 </xsl:template>
 
+<xsl:template match="ui.headtitle">
+  <h2><xsl:apply-templates/></h2>
+</xsl:template>
+
 <xsl:template match="ui.breadcrumb">
   <ul class="breadcrumb">
     <xsl:for-each select="ui.breaditem">
@@ -1126,6 +1120,14 @@
     </xsl:if>
     <xsl:apply-templates/>
   </section>
+</xsl:template>
+
+<xsl:template name="apply-closable">
+  <xsl:if test="@closable">
+    <button class="close" data-trigger="close">
+      <span class="hidden"><xsl:text>Fermer</xsl:text></span>
+    </button>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="inList">
