@@ -56,6 +56,15 @@ input[type=button] {
   overflow: hidden;
 }
 
+.list-container .file .icon:before  {
+  content: "?";
+  text-align: center;
+}
+
+.resume .file .icon:before, .gallery .file .icon:before {
+  font-size: 30px;
+}
+
 /* icon */
 @font-face {
   font-family: "IconicStroke";
@@ -74,6 +83,7 @@ input[type=button] {
 .insert,
 .add:before,
 .refresh:before,
+.import:before,
 .sorted_asc a:after,
 .sorted_desc a:after,
 .toggleExpand:before,
@@ -107,6 +117,10 @@ input[type=button] {
 
 .add:before, .insert:before {
   content: "+";
+}
+
+.import:before {
+  content: "3";
 }
 
 .refresh:before {
@@ -291,6 +305,10 @@ html, fieldset, legend, .dock, .dock li span, .tabs, .accordion-container, .head
 
 noscript, #error-msg, .alertMsg, .formMsg {
   color: #800;
+}
+
+.alertSuccess {
+  color: #080;
 }
 
 input, select {

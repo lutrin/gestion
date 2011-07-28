@@ -62,5 +62,9 @@
   "notsaved": {
     "fr": "Non sauvegardé",
     "en": "Not saved"
+  },
+  "finishsuccess": {
+    "fr": "Envoyé avec succès",
+    "en": "Finished with success"
   }
 }

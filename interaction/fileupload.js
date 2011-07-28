@@ -56,7 +56,7 @@
       _c.ajaxList.template.uploadrow
         .replace( /{className}/g, className )
         .replace( /{filename}/g, filename )
-        .replace( /{filesize}/g, filesize )
+        .replace( /{filesize}/g, filehumansize )
         .replace( /{filetype}/g, filetype )
         .replace( /{index}/g, index )
         .replace( /{uploading}/g, "Téléversement" )
@@ -78,12 +78,10 @@
       progress.children( "span" ).html( percent );
     }, false);
     xhr.upload.onload = function( ev ) {
-      progress.attr( "value", 100 );
-      progress.children( "span" ).html( 100 );
+      progress.replaceWith( "<span class='alertSuccess'>" + _edit.msg( "finishsuccess" ) + "</span>" );
     };
     xhr.upload.onerror = function( ev ) {
-      progress.after( "<div>Erreur</div>" );
-      progress.remove();
+      progress.replaceWith( "<div class='alertMsg'>Erreur</div>" );
     };
     xhr.open( "POST", "procedure/controller.php?filename=" + encodeURIComponent( filename ) + "&" + fields, true );
 
