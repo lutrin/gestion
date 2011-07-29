@@ -74,7 +74,7 @@ class Image {
             imagealphablending( $im2, false );
             imagesavealpha( $im2, true );
             $transparent = imagecolorallocatealpha( $im2, 255, 255, 255, 127 );
-            imagefilledrectangle( $im2, 0, 0, $resize[0], $resize[1], $transparent );
+            imagefilledrectangle( $im2, 0, 0, $newSize[0], $newSize[1], $transparent );
           }
 
           imagecopyResampled( $im2, $im, 0, 0, $newSize[2], $newSize[3], $newSize[0], $newSize[1], $newSize[4], $newSize[5] );
@@ -164,12 +164,15 @@ class Image {
       $newWidth = min( ( $newWidth? $newWidth: $newHeight ), $MAXSIZE["width"] );
       $newHeight = min( ( $newHeight? $newHeight: $newWidth ), $MAXSIZE["height"] );
       $ratio = max( $newWidth / $width, $newHeight / $height );
+      if( $ratio >= 1 ) {
+        $ratio = 1;
+      }
       $x = ( $width - $newWidth / $ratio ) / 2;
       $y = ( $height - $newHeight / $ratio ) / 2;
       $width = $newWidth / $ratio;
       $height = $newHeight / $ratio;
     }
-
+error_log( $ratio );
     return array( (int)$newWidth, (int)$newHeight, (int)$x, (int)$y, (int)$width, (int)$height );
   }
 }

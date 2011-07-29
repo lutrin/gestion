@@ -334,7 +334,7 @@ $MAXSIZE = array(
   "height" => 1000
 );
 
-$IMAGEQUALITY = 70;
+$IMAGEQUALITY = 60;
 $IMAGETYPE = array(
   "jpg" => array( "image/jpeg", "image/pjpeg" ),
   "gif" => array( "image/gif" ),

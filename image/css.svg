@@ -10,8 +10,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="16"
-   height="16"
+   width="64"
+   height="64"
    id="svg2">
   <metadata
      id="metadata31">
@@ -27,17 +27,6 @@
   </metadata>
   <defs
      id="defs4">
-    <linearGradient
-       id="linearGradient3816">
-      <stop
-         id="stop3818"
-         style="stop-color:#ffffff;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop3820"
-         style="stop-color:#ffffff;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
     <linearGradient
        id="linearGradient3764">
       <stop
@@ -94,11 +83,11 @@
        id="linearGradient3764-3">
       <stop
          id="stop3766-9"
-         style="stop-color:#b6d0e7;stop-opacity:1"
+         style="stop-color:#ffffff;stop-opacity:1"
          offset="0" />
       <stop
          id="stop3768-0"
-         style="stop-color:#b6d0e7;stop-opacity:0"
+         style="stop-color:#ffffff;stop-opacity:0"
          offset="1" />
     </linearGradient>
     <inkscape:path-effect
@@ -160,39 +149,22 @@
        id="linearGradient2855"
        xlink:href="#linearGradient3764"
        gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       x1="1.9999993"
-       y1="8.0501423"
-       x2="13.894001"
-       y2="8.0501423"
-       id="linearGradient3822"
-       xlink:href="#linearGradient3816"
-       gradientUnits="userSpaceOnUse" />
   </defs>
-  <path
-     d="m 2.6290021,0.68071498 0,14.73890502 10.6355399,-0.0019 4.56e-4,-10.6879058 -3.6405084,-4.04914992 -6.9954875,6.7e-6"
-     id="path2984-3"
-     style="fill:url(#linearGradient3822);fill-opacity:1;stroke:#444444;stroke-width:1.25800562;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-  <path
-     d="m 9.7191203,0.68256505 0,4.01869045 3.5442407,0"
-     id="path3765-4"
-     style="fill:none;stroke:#444444;stroke-width:1.25800562px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
   <rect
-     width="15.087712"
-     height="6.0877118"
-     x="0.45614412"
-     y="6.9561439"
-     id="rect3009"
-     style="opacity:0.8;fill:#ff0088;fill-opacity:1;stroke:#ff0066;stroke-width:0.91228825;stroke-opacity:1" />
+     width="63.02393"
+     height="29.023932"
+     x="0.55340517"
+     y="23.037506"
+     id="rect3006"
+     style="opacity:0.6;fill:#ff0088;fill-opacity:1;stroke:#ff0066;stroke-width:0.97606826;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
   <text
-     x="7.0584636"
-     y="13.518088"
-     transform="scale(1.1331811,0.88247148)"
-     id="text3811"
+     x="-0.058440942"
+     y="51.825016"
+     transform="scale(1.0835568,0.92288654)"
+     id="text3906"
      xml:space="preserve"
-     style="font-size:7.90570021px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"><tspan
-       x="7.0584636"
-       y="13.518088"
-       id="tspan3813"
-       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace">css</tspan></text>
+     style="font-size:36.96149445px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"><tspan
+       x="-0.058440942"
+       y="51.825016"
+       id="tspan3908">css</tspan></text>
 </svg>

@@ -603,8 +603,8 @@ class fn_File extends fn {
                      . Encode::getString(
                         array(
                           "image" => $item["path"],
-                          "width" => 64,
-                          "height" => 64,
+                          "width" => 58,
+                          "height" => 58,
                           "mode" => "thumb"
                         )
                       );

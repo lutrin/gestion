@@ -149,22 +149,62 @@
        id="linearGradient2855"
        xlink:href="#linearGradient3764"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       x1="7.878788"
+       y1="6.060606"
+       x2="-0.42424244"
+       y2="16.666666"
+       id="linearGradient3010"
+       xlink:href="#linearGradient3764-3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(5.2117286,0,0,5.718568,7.941326,-25.185695)" />
   </defs>
-  <rect
-     width="63.02393"
-     height="29.023932"
-     x="0.55340517"
-     y="23.037506"
-     id="rect3006"
-     style="opacity:0.6;fill:#008688;fill-opacity:1;stroke:#006266;stroke-width:0.97606826;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
   <text
-     x="18.688538"
-     y="51.792244"
-     transform="scale(1.0982335,0.91055314)"
-     id="text3906"
+     x="15.038869"
+     y="7.8021197"
+     id="text3006"
      xml:space="preserve"
-     style="font-size:30.3030777px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"><tspan
-       x="18.688538"
-       y="51.792244"
-       id="tspan3908">js</tspan></text>
+     style="font-size:4px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><tspan
+       x="15.038869"
+       y="7.8021197"
+       id="tspan3008" /></text>
+  <text
+     x="13.455831"
+     y="8.3674908"
+     id="text3010"
+     xml:space="preserve"
+     style="font-size:4px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#666666;fill-opacity:1;stroke:none;font-family:Sans"><tspan
+       x="13.455831"
+       y="8.3674908"
+       id="tspan3012">Lorem ipsum</tspan><tspan
+       x="13.455831"
+       y="13.367491"
+       id="tspan3014">dolor sit</tspan><tspan
+       x="13.455831"
+       y="18.367491"
+       id="tspan3016">amet, </tspan><tspan
+       x="13.455831"
+       y="23.367491"
+       id="tspan3018">consectetur </tspan><tspan
+       x="13.455831"
+       y="28.367491"
+       id="tspan3020">adipiscing elit.</tspan><tspan
+       x="13.455831"
+       y="33.367493"
+       id="tspan3022">Pellentesque biben</tspan><tspan
+       x="13.455831"
+       y="38.367493"
+       id="tspan3024">dum lorem vel sa</tspan><tspan
+       x="13.455831"
+       y="43.367493"
+       id="tspan3026">pien accumsam non</tspan><tspan
+       x="13.455831"
+       y="48.367493"
+       id="tspan3028">eleifend justo dapi</tspan><tspan
+       x="13.455831"
+       y="53.367493"
+       id="tspan3030">bus. Quisque aliquet</tspan><tspan
+       x="13.455831"
+       y="58.367493"
+       id="tspan3032">venenatis vilputate.</tspan></text>
 </svg>

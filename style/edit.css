@@ -51,9 +51,13 @@ input[type=button] {
   align: left;
 }
 
-.resume .main a {
+.compact .main a,.resume .main a {
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.list {
+  overflow: auto;
 }
 
 .list-container .file .icon:before  {
@@ -244,36 +248,49 @@ fieldset.mountpoint .pickitem {
 }
 
 .list-container .xml .icon, #details .xml h2 {
-  background-image: url(../image/xml.svg);
+  background-image: url(../image/xml.svg), url(../image/loremipsum.svg), url(../image/file.svg);
 }
 
 .list-container .javascript .icon, #details .javascript h2 {
-  background-image: url(../image/javascript.svg);
+  background-image: url(../image/javascript.svg), url(../image/loremipsum.svg), url(../image/file.svg);
 }
 
 .list-container .php .icon, #details .php h2 {
-  background-image: url(../image/php.svg);
+  background-image: url(../image/php.svg), url(../image/loremipsum.svg), url(../image/file.svg);
 }
 
 .list-container .text .icon, #details .text h2 {
-  background-image: url(../image/text.svg);
+  background-image: url(../image/text.svg), url(../image/loremipsum.svg), url(../image/file.svg);
 }
 
 .list-container .html .icon, #details .html h2 {
-  background-image: url(../image/html.svg);
+  background-image: url(../image/html.svg), url(../image/loremipsum.svg), url(../image/file.svg);
 }
 
 .list-container .css .icon, #details .css h2 {
-  background-image: url(../image/css.svg);
+  background-image: url(../image/css.svg), url(../image/loremipsum.svg), url(../image/file.svg);
 }
 
 .list-container .sql .icon, #details .sql h2 {
-  background-image: url(../image/sql.svg);
+  background-image: url(../image/sql.svg), url(../image/loremipsum.svg), url(../image/file.svg);
 }
 
 .list-container .music .icon, #details .music h2 {
-  background-image: url(../image/audio.svg);
+  background-image: url(../image/audio.svg), url(../image/file.svg);
 }
+
+.list-container .jpg .icon, #details .jpg h2 {
+  background-image: url(../image/image.svg);
+}
+
+.list-container .gif .icon, #details .gif h2 {
+  background-image: url(../image/image.svg);
+}
+
+.list-container .png .icon, #details .png h2 {
+  background-image: url(../image/image.svg);
+}
+
 
 .empty {
   background: url(../image/roller.gif) no-repeat center center;
@@ -290,7 +307,7 @@ fieldset.mountpoint .pickitem {
 }
 
 /* color */
-html, fieldset, legend, .dock, .dock li span, .tabs, .accordion-container, .header > .cell,
+html, fieldset, legend, .dock, .dock li span, .tabs, .accordion-container, .header > .cell, .list,
 .table .row:nth-child(odd), .resume .row:nth-child(odd) {
   background-color:#F5F5F5;
 }
@@ -373,7 +390,7 @@ input[type=submit]:disabled:active, input[type=button]:disabled:active, button:d
   text-shadow: 0;
 }
 
-.tabs > menu > li.selected, #contextMenu menu, .list, .formlist, .image div, span.picklist {
+.tabs > menu > li.selected, #contextMenu menu, .list, .formlist, .image div, span.picklist, .icon img {
   background-color: #fff;
 }
 
@@ -406,7 +423,7 @@ footer {
   border-top: #F5F5F5 solid 1px;
 }
 
-fieldset, legend, input[type=submit], input[type=button], button, #dialog-content > *, #details > * {
+fieldset, legend, input[type=submit], input[type=button], button, #dialog-content > *, #details > *, .list {
   border: 1px solid #aaa;
   border-radius: 4px;
 }
@@ -510,6 +527,7 @@ input[type=submit],
 input[type=button],
 menu > li,
 #error-msg,
+.list,
 .cell,
 .checklist li,
 .checklist li > *,
@@ -535,6 +553,7 @@ menu > li,
 #details > *,
 .field,
 .info,
+.list,
 .cell,
 .checklist li,
 .radiolist li,
@@ -544,7 +563,9 @@ menu > li,
   margin: 2px;
 }
 
-
+.resume img, .gallery img {
+  margin: 3px;
+}
 
 #login, #dialog-content > * {
   margin-left: auto;
@@ -598,6 +619,14 @@ hr, .picklist, .uploadedList {
   margin: 0;
 }
 
+.resume .file .icon:before, .gallery .file .icon:before  {
+  padding: 27px;
+}
+
+.compact .file .icon:before, .table .file .icon:before  {
+  padding: 5px;
+}
+
 /* size and position */
 html {
   overflow-y: visible;
@@ -632,7 +661,7 @@ footer nav li {
   display: inline;
 }
 
-textarea, fieldset, .closeDialog {
+textarea, fieldset, .closeDialog, .list {
   clear: both;
 }
 
@@ -866,6 +895,7 @@ nav h2, nav menu {
 .compact .row {
   height: 25px;
   overflow: hidden;
+  width: 150px;
 }
 
 .compact .list, .tree .list, .checklist, .radiolist {

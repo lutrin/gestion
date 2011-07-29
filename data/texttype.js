@@ -1,5 +1,6 @@
 {
-  "js" : "javascript",
-  "sql": "sql",
-  "css": "css"
+  "js" :  "javascript",
+  "sql":  "sql",
+  "css":  "css",
+  "html": "html"
 }

@@ -645,7 +645,7 @@
   </xsl:variable>
 
   <!-- list -->
-  <fieldset>
+  <div>
 
     <!-- class -->
     <xsl:attribute name="class">
@@ -725,7 +725,7 @@
       <xsl:with-param name="action" select="ui.action"/>
       <xsl:with-param name="headercolumn" select="ui.headercolumn"/>
     </xsl:apply-templates>
-  </fieldset>
+  </div>
 </xsl:template>
 
 <xsl:template match="ui.row">

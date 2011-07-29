@@ -8,11 +8,14 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg2">
+   width="64"
+   height="64"
+   id="svg2"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="xml.svg">
   <metadata
      id="metadata31">
     <rdf:RDF>
@@ -25,19 +28,28 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1200"
+     inkscape:window-height="1521"
+     id="namedview29"
+     showgrid="false"
+     inkscape:zoom="7.236796"
+     inkscape:cx="19.515483"
+     inkscape:cy="18.016656"
+     inkscape:window-x="1200"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
   <defs
      id="defs4">
-    <linearGradient
-       id="linearGradient3816">
-      <stop
-         id="stop3818"
-         style="stop-color:#ffffff;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop3820"
-         style="stop-color:#ffffff;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
     <linearGradient
        id="linearGradient3764">
       <stop
@@ -51,7 +63,8 @@
     </linearGradient>
     <inkscape:path-effect
        effect="spiro"
-       id="path-effect2986" />
+       id="path-effect2986"
+       is_visible="true" />
     <linearGradient
        x1="7.878788"
        y1="6.060606"
@@ -81,7 +94,8 @@
     </linearGradient>
     <inkscape:path-effect
        effect="spiro"
-       id="path-effect2986-8" />
+       id="path-effect2986-8"
+       is_visible="true" />
     <linearGradient
        x1="7.878788"
        y1="6.060606"
@@ -94,16 +108,17 @@
        id="linearGradient3764-3">
       <stop
          id="stop3766-9"
-         style="stop-color:#b6d0e7;stop-opacity:1"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="0" />
       <stop
          id="stop3768-0"
-         style="stop-color:#b6d0e7;stop-opacity:0"
+         style="stop-color:#ffffff;stop-opacity:0;"
          offset="1" />
     </linearGradient>
     <inkscape:path-effect
        effect="spiro"
-       id="path-effect2986-4" />
+       id="path-effect2986-4"
+       is_visible="true" />
     <linearGradient
        x1="7.878788"
        y1="6.060606"
@@ -160,39 +175,24 @@
        id="linearGradient2855"
        xlink:href="#linearGradient3764"
        gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       x1="1.9999993"
-       y1="8.0501423"
-       x2="13.894001"
-       y2="8.0501423"
-       id="linearGradient3822"
-       xlink:href="#linearGradient3816"
-       gradientUnits="userSpaceOnUse" />
   </defs>
-  <path
-     d="m 2.6290021,0.68071498 0,14.73890502 10.6355399,-0.0019 4.56e-4,-10.6879058 -3.6405084,-4.04914992 -6.9954875,6.7e-6"
-     id="path2984-3"
-     style="fill:url(#linearGradient3822);fill-opacity:1;stroke:#444444;stroke-width:1.25800562;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-  <path
-     d="m 9.7191203,0.68256505 0,4.01869045 3.5442407,0"
-     id="path3765-4"
-     style="fill:none;stroke:#444444;stroke-width:1.25800562px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
   <rect
-     width="15.087712"
-     height="6.0877118"
-     x="0.45614412"
-     y="6.9561439"
-     id="rect3009"
-     style="opacity:0.8;fill:#888800;fill-opacity:1;stroke:#656600;stroke-width:0.91228825;stroke-opacity:1" />
+     style="opacity:0.59999999999999998;fill:#888800;fill-opacity:1;stroke:#656600;stroke-width:0.97606826000000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     id="rect3006"
+     width="63.02393"
+     height="29.023932"
+     x="0.55340517"
+     y="23.037506" />
   <text
-     x="7.0584636"
-     y="13.518088"
-     transform="scale(1.1331811,0.88247148)"
-     id="text3811"
      xml:space="preserve"
-     style="font-size:7.90570021px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"><tspan
-       x="7.0584636"
-       y="13.518088"
-       id="tspan3813"
-       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace">sql</tspan></text>
+     style="font-size:35.11027908px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+     x="0.39567235"
+     y="57.652557"
+     id="text3906"
+     sodipodi:linespacing="125%"
+     transform="scale(1.2390788,0.80705116)"><tspan
+       sodipodi:role="line"
+       id="tspan3908"
+       x="0.39567235"
+       y="57.652557">sql</tspan></text>
 </svg>
