@@ -991,6 +991,12 @@
   </audio>
 </xsl:template>
 
+<xsl:template match="ui.video">
+  <video controls="controls" autobuffer="autobuffer">
+    <xsl:apply-templates select="source" />
+  </video>
+</xsl:template>
+
 <xsl:template match="ui.mp3player">
   <xsl:variable name="flashvars">
     <xsl:text>mp3=</xsl:text>

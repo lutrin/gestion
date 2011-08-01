@@ -344,11 +344,14 @@ function getLang() {
 /******************************************************************************/
 function getData( $name ) {
   global $DATAPATH;
-  $filename = $DATAPATH . $name . ".js";
-  if( file_exists( $filename ) ) {
-    return json_decode( file_get_contents( $filename ), true );
+  if( !isset( $_GLOBALS[$name] ) ) {
+    $filename = $DATAPATH . $name . ".js";
+    if( !file_exists( $filename ) ) {
+      return false;
+    } 
+    $_GLOBALS[$name] = json_decode( file_get_contents( $filename ), true );
   }
-  return false;
+  return $_GLOBALS[$name];
 }
 
 /******************************************************************************/

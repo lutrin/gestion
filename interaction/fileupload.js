@@ -22,7 +22,7 @@
         files = this.files;
     return _c.callAjax( [
           { folder: "data",     name: "filetype" },
-          { folder: "data",     name: "texttype" },
+          { folder: "data",     name: "exttype" },
           { folder: "template", name: "uploadrow" }
         ], function( ajaxItem ) {
       var app = _c.ajaxList.interaction.fileupload,
@@ -98,19 +98,26 @@
 
   /****************************************************************************/
   getClass: function( file, type ) {
-    var classList = _c.ajaxList.data.filetype,
+    var list = _c.ajaxList.data.filetype,
         className = "file",
-        decomposed;
-    for( key in classList ) {
-      if( _c.inList( type, classList[key] ) ) {
+        decomposed, extension;
+    for( key in list ) {
+      if( _c.inList( type, list[key] ) ) {
         className = key;
         break;
       }
     }
-    if( className != "text" ) {
-      return className;
+    if( _c.inList( className, ["file", "ogg", "text"] ) ) {
+      decomposed = file.split( /\./ );
+      extension = decomposed.pop().toLower();
+      list = _c.ajaxList.data.exttype;
+      for( key in list ) {
+        if( _c.inList( extension, list[key] ) ) {
+          className = key;
+          break;
+        }
+      }
     }
-    decomposed = file.split( /\./ );
-    return _c.ajaxList.data.texttype[decomposed.pop()] || className;
+    return className;
   }
 }

@@ -482,6 +482,10 @@ $INCLUDE_LIST = array(
     "path" => "ui/audio.php",
     "depend" => "tag"
   ),
+  "uiVideo" => array(
+    "path" => "ui/video.php",
+    "depend" => "tag"
+  ),
 
   # data base table
   "dbAbstract" => array(

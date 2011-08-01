@@ -85,6 +85,7 @@ input[type=button] {
 .delete,
 .close,
 .insert,
+.import,
 .add:before,
 .refresh:before,
 .import:before,
@@ -279,6 +280,10 @@ fieldset.mountpoint .pickitem {
   background-image: url(../image/audio.svg), url(../image/file.svg);
 }
 
+.list-container .clip .icon, #details .clip h2 {
+  background-image: url(../image/clip.svg), url(../image/file.svg);
+}
+
 .list-container .jpg .icon, #details .jpg h2 {
   background-image: url(../image/image.svg);
 }
@@ -289,6 +294,10 @@ fieldset.mountpoint .pickitem {
 
 .list-container .png .icon, #details .png h2 {
   background-image: url(../image/image.svg);
+}
+
+.list-container .font .icon, #details .font h2 {
+  background-image: url(../image/font.svg), url(../image/file.svg);
 }
 
 

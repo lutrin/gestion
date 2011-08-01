@@ -417,6 +417,18 @@ class fn_File extends fn {
         )
       );
       $values["audio"] = ui_Audio::buildXml( $info, "Impossible de lire le fichier" );
+    } elseif( $infoClass == "clip" ) {
+      Includer::add( "uiVideo" );
+      $fields["read"] = array(
+        "type" => "fieldset",
+        "fieldlist" => array(
+          "video" => array(
+            "type" => "info",
+            "label" => "Lecture"
+          )
+        )
+      );
+      $values["video"] = ui_Video::buildXml( $info, "Impossible de lire le fichier" );
     } elseif( self::isImage( $infoClass, $info["name"] ) ) {
       Includer::add( "encode" );
       $fields["view"] = array(
@@ -817,16 +829,21 @@ class fn_File extends fn {
       }
     }
 
-    # get text class
-    if( $class != "text") {
+    # other
+    if( !in_array( $class, array( "file", "ogg", "text" ) ) ) {
       return $class;
     }
-
-    # text list
-    $textList = getData( "texttype" );
     $decomposed = explode( ".", $file );
-    $last = array_pop( $decomposed );
-    return isset( $textList[$last] )? $textList[$last]: $class;
+    $last = strtolower( array_pop( $decomposed ) );
+
+    $ext = getData( "exttype" );
+    foreach( $ext[$class] as $key => $item ) {
+      if( in_array( $last, $item ) ) {
+        $class = $key;
+        break;
+      }
+    }
+    return $class;
   }
 
   /****************************************************************************/

@@ -1,8 +1,6 @@
 Copier/Coller
 Déplacer
 Avertissement avant suppression
-File d'ariane
-Retour vers la liste de l'item modifié
 Appliquer cette régle
 .resume .cell[data-label]:before {
     background-color:  #f99;
