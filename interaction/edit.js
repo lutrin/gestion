@@ -8,14 +8,15 @@ var _edit = {
 
   /****************************************************************************/
   observeList: [
-    { query: "form",            script: "form" },
-    { query: "button",          script: "button" },
-    { query: "a[href^=#]",      script: "anchor" },
-    { query: ".list-container", script: "list" },
-    { query: ".picklist",       script: "pick" },
-    { query: ".fileUpload",     script: "fileupload" },
-    { query: "audio",           script: "audio" },
-    { query: "img[data-src]",   script: "image" }
+    { query: "form",              script: "form" },
+    { query: "button",            script: "button" },
+    { query: "a[href^=#]",        script: "anchor" },
+    { query: ".list-container",   script: "list" },
+    { query: ".picklist",         script: "pick" },
+    { query: ".fileUpload",       script: "fileupload" },
+    { query: "audio",             script: "audio" },
+    { query: "img[data-src]",     script: "image" },
+    { query: "[contentEditable]", script: "contentEditable" }
   ],
 
   /****************************************************************************/

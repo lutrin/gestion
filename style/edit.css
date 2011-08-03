@@ -69,6 +69,143 @@ input[type=button] {
   font-size: 30px;
 }
 
+[contentEditable] h1 {
+  font-size: 32px;
+}
+
+[contentEditable] h2 {
+  font-size: 24px;
+}
+
+[contentEditable] h3 {
+  font-size: 18px;
+}
+
+[contentEditable] h4 {
+  font-size: 16px;
+}
+
+[contentEditable] h5 {
+  font-size: 13px;
+}
+
+[contentEditable] h6 {
+  font-size: 10px;
+}
+
+[contentEditable] *:before, [contentEditable] *:after {
+  font-size: 8px;
+  color: #888;
+}
+
+[contentEditable] *:before {
+  content: "<?>";
+}
+
+[contentEditable] *:after {
+  content: "</?>";
+}
+
+[contentEditable] h1:before {
+  content: "<h1>";
+}
+
+[contentEditable] h1:after {
+  content: "</h1>";
+}
+
+[contentEditable] h2:before {
+  content: "<h2>";
+}
+
+[contentEditable] h2:after {
+  content: "</h2>";
+}
+
+[contentEditable] h3:before {
+  content: "<h3>";
+}
+
+[contentEditable] h3:after {
+  content: "</h3>";
+}
+
+[contentEditable] h4:before {
+  content: "<h4>";
+}
+
+[contentEditable] h4:after {
+  content: "</h4>";
+}
+
+[contentEditable] h5:before {
+  content: "<h5>";
+}
+
+[contentEditable] h5:after {
+  content: "</h5>";
+}
+
+[contentEditable] h6:before {
+  content: "<h6>";
+}
+
+[contentEditable] h6:after {
+  content: "</h6>";
+}
+
+[contentEditable] p:before {
+  content: "<p>";
+}
+
+[contentEditable] p:after {
+  content: "</p>";
+}
+
+[contentEditable] sub:before {
+  content: "<sub>";
+}
+
+[contentEditable] sub:after {
+  content: "</sub>";
+}
+
+[contentEditable] sup:before {
+  content: "<sup>";
+}
+
+[contentEditable] sup:after {
+  content: "</sup>";
+}
+
+[contentEditable] ul:before {
+  content: "<ul>";
+}
+
+[contentEditable] ul:after {
+  content: "</ul>";
+}
+
+[contentEditable] ol:before {
+  content: "<ol>";
+}
+
+[contentEditable] ol:after {
+  content: "</ol>";
+}
+
+[contentEditable] li:before {
+  content: "<li>";
+}
+
+[contentEditable] li:after {
+  content: "</li>";
+}
+
+[contentEditable] ul > li, [contentEditable] ol > li {
+  margin-left: 40px;
+}
+
 /* icon */
 @font-face {
   font-family: "IconicStroke";
@@ -85,7 +222,7 @@ input[type=button] {
 .delete,
 .close,
 .insert,
-.import,
+.row .import,
 .add:before,
 .refresh:before,
 .import:before,
@@ -300,6 +437,14 @@ fieldset.mountpoint .pickitem {
   background-image: url(../image/font.svg), url(../image/file.svg);
 }
 
+.list-container .domain .icon, #details .domain h2 {
+  background-image: url(../image/domain.svg);
+}
+
+.list-container .normal .icon, #details .normal h2 {
+  background-image: url(../image/page.svg);
+}
+
 
 .empty {
   background: url(../image/roller.gif) no-repeat center center;
@@ -321,7 +466,7 @@ html, fieldset, legend, .dock, .dock li span, .tabs, .accordion-container, .head
   background-color:#F5F5F5;
 }
 
-#dialog-content > * > h2, #details h2 {
+#dialog-content > * > h2, #details > * > h2 {
   background-color: #aaa;
 }
 
@@ -337,7 +482,7 @@ noscript, #error-msg, .alertMsg, .formMsg {
   color: #080;
 }
 
-input, select {
+input, select, textarea, [contentEditable] {
   color: #000;
   background-color: #fff;
 }
@@ -361,7 +506,7 @@ select:hover,
   background-color: #ff9;
 }
 
-textarea:hover {
+textarea:hover, [contentEditable]:hover {
   background: -moz-radial-gradient(circle, #fff, #ffc);
   background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#ff9));
   background: -webkit-radial-gradient(circle, #fff, #ff9);
@@ -446,7 +591,7 @@ fieldset, legend, input[type=submit], input[type=button], button, #dialog-conten
   border-radius: 4px;
 }
 
-input, select, textarea, .header > .cell, #contextMenu menu, .image div, span.picklist {
+input, select, textarea, [contentEditable], .header > .cell, #contextMenu menu, .image div, span.picklist {
   border: 1px solid #aaa;
 }
 
@@ -454,11 +599,11 @@ input, select, textarea, .header > .cell, #contextMenu menu, .image div, span.pi
   border-right: 1px solid #aaa;
 }
 
-input[type=text], input[type=password], textarea, select, span.picklist {
+input[type=text], input[type=password], textarea, [contentEditable], select, span.picklist {
   box-shadow: inset rgba(0,0,0,.2) 2px 2px 2px;
 }
 
-input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus, [contentEditable]:focus, select:focus {
   border-color: #008;
   box-shadow: inset rgba(0,0,88,.5) 2px 2px 2px;
 }
@@ -475,7 +620,7 @@ input[type=submit]:active, button:active {
   border-radius: 4px;
 }
 
-.changed:invalid, .field.invalid input, .field.invalid textarea, .field.invalid span.picklist {
+.changed:invalid, .field.invalid input, .field.invalid textarea, .field.invalid [contentEditable], .field.invalid span.picklist {
   border-color: #800;
   box-shadow: inset rgba(88,0,0,.2) 2px 2px 2px;
 }
@@ -520,6 +665,10 @@ dd {
   border-collapse: collapse;
 }
 
+[contentEditable] * {
+  border: 1px #eee solid;
+}
+
 /* padding and margin */
 noscript,
 button,
@@ -532,6 +681,7 @@ input[type=text],
 input[type=password],
 span.picklist,
 textarea,
+[contentEditable],
 input[type=submit],
 input[type=button],
 menu > li,
@@ -568,7 +718,8 @@ menu > li,
 .radiolist li,
 .picklist > *,
 .checkbox,
-.breadcrumb {
+.breadcrumb,
+[contentEditable] * {
   margin: 2px;
 }
 
@@ -615,7 +766,9 @@ menu > li,
 .file h2,
 .gif h2,
 .sql h2,
-.music h2 {
+.music h2,
+.font h2,
+.clip h2 {
   padding-left: 20px;
   margin-right: 20px;
 }
@@ -670,7 +823,7 @@ footer nav li {
   display: inline;
 }
 
-textarea, fieldset, .closeDialog, .list {
+textarea, [contentEditable], fieldset, .closeDialog, .list {
   clear: both;
 }
 

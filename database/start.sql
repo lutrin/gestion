@@ -97,4 +97,71 @@ ALTER TABLE `mountpoint` CHANGE `edit` `canEdit` TINYINT( 4 ) NOT NULL ;
 ALTER TABLE `mountpoint` CHANGE `delete` `canDelete` TINYINT( 4 ) NOT NULL ;
 ALTER TABLE `mountpoint` CHANGE `add` `canAdd` TINYINT( 4 ) NOT NULL ;
 
+/* create page table */
+CREATE TABLE `gestion`.`page` (
+    `k` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    `name` VARCHAR( 255 ) NOT NULL ,
+    `description` TEXT NOT NULL ,
+    `imageK` MEDIUMINT NULL DEFAULT NULL ,
+    `active` TINYINT NOT NULL DEFAULT '1'
+) ENGINE = MYISAM ;
+ALTER TABLE `page` ADD `type` VARCHAR( 20 ) NOT NULL AFTER `k` ;
+ALTER TABLE `page` ADD `parentK` MEDIUMINT NOT NULL ;
+ALTER TABLE `page` ADD `rank` INT NOT NULL ;
+
+/* create page domain */
+CREATE TABLE `gestion`.`page_domain` (
+`pageK` MEDIUMINT NOT NULL ,
+`redirectK` MEDIUMINT NOT NULL DEFAULT '0',
+`lang` VARCHAR( 10 ) NOT NULL DEFAULT 'fr',
+`title` VARCHAR( 255 ) NOT NULL ,
+`templateK` MEDIUMINT NOT NULL ,
+PRIMARY KEY ( `pageK` )
+) ENGINE = MYISAM;
+ALTER TABLE `page_domain` CHANGE `templateK` `subTemplateK` MEDIUMINT( 9 ) NOT NULL ;
+
+/* create page normal */
+CREATE TABLE `gestion`.`page_normal` (
+`pageK` MEDIUMINT NOT NULL ,
+`lang` VARCHAR( 10 ) NULL DEFAULT NULL ,
+`title` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`url` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`class` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`metaAuthor` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`metaDescription` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`metaKeywords` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`templateK` MEDIUMINT NULL DEFAULT NULL ,
+`subTemplateK` MEDIUMINT NULL DEFAULT NULL ,
+`include` TINYINT NOT NULL DEFAULT '1',
+`ssl` TINYINT NOT NULL DEFAULT '0',
+PRIMARY KEY ( `pageK` )
+) ENGINE = MYISAM ;
+
+
+CREATE TABLE `gestion`.`page_shortcut` (
+`pageK` MEDIUMINT NOT NULL ,
+`lang` VARCHAR( 10 ) NULL DEFAULT NULL ,
+`title` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`url` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`redirectK` MEDIUMINT NOT NULL DEFAULT '0',
+`subTemplateK` MEDIUMINT NULL DEFAULT NULL ,
+`include` TINYINT NOT NULL DEFAULT '1',
+PRIMARY KEY ( `pageK` )
+) ENGINE = MYISAM ;
+
+CREATE TABLE `gestion`.`page_external` (
+`pageK` MEDIUMINT NOT NULL ,
+`href` VARCHAR( 255 ) NOT NULL ,
+`title` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`include` TINYINT NOT NULL DEFAULT '1',
+PRIMARY KEY ( `pageK` )
+) ENGINE = MYISAM;
+
+CREATE TABLE `gestion`.`page_document` (
+`pageK` MEDIUMINT NOT NULL ,
+`pathK` MEDIUMINT NOT NULL ,
+`title` VARCHAR( 255 ) NULL DEFAULT NULL ,
+`include` TINYINT NOT NULL DEFAULT '1',
+PRIMARY KEY ( `pageK` )
+) ENGINE = MYISAM;
 

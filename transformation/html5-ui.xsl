@@ -87,6 +87,36 @@
       </div>
     </xsl:when>
 
+    <xsl:when test="@type='contentEditable'">
+      <div>
+        <xsl:call-template name="apply-data-display" />
+        <xsl:call-template name="apply-topfield" />
+        <div class="buttonList">
+          <button data-command="bold">bold</button>
+          <button data-command="copy">copy</button>
+          <button data-command="cut">cut</button>
+          <button data-command="delete">delete</button>
+          <button data-command="insertParagraph">insertParagraph</button>
+          <button data-command="insertOrderedList">insertOrderedList</button>
+          <button data-command="insertUnorderedList">insertUnorderedList</button>
+          <button data-command="italic">italic</button>
+          <button data-command="paste">paste</button>
+          <button data-command="redo">redo</button>
+          <button data-command="removeFormat">removeFormat</button>
+          <button data-command="selectAll">selectAll</button>
+          <button data-command="subscript">subscript</button>
+          <button data-command="superscript">superscript</button>
+          <button data-command="undo">undo</button>
+          <button data-command="unlink">unlink</button>
+          <button data-command="indent">indent</button>
+          <button data-command="outdent">outdent</button>
+        </div>
+        <div id="{@id}" data-name="{@name}" contentEditable="true">
+          <p class="default">[contenu]</p>
+        </div>
+      </div>      
+    </xsl:when>
+
     <!-- select -->
     <xsl:when test="@type='select'">
       <div>

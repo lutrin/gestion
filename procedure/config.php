@@ -511,5 +511,9 @@ $INCLUDE_LIST = array(
   "dbMountpoint" => array(
     "path" => "db/mountpoint.php",
     "depend" => "dbAbstract"
+  ),
+  "dbPage" => array(
+    "path" => "db/page.php",
+    "depend" => "dbAbstract"
   )
 );
