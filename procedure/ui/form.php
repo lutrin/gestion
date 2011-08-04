@@ -114,10 +114,15 @@ class ui_Form {
 
     # list
     if( isset( $attributes["list"] ) ) {
-      $innerHtml[] = Tag::build( "ui.datalist", false, self::getDatalist(
-        $attributes["list"]
+      $innerHtml[] = Tag::build( "ui.datalist", false, self::getList(
+        $attributes["list"],
+        "data"
       ) );
       unset( $attributes["list"] );
+    }
+    if( isset( $attributes["menu"] ) ) {
+      $innerHtml[] = Tag::build( "ui.menu", false, self::getCommandList( $attributes["menu"] ) );
+      unset( $attributes["menu"] );
     }
 
     return Tag::build( "ui.field", $attributes, $innerHtml );
@@ -180,11 +185,24 @@ class ui_Form {
   }
 
   /****************************************************************************/
-  protected static function getDatalist( $list ) {
+  protected static function getCommandList( $menu ) {
+    return array_map( function( $commandList ) {
+      return Tag::build(
+        "ui.commandlist",
+        array(
+          "title" => $commandList["title"]
+        ),
+        ui_Form::getList( $commandList["list"], "command" )
+      );
+    }, $menu );
+  }
+
+  /****************************************************************************/
+  public static function getList( $list, $prefix = "data" ) {
     $dataList = array();
     foreach( $list as $key => $item ) {
       $dataList[] = Tag::build(
-        "ui.dataitem",
+        "ui.{$prefix}item",
         array_merge( $item, array( "key" => $key ) )
       );
     }

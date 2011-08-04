@@ -93,112 +93,112 @@ input[type=button] {
   font-size: 10px;
 }
 
-[contentEditable] *:before, [contentEditable] *:after {
+.viewTag *:before, [contentEditable] *:after {
   font-size: 8px;
   color: #888;
 }
 
-[contentEditable] *:before {
+.viewTag *:before {
   content: "<?>";
 }
 
-[contentEditable] *:after {
+.viewTag *:after {
   content: "</?>";
 }
 
-[contentEditable] h1:before {
+.viewTag h1:before {
   content: "<h1>";
 }
 
-[contentEditable] h1:after {
+.viewTag h1:after {
   content: "</h1>";
 }
 
-[contentEditable] h2:before {
+.viewTag h2:before {
   content: "<h2>";
 }
 
-[contentEditable] h2:after {
+.viewTag h2:after {
   content: "</h2>";
 }
 
-[contentEditable] h3:before {
+.viewTag h3:before {
   content: "<h3>";
 }
 
-[contentEditable] h3:after {
+.viewTag h3:after {
   content: "</h3>";
 }
 
-[contentEditable] h4:before {
+.viewTag h4:before {
   content: "<h4>";
 }
 
-[contentEditable] h4:after {
+.viewTag h4:after {
   content: "</h4>";
 }
 
-[contentEditable] h5:before {
+.viewTag h5:before {
   content: "<h5>";
 }
 
-[contentEditable] h5:after {
+.viewTag h5:after {
   content: "</h5>";
 }
 
-[contentEditable] h6:before {
+.viewTag h6:before {
   content: "<h6>";
 }
 
-[contentEditable] h6:after {
+.viewTag h6:after {
   content: "</h6>";
 }
 
-[contentEditable] p:before {
+.viewTag p:before {
   content: "<p>";
 }
 
-[contentEditable] p:after {
+.viewTag p:after {
   content: "</p>";
 }
 
-[contentEditable] sub:before {
+.viewTag sub:before {
   content: "<sub>";
 }
 
-[contentEditable] sub:after {
+.viewTag sub:after {
   content: "</sub>";
 }
 
-[contentEditable] sup:before {
+.viewTag sup:before {
   content: "<sup>";
 }
 
-[contentEditable] sup:after {
+.viewTag sup:after {
   content: "</sup>";
 }
 
-[contentEditable] ul:before {
+.viewTag ul:before {
   content: "<ul>";
 }
 
-[contentEditable] ul:after {
+.viewTag ul:after {
   content: "</ul>";
 }
 
-[contentEditable] ol:before {
+.viewTag ol:before {
   content: "<ol>";
 }
 
-[contentEditable] ol:after {
+.viewTag ol:after {
   content: "</ol>";
 }
 
-[contentEditable] li:before {
+.viewTag li:before {
   content: "<li>";
 }
 
-[contentEditable] li:after {
+.viewTag li:after {
   content: "</li>";
 }
 
@@ -497,6 +497,7 @@ select:hover,
 .row:hover > .cell,
 .dock li:hover,
 #contextMenu a:hover,
+.commandMenu a:hover,
 .checkbox:hover,
 .checklist li:hover,
 .radio:hover,
@@ -544,7 +545,7 @@ input[type=submit]:disabled:active, input[type=button]:disabled:active, button:d
   text-shadow: 0;
 }
 
-.tabs > menu > li.selected, #contextMenu menu, .list, .formlist, .image div, span.picklist, .icon img {
+.tabs > menu > li.selected, #contextMenu menu, .list, .formlist, .image div, span.picklist, .icon img, .commandList {
   background-color: #fff;
 }
 
@@ -591,7 +592,7 @@ fieldset, legend, input[type=submit], input[type=button], button, #dialog-conten
   border-radius: 4px;
 }
 
-input, select, textarea, [contentEditable], .header > .cell, #contextMenu menu, .image div, span.picklist {
+input, select, textarea, [contentEditable], .header > .cell, #contextMenu menu, .commandList, .image div, span.picklist {
   border: 1px solid #aaa;
 }
 
@@ -608,7 +609,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus, [contentEdit
   box-shadow: inset rgba(0,0,88,.5) 2px 2px 2px;
 }
 
-input[type=submit], input[type=button], button, .dock li span, #contextMenu menu {
+input[type=submit], input[type=button], button, .dock li span, #contextMenu menu, .commandList {
   box-shadow: inset rgba(0,0,0,.2) -2px -2px 2px;
 }
 
@@ -684,14 +685,11 @@ textarea,
 [contentEditable],
 input[type=submit],
 input[type=button],
-menu > li,
+li,
 #error-msg,
 .list,
 .cell,
-.checklist li,
-.checklist li > *,
-.radiolist li,
-.radiolist li > *,
+li > *,
 .picklist > *,
 .picklist > * > *,
 .checkbox,
@@ -707,15 +705,13 @@ noscript,
 fieldset,
 legend,
 input[type=submit],
-menu > li,
+li,
 #error-msg,
 #details > *,
 .field,
 .info,
 .list,
 .cell,
-.checklist li,
-.radiolist li,
 .picklist > *,
 .checkbox,
 .breadcrumb,
@@ -912,7 +908,7 @@ nav h2, nav menu {
   top: 0;
 }
 
-#contextMenu menu {
+#contextMenu menu, .commandList {
   position: absolute;
   list-style-type: none;
 }
@@ -1233,6 +1229,40 @@ li:hover [data-select] {
 
 .formlist ul, .formlist button {
   display: inline-block;
+}
+
+.commandMenu > li {
+  display: inline;
+}
+
+.commandMenu > li {
+  position: relative;
+}
+
+.commandList {
+  display: none;
+  position: absolute;
+  left: 0;
+  margin:0;
+}
+
+.commandMenu > li:hover .commandList {
+  display: block;
+}
+
+.commandMenu button {
+  border: 0;
+  background-color: transparent;
+  color: #607890;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  text-align: left;
+}
+
+.commandMenu button:hover {
+  color: #036;
+  text-decoration: underline;
 }
 
 /* z position */

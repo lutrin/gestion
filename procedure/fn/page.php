@@ -141,7 +141,67 @@ class fn_Page extends fn {
       ),
       "description" => array(
         "label" => "Description",
-        "type" => "contentEditable"
+        "type" => "contentEditable",
+        "allowed" => "p,ul,ol,li,em,sub,sup,br",
+        "menu" => array(
+          array(
+            "title" => "Édition",
+            "list" => array(
+              "undo" => array(
+                "title" => "Annuler"
+              ),
+              "redo" => array(
+                "title" => "Rétablir"
+              ),
+              "cut" => array(
+                "title" => "Couper"
+              ),
+              "copy" => array(
+                "title" => "Copier"
+              ),
+              "delete" => array(
+                "title" => "Supprimer"
+              ),
+              "paste" => array(
+                "title" => "Coller"
+              ),
+              "selectAll" => array(
+                "title" => "Tout sélectionner"
+              )
+            )
+          ),
+          array(
+            "title" => "Format",
+            "list" => array(
+              "italic" => array(
+                "title" => "Italique"
+              ),
+              "subscript" => array(
+                "title" => "Indice"
+              ),
+              "superscript" => array(
+                "title" => "Exposant"
+              ),
+              "removeFormat" => array(
+                "title" => "Formattage par défaut"
+              )
+            )
+          ),
+          array(
+            "title" => "Balise",
+            "list" => array(
+              "insertParagraph" => array(
+                "title" => "Paragraphe"
+              ),
+              "insertOrderedList" => array(
+                "title" => "Liste numérotée"
+              ),
+              "insertUnorderedList" => array(
+                "title" => "Liste non-numérotée"
+              )
+            )
+          )
+        )
       ),
       "imageK" => array(
         "label" => "Image",

@@ -9,9 +9,9 @@
       return false;
     }
 
-    contentEditable.parent().find( "button" ).click( function() {
-      var button = $( this );
-      document.execCommand( button.data( "command" ), "", "" );
+    contentEditable.parent().find( "[data-command]" ).click( function() {
+      document.execCommand( $( this ).data( "command" ), false, null );
+      return false;
     } );
 /*
     contentEditable.bind( "change", function() {

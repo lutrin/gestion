@@ -91,6 +91,9 @@
       <div>
         <xsl:call-template name="apply-data-display" />
         <xsl:call-template name="apply-topfield" />
+        <xsl:apply-templates select="ui.menu" />
+<!--        <xsl:apply-templates select="ui.buttonlist" />-->
+<!--
         <div class="buttonList">
           <button data-command="bold">bold</button>
           <button data-command="copy">copy</button>
@@ -111,6 +114,7 @@
           <button data-command="indent">indent</button>
           <button data-command="outdent">outdent</button>
         </div>
+-->
         <div id="{@id}" data-name="{@name}" contentEditable="true">
           <p class="default">[contenu]</p>
         </div>
@@ -507,6 +511,27 @@
       </li>
     </xsl:if>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="ui.menu">
+  <menu class="commandMenu">
+    <xsl:apply-templates select="ui.commandlist" />
+  </menu>
+</xsl:template>
+
+<xsl:template match="ui.commandlist">
+  <li>
+    <span><xsl:value-of select="@title" /></span>
+    <ul class="commandList">
+      <xsl:apply-templates select="ui.commanditem" />
+    </ul>
+  </li>
+</xsl:template>
+
+<xsl:template match="ui.commanditem">
+  <li>
+    <button data-command="{@key}"><xsl:value-of select="@title" /></button>
+  </li>
 </xsl:template>
 
 <xsl:template match="ui.dock">
