@@ -87,38 +87,18 @@
       </div>
     </xsl:when>
 
+    <!-- contentEditable -->
     <xsl:when test="@type='contentEditable'">
-      <div>
+      <fieldset>
         <xsl:call-template name="apply-data-display" />
-        <xsl:call-template name="apply-topfield" />
+        <xsl:if test="@label">
+          <legend><xsl:value-of select="@label" /></legend>
+        </xsl:if>
         <xsl:apply-templates select="ui.menu" />
-<!--        <xsl:apply-templates select="ui.buttonlist" />-->
-<!--
-        <div class="buttonList">
-          <button data-command="bold">bold</button>
-          <button data-command="copy">copy</button>
-          <button data-command="cut">cut</button>
-          <button data-command="delete">delete</button>
-          <button data-command="insertParagraph">insertParagraph</button>
-          <button data-command="insertOrderedList">insertOrderedList</button>
-          <button data-command="insertUnorderedList">insertUnorderedList</button>
-          <button data-command="italic">italic</button>
-          <button data-command="paste">paste</button>
-          <button data-command="redo">redo</button>
-          <button data-command="removeFormat">removeFormat</button>
-          <button data-command="selectAll">selectAll</button>
-          <button data-command="subscript">subscript</button>
-          <button data-command="superscript">superscript</button>
-          <button data-command="undo">undo</button>
-          <button data-command="unlink">unlink</button>
-          <button data-command="indent">indent</button>
-          <button data-command="outdent">outdent</button>
+        <div id="{@id}" data-name="{@name}" contentEditable="true" data-allowed="{@allowed}">
+          <br class="default" />
         </div>
--->
-        <div id="{@id}" data-name="{@name}" contentEditable="true">
-          <p class="default">[contenu]</p>
-        </div>
-      </div>      
+      </fieldset>      
     </xsl:when>
 
     <!-- select -->
@@ -190,37 +170,19 @@
 
     <!-- picklist -->
     <xsl:when test="@type='picklist'">
-      <!--<xsl:choose>
-        <xsl:when test="@multiple">-->
-          <fieldset class="formlist">
-            <xsl:attribute name="class">
-              <xsl:text>formlist</xsl:text>
-              <xsl:if test="@class">
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="@class" />
-              </xsl:if>
-            </xsl:attribute>
-            <xsl:if test="@label">
-              <legend><xsl:value-of select="@label" /></legend>
-            </xsl:if>
-            <xsl:apply-templates select="ui.datalist" mode="picklist" />
-          </fieldset>
-        <!--</xsl:when>
-        <xsl:otherwise>
-          <div>
-            <xsl:attribute name="class">
-              <xsl:text>formlist</xsl:text>
-              <xsl:if test="@class">
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="@class" />
-              </xsl:if>
-            </xsl:attribute>
-            <xsl:call-template name="apply-data-display" />
-            <xsl:call-template name="apply-topfield" />
-            <xsl:apply-templates select="ui.datalist" mode="picklist" />
-          </div>
-        </xsl:otherwise>-->
-      <!--</xsl:choose>-->
+      <fieldset class="formlist">
+        <xsl:attribute name="class">
+          <xsl:text>formlist</xsl:text>
+          <xsl:if test="@class">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="@class" />
+          </xsl:if>
+        </xsl:attribute>
+        <xsl:if test="@label">
+          <legend><xsl:value-of select="@label" /></legend>
+        </xsl:if>
+        <xsl:apply-templates select="ui.datalist" mode="picklist" />
+      </fieldset>
     </xsl:when>
 
     <!-- portrait -->
@@ -365,19 +327,6 @@
     </xsl:apply-templates>
   </ul>
 </xsl:template>
-
-<!--<xsl:template match="ui.datalist" mode="picklist">
-  <span class="picklist">
-    <xsl:for-each select="../@id">
-      <xsl:call-template name="apply-attribute" />
-    </xsl:for-each>
-    <xsl:attribute name="data-name">
-      <xsl:value-of select="../@name" />
-    </xsl:attribute>
-    <xsl:apply-templates select="ui.dataitem" mode="picklist" />
-  </span>
-  <button data-action="pick" data-params="object={../@object},for=#{../@id}">Piger...</button>
-</xsl:template>-->
 
 <xsl:template match="ui.datalist" mode="picklist">
   <ul>
@@ -530,7 +479,21 @@
 
 <xsl:template match="ui.commanditem">
   <li>
-    <button data-command="{@key}"><xsl:value-of select="@title" /></button>
+    <button>
+      <xsl:choose>
+        <xsl:when test="@trigger">
+          <xsl:attribute name="data-trigger">
+            <xsl:value-of select="@key" />
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="data-command">
+            <xsl:value-of select="@key" />
+          </xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="@title" />
+    </button>
   </li>
 </xsl:template>
 

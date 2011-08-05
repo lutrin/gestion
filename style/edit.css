@@ -29,6 +29,10 @@ textarea {
   font-family: monospace, sans-serif;
 }
 
+em {
+  font-style: italic;
+}
+
 #title {
   font-size: 15px;
   padding-top: 2px;

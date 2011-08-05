@@ -159,14 +159,27 @@ class fn_Page extends fn {
               "copy" => array(
                 "title" => "Copier"
               ),
-              "delete" => array(
-                "title" => "Supprimer"
-              ),
               "paste" => array(
                 "title" => "Coller"
               ),
+              "delete" => array(
+                "title" => "Supprimer"
+              ),
               "selectAll" => array(
                 "title" => "Tout sélectionner"
+              ),
+              "stripTags" => array(
+                "title" => "Nettoyage",
+                "trigger" => true
+              )
+            )
+          ),
+          array(
+            "title" => "Affichage",
+            "list" => array(
+              "toggleTag" => array(
+                "title"   => "Balises",
+                "trigger" => true
               )
             )
           ),
@@ -188,7 +201,7 @@ class fn_Page extends fn {
             )
           ),
           array(
-            "title" => "Balise",
+            "title" => "Balisage",
             "list" => array(
               "insertParagraph" => array(
                 "title" => "Paragraphe"
