@@ -102,7 +102,6 @@
     var object = $( this );
     object.addClass( "changed" );
     object.parents( "form:first" ).find( "input[type=submit][disabled=disabled]" ).attr( "disabled", false );
-    
   },
 
   /****************************************************************************/
@@ -201,9 +200,9 @@
     var app = _c.ajaxList.interaction.form,
         fields = {},
         error = false;
-    form.find( "input:text,input:hidden,input:password,input:checkbox,input:radio,select,textarea" ).each( function() {
+    form.find( "input:text,input:hidden,input:password,input:checkbox,input:radio,select,textarea,[contentEditable]" ).each( function() {
       var object = $( this ),
-          type = object.attr( "type" ) || object.tagName,
+          type = object.attr( "type" ) || ( object.attr( "contentEditable" )? "contentEditable": false ) ||object.tagName,
           value = object.val(),
           name, compareObject;
 
@@ -215,6 +214,11 @@
       // checkbox
       if( _c.inList( type, ["checkbox","radio"] ) ) {
         value = app.getCheckedValue( object );
+      }
+
+      // contentEditable
+      if( type == "contentEditable" ) {
+        value = object.html();
       }
 
       // required
@@ -241,7 +245,7 @@
       }
 
       if( !error && value !== null ) {
-        name = object.attr( "name" );
+        name = object.attr( "name" ) || object.data( "name" );
         if( fields[name] ) {
           fields[name] = _c.makeArray( fields[name] );
           fields[name].push( value );

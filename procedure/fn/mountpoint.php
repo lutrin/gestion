@@ -215,6 +215,31 @@ class fn_Mountpoint extends fn {
   }
 
   /****************************************************************************/
+  public static function getList() {
+    Includer::add( array( "dbAssociation", "dbMountpoint", "dbEditor" ) );
+    $editor = fn_Login::getSessionEditor();
+    $mountpointList = db_Association::get( "mountpoint", "editor", $editor["k"] );
+    if( $groupKList = db_Editor::getGroupKList( $editor["k"] ) ) {
+      foreach( db_Association::get( "mountpoint", "groupEditor", $groupKList ) as $mountpoint ) {
+        $mountpointList[] = $mountpoint;
+      }
+    }
+    return $mountpointList;
+  }
+
+  /****************************************************************************/
+  public static function mapKList( $list ) {
+    Includer::add( "dbMountpoint" );
+    return array_map(
+      "mapK",
+      db_Mountpoint::get(
+        "pathK as k",
+        "k IN ( " . join( ",", array_map( "mapK", $list ) ) . ")"
+      )
+    )
+  }
+
+  /****************************************************************************/
   protected static function getListParams() {
     return array(
       "id"          => self::$idList,

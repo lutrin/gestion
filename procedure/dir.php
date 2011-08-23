@@ -77,6 +77,15 @@ class Dir {
   }
 
   /****************************************************************************/
+  public static function getFileList( $pathKList, $typeList ) {
+    $treeList = self::getTreeList( $pathKList );
+    $pathList = array();
+e( $tree );
+    foreach( $treeList as $tree ) {
+    }
+  }
+
+  /****************************************************************************/
   public static function getList( $path = "" ) {
     global $PUBLICPATH;
 

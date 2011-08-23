@@ -9,32 +9,17 @@ class fn_File extends fn {
     }
 
     # tab list
+    Includer::add( "fnMountpoint" );
     if( fn_Login::isNotAllowed() ) {
 
       # get mount point list
-      Includer::add( array( "dbAssociation", "dbMountpoint", "dbEditor" ) );
-      $editor = fn_Login::getSessionEditor();
-      $mountpointList = db_Association::get( "mountpoint", "editor", $editor["k"] );
-      if( $groupKList = db_Editor::getGroupKList( $editor["k"] ) ) {
-        foreach( db_Association::get( "mountpoint", "groupEditor", $groupKList ) as $mountpoint ) {
-          $mountpointList[] = $mountpoint;
-        }
-      }
+      $mountpointList = fn_Mountpoint::getList();
       if( $mountpointList ) {
 
         # foreach mount point, get folder tree
-        function mapK( $item ) {
-          return $item["k"];
-        }
         $folderTree = self::getFolderTree(
           false,
-          array_map(
-            "mapK",
-            db_Mountpoint::get(
-              "pathK as k",
-              "k IN ( " . join( ",", array_map( "mapK", $mountpointList ) ) . ")"
-            )
-          )
+          fn_Mountpoint::mapKList( $mountpointList )
         );
         return array(
           "replacement" => array(
@@ -54,7 +39,6 @@ class fn_File extends fn {
     }
 
     # admin user
-    Includer::add( "fnMountpoint" );
     $tabList = array(
       ( self::$idList . "-folderTree" ) => array(
         "label"     => "Arborescence",
@@ -149,6 +133,41 @@ class fn_File extends fn {
     return array(
       "dialog" => ui_Dialog::buildXml( "Répertoire", self::getFolderTree( $params ) ),
     );
+  }
+
+  /****************************************************************************/
+  public static function pick_image( $excludedKList, $for ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+
+    # params
+    $params = array(
+      "id"          => "files-image-pick",
+      "mode"        => array(
+        "tree" => "gallery"
+      ),
+      "class"       => "listToPick",
+      "primary"     => "k",
+      "main"        => "name",
+      "mainTrigger" => "add",
+      "mainHref"    => $for,
+      "expandable"  => true,
+      "columns"     => array(
+        "k"        => array(
+          "hidden" => true
+        ),
+        "name" => array(
+          "class"    => "image"
+        )
+      )
+    );
+
+    # tab list
+    Includer::add( "fnMountpoint" );
+    if( fn_Login::isNotAllowed() ) {
+
+    }
   }
 
   /****************************************************************************/
@@ -686,6 +705,11 @@ class fn_File extends fn {
       return ui_List::buildXml( $params, Dir::getTreeList( $pathKList ) );
     }
     return ui_List::buildXml( $params, Dir::getTree() );
+  }
+
+  /****************************************************************************/
+  protected static function getFileList() {
+    
   }
 
   /****************************************************************************/

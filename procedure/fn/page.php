@@ -137,7 +137,8 @@ class fn_Page extends fn {
         "value" => "page"
       ),
       "name" => array(
-        "label" => "Nom"
+        "label" => "Nom",
+        "required" => "required"
       ),
       "description" => array(
         "label" => "Description",
@@ -217,8 +218,11 @@ class fn_Page extends fn {
         )
       ),
       "imageK" => array(
-        "label" => "Image",
-        "type" => "image"
+        "label"  => "Image",
+        "type"   => "picklist",
+        "class"  => "image",
+        "object" => "files-image",
+        "list"   => array()
       ),
       "active" => array(
         "label" => "Page activée",

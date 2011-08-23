@@ -198,12 +198,12 @@ input[type=button] {
   content: "</ol>";
 }
 
-.viewTag li:before {
-  content: "<li>";
+.viewTag em:before {
+  content: "<em>";
 }
 
-.viewTag li:after {
-  content: "</li>";
+.viewTag em:after {
+  content: "</em>";
 }
 
 [contentEditable] ul > li, [contentEditable] ol > li {
