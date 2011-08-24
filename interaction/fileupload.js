@@ -107,9 +107,10 @@
         break;
       }
     }
+console.log( [file,type,className] );
     if( _c.inList( className, ["file", "ogg", "text"] ) ) {
       decomposed = file.split( /\./ );
-      extension = decomposed.pop().toLower();
+      extension = decomposed.pop().toLowerCase()
       list = _c.ajaxList.data.exttype;
       for( key in list ) {
         if( _c.inList( extension, list[key] ) ) {

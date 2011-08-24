@@ -9,7 +9,7 @@
   "ogg"        : ["application/ogg"],
   "html"       : ["text/html"],
   "php"        : ["text/x-php", "application/x-httpd-php"],
-  "text"       : ["text/x-c++", "text/plain", "text/x-c"],
+  "text"       : ["text/x-c++", "text/plain", "text/x-c", "text/cache-manifest", "text/x-shellscript"],
   "css"        : ["text/css"],
   "xml"        : ["application/xml", "application/xslt+xml", "text/xml"],
   "sql"        : ["text/x-sql"],

@@ -153,6 +153,7 @@ class fn_File extends fn {
       "mainTrigger" => "add",
       "mainHref"    => $for,
       "expandable"  => true,
+      "accept"      => "gif,jpg,png",
       "columns"     => array(
         "k"        => array(
           "hidden" => true
@@ -165,9 +166,16 @@ class fn_File extends fn {
 
     # tab list
     Includer::add( "fnMountpoint" );
-    if( fn_Login::isNotAllowed() ) {
+self::getGroupList( $params, false );
+   /* if( fn_Login::isNotAllowed() ) {*/
+     /* $mountpointList = fn_Mountpoint::getList();
 
-    }
+      # foreach mount point, get folder tree
+      $groupList = self::getGroupList(
+        $params,
+        fn_Mountpoint::mapKList( $mountpointList )
+      );*/
+  /*  }*/
   }
 
   /****************************************************************************/
@@ -708,8 +716,13 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  protected static function getFileList() {
-    
+  protected static function getGroupList( $params, $pathKList ) {
+Includer::add( "dir" );
+e( Dir::getTree() );
+    /*if( $pathKList ) {
+      return ui_List::buildXml( $params, Dir::getTreeList( $pathKList ) );
+    }
+    return ui_List::buildXml( $params, Dir::getTree() );*/
   }
 
   /****************************************************************************/

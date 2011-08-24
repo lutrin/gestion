@@ -236,7 +236,7 @@ class fn_Mountpoint extends fn {
         "pathK as k",
         "k IN ( " . join( ",", array_map( "mapK", $list ) ) . ")"
       )
-    )
+    );
   }
 
   /****************************************************************************/
