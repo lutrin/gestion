@@ -18,7 +18,7 @@ class fn_Page extends fn {
 
   /****************************************************************************/
   public static function insert( $parentK ) {
-    if( $allowResult = fn_Login::isNotAllowed() ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
     }
 

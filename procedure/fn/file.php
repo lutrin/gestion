@@ -718,11 +718,27 @@ self::getGroupList( $params, false );
   /****************************************************************************/
   protected static function getGroupList( $params, $pathKList ) {
 Includer::add( "dir" );
-e( Dir::getTree() );
-    /*if( $pathKList ) {
-      return ui_List::buildXml( $params, Dir::getTreeList( $pathKList ) );
+    $treeList = $pathKList? Dir::getTreeList( $pathKList ): Dir::getTree();
+    $groupList = array();
+    foreach( $treeList as $tree ) {
+        $groupList[] = $tree["name"];
+        if( isset( $tree["childList"] ) ) {
+            $groupList = array_merge( $groupList, self::getSubgroupList( $tree["childList"], $tree["name"] ) );
+        }
     }
-    return ui_List::buildXml( $params, Dir::getTree() );*/
+e( $groupList );
+  }
+
+  /****************************************************************************/
+  protected static function getSubgroupList( $treeList, $name ) {
+    $groupList = array();
+    foreach( $treeList as $tree ) {
+      $groupList[] = "$name/" . $tree["name"];
+      if( isset( $tree["childList"] ) ) {
+          $groupList = array_merge( $groupList, self::getSubgroupList( $tree["childList"],  "$name/" . $tree["name"] ) );
+      }
+    }
+    return $groupList;
   }
 
   /****************************************************************************/
