@@ -166,16 +166,17 @@ class fn_File extends fn {
 
     # tab list
     Includer::add( "fnMountpoint" );
-self::getGroupList( $params, false );
-   /* if( fn_Login::isNotAllowed() ) {*/
-     /* $mountpointList = fn_Mountpoint::getList();
+    $mountpointList = fn_Mountpoint::getList();
+    if( $mountpointList ) {
 
       # foreach mount point, get folder tree
       $groupList = self::getGroupList(
         $params,
         fn_Mountpoint::mapKList( $mountpointList )
-      );*/
-  /*  }*/
+      );
+      return $groupList;
+    }
+    return self::getGroupList( $params, false );
   }
 
   /****************************************************************************/
@@ -719,23 +720,18 @@ self::getGroupList( $params, false );
   protected static function getGroupList( $params, $pathKList ) {
 Includer::add( "dir" );
     $treeList = $pathKList? Dir::getTreeList( $pathKList ): Dir::getTree();
-    $groupList = array();
-    foreach( $treeList as $tree ) {
-        $groupList[] = $tree["name"];
-        if( isset( $tree["childList"] ) ) {
-            $groupList = array_merge( $groupList, self::getSubgroupList( $tree["childList"], $tree["name"] ) );
-        }
-    }
+    $groupList = self::getSubgroupList( $treeList );
 e( $groupList );
   }
 
   /****************************************************************************/
-  protected static function getSubgroupList( $treeList, $name ) {
+  protected static function getSubgroupList( $treeList, $name = false ) {
     $groupList = array();
+    $prefix = $name? "$name/": false;
     foreach( $treeList as $tree ) {
-      $groupList[] = "$name/" . $tree["name"];
+      $groupList[] = $prefix . $tree["name"];
       if( isset( $tree["childList"] ) ) {
-          $groupList = array_merge( $groupList, self::getSubgroupList( $tree["childList"],  "$name/" . $tree["name"] ) );
+          $groupList = array_merge( $groupList, self::getSubgroupList( $tree["childList"],  $prefix . $tree["name"] ) );
       }
     }
     return $groupList;
