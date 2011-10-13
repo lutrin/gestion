@@ -125,3 +125,5 @@ http://gokercebeci.com/dev/droparea
 http://code.google.com/p/swfobject/
 http://www.html5rocks.com/en/tutorials/audio/quick/
 http://html5doctor.com/native-audio-in-the-browser/
+http://jejacks0n.github.com/mercury/
+http://fitvidsjs.com/

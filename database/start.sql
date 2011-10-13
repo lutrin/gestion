@@ -76,7 +76,7 @@ CREATE TABLE `gestion`.`association` (
 ) ENGINE = MYISAM ;
 
 /* drop editorInGroup */
-DROP TABLE `editorInGroup` 
+DROP TABLE `editorInGroup` ;
 
 /* create mountpoint */
 CREATE TABLE `gestion`.`mountpoint` (
