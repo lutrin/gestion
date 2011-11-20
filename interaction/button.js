@@ -20,7 +20,7 @@
     }
 
     // close form
-    /*form.find( "button.close" ).bind( "close", function() {
+    /*form.find( "button.close" ).on( "close", function() {
       form.remove();
     } );*/
 

@@ -6,9 +6,11 @@ abstract class db_Abstract {
   /****************************************************************************/
   public static function get( $fields, $where = false, $orders = false ) {
     $query = array(
-      "field" => $fields,
       "table" => static::$table
     );
+    if( $fields ) {
+      $query["field"] = $fields;
+    }
     if( $orders ) {
       $query["order"] = $orders;
     }

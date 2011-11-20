@@ -50,7 +50,7 @@
 
     // apply change
     form.find( app.changeable ).change( app.change );
-    form.find( ".picklist" ).bind( "change", app.change );
+    form.find( ".picklist" ).on( "change", app.change );
 
     form.addClass( "initiated" );
   },

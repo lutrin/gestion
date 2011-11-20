@@ -18,6 +18,9 @@ html {
 		background-size: cover; /* version standardisée */
 		}
 
+Au bout des js et css, ajouter /?version=$VERSION
+Bouton parent à côté du bouton fermer
+
 Fichiers:
 - Mettre le nom du fichier et le texte dans le même formulaire
 
@@ -127,3 +130,6 @@ http://www.html5rocks.com/en/tutorials/audio/quick/
 http://html5doctor.com/native-audio-in-the-browser/
 http://jejacks0n.github.com/mercury/
 http://fitvidsjs.com/
+http://keithcirkel.co.uk/jwerty/
+http://www.thecssninja.com/css/css-tree-menu
+http://jszip.stuartk.co.uk/

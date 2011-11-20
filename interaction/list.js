@@ -18,7 +18,7 @@
     listContainer.find( ".sortable" ).click( app.sort );
 
     // fitrable
-    listContainer.find( ".setFilter" ).bind( "setFilter", app.setFilter );
+    listContainer.find( ".setFilter" ).on( "setFilter", app.setFilter );
 
     // initialize
     app.initializeRowList( listContainer );
