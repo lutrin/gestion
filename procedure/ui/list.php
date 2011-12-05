@@ -117,7 +117,7 @@ class ui_List {
 
     # attributes list
     foreach( $params as $key => $param ) {
-      if( !in_array( $key, array( "order", "columns", "primary", "headtitle", "mode", "field", "actions", "childList" ) ) ) {
+      if( !in_array( $key, array( "order", "columns", "primary", "headtitle", "mode", "field", "actions", "childList", "filter" ) ) ) {
         $attributes[$key] = $param;
       }
     }
@@ -127,6 +127,18 @@ class ui_List {
     
     # items
     foreach( $items as $item ) {
+      if( isset( $params["filter"] ) ) {
+        $accept = true;
+        foreach( $params["filter"] as $key => $filter ) {
+          if( !in_array( $item[$key], $filter ) ) {
+            $accept = false;
+            break;
+          }
+        }
+        if( !$accept ) {
+          continue;
+        }
+      }
       $innerHtml[] = self::getRow( $primary, $item, $storedValue );
     }
 

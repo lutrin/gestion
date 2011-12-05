@@ -33,19 +33,19 @@
         html, inner, main, toRemove;
 
     // html
-    if( picklist.hasClass( "multiple" ) ) {
+    //if( picklist.hasClass( "multiple" ) ) {
       html = "<li class='pickitem'>" +
                "<span>{text}</span>" +
                "<input type='hidden' value='{value}' name='{name}' id='{id}-{value}'>" +
                "<a title='Exclure' class='remove'></a>" +
              "</li>";
-    } else {
+    /*} else {
       html = "<div class='pickitem'>" +
                "<span>{text}</span>" +
                "<input type='hidden' value='{value}' name='{name}' id='{id}-{value}'>" +
                "<a title='Exclure' class='remove'></a>" +
              "</div>";
-    }
+    }*/
 
     // text
     row.parents( ".row" ).each( function() {

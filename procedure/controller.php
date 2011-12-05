@@ -156,13 +156,23 @@ function getContent() {
   global $CONTROLLER, $INCLUDE_LIST;
   if( $id = ( isset( $_GET["id"] )? typeValidator::isAlphaNumeric( $_GET["id"] ): false ) ) {
     $idList = explode( "-", $id );
+    $for = isset( $_GET["for"] )? $_GET["for"]: false;
     setHeader( "json" );
 
     foreach( $INCLUDE_LIST as $key => $include ) {
       if( isset( $include["entries"] ) && in_array( $idList[0], $include["entries"] ) ) {
         Includer::add( $key );
         $function = "getContent" . ( isset( $idList[1] )? ( "_" . $idList[1] ) : "" );
-        return json_encode( call_user_func( array( $include["class"], $function ) ) );
+        if( isset( $idList[2] ) ) {
+          $params = array( $idList[2] );
+          if( $for ) {
+            $params[] = $for;
+          }
+          return json_encode(
+            call_user_func_array( array( $include["class"], $function ), $params )
+          );
+        }
+        return json_encode( call_user_func( array( $include["class"], $function ) ) );  
         break;
       }
     }

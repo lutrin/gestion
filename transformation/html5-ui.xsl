@@ -632,19 +632,19 @@
     <xsl:call-template name="apply-listpart" />
 
     <!-- addable -->
-    <xsl:if test="@insertable|@addable|@importable|@refreshable">
+    <xsl:if test="(@insertable='1') or (@addable='1') or (@importable='1') or (@refreshable='1')">
       <fieldset class="function">
         <legend>Fonctions</legend>
-        <xsl:if test="@insertable">
+        <xsl:if test="@insertable='1'">
           <button id="{@id}-insert" class="add" data-action="insert" data-params="object={@id},k={@key}">Ajouter</button>
         </xsl:if>
-        <xsl:if test="@addable">
+        <xsl:if test="@addable='1'">
           <button id="{@id}-add" class="add" data-action="add" data-params="object={@id}">Ajouter</button>
         </xsl:if>
-        <xsl:if test="@importable">
+        <xsl:if test="@importable='1'">
           <button id="{@id}-import" class="import" data-action="import" data-params="object={@id},k={@key}">Importer</button>
         </xsl:if>
-        <xsl:if test="@refreshable">
+        <xsl:if test="@refreshable='1'">
           <button id="{@id}-refresh" class="refresh" data-action="refresh" data-params="object={@id}">Actualiser</button>
         </xsl:if>
       </fieldset>
@@ -1102,6 +1102,11 @@
     <xsl:attribute name="title">
       <xsl:value-of select="@label" />
     </xsl:attribute>
+    <xsl:if test="@params">
+      <xsl:attribute name="data-params">
+        <xsl:value-of select="@params" />
+      </xsl:attribute>      
+    </xsl:if>
     <xsl:if test="@label">
       <xsl:value-of select="@label"/>
     </xsl:if>

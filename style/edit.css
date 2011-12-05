@@ -878,6 +878,8 @@ nav h2, nav menu {
 
 #dialog-content > div {
   min-width: 320px;
+  max-height: 95%;
+  max-width: 95%;
   display: inline-block;
   text-align: left;
 }

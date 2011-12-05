@@ -24,7 +24,16 @@
         action = anchor.data( "action" ),
         trigger = anchor.data( "trigger" ),
         dataParams = anchor.data( "params" ),
-        ajaxObject, dataParams, params, navigator;
+        makeParams = function( data ) {
+          var params = {};
+          _c.eachItem( data.split( /\,/g ), function( param ) {
+            var paramSplit = param.split( /=/g );
+            params[paramSplit[0]] = paramSplit[1];
+          } );
+          return params;
+        },
+        params = {},
+        ajaxObject, dataParams, navigator;
 
 
     // disabled
@@ -34,8 +43,12 @@
 
     // empty
     if( target.hasClass( "empty" ) ) {
+      if( dataParams ) {
+        params = makeParams( dataParams );
+      }
+      params["id"] = target.attr( "id" );
       _c.callAjax(
-        [ { folder: "procedure", name: "getContent", params: { id: target.attr( "id" ) } } ],
+        [ { folder: "procedure", name: "getContent", params: params } ],
         function( ajaxItem ) {
 
           // fatal error
@@ -65,11 +78,7 @@
 
       // params
       if( dataParams ) {
-        params = {};
-        _c.eachItem( dataParams.split( /\,/g ), function( param ) {
-          var paramSplit = param.split( /=/g );
-          params[paramSplit[0]] = paramSplit[1];
-        } );
+        params = makeParams( dataParams );
       }
 
       // action      

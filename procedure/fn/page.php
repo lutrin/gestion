@@ -49,8 +49,21 @@ class fn_Page extends fn {
       return $allowResult;
     }
 
+    Includer::add( array( "dbPage", "uiForm" ) );
+    if( !$values = db_Page::get( array( "k", "type", "name", "description", "imageK", "active" ), "k=$k" ) ) {
+      return "Introuvable $k";
+    }
+    $params = self::getFormParams( $k );
+    $params["headtitle"] = $values[0]["name"] . "&nbsp;-&nbsp;Page";
+    $fields = self::getFormFields( $k );
+    $values = $values[0];
+
     return array(
-      "details" => "soon..."
+      "details" => ui_Form::buildXml(
+        $params,
+        $fields,
+        $values
+      )
     );
   }
 

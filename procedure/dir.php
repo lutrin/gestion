@@ -4,7 +4,7 @@ class Dir {
   protected static $ignore = array( ".", "..", ".git" );
 
   /****************************************************************************/
-  public static function getTree( $path = "", $accept = false ) {
+  public static function getTree( $path = "", $filter = false ) {
     global $PUBLICPATH;
 
     # path
@@ -58,7 +58,7 @@ class Dir {
   }
 
   /****************************************************************************/
-  public static function getTreeList( $pathKList, $accept = false ) {
+  public static function getTreeList( $pathKList, $filter = false ) {
     $treeList = array();
     foreach( $pathKList as $pathK ) {
       $path = self::getPath( $pathK );
@@ -66,7 +66,7 @@ class Dir {
         "k" => $pathK,
         "name" => self::getName( $path ),
       );
-      if( $childList = self::getTree( $path, $accept ) ) {
+      if( $childList = self::getTree( $path, $filter ) ) {
         $folder["childList"] = $childList;
       } else {
         $folder["indAction"] = "delete";
@@ -348,7 +348,7 @@ class Dir {
   }
 
   /****************************************************************************/
-  protected static function getK( $subpath ) {
+  public static function getK( $subpath ) {
     global $PUBLICPATH;
     if( $subpath == $PUBLICPATH ) {
       return 0;

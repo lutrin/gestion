@@ -68,6 +68,37 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
+  public static function getContent_imageFolder( $k, $for ) {
+    if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
+      return $allowResult;
+    }
+    $id = "imageFolder-$k";
+    $options = array(
+      "mode" => array(
+        "gallery" => "Galerie"
+      ),
+      "insertable"  => false,
+      "importable"  => false,
+      "selectable"  => false,
+      "refreshable" => false,
+      "mainAction"  => false,
+      "rowAction"   => false,
+      "mainHref"    => $for,
+      "mainTrigger" => "add",
+      "actions"     => array(),
+      "filter"      => array(
+        "mimetype" => array( "image/gif", "image/jpeg", "image/png" )
+      )
+    );
+    return array(
+      "replacement" => array(
+        "query"     => "#file-$id",
+        "innerHtml" => self::getExploreFolder( $id, $k, $options )
+      )
+    );
+  }
+
+  /****************************************************************************/
   public static function refresh_folder( $id, $object ) {
     if( $allowResult = fn_Login::isNotAllowed( self::$idList ) ) {
       return $allowResult;
@@ -142,7 +173,7 @@ class fn_File extends fn {
     }
 
     # params
-    $params = array(
+    /*$params = array(
       "id"          => "files-image-pick",
       "mode"        => array(
         "tree" => "gallery"
@@ -162,21 +193,38 @@ class fn_File extends fn {
           "class"    => "image"
         )
       )
+    );*/
+    $params = array(
+      "id"   => "pick_image",
+      "mode" => "accordion",
+      "noAnchor" => true
+    );
+
+    # filter
+    $filter = array(
+      "mimetype" => array( "image/gif", "image/jpeg", "image/png" )
     );
 
     # tab list
-    Includer::add( "fnMountpoint" );
+    Includer::add( array( "fnMountpoint", "uiDialog", "uiNav" ) );
     $mountpointList = fn_Mountpoint::getList();
     if( $mountpointList ) {
 
       # foreach mount point, get folder tree
       $groupList = self::getGroupList(
-        $params,
-        fn_Mountpoint::mapKList( $mountpointList )
+        fn_Mountpoint::mapKList( $mountpointList ),
+        $for,
+        $filter
       );
-      return $groupList;
+    } else {
+      $groupList = self::getGroupList( false, $for, $filter );
     }
-    return self::getGroupList( $params, false );
+    return array(
+      "dialog" => ui_Dialog::buildXml(
+        "Liste d'images",
+        ui_Nav::buildXml( $params, $groupList )
+      )
+    );
   }
 
   /****************************************************************************/
@@ -571,7 +619,7 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  protected static function getExploreFolder( $id, $k ) {
+  protected static function getExploreFolder( $id, $k, $options = false ) {
     global $PUBLICPATH;
 
     $exploreParams = array(
@@ -623,11 +671,17 @@ class fn_File extends fn {
       )
     );
 
+    # options
+    if( $options ) {
+      $exploreParams = array_merge( $exploreParams, $options );
+    }
+
     # get filter list
     Includer::add( array( "dir", "uiList" ) );
     $oldList = Dir::getExplore( $k );
     $list = array();
     foreach( $oldList as $key => $item ) {
+error_log( print_r( $item, 1 ) );
       $class = self::getClass( $item["name"], $item["mimetype"] );
       if( $class == "php" ) {
         continue;
@@ -717,10 +771,44 @@ class fn_File extends fn {
   }
 
   /****************************************************************************/
-  protected static function getGroupList( $params, $pathKList ) {
+  protected static function getGroupList( $pathKList, $for, $filter = false ) {
 Includer::add( "dir" );
-    $treeList = $pathKList? Dir::getTreeList( $pathKList ): Dir::getTree();
-    $groupList = self::getSubgroupList( $treeList );
+    $treeList = $pathKList? Dir::getTreeList( $pathKList, $filter ): Dir::getTree( "", $filter );
+
+    $subGroupList = self::getSubgroupList( $treeList );
+    $groupList = array();
+    foreach( $subGroupList as $group ) {
+      $k = Dir::getK( $group );
+
+      # filter
+      $accept = true;
+      if( $filter ) {
+        $accept = false;
+        $fileList = Dir::getExplore( $k );
+        foreach( $fileList as $fileItem ) {
+          foreach( $filter as $key => $filterItem ) {
+            if( in_array( $fileItem[$key], $filterItem ) ) {
+              $accept = true;
+              break;
+            }
+          }
+          if( $accept ) {
+            break;
+          }
+        }
+      }
+
+      if( $accept ) {
+        $groupList["file-imageFolder-$k"] = array(
+          "label" => $group,
+          "class" => "empty",
+          "params" => "for=$for"
+        );
+      }
+    }
+    return $groupList;
+print json_encode( $groupList );
+exit;
 e( $groupList );
   }
 
